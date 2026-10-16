@@ -497,30 +497,39 @@
     </div>`;
   }
 
-  /* ---------- 入場曲プレーヤー ---------- */
+  /* ---------- 入場曲プレーヤー ----------
+     ・プレーヤーは画面右下に1つだけ置き、ページを移っても使い回す
+       （一度でも画面に触れたあとは、選手ページに移るだけで音つきで自動再生できる）
+     ・最初の1ページ目でブラウザが音を止めた場合は、音なしで再生を始め、
+       画面のどこかに最初に触れた瞬間に音を出す */
   const AUTO_KEY = "fb_walkout_autoplay";
   const autoOn = () => { try { return localStorage.getItem(AUTO_KEY) !== "0"; } catch (e) { return true; } };
   const setAuto = v => { try { localStorage.setItem(AUTO_KEY, v ? "1" : "0"); } catch (e) {} };
   const songsOf = k => (window.ENTRANCE && window.ENTRANCE[k]) || [];
   const EQ = '<span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>';
-  const walk = { player: null, key: null, idx: 0, ready: false };
+  const walk = { player: null, ready: false, key: null, idx: 0, pendingSound: false, unlocked: false };
 
   function walkoutBar(key) {
     const s = songsOf(key)[0]; if (!s) return "";
     return `<div class="walkout" id="walkout"><div class="in">
       <button class="wo-play" id="woPlay" aria-label="入場曲を再生"><span class="wo-icon">▶</span></button>
       <div class="wo-meta"><small>ENTRANCE MUSIC ${EQ}</small><b id="woTitle">${esc(s.title)}</b><span id="woArtist">${esc(s.artist)}</span></div>
-      <div class="wo-hint" id="woHint" hidden>▶ を押すと入場曲が流れます</div>
+      <div class="wo-hint" id="woHint" hidden>🔇 画面のどこかをタップすると音が出ます</div>
       <label class="switch" title="選手ページを開いたときに入場曲を自動で流す"><input type="checkbox" id="woAuto" ${autoOn() ? "checked" : ""}><span class="slider"></span><em>自動再生</em></label>
     </div></div>`;
   }
   function walkoutPanel(key) {
     const list = songsOf(key); if (!list.length) return "";
     return `<div class="panel" style="margin-top:16px"><h3>入場曲</h3>
-      <div class="yt-frame"><div id="ytPlayer"></div></div>
-      ${list.length > 1 ? `<div class="song-list">${list.map((s, i) => `<button class="song-pick ${i === 0 ? "on" : ""}" data-idx="${i}">♪ ${esc(s.title)} <small>${esc(s.artist)}</small></button>`).join("")}</div>` : ""}
-      <p class="note" style="margin:8px 0 0">YouTubeの動画を埋め込んでいます。</p></div>`;
+      <div class="song-list">${list.map((s, i) => `<button class="song-pick ${i === 0 ? "on" : ""}" data-idx="${i}">♪ ${esc(s.title)} <small>${esc(s.artist)}</small></button>`).join("")}</div>
+      <p class="note" style="margin:8px 0 0">YouTubeの動画を画面右下のプレーヤーで再生します。<a href="https://www.youtube.com/watch?v=${esc(list[0].yt)}" target="_blank" rel="noopener">YouTubeで開く</a></p></div>`;
   }
+
+  // 画面右下のプレーヤー枠（ページ全体で1つ）
+  const dock = document.createElement("div");
+  dock.id = "ytDock"; dock.className = "yt-dock"; dock.hidden = true;
+  dock.innerHTML = `<div class="yt-dock-head"><span>♪ 入場曲</span><button id="dockMin" aria-label="プレーヤーを小さくする">–</button></div><div class="yt-frame"><div id="ytGlobal"></div></div>`;
+  document.body.appendChild(dock);
 
   let ytReady = null;
   function loadYT() {
@@ -529,74 +538,113 @@
       if (window.YT && window.YT.Player) return res();
       const prev = window.onYouTubeIframeAPIReady;
       window.onYouTubeIframeAPIReady = () => { if (prev) prev(); res(); };
-      const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; s.async = true;
-      document.head.appendChild(s);
+      const sc = document.createElement("script"); sc.src = "https://www.youtube.com/iframe_api"; sc.async = true;
+      document.head.appendChild(sc);
     });
     return ytReady;
   }
+  loadYT(); // 先に読み込んでおき、選手ページに移ったらすぐ鳴らせるようにする
+
+  const isPlaying = () => { try { const st = walk.player.getPlayerState(); return st === 1 || st === 3; } catch (e) { return false; } };
+  const isMuted = () => { try { return walk.player.isMuted(); } catch (e) { return false; } };
+  function showHint(on) { const h = document.getElementById("woHint"); if (h) h.hidden = !on; }
   function setPlaying(on) {
     const bar = document.getElementById("walkout"); if (!bar) return;
-    bar.classList.toggle("playing", on);
+    const audible = on && !isMuted();
+    bar.classList.toggle("playing", audible);
     const b = document.getElementById("woPlay");
-    b.querySelector(".wo-icon").textContent = on ? "❚❚" : "▶";
-    b.setAttribute("aria-label", on ? "入場曲を一時停止" : "入場曲を再生");
-    if (on) document.getElementById("woHint").hidden = true;
+    b.querySelector(".wo-icon").textContent = audible ? "❚❚" : "▶";
+    b.setAttribute("aria-label", audible ? "入場曲を一時停止" : "入場曲を再生");
+    if (audible) showHint(false);
   }
-  function stopWalkout() {
-    if (walk.player && walk.player.destroy) { try { walk.player.destroy(); } catch (e) {} }
-    walk.player = null; walk.key = null; walk.ready = false;
+
+  // 音が出なかったら、音なしで再生を続けて最初のタップを待つ
+  function verifySound(key) {
+    setTimeout(() => {
+      if (walk.key !== key || !walk.player) return;
+      if (isPlaying() && !isMuted()) { walk.pendingSound = false; return; }
+      walk.pendingSound = true;
+      try { walk.player.mute(); walk.player.playVideo(); } catch (e) {}
+      showHint(true);
+    }, 1200);
+  }
+  function startSong(key, idx) {
+    const s = songsOf(key)[idx]; if (!s || !walk.player || !walk.ready) return;
+    const auto = autoOn();
+    if (auto) {
+      try { walk.player.unMute(); walk.player.setVolume(70); } catch (e) {}
+      walk.player.loadVideoById(s.yt);
+      verifySound(key);
+    } else {
+      walk.player.cueVideoById(s.yt);
+    }
   }
   function initWalkout(key) {
-    stopWalkout();
     const list = songsOf(key);
-    if (!list.length || !document.getElementById("ytPlayer")) return;
+    if (!list.length) { stopWalkout(); return; }
     walk.key = key; walk.idx = 0;
-    const auto = autoOn();
+    dock.hidden = false;
     loadYT().then(() => {
-      if (walk.key !== key || !document.getElementById("ytPlayer")) return;
-      walk.player = new YT.Player("ytPlayer", {
+      if (walk.key !== key) return;
+      if (walk.player) { startSong(key, 0); return; }
+      const auto = autoOn();
+      walk.player = new YT.Player("ytGlobal", {
         videoId: list[0].yt, host: "https://www.youtube-nocookie.com",
         playerVars: { autoplay: auto ? 1 : 0, playsinline: 1, rel: 0, modestbranding: 1 },
         events: {
           onReady: e => {
             walk.ready = true;
             try { e.target.setVolume(70); } catch (_) {}
-            if (auto) {
-              e.target.playVideo();
-              // ブラウザが自動再生を止めた場合は、再生ボタンを案内する
-              setTimeout(() => {
-                if (walk.key !== key || !walk.player) return;
-                const st = walk.player.getPlayerState ? walk.player.getPlayerState() : -1;
-                if (st !== 1 && st !== 3) { const h = document.getElementById("woHint"); if (h) h.hidden = false; }
-              }, 1500);
-            }
+            if (auto && walk.key) { e.target.playVideo(); verifySound(walk.key); }
           },
           onStateChange: e => setPlaying(e.data === 1 || e.data === 3),
         },
       });
     });
   }
+  function stopWalkout() {
+    walk.key = null; walk.pendingSound = false;
+    if (walk.player && walk.ready) { try { walk.player.pauseVideo(); } catch (e) {} }
+    dock.hidden = true;
+  }
+  function soundOn() {
+    if (!walk.player || !walk.ready) return;
+    try { walk.player.unMute(); walk.player.setVolume(70); walk.player.playVideo(); } catch (e) {}
+    walk.pendingSound = false; showHint(false);
+    setTimeout(() => setPlaying(isPlaying()), 300);
+  }
   function togglePlay() {
     if (!walk.player || !walk.ready) return;
-    const st = walk.player.getPlayerState();
-    if (st === 1 || st === 3) walk.player.pauseVideo(); else walk.player.playVideo();
+    if (isPlaying() && !isMuted()) walk.player.pauseVideo(); else soundOn();
   }
   function pickSong(i) {
-    const list = songsOf(walk.key); const s = list[i]; if (!s || !walk.player) return;
-    walk.idx = i; walk.player.loadVideoById(s.yt);
+    const s = songsOf(walk.key)[i]; if (!s || !walk.player) return;
+    walk.idx = i;
+    try { walk.player.unMute(); } catch (e) {}
+    walk.player.loadVideoById(s.yt);
     document.getElementById("woTitle").textContent = s.title;
     document.getElementById("woArtist").textContent = s.artist;
     document.querySelectorAll(".song-pick").forEach(b => b.classList.toggle("on", +b.dataset.idx === i));
   }
+
+  // 最初のタップ・クリック・キー入力で音を出す（ブラウザの決まりで、操作の中でしか音を出せない）
+  function onFirstGesture(e) {
+    walk.unlocked = true;
+    if (e.target.closest && (e.target.closest("#woPlay") || e.target.closest(".switch") || e.target.closest("#dockMin"))) return;
+    if (walk.pendingSound && autoOn() && walk.key) soundOn();
+  }
+  ["pointerdown", "keydown", "touchend"].forEach(t => document.addEventListener(t, onFirstGesture, true));
+
   document.addEventListener("click", e => {
     if (e.target.closest("#woPlay")) togglePlay();
+    if (e.target.closest("#dockMin")) dock.classList.toggle("min");
     const pk = e.target.closest(".song-pick"); if (pk) pickSong(+pk.dataset.idx);
   });
   document.addEventListener("change", e => {
     if (e.target.id !== "woAuto") return;
     setAuto(e.target.checked);
     if (!walk.player || !walk.ready) return;
-    if (e.target.checked) walk.player.playVideo(); else walk.player.pauseVideo();
+    if (e.target.checked) soundOn(); else { walk.player.pauseVideo(); walk.pendingSound = false; showHint(false); }
   });
 
   /* ---------- ルーター ---------- */
