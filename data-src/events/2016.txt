@@ -1,0 +1,50 @@
+Rizin 1|2016-04-17|Catchweight 110 kg|CZE Jiří Procházka|JPN Kazuyuki Fujita|W|KO (Punch)|1|3:33|
+Rizin 1|2016-04-17|Light Heavyweight 93 kg|SWE Karl Albrektsson|RUS Vadim Nemkov|W|Decision (Split)|3|20:00|
+Rizin 1|2016-04-17|Catchweight 98 kg|LIT Teodoras Aukštuolis|IND Singh Jaideep|W|Decision (Unanimous)|3|20:00|
+Rizin 1|2016-04-17|Female Openweight|BRA Gabi Garcia|RUS Anna Maliukova|W|Submission (Armbar)|2|7:05|
+Rizin 1|2016-04-17|EXH Tag Team Grappling Match|JPN Kazushi Sakuraba / JPN Hideo Tokoro|BRA Wanderlei Silva / JPN Kiyoshi Tamura|D|Draw|1|15:00|
+Rizin 1|2016-04-17|KICK Shootboxing 51 kg|JPN Rena Kubota|BRA Cyndi Alves|W|Decision (Unanimous)|3|9:00|
+Rizin 1|2016-04-17|Lightweight 70 kg|USA Daron Cruickshank|JPN Shinji Sasaki|W|TKO (Soccer Kicks)|1|4:36|
+Rizin 1|2016-04-17|Openweight|RUS Kirill Sidelnikov|USA Chris Barnett|W|Decision (Split)|3|20:00|
+Rizin 1|2016-04-17|Catchweight 81.5 kg|JPN Hisaki Kato|JPN Yuta Watanabe|W|TKO (Punches)|1|1:04|
+Rizin 1|2016-04-17|Female Strawweight 52 kg|JPN Kanako Murata|RUS Natalya Denisova|W|Decision (Unanimous)|3|15:00|
+Rizin 1|2016-04-17|KICK K-1 Featherweight 65 kg|JPN Tetsuya Yamato|JPN Hiroto Yamaguchi|W|TKO (3 Knockdowns)|1|2:37|
+Rizin 1|2016-04-17|KICK K-1 Catchweight 73 kg|BRA Danilo Zanolini|JPN Norihisa Amimoto|W|TKO (3 Knockdowns)|1|2:19|
+Rizin 1|2016-04-17|KICK K-1 Catchweight 60 kg|JPN Yuya|JPN Yuki|W|TKO (3 Knockdowns)|1|1:06|
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Featherweight 66 kg|BRA Kron Gracie|JPN Hideo Tokoro|W|Submission (Rear Naked Choke)|1|9:50|
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Female Atomweight 49 kg|JPN Rena Kubota|JPN Miyuu Yamamoto|W|Submission (Guillotine Choke)|1|4:50|
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Openweight|CRO Mirko Cro Cop|KOR Hyun Man Myung|W|Submission (Arm Triangle Choke)|1|2:20|Openweight Grand-Prix 1st Round
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Openweight|EST Baruto Kaito|JPN Kazuyuki Fujita|W|Decision (Unanimous)|2|10:00|Openweight Grand-Prix 1st Round
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Lightweight 70 kg|USA Daron Cruickshank|NED Andy Souwer|W|Submission (Rear Naked Choke)|1|4:10|
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Bantamweight 61 kg|JPN Erson Yamamoto|JPN Kizaemon Saiga|W|Decision (Split)|2|15:00|
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Openweight|CZE Jiří Procházka|LBN Mark Tanios|W|Decision (Unanimous)|2|10:00|Openweight Grand-Prix 1st Round
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Openweight|RUS Valentin Moldavsky|SWE Karl Albrektsson|W|Decision (Unanimous)|2|10:00|Openweight Grand-Prix 1st Round
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Openweight|IRN Amir Aliakbari|BRA João Almeida|W|TKO (Punches)|1|2:25|Openweight Grand-Prix 1st Round
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Openweight|POL Szymon Bajor|LIT Teodoras Aukštuolis|W|Decision (Unanimous)|2|10:00|Openweight Grand-Prix 1st Round
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Featherweight 66 kg|USA Charles Bennett|BRA Minoru Kimura|W|TKO (Punches)|1|0:07|
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Female Strawweight 53 kg|JPN Kanako Murata|USA Kyra Batara|W|Decision (Unanimous)|3|15:00|
+Rizin World Grand-Prix 2016: 1st Round|2016-09-25|Female Openweight|BRA Gabi Garcia|USA Destanie Yarbrough|W|Submission (Americana)|1|2:42|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Openweight|CRO Mirko Cro Cop|USA Muhammed Lawal|W|TKO (Punches)|2|1:41|Openweight Grand-Prix Quarter-Finals
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Openweight|EST Baruto Kaito|JPN Tsuyoshi Kosaka|W|Decision (Unanimous)|2|10:00|Openweight Grand-Prix Quarter-Finals
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Openweight|IRN Amir Aliakbari|USA Heath Herring|W|Decision (Unanimous)|2|10:00|Openweight Grand-Prix Quarter-Finals
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Openweight|RUS Valentin Moldavsky|POL Szymon Bajor|W|Decision (Unanimous)|2|10:00|Openweight Grand-Prix Quarter-Finals
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Female Flyweight 57 kg|JPN Rin Nakai|JPN Kanako Murata|W|Submission (Rear Naked Choke)|3|11:16|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Flyweight 57 kg|JPN Tenshin Nasukawa|UKR Nikita Sapun|W|TKO (Punches)|1|2:45|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Lightweight 70 kg|JPN Kazuyuki Miyata|NED Andy Souwer|W|Submission (Armbar)|1|4:39|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Bantamweight 61 kg|JPN Yuki Motoya|BRA Allan Nascimento|W|Decision (Split)|2|15:00|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Flyweight 58 kg|JPN Tatsumitsu Wada|NZL Kai Kara-France|W|Decision (Unanimous)|3|15:00|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Featherweight 66 kg|JPN Yusuke Yachi|PHI Mario Sismundo|W|TKO (Knee to the Body)|1|0:18|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Female Atomweight 48 kg|USA Alyssa Garcia|JPN Kanna Asakura|W|Decision (Unanimous)|3|15:00|
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Openweight|RUS Vadim Nemkov|BRA Alison Vicente|W|TKO (Punches)|1|0:54|Openweight Grand-Prix Reserve Fight
+Rizin World Grand-Prix 2016: 2nd Round|2016-12-29|Lightweight 70 kg|JPN Satoru Kitaoka|USA Daron Cruickshank|W|Submission (Guillotine Choke)|1|8:18|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Openweight|CRO Mirko Cro Cop|IRN Amir Aliakbari|W|KO (Punches)|1|2:03|Openweight Grand-Prix Final
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Featherweight 66 kg|BRA Kron Gracie|JPN Tatsuya Kawajiri|W|Submission (Rear Naked Choke)|2|12:05|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Bantamweight 62 kg|JPN Hideo Tokoro|JPN Erson Yamamoto|W|Submission (Armbar)|1|1:19|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Female Atomweight 49 kg|JPN Rena Kubota|POL Hanna Gujwan|W|TKO (Body Kick)|3|12:47|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Female Atomweight 49 kg|USA Andy Nguyen|JPN Miyuu Yamamoto|W|Submission (Armbar)|1|4:42|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Flyweight 58 kg|JPN Kizaemon Saiga|RSA Dillin West|W|TKO (Punches)|1|2:03|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Female Openweight|BRA Gabi Garcia|JPN Yumiko Hotta|W|TKO (Punches)|1|0:41|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Catchweight 82 kg|JPN Hayato Sakurai|JPN Wataru Sakata|W|TKO (Punches)|2|12:37|
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Openweight|IRN Amir Aliakbari|RUS Valentin Moldavsky|W|Decision (Split)|2|10:00|Openweight Grand-Prix Semi-Finals
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Openweight|CRO Mirko Cro Cop|EST Baruto Kaito|W|KO (Knee to the Body)|1|0:49|Openweight Grand-Prix Semi-Finals
+Rizin World Grand-Prix 2016: Final Round|2016-12-31|Flyweight 57 kg|JPN Tenshin Nasukawa|USA Dylan Kawika Oligo|W|Submission (Guillotine Choke)|2|3:37|

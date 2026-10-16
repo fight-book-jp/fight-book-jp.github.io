@@ -1,0 +1,79 @@
+Rizin 15 - Yokohama|2019-04-21|Light Heavyweight 93 kg|CZE Jiří Procházka|USA Muhammed Lawal|W|TKO (Punches)|3|13:02|Won the inaugural Rizin Light Heavyweight Championship.
+Rizin 15 - Yokohama|2019-04-21|KICK Catchweight 59 kg|JPN Tenshin Nasukawa|PHI Fritz Aldin Biagtan|W|TKO (3 Knockdown Rule)|3|7:24|
+Rizin 15 - Yokohama|2019-04-21|Catchweight 60 kg|JPN Kyoji Horiguchi|USA Ben Nguyen|W|TKO (Punches)|1|2:53|
+Rizin 15 - Yokohama|2019-04-21|Catchweight 71 kg|BRA Roberto de Souza|JPN Satoru Kitaoka|W|TKO (Punches)|2|8:56|
+Rizin 15 - Yokohama|2019-04-21|Light Heavyweight 93 kg|SWE Karl Albrektsson|BRA Christiano Frohlich|W|Decision (Unanimous)|3|15:00|
+Rizin 15 - Yokohama|2019-04-21|Female Catchweight 51 kg|JPN Rena Kubota|FRA Samantha Jean-Francois|W|Decision (Unanimous)|3|15:00|
+Rizin 15 - Yokohama|2019-04-21|Catchweight 68 kg|JPN Mikuru Asakura|BRA Luiz Gustavo|W|Decision (Unanimous)|3|15:00|
+Rizin 15 - Yokohama|2019-04-21|Female Flyweight 57 kg|JPN Kana Watanabe|POL Justyna Haba|W|Decision (Unanimous)|3|15:00|
+Rizin 15 - Yokohama|2019-04-21|Lightweight 70 kg|AUS Damien Brown|JPN Koji Takeda|W|Decision (Unanimous)|3|15:00|
+Rizin 15 - Yokohama|2019-04-21|Flyweight 58 kg|POR Manel Kape|JPN Seiichiro Ito|W|TKO (Punches)|2|8:59|
+Rizin 15 - Yokohama|2019-04-21|Female Flyweight 57 kg|JPN Kanako Murata|MEX Saray Orozco|W|Submission (Von Flue choke)|2|7:12|
+Rizin 15 - Yokohama|2019-04-21|KICK Bantamweight 61 kg|BRA Thalisson Gomes Ferreira|JPN Taiga|W|TKO (3 Knockdown Rule)|2|5:34|
+Rizin 16 - Kobe|2019-06-02|KICK ISKA 57 kg|JPN Tenshin Nasukawa|ARG Martin Blanco|W|KO (Knee to the Body)|2|5:19|
+Rizin 16 - Kobe|2019-06-02|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|USA Jinh Yu Frey|W|Decision (Unanimous)|3|15:00|Defended the Rizin Super Atomweight Championship.
+Rizin 16 - Kobe|2019-06-02|Female Super Atomweight 49 kg|JPN Miyuu Yamamoto|JPN Kanna Asakura|W|Decision (Unanimous)|3|15:00|
+Rizin 16 - Kobe|2019-06-02|Heavyweight 120 kg|USA Jake Heun|GUM Roque Martinez|W|Decision (Split)|3|15:00|
+Rizin 16 - Kobe|2019-06-02|Flyweight 57 kg|JPN Yusaku Nakamura|THA Topnoi Thanongsaklek|W|Decision (Unanimous)|3|15:00|
+Rizin 16 - Kobe|2019-06-02|Lightweight 71 kg|AZE Tofiq Musayev|USA Daron Cruickshank|W|Decision (Unanimous)|3|15:00|
+Rizin 16 - Kobe|2019-06-02|Bantamweight 61 kg|JPN Mamoru Uoi|USA Kana Hyatt|W|TKO (Punches and Soccer Kicks)|3|14:32|
+Rizin 16 - Kobe|2019-06-02|KICK Catchweight 59 kg|JPN Ryuji Horio|JPN Kunitaka Fujiwara|W|Decision (Unanimous)|3|9:00|
+Rizin 16 - Kobe|2019-06-02|Bantamweight 61 kg|JPN Erson Yamamoto|USA Tim Eschtruth|W|KO (Elbow and Punches)|1|2:04|
+Rizin 16 - Kobe|2019-06-02|KICK Catchweight 63 kg|JPN Taiju Shiratori|JPN Hiroto Yamaguchi|W|Decision (Unanimous)|3|9:00|
+Rizin 16 - Kobe|2019-06-02|Catchweight 59 kg|JPN Takaki Soya|JPN Namiki Kawahara|W|KO (Punch and Soccer Kick)|1|4:05|
+Rizin 16 - Kobe|2019-06-02|KICK Catchweight 60 kg|JPN Kan Nakamura|JPN Itto|W|KO (Head Kick)|2|3:18|
+Rizin 16 - Kobe|2019-06-02|KICK Catchweight 56 kg|JPN Seiki Ueyama|JPN Kengo|W|TKO (3 Knockdown Rule)|1|2:42|
+Rizin 16 - Kobe|2019-06-02|KICK Catchweight 69 kg|JPN Yuya|JPN Yuki Tanaka|W|TKO (3 Knockdown Rule)|1|2:45|
+Rizin 17 - Saitama|2019-07-28|Lightweight 70 kg|JPN Mikuru Asakura|JPN Yusuke Yachi|W|Decision (Unanimous)|3|15:00|
+Rizin 17 - Saitama|2019-07-28|Bantamweight 61 kg|JPN Shintaro Ishiwatari|JPN Ulka Sasaki|W|Submission (North-South Choke)|2|8:57|
+Rizin 17 - Saitama|2019-07-28|Bantamweight 61 kg|JPN Hiromasa Ougikubo|JPN Yuki Motoya|W|Decision (Split)|3|15:00|
+Rizin 17 - Saitama|2019-07-28|Light Heavyweight 93 kg|RUS Ivan Shtyrkov|KOR Hoon Kim|W|TKO (Punches)|2|9:05|
+Rizin 17 - Saitama|2019-07-28|KICK Catchweight 62 kg|JPN Taiga|JPN Hikaru Machida|W|Decision (Unanimous)|3|9:00|
+Rizin 17 - Saitama|2019-07-28|Lightweight 71 kg|USA Johnny Case|JPN Satoru Kitaoka|W|TKO (Retirement)|1|5:00|Lightweight GP Qualifying Round
+Rizin 17 - Saitama|2019-07-28|Lightweight 71 kg|JPN Tatsuya Kawajiri|RUS Ali Abdulkhalikov|W|Decision (Unanimous)|3|15:00|Lightweight GP Qualifying Round
+Rizin 17 - Saitama|2019-07-28|Lightweight 71 kg|BRA Roberto de Souza|JPN Mizuto Hirota|W|KO (Punches)|1|3:04|Lightweight GP Qualifying Round
+Rizin 17 - Saitama|2019-07-28|Light Heavyweight 93 kg|USA Jake Heun|RUS Vitaly Shemetov|W|TKO (Cut)|3|12:20|
+Rizin 17 - Saitama|2019-07-28|Female Super Atomweight 49 kg|KOR Seo Hee Ham|JPN Tomo Maesawa|W|TKO (Knees)|1|3:12|
+Rizin 17 - Saitama|2019-07-28|Female Catchweight 63 kg|SUI Stephanie Egger|JPN Reina Miura|W|Decision (Unanimous)|3|15:00|
+Rizin 17 - Saitama|2019-07-28|KICK Catchweight 67 kg|BOL Hideki|JPN Daiki Watabe|W|Decision (Majority)|3|9:00|
+Rizin 18 - Nagoya|2019-08-18|Bantamweight 61 kg|JPN Kai Asakura|JPN Kyoji Horiguchi|W|KO (Punches)|1|1:07|
+Rizin 18 - Nagoya|2019-08-18|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|THA Suwanan Boonsorn|W|Submission (Armbar)|1|3:20|
+Rizin 18 - Nagoya|2019-08-18|Bantamweight 61 kg|USA Victor Henry|AUS Trent Girdham|W|Submission (Inverted Triangle Choke)|3|12:14|
+Rizin 18 - Nagoya|2019-08-18|Bantamweight 61 kg|POR Manel Kape|JPN Takeya Mizugaki|W|KO (punch)|2|6:35|
+Rizin 18 - Nagoya|2019-08-18|KICK Catchweight 75 kg|BRA Danilo Zanolini|AUS John Wayne Parr|W|Decision (Split)|3|9:00|
+Rizin 18 - Nagoya|2019-08-18|Female Super Atomweight 49 kg|JPN Kanna Asakura|USA Alesha Zappitella|W|Decision (Split)|3|15:00|
+Rizin 18 - Nagoya|2019-08-18|Strawweight 53 kg|JPN Haruo Ochi|USA Jarred Brooks|NC|No Contest (Accidental Headbutt)|1|0:11|
+Rizin 18 - Nagoya|2019-08-18|Lightweight 71 kg|JPN Hiroto Uesako|FRA Yves Landu|W|TKO (Punches)|2|8:45|Lightweight GP Qualifying Round
+Rizin 18 - Nagoya|2019-08-18|Bantamweight 61 kg|USA Justin Scoggins|JPN Kazuma Sone|W|Decision (Unanimous)|3|15:00|
+Rizin 18 - Nagoya|2019-08-18|Catchweight 59 kg|JPN Takaki Soya|JPN Yutaro Muramoto|W|TKO (Punches)|2|6:27|
+Rizin 18 - Nagoya|2019-08-18|Female Super Atomweight 49 kg|JPN Ai Shimizu|USA Tabatha Watkins|W|Decision (Unanimous)|3|15:00|
+Rizin 18 - Nagoya|2019-08-18|KICK Strawweight 53 kg|JPN Kazuki Osaki|JPN Shota Takiya|W|Decision (Unanimous)|3|9:00|
+Rizin 18 - Nagoya|2019-08-18|KICK Flyweight 57 kg|JPN Ryuji Horio|JPN Uchu Sakurai|W|Decision (Unanimous)|3|9:00|
+Rizin 19 - Osaka|2019-10-12|Catchweight 100 kg|CZE Jiří Procházka|BRA Fábio Maldonado|W|TKO (Punches)|1|1:49|
+Rizin 19 - Osaka|2019-10-12|Bantamweight 61 kg|JPN Kai Asakura|JPN Ulka Sasaki|W|TKO (Doctor Stoppage)|1|0:54|
+Rizin 19 - Osaka|2019-10-12|Female Super Atomweight 49 kg|KOR Seo Hee Ham|JPN Miyuu Yamamoto|W|TKO (Punches)|2|9:42|
+Rizin 19 - Osaka|2019-10-12|Female Catchweight 51 kg|JPN Rena Kubota|ESP Alexandra Alvare|W|TKO (Punches)|1|0:20|
+Rizin 19 - Osaka|2019-10-12|Lightweight 71 kg|USA Johnny Case|BRA Roberto de Souza|W|TKO (Punches)|1|1:15|Lightweight Grand Prix Quarter-Finals
+Rizin 19 - Osaka|2019-10-12|Lightweight 71 kg|BRA Patricky Freire|JPN Tatsuya Kawajiri|W|TKO (Knee and Punches)|1|1:10|Lightweight Grand Prix Quarter-Finals
+Rizin 19 - Osaka|2019-10-12|Lightweight 71 kg|BRA Luiz Gustavo|JPN Hiroto Uesako|W|TKO (Doctor Stoppage)|1|3:55|Lightweight Grand Prix Quarter-Finals
+Rizin 19 - Osaka|2019-10-12|Lightweight 71 kg|AZE Tofiq Musayev|AUS Damien Brown|W|TKO (Punches)|1|4:14|Lightweight Grand Prix Quarter-Finals
+Rizin 19 - Osaka|2019-10-12|Welterweight 77 kg|JPN Keita Nakamura|BRA Marcos de Souza|W|TKO (Punches)|1|1:18|
+Rizin 19 - Osaka|2019-10-12|KICK Catchweight 62 kg|JPN Taiju Shiratori|JPN Taiga|W|Decision (Unanimous)|3|9:00|
+Rizin 19 - Osaka|2019-10-12|KICK Welterweight 77 kg|JPN Takuma Konishi|JPN Hiroya|W|TKO (Knee)|1|1:20|
+Rizin 19 - Osaka|2019-10-12|Openweight|JPN Shoma Shibisai|KOR Chang Hee Kim|W|Submission (Kimura)|1|1:09|
+Rizin 19 - Osaka|2019-10-12|KICK Catchweight 56 kg|JPN Seiki Ueyama|JPN Taisei Umei|W|Decision (Unanimous)|3|9:00|
+Rizin 20 - Saitama|2019-12-31|Bantamweight 61 kg|POR Manel Kape|JPN Kai Asakura|W|TKO (Punches)|2|5:38|Won the vacant Rizin Bantamweight Championship.
+Rizin 20 - Saitama|2019-12-31|KICK Catchweight 56 kg|JPN Tenshin Nasukawa|JPN Rui Ebata|W|TKO (3 Knockdown Rule)|1|2:44|
+Rizin 20 - Saitama|2019-12-31|Female Super Atomweight 49 kg|KOR Seo Hee Ham|JPN Ayaka Hamasaki|W|Decision (Split)|3|15:00|Won the Rizin Super Atomweight Championship.
+Rizin 20 - Saitama|2019-12-31|Featherweight 66 kg|JPN Mikuru Asakura|BRA John Teixeira|W|Decision (Unanimous)|3|15:00|
+Rizin 20 - Saitama|2019-12-31|Female Catchweight 50.8 kg|JPN Rena Kubota|USA Lindsey VanZandt|W|TKO (Corner Stoppage)|3|14:42|
+Rizin 20 - Saitama|2019-12-31|Lightweight 71 kg|AZE Tofiq Musayev|BRA Patricky Freire|W|Decision (Unanimous)|3|15:00|Lightweight Grand Prix Final
+Rizin 20 - Saitama|2019-12-31|Light Heavyweight 93 kg|CZE Jiří Procházka|USA C. B. Dollaway|W|KO (Punches)|1|1:55|Defended the Rizin Light Heavyweight Championship.
+Rizin 20 - Saitama|2019-12-31|Light Heavyweight 93 kg|CMR Simon Biyong|RUS Vitaly Shemetov|W|TKO (Elbows and Punches)|2|0:58|
+Rizin 20 - Saitama|2019-12-31|Bantamweight 61 kg|JPN Hiromasa Ougikubo|JPN Shintaro Ishiwatari|W|Decision (Split)|3|15:00|
+Rizin 20 - Saitama|2019-12-31|Catchweight 105 kg|USA Jake Heun|JPN Satoshi Ishii|W|TKO (Punches)|1|1:12|
+Rizin 20 - Saitama|2019-12-31|Bantamweight 61 kg|USA Patchy Mix|JPN Yuki Motoya|W|Submission (Guillotine Choke)|1|1:36|
+Rizin 20 - Saitama|2019-12-31|KICK Catchweight 62 kg|JPN Taiju Shiratori|JPN Taiga|W|TKO (Cut)|2|6:00|
+Rizin 20 - Saitama|2019-12-31|Female Super Atomweight 49 kg|JPN Miyuu Yamamoto|THA Suwanan Boonsorn|W|Decision (Unanimous)|3|15:00|
+Rizin 20 - Saitama|2019-12-31|Lightweight 71 kg|BRA Patricky Freire|BRA Luiz Gustavo|W|TKO (Punches and Soccer Kick)|1|0:28|Lightweight Grand Prix Semi-Finals
+Rizin 20 - Saitama|2019-12-31|Lightweight 71 kg|AZE Tofiq Musayev|USA Johnny Case|W|TKO (Punches)|1|2:46|Lightweight Grand Prix Semi-Finals

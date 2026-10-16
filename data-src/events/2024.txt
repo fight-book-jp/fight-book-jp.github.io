@@ -1,0 +1,82 @@
+Rizin Landmark 8|2024-02-24|Lightweight 71 kg|BRA Luiz Gustavo|JPN Yoshinori Horie|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 8|2024-02-24|Featherweight 66 kg|JPN Masakazu Imanari|JPN Kazumasa Majima|W|Submission (armbar)|2|1:37|
+Rizin Landmark 8|2024-02-24|Lightweight 71 kg|JPN Yusuke Yachi|JPN Rikuto Shirakawa|W|Technical Submission (face crank)|2|5:00|
+Rizin Landmark 8|2024-02-24|Female Super Atomweight 49 kg|JPN Saori Oshima|FRA Claire Lopez|W|Submission (armbar)|2|3:18|
+Rizin Landmark 8|2024-02-24|Featherweight 66 kg|JPN Hiroaki Suzuki|JPN Takahiro Ashida|W|TKO (soccer kicks and punches)|1|4:29|
+Rizin Landmark 8|2024-02-24|Welterweight 77 kg|JPN Daichi Abe|JPN Kota Ossman|W|KO (punch)|1|1:35|
+Rizin Landmark 8|2024-02-24|Bantamweight 61 kg|JPN Shohei Nose|JPN Kenta Takizawa|W|TKO (elbows)|2|2:48|
+Rizin Landmark 8|2024-02-24|Flyweight 57 kg|JPN Yuki Ito|JPN Masatoshi Ueda|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 9|2024-03-23|Lightweight 71 kg|BRA Roberto de Souza|JPN Keita Nakamura|W|TKO (corner stoppage)|1|1:43|
+Rizin Landmark 9|2024-03-23|Featherweight 66 kg|JPN Koji Takeda|JPN Kyohei Hagiwara|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 9|2024-03-23|Bantamweight 61 kg|JPN Naoki Inoue|JPN Shoko Sato|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 9|2024-03-23|Female Super Atomweight 49 kg|JPN Rena Kubota|KOR Shim Yu-ri|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 9|2024-03-23|Flyweight 57 kg|JPN Yuya Shibata|JPN Erson Yamamoto|W|Submission (kneebar)|1|1:45|
+Rizin Landmark 9|2024-03-23|Bantamweight 61 kg|JPN Yuto Hokamura|JPN Daiki Tsubota|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 9|2024-03-23|Heavyweight 120 kg|JPN Takakenshin|USA Cody Jerabek|W|TKO (punches)|1|2:58|
+Rizin Landmark 9|2024-03-23|Featherweight 66 kg|JPN Yuta Kubo|JPN Ryogo Takahashi|W|Decision (split)|3|5:00|
+Rizin Landmark 9|2024-03-23|Flyweight 57 kg|JPN Yusaku Nakamura|KAZ Arman Ashimov|W|Decision (unanimous)|3|5:00|
+Rizin 46|2024-04-29|Featherweight 66 kg|JPN Chihiro Suzuki|JPN Masanori Kanehara|W|TKO (punches)|1|4:28|Defended the Rizin Featherweight Championship.
+Rizin 46|2024-04-29|Bantamweight 61 kg|JPN Shinobu Ota|JPN Juntaro Ushiku|W|Decision (unanimous)|3|5:00|
+Rizin 46|2024-04-29|Bantamweight 61 kg|KOR Soo Chul Kim|JPN Taichi Nakajima|W|KO (punches)|2|0:06|
+Rizin 46|2024-04-29|Flyweight 57 kg|JPN Makoto Takahashi|KOR Lee Jung-hyun|W|Submission (arm-triangle choke)|1|4:29|
+Rizin 46|2024-04-29|Bantamweight 61 kg|JPN Kazuma Kuramoto|KOR Yang Ji-yong|W|Decision (split)|3|5:00|
+Rizin 46|2024-04-29|Lightweight 71 kg|USA BeyNoah|JPN Yusaku Inoue|W|Decision (unanimous)|3|5:00|
+Rizin 46|2024-04-29|Featherweight 66 kg|RUS Viktor Kolesnik|JPN Yoshiki Nakahara|W|Decision (unanimous)|3|5:00|
+Rizin 46|2024-04-29|Featherweight 66 kg|UZB Ilkhom Nozimov|JPN Sora Yamamoto|W|TKO (elbows and punches)|2|3:39|
+Rizin 46|2024-04-29|Featherweight 66 kg|JPN Ryo Takagi|JPN Taisei Nishitani|W|KO (punch)|1|4:04|
+Rizin 47|2024-06-09|Bantamweight 61 kg|JPN Kyoji Horiguchi|USA Sergio Pettis|W|Decision (unanimous)|3|5:00|
+Rizin 47|2024-06-09|Featherweight 66 kg|JPN Kleber Koike Erbst|USA Juan Archuleta|W|Submission (inverted heel hook)|1|2:25|
+Rizin 47|2024-06-09|Heavyweight 120 kg|POL Przemysław Kowalczyk|JPN Mikio Ueda|W|Submission (armbar)|1|2:08|
+Rizin 47|2024-06-09|Featherweight 66 kg|KGZ Razhabali Shaydullaev|JPN Koji Takeda|W|Submission (rear-naked choke)|1|4:42|
+Rizin 47|2024-06-09|Lightweight 71 kg|USA Spike Carlyle|KOR Kim Kyung-pyo|W|Technical Submission (rear-naked choke)|3|1:11|
+Rizin 47|2024-06-09|Featherweight 66 kg|KAZ Karshyga Dautbek|JPN Tetsuya Seki|W|KO (punch to the body)|1|3:11|
+Rizin 47|2024-06-09|Lightweight 71 kg|USA BeyNoah|USA Johnny Case|W|Decision (unanimous)|3|5:00|
+Rizin 47|2024-06-09|Lightweight 71 kg|JPN Sho Patrick Usami|JPN Kazuki Tokudome|W|KO (punches)|1|2:29|
+Super Rizin 3|2024-07-28|Featherweight 66 kg|JPN Ren Hiramoto|JPN Mikuru Asakura|W|KO (punches)|1|2:18|
+Super Rizin 3|2024-07-28|Featherweight 66 kg|JPN Yuta Kubo|JPN Yutaka Saito|W|TKO (front kick to the body)|2|4:19|
+Super Rizin 3|2024-07-28|Flyweight 57 kg|JPN Hiromasa Ougikubo|JPN Makoto Takahashi|W|Decision (unanimous)|3|5:00|
+Super Rizin 3|2024-07-28|Catchweight 59 kg|JPN Hideo Tokoro|JPN Hiroya Kondo|W|TKO (punch and elbows)|1|3:20|
+Super Rizin 3|2024-07-28|Bantamweight 61 kg|JPN Ryusei Ashizawa|JPN Kouzi|W|Decision (unanimous)|3|5:00|
+Super Rizin 3|2024-07-28|Female Super Atomweight 49 kg|JPN Rena Kubota|JPN Kate Oyama|W|TKO (punches)|2|4:18|
+Super Rizin 3|2024-07-28|Featherweight 66 kg|JPN YA-MAN|JPN Hiroaki Suzuki|W|KO (punches)|1|3:28|
+Super Rizin 3|2024-07-28|Featherweight 66 kg|JPN Kazumasa Majima|JPN Suguru Nii|W|Submission (rear-naked choke)|2|3:11|
+Rizin 48|2024-09-29|Lightweight 70 kg|BRA Roberto de Souza|BRA Luiz Gustavo|W|TKO (punches)|1|0:21|Defended the Rizin Lightweight Championship.
+Rizin 48|2024-09-29|Bantamweight 61 kg|JPN Naoki Inoue|KOR Soo Chul Kim|W|TKO (punches)|1|3:55|Won the vacant Rizin Bantamweight Championship.
+Rizin 48|2024-09-29|Bantamweight 61 kg|JPN Yuki Motoya|JPN Shinobu Ota|W|Submission (rear-naked choke)|3|4:09|
+Rizin 48|2024-09-29|Featherweight 66 kg|KGZ Razhabali Shaydullaev|USA Juan Archuleta|W|Submission (armbar)|1|3:12|
+Rizin 48|2024-09-29|Female Super Atomweight 49 kg|JPN Seika Izawa|JPN Kanna Asakura|W|Decision (unanimous)|3|5:00|
+Rizin 48|2024-09-29|Bantamweight 61 kg|JPN Shoko Sato|JPN Juntaro Ushiku|W|Decision (unanimous)|3|5:00|
+Rizin 48|2024-09-29|Lightweight 70 kg|JPN Yusuke Yachi|JPN Sho Patrick Usami|W|Decision (unanimous)|3|5:00|
+Rizin 48|2024-09-29|Featherweight 66 kg|JPN Ryo Takagi|JPN Kyohei Hagiwara|W|Submission (rear-naked choke)|1|2:39|
+Rizin 48|2024-09-29|Bantamweight 61 kg|JPN Kyoma Akimoto|JPN Yuto Hokamura|W|TKO (punches and knees)|1|3:16|
+Rizin 48|2024-09-29|Flyweight 57 kg|RSA Nkazimulo Zulu|JPN Jo Arai|W|TKO (spinning wheel kick and punches)|1|4:12|
+Rizin 48|2024-09-29|Featherweight 66 kg|KAZ Karshyga Dautbek|JPN Takeaki Kinoshita|W|KO (punch)|1|1:48|
+Rizin Landmark 10|2024-11-17|Featherweight 66 kg|AZE Vugar Karamov|JPN Kazumasa Majima|W|TKO (punches and elbows)|1|0:28|
+Rizin Landmark 10|2024-11-17|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|KOR Shim Yu-ri|W|Submission (kimura)|2|1:15|
+Rizin Landmark 10|2024-11-17|Bantamweight 61 kg|JPN Ryusei Ashizawa|JPN Shoji Maruyama|W|KO (knee to the body)|2|1:05|
+Rizin Landmark 10|2024-11-17|Heavyweight 120 kg|JPN Tsuyoshi Sudario|JPN Hisaki Kato|W|TKO (doctor stoppage)|3|1:11|
+Rizin Landmark 10|2024-11-17|Featherweight 66 kg|JPN Kyoma Akimoto|JPN Hiroaki Suzuki|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 10|2024-11-17|Lightweight 70 kg|KOR Kim Kyung-pyo|JPN Daigo Kuramoto|W|TKO (elbows and punches)|1|3:59|
+Rizin Landmark 10|2024-11-17|Flyweight 57 kg|JPN Yuki Ito|KOR Lee Jung-hyun|W|TKO (elbows)|3|2:59|
+Rizin Landmark 10|2024-11-17|Flyweight 57 kg|JPN Hiroya Kondo|JPN Yuya Shibata|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 10|2024-11-17|Flyweight 57 kg|CAN Tony Laramie|JPN Yutaro Muramoto|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 10|2024-11-17|Bantamweight 61 kg|AZE Magerram Gasanzade|JPN Rikuto Shirakawa|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 10|2024-11-17|Bantamweight 61 kg|BRA Alan Yamaniha|JPN Seigo Yamamoto|W|Submission (rear-naked choke)|2|3:07|
+Rizin Landmark 10|2024-11-17|Flyweight 57 kg|RUS Alibek Gadzhammatov|JPN Daichi Kitakata|W|TKO (knees and punches)|1|3:20|
+Rizin 49|2024-12-31|Featherweight 66 kg|JPN Kleber Koike Erbst|JPN Chihiro Suzuki|W|Decision (unanimous)|3|5:00|Won the Rizin Featherweight Championship.
+Rizin 49|2024-12-31|Flyweight 57 kg|JPN Kyoji Horiguchi|RSA Nkazimulo Zulu|W|Decision (unanimous)|3|5:00|Defended the Rizin Flyweight Championship.
+Rizin 49|2024-12-31|Lightweight 70 kg|BRA Roberto de Souza|AZE Vugar Karamov|W|Submission (triangle choke)|1|4:45|Defended the Rizin Lightweight Championship.
+Rizin 49|2024-12-31|Female Super Atomweight 49 kg|JPN Seika Izawa|ARG Lucia Apdelgarim|W|Submission (triangle armbar)|1|2:21|
+Rizin 49|2024-12-31|Bantamweight 61 kg|JPN Yuki Motoya|JPN Kyoma Akimoto|W|Decision (unanimous)|3|5:00|
+Rizin 49|2024-12-31|Featherweight 66 kg|KGZ Razhabali Shaydullaev|JPN Yuta Kubo|W|TKO (punches)|2|2:30|
+Rizin 49|2024-12-31|Featherweight 66 kg|KAZ Karshyga Dautbek|JPN YA-MAN|W|Decision (unanimous)|3|5:00|
+Rizin 49|2024-12-31|Bantamweight 61 kg|JPN Ryuya Fukuda|JPN Ryusei Ashizawa|W|KO (punches)|1|0:54|
+Rizin 49|2024-12-31|Heavyweight 120 kg|JPN Mikio Ueda|KOR Kim Tae-in|W|KO (knee)|2|2:31|
+Rizin 49|2024-12-31|Catchweight 59 kg|USA Jose Torres|JPN Makoto Takahashi|W|Decision (split)|3|5:00|
+Rizin 49|2024-12-31|Lightweight 71 kg|JPN Taisei Sakuraba|JPN Yusuke Yachi|W|TKO (punches)|1|0:26|
+Rizin 49|2024-12-31|Featherweight 66 kg|JPN Koji Takeda|JPN Suguru Nii|W|Technical Decision (unanimous)|3|4:09|
+Rizin 49|2024-12-31|Heavyweight 120 kg|JPN King Edokpolo|JPN Takakenshin|W|KO (knee and punches)|1|3:22|
+Rizin 49|2024-12-31|Bantamweight 61 kg|JPN Genji Umeno|JPN Taiga Kawabe|W|Decision (unanimous)|3|5:00|
+Rizin 49|2024-12-31|Bantamweight 61 kg|JPN Sanou Yokouchi|JPN Kenshin Saito|W|Submission (rear-naked choke)|1|3:03|
+Rizin 49|2024-12-31|Featherweight 66 kg|JPN Hyuma Yasui|JPN Hiroaki Suzuki|W|Decision (unanimous)|3|5:00|
+Rizin 49|2024-12-31|Featherweight 66 kg|JPN Hiroto Gomyo|JPN Koki Akada|W|Decision (split)|3|5:00|

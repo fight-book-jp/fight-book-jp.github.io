@@ -1,0 +1,46 @@
+Rizin 21|2020-02-22|Catchweight 68 kg|JPN Mikuru Asakura|MEX Daniel Salas|W|TKO (Head Kick and Punches)|2|7:34|
+Rizin 21|2020-02-22|Bantamweight 61 kg|USA Victor Henry|JPN Masanori Kanehara|W|TKO (Punches)|2|5:45|
+Rizin 21|2020-02-22|Heavyweight 120 kg|GUM Roque Martinez|JPN Hideki Sekine|W|TKO (Soccer Kicks)|1|4:04|
+Rizin 21|2020-02-22|Catchweight 79 kg|BRA Marcos de Souza|POR Falco Neto|W|TKO (Punches)|1|1:27|
+Rizin 21|2020-02-22|Bantamweight 61 kg|JPN Yuto Hokamura|JPN Kenji Kato|W|Submission (Rear-Naked Choke)|1|4:21|
+Rizin 21|2020-02-22|Bantamweight 61 kg|JPN Naoki Inoue|AUS Trent Girdham|W|Decision (Unanimous)|3|15:00|
+Rizin 21|2020-02-22|Featherweight 66 kg|AZE Vugar Karamov|GUM Kyle Aguon|W|Decision (Unanimous)|3|15:00|
+Rizin 22|2020-08-09|Lightweight 71 kg|BRA Roberto de Souza|JPN Yusuke Yachi|W|TKO (Punches)|1|1:52|
+Rizin 22|2020-08-09|Female Strawweight 52 kg|JPN Ayaka Hamasaki|JPN Tomo Maesawa|W|Submission (Kimura)|2|6:26|
+Rizin 22|2020-08-09|Female Super Atomweight 49 kg|JPN Kanna Asakura|JPN Mizuki Furuse|W|TKO (Punches)|1|1:35|
+Rizin 22|2020-08-09|Bantamweight 61 kg|JPN Naoki Inoue|JPN Shooto Watanabe|W|Submission (Rear-Naked Choke)|1|1:40|
+Rizin 22|2020-08-09|Featherweight 66 kg|JPN Tetsuya Seki|JPN Kouya Kanda|W|TKO (Punches)|2|8:47|
+Rizin 22|2020-08-09|Featherweight 66 kg|JPN Kyohei Hagiwara|JPN Rikuto Shirakawa|W|TKO (Punches)|3|14:40|
+Rizin 22|2020-08-09|Bantamweight 61 kg|JPN Kenji Kato|JPN Erson Yamamoto|W|KO (Punch)|1|3:32|
+Rizin 23|2020-08-10|Bantamweight 61 kg|JPN Kai Asakura|JPN Hiromasa Ougikubo|W|TKO (Soccer Kicks)|1|4:31|Won the vacant Rizin Bantamweight Championship.
+Rizin 23|2020-08-10|Bantamweight 61 kg|JPN Yuki Motoya|JPN Mamoru Uoi|W|Submission (Guillotine Choke)|3|12:19|
+Rizin 23|2020-08-10|Featherweight 66 kg|JPN Yutaka Saito|JPN Kazumasa Majima|W|TKO (Knees and Elbow)|2|5:24|
+Rizin 23|2020-08-10|Featherweight 66 kg|JPN Jin Aoi|JPN Kotetsu Boku|W|Decision (Unanimous)|3|15:00|
+Rizin 23|2020-08-10|Catchweight 59 kg|JPN Makoto Shinryu|JPN Seiichiro Ito|W|Submission (Guillotine Choke)|2|9:30|
+Rizin 23|2020-08-10|Flyweight 58 kg|JPN Tatsuki Saomoto|JPN Yusaku Nakamura|W|KO (Punches)|1|4:06|
+Rizin 24|2020-09-27|Bantamweight 61 kg|JPN Kai Asakura|JPN Shoji Maruyama|W|TKO (Punches and Soccer Kick)|1|2:37|
+Rizin 24|2020-09-27|Lightweight 71 kg|JPN Koji Takeda|JPN Yuki Kawana|W|Decision (Split)|3|15:00|
+Rizin 24|2020-09-27|Lightweight 71 kg|JPN Takasuke Kume|JPN Satoru Kitaoka|W|Decision (Split)|3|15:00|
+Rizin 24|2020-09-27|Bantamweight 61 kg|JPN Kenta Takizawa|JPN Yuto Hokamura|W|Decision (Split)|3|15:00|
+Rizin 24|2020-09-27|Female Strawweight 52 kg|JPN Rena Kubota|JPN Emi Tomimatsu|W|Decision (Unanimous)|3|15:00|
+Rizin 24|2020-09-27|Featherweight 66 kg|JPN Takahiro Ashida|JPN Kyohei Hagiwara|W|Submission (Triangle Choke)|2|9:25|
+Rizin 24|2020-09-27|Heavyweight 120 kg|JPN Tsuyoshi Sudario|NZL Dylan James|W|TKO (Doctor Stoppage)|1|5:00|
+Rizin 24|2020-09-27|Lightweight 71 kg|JPN Juri Ohara|JPN Yusuke Yachi|W|Decision (Split)|3|15:00|
+Rizin 25|2020-11-21|Featherweight 66 kg|JPN Yutaka Saito|JPN Mikuru Asakura|W|Decision (Unanimous)|3|15:00|Won the inaugural Rizin Featherweight Championship.
+Rizin 25|2020-11-21|Bantamweight 61 kg|JPN Hiromasa Ougikubo|JPN Kenta Takizawa|W|Decision (Unanimous)|3|15:00|
+Rizin 25|2020-11-21|Welterweight 77 kg|JPN Ryuichiro Sumimura|JPN Gota Yamashita|W|Decision (Split)|3|15:00|
+Rizin 25|2020-11-21|Flyweight 57 kg|JPN Tatsuki Saomoto|JPN Daichi Kitakata|W|Decision (Unanimous)|3|15:00|
+Rizin 25|2020-11-21|Featherweight 66 kg|JPN Kyohei Hagiwara|JPN Yojiro Uchimura|W|KO (Punches and Foot Stomp)|1|0:22|
+Rizin 25|2020-11-21|Featherweight 66 kg|JPN Rikuto Shirakawa|JPN Kotetsu Boku|W|TKO (Punches and Soccer Kick)|3|14:19|
+Rizin 26|2020-12-31|Bantamweight 61 kg|JPN Kyoji Horiguchi|JPN Kai Asakura|W|TKO (Punches)|1|2:48|Won the Rizin Bantamweight Championship.
+Rizin 26|2020-12-31|Catchweight 68 kg|JPN Mikuru Asakura|JPN Satoshi Yamasu|W|KO (Head Kick and Punches)|1|4:20|
+Rizin 26|2020-12-31|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|JPN Miyuu Yamamoto|W|Submission (Head Scissors Choke)|1|1:42|Won the vacant Rizin Super Atomweight Championship.
+Rizin 26|2020-12-31|Bantamweight 61 kg|JPN Naoki Inoue|JPN Yuki Motoya|W|Submission (Rear-Naked Choke)|1|3:00|
+Rizin 26|2020-12-31|Catchweight 67 kg|JPN Kleber Koike Erbst|GUM Kyle Aguon|W|Technical Submission (Brabo Choke)|1|4:21|
+Rizin 26|2020-12-31|Catchweight 68 kg|JPN Kyohei Hagiwara|JPN Ren Hiramoto|W|TKO (Corner Stoppage)|2|1:29|
+Rizin 26|2020-12-31|Bantamweight 61 kg|JPN Hideo Tokoro|JPN Shinobu Ota|W|Submission (Armbar)|2|2:23|
+Rizin 26|2020-12-31|Bantamweight 61 kg|JPN Ulka Sasaki|JPN Kenta Takizawa|W|Decision (Unanimous)|3|5:00|
+Rizin 26|2020-12-31|Female Super Atomweight 49 kg|JPN Kanna Asakura|JPN Ai Shimizu|W|Decision (Unanimous)|3|5:00|
+Rizin 26|2020-12-31|Catchweight 63 kg|JPN Kazuma Kuramoto|JPN Taiyo Nakahara|W|KO (Soccer Kicks)|1|2:12|
+Rizin 26|2020-12-31|Heavyweight 120 kg|JPN Tsuyoshi Sudario|JPN Ikuhisa Minowa|W|TKO (Leg Injury)|1|3:17|
+Rizin 26|2020-12-31|Female Catchweight 52.7 kg|JPN Sakura Mori|JPN Eru Takebayashi|NC|No Contest|1|1:37|Mori missed weight.

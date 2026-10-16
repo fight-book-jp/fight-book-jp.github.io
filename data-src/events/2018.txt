@@ -1,0 +1,66 @@
+Rizin 10 - Fukuoka|2018-05-06|Bantamweight 61 kg|JPN Kyoji Horiguchi|USA Ian McCall|W|KO (Punch)|1|0:09|
+Rizin 10 - Fukuoka|2018-05-06|KICK Flyweight 57 kg|JPN Tenshin Nasukawa|JPN Yusaku Nakamura|W|TKO (3 Knockdowns Rules)|2|4:42|
+Rizin 10 - Fukuoka|2018-05-06|Super Atomweight 49 kg|JPN Kanna Asakura|CAN Melissa Karagianis|W|Decision (Unanimous)|3|15:00|
+Rizin 10 - Fukuoka|2018-05-06|Lightweight 70 kg|JPN Yusuke Yachi|BRA Diego Nunes|W|Decision (Split)|3|15:00|
+Rizin 10 - Fukuoka|2018-05-06|Lightweight 70 kg|USA Daron Cruickshank|JPN Koshi Matsumoto|W|KO (Head Kick)|1|3:52|
+Rizin 10 - Fukuoka|2018-05-06|KICK Strawweight 51.5 kg|JPN Issei Ishii|JPN Daishin Sakai|W|Decision (Unanimous)|3|9:00|
+Rizin 10 - Fukuoka|2018-05-06|Catchweight 59 kg|JPN Kai Asakura|POR Manel Kape|W|Decision (Split)|3|15:00|
+Rizin 10 - Fukuoka|2018-05-06|Super Atomweight 49 kg|JPN Ayaka Hamasaki|USA Alyssa Garcia|W|Decision (Unanimous)|3|15:00|
+Rizin 10 - Fukuoka|2018-05-06|Heavyweight 120 kg|CRO Ante Delija|BRA Ricardo Prasel|W|Decision (Unanimous)|3|15:00|
+Rizin 10 - Fukuoka|2018-05-06|Heavyweight 120 kg|SUR Jairzinho Rozenstruik|UKR Andrey Kovalev|W|Decision (Split)|3|15:00|
+Rizin 10 - Fukuoka|2018-05-06|Female Strawweight 53 kg|JPN Kanako Murata|ENG Lanchana Green|W|Submission (Anaconda Choke)|1|4:54|
+Rizin 10 - Fukuoka|2018-05-06|KICK Bantamweight 61 kg|JPN Tomohiro Kitai|JPN Kurogi Darvish|D|Draw (Split)|3|9:00|
+Rizin 11 - Saitama|2018-07-29|Female Super Atomweight 49 kg|JPN Kanna Asakura|JPN Rena Kubota|W|Decision (unanimous)|3|15:00|
+Rizin 11 - Saitama|2018-07-29|Catchweight 60 kg|JPN Kyoji Horiguchi|JPN Hiromasa Ougikubo|W|Decision (Unanimous)|2|15:00|
+Rizin 11 - Saitama|2018-07-29|Light Heavyweight 93 kg|CZE Jiří Procházka|BRA Bruno Cappelozza|W|KO (Punches)|1|1:41|
+Rizin 11 - Saitama|2018-07-29|Catchweight 74 kg|JPN Takanori Gomi|USA Melvin Guillard|W|KO (Punches)|1|2:33|
+Rizin 11 - Saitama|2018-07-29|Lightweight 70 kg|BRA Diego Brandao|JPN Satoru Kitaoka|W|KO (Punches)|1|1:30|
+Rizin 11 - Saitama|2018-07-29|Openweight|MGL Unurjargal Boldpurev|JPN Shoma Shibisai|W|Decision (Unanimous)|3|15:00|
+Rizin 11 - Saitama|2018-07-29|KICK Lightweight 70 kg|JPN Kaito Ono|JPN Yoshiya Uzatsuyo|W|KO (knee)|2|4:22|
+Rizin 11 - Saitama|2018-07-29|Female Super Atomweight 49 kg|JPN Miyuu Yamamoto|JPN Saori Ishioka|W|Decision (split)|3|15:00|
+Rizin 11 - Saitama|2018-07-29|Catchweight 59 kg|THA Topnoi Thanongsaklek|JPN Tadaaki Yamamoto|W|KO (Punch)|1|1:06|
+Rizin 11 - Saitama|2018-07-29|Lightweight 70 kg|USA Daron Cruickshank|BRA Tom Santos|W|TKO (Elbows)|3|14:11|
+Rizin 12 - Aichi - Ken|2018-08-12|Lightweight 70 kg|BRA Luiz Gustavo|JPN Yusuke Yachi|W|KO (Punch)|2|7:32|
+Rizin 12 - Aichi - Ken|2018-08-12|Bantamweight 61 kg|JPN Yuki Motoya|JPN Kazuma Sone|W|Submission (Rear-Naked Choke)|2|9:31|
+Rizin 12 - Aichi - Ken|2018-08-12|Welterweight 77 kg|JPN Kiichi Kunimoto|JPN Ryuichiro Sumimura|W|Submission (Arm-Triangle Choke)|1|4:59|
+Rizin 12 - Aichi - Ken|2018-08-12|Female Featherweight 65 kg|USA Kaitlin Young|JPN Reina Miura|W|Decision (Unanimous)|3|15:00|
+Rizin 12 - Aichi - Ken|2018-08-12|KICK Catchweight 59 kg|JPN Daiki Naito|JPN Hannya Hashimoto|W|TKO (Leg Kicks)|2|4:53|
+Rizin 12 - Aichi - Ken|2018-08-12|Featherweight 66 kg|JPN Mikuru Asakura|JPN Hatsu Hioki|W|KO (Head Kick and Punches)|1|3:45|
+Rizin 12 - Aichi - Ken|2018-08-12|Heavyweight 120 kg|GUM Roque Martinez|JPN Kiyoshi Kuwabara|W|TKO (Punches)|1|4:37|
+Rizin 12 - Aichi - Ken|2018-08-12|KICK Featherweight 65 kg|JPN Kaito Ono|JPN Sho Ogawa|W|Decision (Unanimous)|3|9:00|
+Rizin 12 - Aichi - Ken|2018-08-12|Female Strawweight 53 kg|JPN Kanako Murata|PUR Angela Magaña|W|Submission (Von Flue choke)|2|8:52|
+Rizin 12 - Aichi - Ken|2018-08-12|KICK Catchweight 59 kg|JPN Ryuki|JPN NAOYA|W|Decision (Unanimous)|3|9:00|
+Rizin 12 - Aichi - Ken|2018-08-12|KICK Lightweight 70 kg|JPN Shintaro Matsukura|JPN Takahiro Okuyama|W|KO (Punch)|2|5:30|
+Rizin 12 - Aichi - Ken|2018-08-12|KICK Catchweight 53 kg|JPN Shota Takiya|JPN Syuto Sato|W|Decision (Unanimous)|3|9:00|
+Rizin 13 - Saitama|2018-09-30|Light Heavyweight 93 kg|CZE Jiří Procházka|USA Jake Heun|W|TKO (Punches)|1|4:29|
+Rizin 13 - Saitama|2018-09-30|Featherweight 66 kg|JPN Mikuru Asakura|KAZ Karshyga Dautbek|W|Decision (Unanimous)|3|15:00|
+Rizin 13 - Saitama|2018-09-30|Lightweight 70 kg|USA Daron Cruickshank|BRA Diego Brandao|W|KO (Flying Knee)|2|5:17|
+Rizin 13 - Saitama|2018-09-30|KICK Flyweight 57 kg|JPN Tenshin Nasukawa|JPN Kyoji Horiguchi|W|Decision (Unanimous)|3|9:00|
+Rizin 13 - Saitama|2018-09-30|Female Super Atomweight 49 kg|JPN Miyuu Yamamoto|USA Andy Nguyen|W|Decision (Unanimous)|3|15:00|
+Rizin 13 - Saitama|2018-09-30|Heavyweight 120 kg|CRO Mirko Cro Cop|GUM Roque Martinez|W|TKO (Cut)|1|4:58|
+Rizin 13 - Saitama|2018-09-30|EXH Openweight|USA Bob Sapp|EGY Osunaarashi|W|Decision (Unanimous)|3|9:00|Special Rules bout
+Rizin 13 - Saitama|2018-09-30|Strawweight 53 kg|JPN Haruo Ochi|JPN Mitsuhisa Sunabe|W|KO (Soccer Kicks)|3|12:51|
+Rizin 13 - Saitama|2018-09-30|Catchweight 59 kg|JPN Kai Asakura|THA Topnoi Thanongsaklek|W|Decision (Unanimous)|3|15:00|
+Rizin 13 - Saitama|2018-09-30|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|JPN Mina Kurobe|W|Submission (Kimura)|1|4:45|
+Rizin 13 - Saitama|2018-09-30|KICK Catchweight 59 kg|JPN Taiga|JPN Kento Haraguchi|D|Draw (Majority)|3|9:00|
+Rizin 13 - Saitama|2018-09-30|Catchweight 58 kg|POR Manel Kape|JPN Yusaku Nakamura|W|Submission (Rear-Naked Choke)|3|14:27|
+Rizin - Heisei's Last Yarennoka!|2018-12-31|Lightweight 70 kg|JPN Satoru Kitaoka|JPN Tatsuya Kawajiri|W|Decision (Split)|3|15:00|
+Rizin - Heisei's Last Yarennoka!|2018-12-31|Catchweight 68 kg|JPN Mikuru Asakura|JPN Takeshi Inoue|W|TKO (Flying Knee and Punch)|2|7:39|
+Rizin - Heisei's Last Yarennoka!|2018-12-31|Female Flyweight 57 kg|JPN Kana Watanabe|JPN Shizuka Sugiyama|W|TKO (Punch)|1|0:11|
+Rizin - Heisei's Last Yarennoka!|2018-12-31|Bantamweight 61 kg|JPN Kai Asakura|KOR Jae Hoon Moon|W|Decision (Unanimous)|3|15:00|
+Rizin - Heisei's Last Yarennoka!|2018-12-31|KICK Catchweight 64 kg|JPN Taiju Shiratori|JPN Yoshiya Uzatsuyo|W|TKO (Flying Knee)|3|7:43|
+Rizin - Heisei's Last Yarennoka!|2018-12-31|KICK Catchweight 92 kg|JPN Yuta Uchida|JPN Takuma Konishi|W|Decision (Unanimous)|3|9:00|
+Rizin - Heisei's Last Yarennoka!|2018-12-31|Female Super Atomweight 49 kg|JPN Ai Shimizu|JPN Nanaka Kawamura|W|TKO (Punches)|1|3:01|
+Rizin 14 - Saitama|2018-12-31|EXH Boxing 66.6 kg|USA Floyd Mayweather Jr.|JPN Tenshin Nasukawa|W|TKO (Corner Stoppage)|1|2:19|Exhibition boxing match
+Rizin 14 - Saitama|2018-12-31|Bantamweight 61 kg|JPN Kyoji Horiguchi|USA Darrion Caldwell|W|Submission (Guillotine Choke)|3|11:13|Won the inaugural Rizin Bantamweight Championship.
+Rizin 14 - Saitama|2018-12-31|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|JPN Kanna Asakura|W|Submission (Armbar)|2|9:34|Won the inaugural Rizin Super Atomweight Championship.
+Rizin 14 - Saitama|2018-12-31|Light Heavyweight 93 kg|CZE Jiří Procházka|USA Brandon Halsey|W|Submission (Punches)|1|6:30|
+Rizin 14 - Saitama|2018-12-31|Female Catchweight 102.5 kg|BRA Gabi Garcia|BRA Barbara Nepomuceno|W|Submission (Keylock)|1|2:35|
+Rizin 14 - Saitama|2018-12-31|Lightweight 70 kg|AUS Damien Brown|USA Daron Cruickshank|W|Submission (Guillotine Choke)|1|4:10|
+Rizin 14 - Saitama|2018-12-31|Female Catchweight 51 kg|JPN Miyuu Yamamoto|JPN Mika Nagano|W|Decision (Unanimous)|3|15:00|
+Rizin 14 - Saitama|2018-12-31|Featherweight 65 kg|JPN Kazuyuki Miyata|JPN Erson Yamamoto|W|Submission (Hammerlock)|2|8:23|
+Rizin 14 - Saitama|2018-12-31|Lightweight 70 kg|USA Johnny Case|JPN Yusuke Yachi|W|TKO (Cut)|2|9:47|
+Rizin 14 - Saitama|2018-12-31|Catchweight 60 kg|JPN Yuki Motoya|USA Justin Scoggins|W|Submission (Teepee Choke)|1|3:28|
+Rizin 14 - Saitama|2018-12-31|Catchweight 59 kg|JPN Ulka Sasaki|POR Manel Kape|W|Decision (Unanimous)|3|15:00|
+Rizin 14 - Saitama|2018-12-31|Female Flyweight 57 kg|POL Justyna Haba|USA Shinju Nozawa-Auclair|W|Submission (Rear-Naked Choke)|2|8:41|
+Rizin 14 - Saitama|2018-12-31|Lightweight 70 kg|AZE Tofiq Musayev|JPN Nobumitsu Osawa|W|TKO (Punches)|2|6:19|

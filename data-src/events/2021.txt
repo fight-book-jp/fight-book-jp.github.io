@@ -1,0 +1,79 @@
+Rizin 27|2021-03-21|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|JPN Kanna Asakura|W|Decision (Split)|3|5:00|Defended the Rizin Super Atomweight Championship.
+Rizin 27|2021-03-21|Lightweight 71 kg|BRA Roberto de Souza|JPN Kazuki Tokudome|W|Submission (Triangle Choke)|1|1:44|
+Rizin 27|2021-03-21|Lightweight 71 kg|JPN Koji Takeda|JPN Takasuke Kume|W|Decision (Unanimous)|3|15:00|
+Rizin 27|2021-03-21|Featherweight 66 kg|JPN Kleber Koike Erbst|JPN Kazumasa Majima|W|Submission (Triangle Choke)|2|8:02|
+Rizin 27|2021-03-21|Heavyweight 120 kg|JPN Tsuyoshi Sudario|JPN Kazushi Miyamoto|W|KO (Punches)|1|0:08|
+Rizin 27|2021-03-21|Featherweight 66 kg|JPN Yoshinori Horie|JPN Tetsuya Seki|W|TKO (Punches)|3|11:16|
+Rizin 27|2021-03-21|Bantamweight 61 kg|JPN Hiroki Yamashita|JPN Kazuma Sone|W|KO (Punches)|1|0:27|
+Rizin 27|2021-03-21|Bantamweight 61 kg|JPN Shooto Watanabe|JPN Takumi Tamaru|W|Submission (Rear-Naked Choke)|2|9:13|
+Rizin 27|2021-03-21|Flyweight 57 kg|JPN Yutaro Muramoto|JPN Seigo Yamamoto|W|KO (Punches)|1|2:37|
+Rizin 27|2021-03-21|Flyweight 57 kg|JPN Yuki Ito|JPN Kohei Sugiyama|W|TKO (Punches)|1|0:33|
+Rizin 28|2021-06-13|Featherweight 66 kg|JPN Kleber Koike Erbst|JPN Mikuru Asakura|W|Technical Submission (Triangle Choke)|2|1:51|
+Rizin 28|2021-06-13|Lightweight 70 kg|BRA Roberto de Souza|AZE Tofiq Musayev|W|Submission (Triangle Choke)|1|1:12|Won the inaugural Rizin Lightweight Championship.
+Rizin 28|2021-06-13|Bantamweight 61 kg|JPN Kai Asakura|JPN Shooto Watanabe|W|TKO (Punches)|1|3:22|Bantamweight Grand Prix Opening Round
+Rizin 28|2021-06-13|Bantamweight 61 kg|JPN Naoki Inoue|JPN Shintaro Ishiwatari|W|KO (Soccer Kick)|1|1:58|Bantamweight Grand Prix Opening Round
+Rizin 28|2021-06-13|Bantamweight 61 kg|JPN Hiromasa Ougikubo|JPN Takeshi Kasugai|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Opening Round
+Rizin 28|2021-06-13|Bantamweight 61 kg|JPN Yuki Motoya|JPN Ryo Okada|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Opening Round
+Rizin 28|2021-06-13|Featherweight 66 kg|JPN Yutaka Saito|AZE Vugar Karamov|W|Decision (Split)|3|5:00|
+Rizin 28|2021-06-13|Heavyweight 120 kg|JPN Shoma Shibisai|JPN Tsuyoshi Sudario|W|Submission (Rear-Naked Choke)|3|1:38|
+Rizin 28|2021-06-13|Catchweight 73 kg|JPN Satoshi Yamasu|USA BeyNoah|W|Decision (Split)|3|5:00|
+Rizin 29|2021-06-27|Bantamweight 61 kg|JPN Yuto Hokamura|JPN Kuya Ito|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Opening Round
+Rizin 29|2021-06-27|Bantamweight 61 kg|JPN Takafumi Otsuka|JPN Hiroki Yamashita|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Opening Round
+Rizin 29|2021-06-27|Bantamweight 61 kg|JPN Kenta Takizawa|JPN Masakazu Imanari|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Opening Round
+Rizin 29|2021-06-27|Bantamweight 61 kg|BRA Alan Yamaniha|JPN Kazuma Kuramoto|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Opening Round
+Rizin 29|2021-06-27|Lightweight 71 kg|JPN Yusuke Yachi|JPN Yuki Kawana|W|Decision (Unanimous)|3|5:00|
+Rizin 29|2021-06-27|Featherweight 66 kg|JPN Rikuto Shirakawa|JPN Jin Aoi|W|Decision (Unanimous)|3|5:00|
+Rizin 30|2021-09-19|Bantamweight 61 kg|JPN Kai Asakura|BRA Alan Yamaniha|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Quarterfinals
+Rizin 30|2021-09-19|Bantamweight 61 kg|JPN Naoki Inoue|JPN Yuto Hokamura|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Quarterfinals
+Rizin 30|2021-09-19|Bantamweight 61 kg|JPN Hiromasa Ougikubo|JPN Takafumi Otsuka|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Quarterfinals
+Rizin 30|2021-09-19|Bantamweight 61 kg|JPN Kenta Takizawa|JPN Yuki Motoya|W|TKO (Punches)|1|2:27|Bantamweight Grand Prix Quarterfinals
+Rizin 30|2021-09-19|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|JPN Emi Fujino|W|Decision (Unanimous)|3|5:00|
+Rizin 30|2021-09-19|Lightweight 70 kg|JPN Yusuke Yachi|JPN Koji Takeda|W|Decision (Unanimous)|3|5:00|
+Rizin 30|2021-09-19|Featherweight 66 kg|JPN Yoshinori Horie|JPN Ulka Sasaki|W|Decision (Unanimous)|3|5:00|
+Rizin 30|2021-09-19|Featherweight 66 kg|JPN Shinobu Ota|JPN Yuta Kubo|W|Decision (Unanimous)|3|5:00|
+Rizin 30|2021-09-19|Featherweight 66 kg|JPN Shoji Maruyama|JPN Chihiro Suzuki|W|KO (Punches)|1|0:20|
+Rizin Landmark 1|2021-10-02|Catchweight 68 kg|JPN Mikuru Asakura|JPN Kyohei Hagiwara|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 1|2021-10-02|Lightweight 70 kg|JPN Hiroaki Suzuki|JPN Keisuke Okuda|W|TKO (Knee and Punches)|1|1:42|
+Rizin Landmark 1|2021-10-02|Bantamweight 61 kg|JPN Masakazu Imanari|JPN Takeshi Kasugai|W|Submission (Armbar)|1|2:50|
+Rizin Landmark 1|2021-10-02|Bantamweight 61 kg|JPN Shooto Watanabe|JPN Nobutaka Naito|W|Technical Submission (D'Arce Choke)|1|1:33|
+Rizin 31|2021-10-24|Featherweight 66 kg|JPN Juntaro Ushiku|JPN Yutaka Saito|W|TKO (Doctor Stoppage)|2|4:26|Won the Rizin Featherweight Championship.
+Rizin 31|2021-10-24|Female Super Atomweight 49 kg|JPN Saori Oshima|JPN Kanna Asakura|W|Decision (Split)|3|5:00|
+Rizin 31|2021-10-24|Heavyweight 120 kg|JPN Tsuyoshi Sudario|USA Radlein Saint Ilme|W|KO (Punch)|1|1:51|
+Rizin 31|2021-10-24|Featherweight 66 kg|JPN Masanori Kanehara|JPN Takahiro Ashida|W|TKO (Punches and Elbows)|2|1:18|
+Rizin 31|2021-10-24|Lightweight 71 kg|JPN Akira Okada|JPN Daichi Abe|W|Submission (North-South Choke)|2|4:34|
+Rizin 31|2021-10-24|Featherweight 66 kg|JPN Daisuke Nakamura|JPN Suguru Nii|W|Submission (Flying Armbar)|1|2:16|
+Rizin 31|2021-10-24|Featherweight 66 kg|JPN Rikuto Shirakawa|JPN Takuya Yamamoto|W|KO (Punches and Soccer Kick)|1|3:48|
+Rizin 31|2021-10-24|Flyweight 57 kg|JPN Yuki Ito|JPN Yusaku Nakamura|W|TKO (Elbow and Punches)|1|4:52|
+Rizin 31|2021-10-24|Flyweight 57 kg|JPN Seiichiro Ito|JPN Kunta Hashimoto|W|Submission (Rear-Naked Choke)|2|4:07|
+Rizin 32|2021-11-20|Female Super Atomweight 50 kg|JPN Rena Kubota|JPN Miyuu Yamamoto|W|TKO (Knee and Punches)|2|3:35|
+Rizin 32|2021-11-20|Catchweight 58.5 kg|JPN Yoshiro Maeda|JPN Mitsuhisa Sunabe|W|Decision (Unanimous)|3|5:00|
+Rizin 32|2021-11-20|Heavyweight 120 kg|NGA Bobby Ologun|JPN Katsuya Kitamura|W|Submission (Rear-Naked Choke)|2|2:34|
+Rizin 32|2021-11-20|Catchweight 72 kg|USA BeyNoah|COD Daryl Lokoku|W|KO (Punch)|3|1:09|
+Rizin 32|2021-11-20|Catchweight 72 kg|JPN Juri Ohara|JPN Kohei Tokeshi|W|TKO (Soccer Kicks and Punches)|1|1:16|
+Rizin 32|2021-11-20|Flyweight 57 kg|JPN Haruo Ochi|JPN Tatsuya So|W|Decision (Unanimous)|3|5:00|
+Rizin 32|2021-11-20|Flyweight 57 kg|JPN Yuichi Miyagi|JPN Tomohiro Adaniya|W|KO (Knee)|1|0:47|
+Rizin 32|2021-11-20|Female Super Atomweight 49 kg|JPN Mizuki Oshiro|JPN Aira Koga|W|Decision (Split)|3|5:00|
+Rizin 32|2021-11-20|Catchweight 74 kg|USA Tanner Lourenco|JPN Shinya Kumazawa|W|Submission (Okuri Eri Jime)|2|1:34|
+Rizin 32|2021-11-20|Catchweight 58 kg|JPN Sho Sekihara|JPN Takahiro Kuniyoshi|W|Decision (Unanimous)|3|5:00|
+Rizin Trigger 1|2021-11-28|Featherweight 66 kg|JPN Kyohei Hagiwara|JPN Shoji Maruyama|W|TKO (Punch and Soccer Kick)|2|1:19|
+Rizin Trigger 1|2021-11-28|Catchweight 68 kg|JPN Yoshinori Horie|JPN Hirotaka Nakada|W|Decision (Unanimous)|3|5:00|
+Rizin Trigger 1|2021-11-28|Welterweight 77 kg|JPN Kiichi Kunimoto|JPN Takahiro Kawanaka|W|Submission (Arm-Triangle Choke)|1|4:10|
+Rizin Trigger 1|2021-11-28|Welterweight 77 kg|JPN Ryuichiro Sumimura|JPN Yasaku Kinoshita|W|DQ (Fence Grabbing)|2|2:34|
+Rizin Trigger 1|2021-11-28|Bantamweight 61 kg|JPN Mamoru Uoi|JPN Hiroki Yamashita|W|KO (Punch and Soccer Kick)|1|4:53|
+Rizin Trigger 1|2021-11-28|Flyweight 57 kg|JPN Tatsuki Saomoto|JPN Takashi Matsuba|W|Decision (Split)|3|5:00|
+Rizin Trigger 1|2021-11-28|Featherweight 66 kg|JPN Chihiro Suzuki|JPN Sora Yamamoto|W|Decision (Unanimous)|3|5:00|
+Rizin Trigger 1|2021-11-28|Catchweight 73 kg|USA Grant Bogdanove|JPN Keisuke Okuda|W|Submission (Rear-Naked Choke)|1|1:07|
+Rizin Trigger 1|2021-11-28|Bantamweight 61 kg|JPN Daiki Tsubota|JPN Makoto Kamaya|W|KO (Flying Knee)|2|2:49|
+Rizin Trigger 1|2021-11-28|Bantamweight 61 kg|JPN Kenji Kato|JPN Katsuya Fujiwara|W|TKO (Injury)|2|1:21|
+Rizin 33|2021-12-31|Bantamweight 61 kg|JPN Hiromasa Ougikubo|JPN Kai Asakura|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Final
+Rizin 33|2021-12-31|Lightweight 71 kg|BRA Roberto de Souza|JPN Yusuke Yachi|W|Submission (Triangle Armbar)|2|3:30|Defended the Rizin Lightweight Championship.
+Rizin 33|2021-12-31|Featherweight 66 kg|JPN Mikuru Asakura|JPN Yutaka Saito|W|Decision (Unanimous)|3|5:00|
+Rizin 33|2021-12-31|Female Catchweight 50 kg|KOR Si Woo Park|JPN Rena Kubota|W|Decision (Unanimous)|3|5:00|
+Rizin 33|2021-12-31|Female Super Atomweight 49 kg|JPN Seika Izawa|JPN Ayaka Hamasaki|W|TKO (Elbows and Punches)|2|2:50|
+Rizin 33|2021-12-31|Lightweight 71 kg|JPN Koji Takeda|USA BeyNoah|W|Submission (Armbar)|2|4:12|
+Rizin 33|2021-12-31|Heavyweight 120 kg|JPN Hideki Sekine|JPN Shoma Shibisai|W|TKO (Punches)|2|2:09|
+Rizin 33|2021-12-31|Featherweight 66 kg|JPN Kyohei Hagiwara|JPN Hiroaki Suzuki|W|Decision (Unanimous)|3|5:00|
+Rizin 33|2021-12-31|Bantamweight 61 kg|JPN Shinobu Ota|JPN Kazuma Sone|W|TKO (Soccer Kicks and Stomps)|2|3:55|
+Rizin 33|2021-12-31|Bantamweight 61 kg|JPN Yuki Motoya|JPN Yuto Hokamura|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Reserve Bout
+Rizin 33|2021-12-31|Bantamweight 61 kg|JPN Hiromasa Ougikubo|JPN Naoki Inoue|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Semi-finals
+Rizin 33|2021-12-31|Bantamweight 61 kg|JPN Kai Asakura|JPN Kenta Takizawa|W|Decision (Unanimous)|3|5:00|Bantamweight Grand Prix Semi-finals

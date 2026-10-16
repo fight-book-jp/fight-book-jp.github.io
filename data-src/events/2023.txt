@@ -1,0 +1,85 @@
+Rizin 41|2023-04-01|Featherweight|AZE Vugar Karamov|JPN Yoshinori Horie|W|Submission (Rear-Naked Choke)|2|3:21|
+Rizin 41|2023-04-01|Welterweight|JPN Keita Nakamura|JPN Kiichi Kunimoto|W|KO (Punches and Soccer Kick)|2|0:49|
+Rizin 41|2023-04-01|Flyweight|JPN Makoto Takahashi|JPN Daichi Kitakata|W|Technical Submission (Arm-Triangle Choke)|2|1:17|
+Rizin 41|2023-04-01|Featherweight|JPN Kyohei Hagiwara|GUM Kyle Aguon|W|Decision (Unanimous)|3|5:00|
+Rizin 41|2023-04-01|Bantamweight|JPN Koichi Ishizuka|JPN Yuto Hokamura|W|Decision (Split)|3|5:00|
+Rizin 41|2023-04-01|Lightweight|KOR Kim Kyung-pyo|JPN Sho Patrick Usami|W|Submission (Rear-Naked Choke)|1|3:33|
+Rizin 41|2023-04-01|Flyweight|AZE Mehman Mamedov|JPN Yusaku Nakamura|W|KO (Punches)|1|0:23|
+Rizin Landmark 5|2023-04-29|Featherweight|JPN Mikuru Asakura|JPN Juntaro Ushiku|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 5|2023-04-29|Featherweight|JPN Yutaka Saito|JPN Ren Hiramoto|W|Decision (Split)|3|5:00|
+Rizin Landmark 5|2023-04-29|Bantamweight|JPN Shinobu Ota|JPN Kazuma Kuramoto|W|KO (Punch)|1|0:27|
+Rizin Landmark 5|2023-04-29|Lightweight|BRA Luiz Gustavo|JPN Koji Takeda|W|Decision (Split)|3|5:00|
+Rizin Landmark 5|2023-04-29|Female Super Atomweight 49 kg|JPN Kanna Asakura|JPN Mei Yamaguchi|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 5|2023-04-29|Female Catchweight 51 kg|FRA Claire Lopez|JPN Rena Kubota|W|Submission (Kneebar)|3|4:21|
+Rizin Landmark 5|2023-04-29|Heavyweight|JPN Tsuyoshi Sudario|GUM Roque Martinez|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 5|2023-04-29|Featherweight|JPN Masanori Kanehara|JPN Sora Yamamoto|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 5|2023-04-29|Lightweight|RUS Ali Abdulkhalikov|JPN Tatsuya Saika|W|KO (Punch)|1|3:30|
+Rizin 42|2023-05-06|Bantamweight|JPN Kai Asakura|JPN Yuki Motoya|W|KO (Knee to the Body)|3|2:25|
+Rizin 42|2023-05-06|Bantamweight|USA Juan Archuleta|JPN Naoki Inoue|W|Decision (Unanimous)|3|5:00|
+Rizin 42|2023-05-06|Lightweight|BRA Roberto de Souza|USA Spike Carlyle|W|Decision (Unanimous)|3|5:00|
+Rizin 42|2023-05-06|Featherweight|JPN Kazumasa Majima|JPN Takahiro Ashida|W|Technical Submission (Shoulder Choke)|1|4:43|
+Rizin 42|2023-05-06|Featherweight|JPN Ulka Sasaki|RSA Boyd Allen|W|Decision (Unanimous)|3|5:00|
+Rizin 42|2023-05-06|Lightweight|RUS Viktor Kolesnik|JPN Atsushi Kishimoto|W|TKO (Leg Kick)|2|2:57|
+Rizin 42|2023-05-06|Flyweight|JPN Erson Yamamoto|JPN Yuki Ito|W|Decision (Unanimous)|3|5:00|
+Rizin 42|2023-05-06|Featherweight|JPN Takeji Yokoyama|JPN Takuya Yamamoto|W|Submission (Armbar)|1|1:24|
+Rizin 42|2023-05-06|Flyweight|UZB Ramazonbek Temirov|JPN Yuta Hamamoto|W|TKO (Punches)|1|4:06|
+Super Rizin 2|2023-07-30|Featherweight|AZE Vugar Karamov|JPN Mikuru Asakura|W|Submission (Rear-Naked Choke)|1|2:41|Won the vacant Rizin Featherweight Championship.
+Super Rizin 2|2023-07-30|Bantamweight|USA Juan Archuleta|JPN Hiromasa Ougikubo|W|Decision (Unanimous)|3|5:00|Won the vacant Rizin Bantamweight Championship.
+Super Rizin 2|2023-07-30|Female Super Atomweight 49 kg|JPN Seika Izawa|FRA Claire Lopez|W|Submission (Ninja Choke)|1|1:04|Defended the Rizin Super Atomweight Championship.
+Super Rizin 2|2023-07-30|Catchweight 70 kg|JPN Chihiro Suzuki|BRA Patrício Pitbull|W|KO (Punch)|1|2:32|
+Super Rizin 2|2023-07-30|Lightweight|AZE Tofiq Musayev|JPN Akira Okada|W|KO (Punches)|2|1:11|
+Super Rizin 2|2023-07-30|Bantamweight|JPN Shinobu Ota|JPN Kenta Takizawa|W|TKO (Punches)|1|4:54|
+Super Rizin 2|2023-07-30|Middleweight|BRA Igor Tanabe|JPN Daichi Abe|W|Submission (Heel Hook)|1|4:34|
+Super Rizin 2|2023-07-30|Catchweight 58 kg|JPN Yuki Ito|JPN Hiroya Kondo|W|Decision (Split)|3|5:00|
+Super Rizin 2|2023-07-30|Lightweight|BRA Patricky Pitbull|BRA Roberto de Souza|W|TKO (Leg Kick)|3|0:49|
+Super Rizin 2|2023-07-30|Flyweight|JPN Kyoji Horiguchi|JPN Makoto Takahashi|NC|No Contest (Accidental Eye Poke)|1|0:25|
+Super Rizin 2|2023-07-30|Female Flyweight|JPN Kana Watanabe|USA Veta Arteaga|W|Decision (Unanimous)|3|5:00|
+Super Rizin 2|2023-07-30|Bantamweight|RUS Magomed Magomedov|USA Danny Sabatello|W|Submission (Guillotine Choke)|1|3:55|
+Super Rizin 2|2023-07-30|Welterweight|RUS Andrey Koreshkov|USA Lorenz Larkin|W|Decision (Split)|3|5:00|
+Rizin 44|2023-09-24|Featherweight|JPN Masanori Kanehara|JPN Kleber Koike Erbst|W|Decision (Unanimous)|3|5:00|
+Rizin 44|2023-09-24|Featherweight|JPN Juntaro Ushiku|JPN Kyohei Hagiwara|W|Decision (Unanimous)|3|5:00|
+Rizin 44|2023-09-24|Lightweight|JPN Yoshinori Horie|USA Spike Carlyle|W|Decision (Unanimous)|3|5:00|
+Rizin 44|2023-09-24|Featherweight|JPN Yoshiki Nakahara|JPN Rikuto Shirakawa|W|Decision (Unanimous)|3|5:00|
+Rizin 44|2023-09-24|Catchweight 66.2 kg|JPN Kazumasa Majima|JPN Takeji Yokoyama|W|Decision (Unanimous)|3|5:00|
+Rizin 44|2023-09-24|Flyweight|JPN Ryuya Fukuda|JPN Erson Yamamoto|W|TKO (Doctor Stoppage)|3|1:37|
+Rizin 44|2023-09-24|Bantamweight|JPN Taichi Nakajima|JPN Ryo Okada|W|Decision (Unanimous)|3|5:00|
+Rizin 44|2023-09-24|Heavyweight|JPN Shoma Shibisai|ROU Janos Csukas|W|Submission (Heel Hook)|1|2:27|
+Rizin 44|2023-09-24|Flyweight|UZB Ramazonbek Temirov|JPN Takaki Soya|W|KO (Punches)|1|3:15|
+Rizin Landmark 6|2023-10-01|Bantamweight|BRA Alan Yamaniha|JPN Hideo Tokoro|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 6|2023-10-01|Catchweight 63 kg|JPN Shoko Sato|JPN Shinobu Ota|W|Decision (Split)|3|5:00|
+Rizin Landmark 6|2023-10-01|Heavyweight|JPN Tsuyoshi Sudario|KOR Lim Dong-hwan|W|TKO (Punches)|3|2:10|
+Rizin Landmark 6|2023-10-01|Flyweight|JPN Yuki Ito|THA Topnoi Kiwram|W|Decision (Split)|3|5:00|
+Rizin Landmark 6|2023-10-01|Catchweight 58 kg|JPN Yusaku Nakamura|JPN Hiroya Kondo|W|Decision (Split)|3|5:00|
+Rizin Landmark 6|2023-10-01|Middleweight|BRA Igor Tanabe|JPN Animal Koji|W|Submission (Triangle Choke)|1|3:40|
+Rizin Landmark 6|2023-10-01|Female Strawweight 52.5 kg|JPN Machi Fukuda|JPN Ayaka Watanabe|W|Decision (Split)|3|5:00|
+Rizin Landmark 6|2023-10-01|Heavyweight|JPN Hidetaka Arato|JPN Takakenshin|W|TKO (Punches)|2|4:49|
+Rizin Landmark 6|2023-10-01|Flyweight|BRA Rogério Bontorin|JPN Yutaro Muramoto|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 6|2023-10-01|Featherweight|RUS Viktor Kolesnik|JPN Ryo Takagi|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 6|2023-10-01|Lightweight|JPN Yusaku Inoue|JPN Kohei Tokeshi|W|TKO (Flying Knee and Punches)|1|1:11|
+Rizin Landmark 6|2023-10-01|Bantamweight|JPN Joji Goto|JPN Junya Hibino|W|Submission (Twister)|2|2:00|
+Rizin Landmark 6|2023-10-01|Catchweight 68 kg|JPN Shogo Ota|JPN Ginji Hara|W|Submission (Armbar)|1|1:52|
+Rizin Landmark 6|2023-10-01|Bantamweight|JPN Ryuki Kirishima|JPN Masanari Yamada|W|Decision (Unanimous)|2|5:00|
+Rizin Landmark 7|2023-11-04|Featherweight|JPN Chihiro Suzuki|AZE Vugar Karamov|W|TKO (Upkick and Punches)|1|1:28|Won the Rizin Featherweight Championship.
+Rizin Landmark 7|2023-11-04|Lightweight|AZE Tofiq Musayev|JPN Koji Takeda|W|KO (Punches)|3|2:03|
+Rizin Landmark 7|2023-11-04|Lightweight|RUS Ali Abdulkhalikov|AZE Nariman Abbasov|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 7|2023-11-04|Catchweight 60 kg|AZE Mehman Mamedov|TUR Ferit Göktepe|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 7|2023-11-04|Lightweight|KOR Kim Kyung-pyo|AZE Tural Ragimov|W|TKO (Punches)|1|0:21|
+Rizin Landmark 7|2023-11-04|Female Strawweight 51 kg|UKR Anastasiya Svetkivska|KGZ Farida Abdueva|W|Submission (Triangle Armbar)|2|4:20|
+Rizin Landmark 7|2023-11-04|Featherweight|UZB Ilkhom Nozimov|CMR Jaures Dea|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 7|2023-11-04|Lightweight|UKR Vladyslav Rudnev|KAZ Iliyar Askhanov|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 7|2023-11-04|Heavyweight|GEO Shota Betlemidze|POR Quentin Domingos|W|TKO (Retirement)|1|5:00|
+Rizin Landmark 7|2023-11-04|Light Heavyweight|LVA Hasan Mezhiev|KAZ Konstantin Merkulov|W|Submission (Rear-Naked Choke)|1|2:32|
+Rizin 45|2023-12-31|Flyweight|JPN Kyoji Horiguchi|JPN Makoto Takahashi|W|Submission (Rear-Naked Choke)|2|3:44|Won the inaugural Rizin Flyweight Championship.
+Rizin 45|2023-12-31|Bantamweight|JPN Kai Asakura|USA Juan Archuleta|W|TKO (Knee to the Body and Punches)|2|3:20|Won the vacant Rizin Bantamweight Championship.
+Rizin 45|2023-12-31|Featherweight|JPN Kleber Koike Erbst|JPN Yutaka Saito|W|Technical Submission (Brabo Choke)|3|1:22|
+Rizin 45|2023-12-31|Featherweight|JPN Ren Hiramoto|JPN YA-MAN|W|Decision (Unanimous)|3|5:00|
+Rizin 45|2023-12-31|Female Super Atomweight 49 kg|JPN Seika Izawa|JPN Miyuu Yamamoto|W|Submission (Rear-Naked Choke)|2|0:37|
+Rizin 45|2023-12-31|Heavyweight|JPN Mikio Ueda|JPN Tsuyoshi Sudario|W|TKO (Knee and Punches)|2|0:55|
+Rizin 45|2023-12-31|Flyweight|JPN Hiromasa Ougikubo|USA John Dodson|W|Decision (Unanimous)|3|5:00|
+Rizin 45|2023-12-31|Bantamweight|USA Vince Morales|JPN Yuki Motoya|W|Decision (Unanimous)|3|5:00|
+Rizin 45|2023-12-31|Bantamweight|JPN Shinobu Ota|JPN Ryusei Ashizawa|W|KO (Punches)|1|2:21|
+Rizin 45|2023-12-31|Welterweight|BRA Igor Tanabe|JPN Shinsho Anzai|W|Technical Submission (Rear-Naked Choke)|1|1:32|
+Rizin 45|2023-12-31|Flyweight|JPN Hiroya Kondo|JPN Jo Arai|W|TKO (Head Kick and Punches)|2|2:53|
+Rizin 45|2023-12-31|Featherweight|JPN Suguru Nii|JPN Satoshi Yamasu|W|KO (Punch)|2|1:03|
+Rizin 45|2023-12-31|Catchweight 54 kg|JPN Ryujin Nasukawa|KOR Shin Jong-min|W|TKO (Punches)|1|2:16|
+Rizin 45|2023-12-31|Bantamweight|JPN Joe Hiramoto|JPN Yushi|W|Decision (Unanimous)|3|5:00|

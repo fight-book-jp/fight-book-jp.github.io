@@ -1,0 +1,61 @@
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Featherweight 66 kg|JPN Tatsuya Kawajiri|USA Anthony Birchak|W|Decision (unanimous)|2|15:00|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Openweight|IRN Amir Aliakbari|BRA Gerônimo Dos Santos|W|TKO (punches)|1|3:34|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Flyweight 58 kg|JPN Kyoji Horiguchi|JPN Yuki Motoya|W|Decision (unanimous)|2|15:00|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Female Atomweight 48 kg|JPN Rena Kubota|HUN Dóra Perjés|W|KO (punch to the body)|1|2:49|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|KICK Flyweight 57 kg|JPN Tenshin Nasukawa|ITA Francesco Ghigliotti|W|KO (head kick)|1|1:07|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Heavyweight 120 kg|JPN Satoshi Ishii|USA Heath Herring|W|Decision (unanimous)|2|15:00|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Female Catchweight 90 kg|JPN Reina Miura|GER Jazzy Gabert|W|Submission (armbar)|2|9:54|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Lightweight 70 kg|JPN Yusuke Yachi|USA Daron Cruickshank|W|KO (punch)|1|5:10|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Female Atomweight 48 kg|JPN Saori Ishioka|SUI Bestare Kicaj|W|Submission (Rear Naked Choke)|1|2:12|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Female Atomweight 48 kg|JPN Kanna Asakura|BUL Aleksandra Toncheva|W|Decision (unanimous)|3|15:00|
+Rizin 2017 in Yokohama: Sakura|2017-04-16|Flyweight 58 kg|JPN Seiichiro Ito|JPN Kizaemon Saiga|W|Decision (unanimous)|2|15:00|
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Bantamweight 61 kg|JPN Kyoji Horiguchi|JPN Hideo Tokoro|W|KO (punches)|1|1:49|Bantamweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Heavyweight 120 kg|IRN Amir Aliakbari|USA Tyler King|W|TKO (punches)|1|1:39|
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Female Openweight|BRA Gabi Garcia|RUS Oksana Gagloeva|NC|No contest (accidental eye poke)|1|0:15|
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Female Openweight|JPN Reina Miura|TGA Lei'D Tapa|W|Decision (unanimous)|3|5:00|
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|KICK Mix Rules 57 kg|JPN Tenshin Nasukawa|JPN Kizaemon Saiga|W|KO (punch)|1|1:36|Mix Rules
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Lightweight 70 kg|JPN Yusuke Yachi|JPN Satoru Kitaoka|W|TKO (punches)|2|4:46|
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Female Atomweight 49 kg|JPN Miyuu Yamamoto|USA Cassie Robb|W|Decision (unanimous)|3|15:00|
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Bantamweight 61 kg|JPN Takafumi Otsuka|USA Anthony Birchak|W|Decision (split)|2|15:00|Bantamweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Bantamweight 61 kg|GER Khalid Taha|JPN Keita Ishibashi|W|KO (Grounded Knees and Punches)|1|4:51|Bantamweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Female Flyweight 57 kg|USA Shinju Nozawa-Auclair|USA Sheena Brandenburg|W|Submission (armbar)|1|1:40|
+Rizin World Grand Prix 2017: opening round part 1|2017-07-30|Light Heavyweight 93 kg|SWE Karl Albrektsson|LIT Teodoras Aukštuolis|W|Submission (Arm-Triangle Choke)|1|8:02|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Female Super Atomweight 49 kg|JPN Rena Kubota|USA Andy Nguyen|W|KO (punch to the body)|1|3:23|Women's Super Atomweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|KICK Flyweight 57 kg|JPN Tenshin Nasukawa|JPN Yamato Fujita|W|Decision (unanimous)|3|5:00|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|EXH Grappling 84 kg|JPN Kazushi Sakuraba|USA Frank Shamrock|D|Draw|1|10:00|Grappling Match
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Lightweight 70 kg|JPN Akiyo Nishiura|NED Andy Souwer|W|Decision (unanimous)|2|15:00|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Female Catchweight 75 kg|JPN Reina Miura|USA Crystal Stokes|W|Decision (unanimous)|3|15:00|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Catchweight 63 kg|BRA Gabriel Oliveira|JPN Tatsuya Kawajiri|W|KO (Knee)|2|1:00|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Bantamweight 61 kg|JPN Shintaro Ishiwatari|RUS Akhmed Musakaev|W|Decision (unanimous)|3|15:00|Bantamweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Bantamweight 61 kg|FRA Kevin Petshi|KOR Jae Hoon Moon|W|Decision (split)|3|15:00|Bantamweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Bantamweight 61 kg|POR Manel Kape|JPN Erson Yamamoto|W|TKO (Head Kick and Punch)|1|1:10|Bantamweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Openweight|GUM Roque Martinez|FRA Jérôme Le Banner|W|Submission (Scarf Hold Chest Choke)|1|2:10|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Female Super Atomweight 49 kg|BRA Maria Oliveira|USA Alyssa Garcia|W|Decision (unanimous)|3|15:00|Women's Super Atomweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Female Super Atomweight 49 kg|JPN Kanna Asakura|POL Sylwia Juśkiewicz|W|Decision (unanimous)|3|15:00|Women's Super Atomweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|Female Super Atomweight 49 kg|ESP Irene Cabello Rivera|JPN Miyuu Yamamoto|W|Submission (armbar)|2|7:25|Women's Super Atomweight Grand Prix 1st round
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|KICK Catchweight 51 kg|JPN Jin Mandokoro|JPN Issei Ishii|W|Decision (majority)|3|9:00|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|KICK Catchweight 62 kg|JPN Yuki|JPN Kurogi Darvish|D|Draw (majority)|3|9:00|
+Rizin World Grand Prix 2017: opening round part 2|2017-10-15|KICK Catchweight 58 kg|JPN Yoshihisa Morimoto|JPN Ryota Renseigym|W|TKO (punches)|3|7:57|
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Bantamweight 61 kg|JPN Kyoji Horiguchi|BRA Gabriel Oliveira|W|TKO (punches)|1|4:30|Bantamweight Grand Prix quarter-finals
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Bantamweight 61 kg|POR Manel Kape|USA Ian McCall|W|TKO (doctor Stoppage)|1|1:48|Bantamweight Grand Prix quarter-finals
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Bantamweight 61 kg|JPN Shintaro Ishiwatari|FRA Kevin Petshi|W|KO (punch)|1|4:30|Bantamweight Grand Prix quarter-finals
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Bantamweight 61 kg|JPN Takafumi Otsuka|GER Khalid Taha|W|Submission (Guillotine Choke)|3|12:22|Bantamweight Grand Prix quarter-finals
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Light Heavyweight 93 kg|CZE Jiří Procházka|SWE Karl Albrektsson|W|TKO (punches)|1|9:57|
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Female Lightweight 70 kg|BEL Cindy Dandois|JPN Reina Miura|W|Decision (split)|3|15:00|
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Featherweight 66 kg|JPN Hiroyuki Takaya|MGL Baataryn Azjavkhlan|W|Decision (unanimous)|2|15:00|
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Bantamweight 61 kg|KOR Jae Hoon Moon|USA Anthony Birchak|W|Decision (split)|3|15:00|Bantamweight Grand Prix reserve bout
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Catchweight 62.5 kg|JPN Kai Asakura|JPN Kizaemon Saiga|W|TKO (Punches and Knee)|2|7:36|
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Female Flyweight 57 kg|JPN Kana Watanabe|JPN Shizuka Sugiyama|W|Decision (unanimous)|3|15:00|
+Rizin World Grand Prix 2017: 2nd round|2017-12-29|Catchweight 75 kg|JPN Kiichi Kunimoto|JPN Satoru Kitaoka|W|Decision (unanimous)|2|15:00|
+Rizin World Grand Prix 2017: final round|2017-12-31|Bantamweight 61 kg|JPN Kyoji Horiguchi|JPN Shintaro Ishiwatari|W|KO (punches)|2|5:14|Bantamweight Grand Prix final
+Rizin World Grand Prix 2017: final round|2017-12-31|Female Super Atomweight 49 kg|JPN Kanna Asakura|JPN Rena Kubota|W|Submission (rear-naked choke)|1|4:33|Women's Super Atomweight Grand Prix final
+Rizin World Grand Prix 2017: final round|2017-12-31|KICK Flyweight 57 kg|JPN Tenshin Nasukawa|JPN Yamato Fujita|W|TKO (3 knockdowns)|1|1:27|Flyweight KB Tournament Final
+Rizin World Grand Prix 2017: final round|2017-12-31|Heavyweight 120 kg|CRO Mirko Cro Cop|JPN Tsuyoshi Kosaka|W|TKO (punches)|1|1:02|
+Rizin World Grand Prix 2017: final round|2017-12-31|Female Flyweight 57 kg|USA Shinju Nozawa-Auclair|USA Chelsea LaGrasse|W|Submission (armbar)|1|4:47|
+Rizin World Grand Prix 2017: final round|2017-12-31|Catchweight 72 kg|JPN Yusuke Yachi|JPN Takanori Gomi|W|Submission (triangle choke)|1|2:36|
+Rizin World Grand Prix 2017: final round|2017-12-31|Female Super Atomweight 49 kg|JPN Kanna Asakura|BRA Maria Oliveira|W|Submission (armbar)|2|8:40|Women's Super Atomweight Grand Prix semi-finals
+Rizin World Grand Prix 2017: final round|2017-12-31|Female Super Atomweight 49 kg|JPN Rena Kubota|ESP Irene Cabello Rivera|W|TKO (punches)|1|4:38|Women's Super Atomweight Grand Prix semi-finals
+Rizin World Grand Prix 2017: final round|2017-12-31|KICK Flyweight 57 kg|JPN Yamato Fujita|JPN Mitsuhisa Sunabe|W|KO (punch)|3|6:46|Flyweight KB Tournament Semi-Finals
+Rizin World Grand Prix 2017: final round|2017-12-31|KICK Flyweight 57 kg|JPN Tenshin Nasukawa|JPN Yuta Hamamoto|W|KO (flying knee)|2|4:58|Flyweight KB Tournament Semi-Finals
+Rizin World Grand Prix 2017: final round|2017-12-31|Bantamweight 61 kg|JPN Shintaro Ishiwatari|JPN Takafumi Otsuka|W|Decision (unanimous)|3|15:00|Bantamweight Grand Prix semi-finals
+Rizin World Grand Prix 2017: final round|2017-12-31|Bantamweight 61 kg|JPN Kyoji Horiguchi|POR Manel Kape|W|Submission (arm-triangle choke)|3|14:28|Bantamweight Grand Prix semi-finals

@@ -1,0 +1,95 @@
+Rizin Trigger 2|2022-02-23|Featherweight 66 kg|JPN Kleber Koike Erbst|JPN Ulka Sasaki|W|Submission (Rear-Naked Choke)|2|3:22|
+Rizin Trigger 2|2022-02-23|Bantamweight 61 kg|JPN Kazuma Kuramoto|JPN Kenji Kato|W|TKO (Knees)|1|4:16|
+Rizin Trigger 2|2022-02-23|Lightweight 71 kg|JPN Akira Okada|JPN Takumi Suzuki|W|Decision (Unanimous)|3|5:00|
+Rizin Trigger 2|2022-02-23|Featherweight 66 kg|JPN Sora Yamamoto|JPN Suguru Nii|W|TKO (Knees and Punches)|1|0:35|
+Rizin Trigger 2|2022-02-23|Catchweight 73 kg|JPN Kohei Tokeshi|BRA Harry Stallone|W|KO (Punch)|2|3:31|
+Rizin Trigger 2|2022-02-23|Catchweight 62 kg|JPN Hikaru Yoshino|JPN Daisuke Endo|W|Decision (Unanimous)|3|5:00|
+Rizin Trigger 2|2022-02-23|Featherweight 66 kg|JPN Kouki Nakagawa|JPN Katsushi Kojima|W|Decision (Unanimous)|3|5:00|
+Rizin Trigger 2|2022-02-23|Bantamweight 61 kg|JPN Takuma Uchiyama|JPN Kotetsu Hara|W|Decision (Split)|3|5:00|
+Rizin Landmark 2|2022-03-06|Featherweight 66 kg|JPN Chihiro Suzuki|JPN Ren Hiramoto|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 2|2022-03-06|Featherweight 66 kg|JPN Hiroaki Suzuki|JPN Shoji Maruyama|W|TKO (Punch and Soccer Kick)|1|1:12|
+Rizin Landmark 2|2022-03-06|Bantamweight 61 kg|JPN Kuya Ito|JPN Mamoru Uoi|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 2|2022-03-06|Catchweight 63 kg|JPN Kosuke Terashima|JPN Takuma Masuda|W|Decision (Split)|3|5:00|
+Rizin 34|2022-03-20|Featherweight 66 kg|JPN Satoshi Yamasu|JPN Kyohei Hagiwara|W|Submission (Triangle Choke)|1|3:21|
+Rizin 34|2022-03-20|Catchweight 68 kg|JPN Sora Yamamoto|JPN Daisuke Nakamura|W|Decision (Split)|3|5:00|
+Rizin 34|2022-03-20|Welterweight 77 kg|JPN Daichi Abe|JPN Kiichi Kunimoto|W|Decision (Unanimous)|3|5:00|
+Rizin 34|2022-03-20|Flyweight 57 kg|JPN Daichi Kitakata|JPN Yutaro Muramoto|W|Decision (Unanimous)|3|5:00|
+Rizin 34|2022-03-20|Lightweight 71 kg|JPN Juri Ohara|JPN Akira Okada|W|Decision (Split)|3|5:00|
+Rizin 34|2022-03-20|Bantamweight 61 kg|BRA Alan Yamaniha|JPN Motonobu Tezuka|W|Submission (Rear-Naked Choke)|2|3:25|
+Rizin 34|2022-03-20|Flyweight 57 kg|JPN Tatsuki Saomoto|JPN Yuto Uda|W|Decision (Split)|3|5:00|
+Rizin 34|2022-03-20|Catchweight 60 kg|JPN Ryuya Fukuda|JPN Masayuki Watanabe|W|KO (Punches)|1|0:54|
+Rizin 34|2022-03-20|Catchweight 63 kg|JPN Ryuki Kaneda|JPN Ayumu Yamamoto|W|TKO (Soccer kick)|1|2:07|
+Rizin Trigger 3|2022-04-16|Lightweight 71 kg|BRA Luiz Gustavo|JPN Yusuke Yachi|W|TKO (Punches)|2|3:14|
+Rizin Trigger 3|2022-04-16|Openweight|JPN Hideki Sekine|JPN Takakenshin|W|TKO (Soccer Kicks and Punches)|2|3:49|
+Rizin Trigger 3|2022-04-16|Featherweight 66 kg|JPN Masanori Kanehara|JPN Kazumasa Majima|W|TKO (Punches)|3|3:37|
+Rizin Trigger 3|2022-04-16|Flyweight 57 kg|JPN Takaki Soya|JPN Nobuyoshi Nakatsukasa|W|KO (Soccer Kick and Punches)|2|3:29|
+Rizin Trigger 3|2022-04-16|Bantamweight 61 kg|JPN Takuma Sudo|JPN Shooto Watanabe|W|Decision (Split)|3|5:00|
+Rizin Trigger 3|2022-04-16|Lightweight 71 kg|JPN Kimihiro Eto|JPN Tatsuya Saika|W|TKO (Punches)|3|4:12|
+Rizin Trigger 3|2022-04-16|Catchweight 72 kg|USA Grant Bogdanove|JPN Takeshi Izumi|W|TKO (Punches and Elbows)|3|3:16|
+Rizin 35|2022-04-17|Lightweight 71 kg|BRA Roberto de Souza|USA Johnny Case|W|Submission (Reverse Triangle Armbar)|1|3:32|Defended the Rizin Lightweight Championship.
+Rizin 35|2022-04-17|Featherweight 66 kg|JPN Juntaro Ushiku|JPN Yutaka Saito|W|Decision (Unanimous)|3|5:00|Defended the Rizin Featherweight Championship.
+Rizin 35|2022-04-17|Female Super Atomweight 49 kg|JPN Seika Izawa|JPN Ayaka Hamasaki|W|Decision (Unanimous)|3|5:00|Won the Rizin Super Atomweight Championship.
+Rizin 35|2022-04-17|Heavyweight 120 kg|JPN Tsuyoshi Kosaka|JPN Mikio Ueda|W|KO (Punches)|1|2:05|
+Rizin 35|2022-04-17|Female Super Atomweight 49 kg|JPN Kanna Asakura|JPN Satomi Takano|W|Decision (Unanimous)|3|5:00|
+Rizin 35|2022-04-17|Lightweight 71 kg|USA Spike Carlyle|JPN Koji Takeda|W|Technical Submission (Guillotine Choke)|2|1:35|
+Rizin 35|2022-04-17|Heavyweight 120 kg|JPN Shoma Shibisai|LAT Rihards Bigis|W|TKO (Punches and Elbows)|1|1:36|
+Rizin 35|2022-04-17|Bantamweight 61 kg|JPN Yuki Motoya|BRA Alan Yamaniha|W|Decision (Unanimous)|3|5:00|
+Rizin 35|2022-04-17|Featherweight 66 kg|AZE Vugar Karamov|JPN Taichi Nakajima|W|Technical Submission (Triangle Choke)|1|2:00|
+Rizin 35|2022-04-17|Featherweight 66 kg|GUM Kyle Aguon|JPN Takahiro Ashida|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 3|2022-05-05|Catchweight 68 kg|JPN Kleber Koike Erbst|JPN Kyohei Hagiwara|W|Submission (Face Crank)|1|1:37|
+Rizin Landmark 3|2022-05-05|Bantamweight 61 kg|JPN Kazuma Kuramoto|JPN Mamoru Uoi|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 3|2022-05-05|Featherweight 66 kg|JPN Tetsuya Seki|JPN Akira Haraguchi|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 3|2022-05-05|Catchweight 62 kg|JPN Yushi|JPN Tony Zenki|W|KO (Punch)|2|2:21|
+Rizin 36|2022-07-02|Featherweight 66 kg|JPN Ren Hiramoto|JPN Hiroaki Suzuki|W|Decision (Split)|3|5:00|
+Rizin 36|2022-07-02|Female Super Atomweight 49 kg|JPN Saori Oshima|JPN Miyuu Yamamoto|W|Decision (Split)|3|5:00|
+Rizin 36|2022-07-02|Catchweight 54 kg|JPN Nobuyoshi Nakatsukasa|JPN Mitsuhisa Sunabe|W|TKO (Knee and Punches)|1|1:40|
+Rizin 36|2022-07-02|Featherweight 66 kg|JPN Sora Yamamoto|GUM Kyle Aguon|W|Decision (Unanimous)|3|5:00|
+Rizin 36|2022-07-02|Bantamweight 61 kg|KOR Yang Ji-yong|JPN Shoji Maruyama|W|Technical Submission (Rear-Naked Choke)|3|1:46|
+Rizin 36|2022-07-02|Lightweight 71 kg|JPN Atsushi Kishimoto|JPN Kohei Tokeshi|W|TKO (Punches)|1|2:05|
+Rizin 36|2022-07-02|Flyweight 57 kg|JPN Yamato Fujita|JPN Tatsuya So|W|Decision (Unanimous)|3|5:00|
+Rizin 36|2022-07-02|Flyweight 57 kg|JPN Yutaro Muramoto|JPN Shinichi Kojima|W|TKO (Punches)|2|2:23|
+Rizin 36|2022-07-02|Flyweight 57 kg|JPN Yuki Ito|JPN Yuichi Miyagi|W|TKO (Knees and Punches)|2|4:57|
+Rizin 36|2022-07-02|Female Super Atomweight 49 kg|JPN Moeri Suda|JPN Mizuki Oshiro|W|Submission (Armbar)|1|2:12|
+Rizin 36|2022-07-02|Lightweight 71 kg|USA Tanner Lourenco|JPN Orihey|W|TKO (Elbows)|2|1:05|
+Rizin 37|2022-07-31|Female Super Atomweight 49 kg|JPN Seika Izawa|BRA Laura Fontoura|W|Submission (Guillotine Choke)|1|3:47|Super Atomweight Grand Prix Quarterfinal
+Rizin 37|2022-07-31|Female Super Atomweight 49 kg|JPN Ayaka Hamasaki|MEX Jessica Aguilar|W|Decision (Unanimous)|3|5:00|Super Atomweight Grand Prix Quarterfinal
+Rizin 37|2022-07-31|Flyweight 57 kg|JPN Makoto Takahashi|JPN Hideo Tokoro|W|Decision (Unanimous)|3|5:00|
+Rizin 37|2022-07-31|Catchweight 72 kg|JPN Koji Takeda|USA Johnny Case|W|Decision (Unanimous)|3|5:00|
+Rizin 37|2022-07-31|Female Super Atomweight 49 kg|KOR Si Woo Park|JPN Kanna Asakura|W|Decision (Unanimous)|3|5:00|Super Atomweight Grand Prix Quarterfinal
+Rizin 37|2022-07-31|Female Super Atomweight 49 kg|JPN Rena Kubota|UKR Anastasiya Svetkivska|W|Decision (Unanimous)|3|5:00|Super Atomweight Grand Prix Quarterfinal
+Rizin 37|2022-07-31|Heavyweight 120 kg|JPN Tsuyoshi Sudario|JPN Hideki Sekine|W|KO (Punch)|1|0:53|
+Rizin 37|2022-07-31|Bantamweight 61 kg|JPN Yuki Motoya|JPN Shinobu Ota|W|Decision (Unanimous)|3|5:00|
+Rizin 37|2022-07-31|Catchweight 68 kg|JPN Yoshiki Nakahara|JPN Tetsuya Seki|W|Decision (Unanimous)|3|5:00|
+Rizin 37|2022-07-31|Catchweight 80 kg|JPN Daichi Abe|BRA Marcos de Souza|W|KO (Punch and Soccer Kick)|2|3:02|
+Rizin 37|2022-07-31|Featherweight 66 kg|AZE Vugar Karamov|JPN Sora Yamamoto|W|Decision (Unanimous)|3|5:00|
+Rizin 37|2022-07-31|Catchweight 62 kg|JPN Yushi|JPN Haruki|W|Submission (Rear-Naked Choke)|2|0:43|
+Super Rizin & Rizin 38|2022-09-25|Featherweight 66 kg|JPN Kota Miura|THA Bunchuai Phonsungnoen|W|Submission (Armbar)|1|1:54|
+Super Rizin & Rizin 38|2022-09-25|Bantamweight 61 kg|JPN Kyoji Horiguchi|JPN Yuto Hokamura|W|Technical Submission (Arm-Triangle Choke)|2|2:59|
+Super Rizin & Rizin 38|2022-09-25|Female Super Atomweight 49 kg|JPN Seika Izawa|UKR Anastasiya Svetkivska|W|Submission (Armbar)|2|4:56|Super Atomweight Grand Prix Semifinal
+Super Rizin & Rizin 38|2022-09-25|Female Super Atomweight 49 kg|KOR Si Woo Park|JPN Ayaka Hamasaki|W|Decision (Unanimous)|3|5:00|Super Atomweight Grand Prix Semifinal
+Super Rizin & Rizin 38|2022-09-25|Bantamweight 61 kg|KOR Soo Chul Kim|JPN Hiromasa Ougikubo|W|Decision (Unanimous)|3|5:00|
+Super Rizin & Rizin 38|2022-09-25|Heavyweight 120 kg|JPN Shoma Shibisai|BRA Cally Gibrainn de Oliveira|W|Submission (Rear-Naked Choke)|1|1:48|
+Super Rizin & Rizin 38|2022-09-25|Featherweight 66 kg|JPN Chihiro Suzuki|JPN Kyohei Hagiwara|W|Submission (Rear-naked choke)|2|2:14|
+Super Rizin & Rizin 38|2022-09-25|Lightweight 71 kg|BRA Luiz Gustavo|JPN Juri Ohara|W|KO (Punches)|1|1:23|
+Rizin 39|2022-10-23|Featherweight 66 kg|JPN Kleber Koike Erbst|JPN Juntaro Ushiku|W|Submission (Triangle Choke)|2|1:29|Won the Rizin Featherweight Championship.
+Rizin 39|2022-10-23|Heavyweight 120 kg|JPN Tsuyoshi Sudario|ROU Janos Csukas|W|TKO (Punches and Knee)|2|0:30|
+Rizin 39|2022-10-23|Lightweight 71 kg|JPN Yusuke Yachi|RSA Boyd Allen|W|Decision (Unanimous)|3|5:00|
+Rizin 39|2022-10-23|Lightweight 71 kg|JPN Koji Takeda|USA Zach Zane|W|Submission (Armbar)|1|3:35|
+Rizin 39|2022-10-23|Catchweight 75 kg|JPN Sho Patrick Usami|JPN Shinji Sasaki|W|TKO (Punches)|3|2:33|
+Rizin 39|2022-10-23|Welterweight 77 kg|JPN Daichi Abe|JPN Yukinari Tamura|W|Decision (Unanimous)|3|5:00|
+Rizin 39|2022-10-23|Featherweight 66 kg|JPN Takahiro Ashida|JPN Hirotaka Nakada|W|Decision (Unanimous)|3|5:00|
+Rizin 39|2022-10-23|Featherweight 66 kg|JPN Yoshiki Nakahara|JPN Akira Haraguchi|W|TKO (Punches and Soccer Kicks)|1|2:31|
+Rizin 39|2022-10-23|Bantamweight 61 kg|JPN Motonobu Tezuka|AZE Mehman Mamedov|W|TKO (Corner Stoppage)|1|4:33|
+Rizin Landmark 4|2022-11-06|Lightweight 70 kg|JPN Ren Hiramoto|JPN Satoshi Yamasu|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 4|2022-11-06|Featherweight 66 kg|JPN Chihiro Suzuki|JPN Masakazu Imanari|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 4|2022-11-06|Bantamweight 61 kg|JPN Yuki Motoya|JPN Kazuma Kuramoto|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 4|2022-11-06|Heavyweight 120 kg|JPN Kiyoshi Kuwabara|JPN Ikuhisa Minowa|W|TKO (Punches)|1|2:24|
+Rizin Landmark 4|2022-11-06|Heavyweight 120 kg|BRA Cally Gibrainn de Oliveira|JPN Takakenshin|W|TKO (Punches)|1|4:35|
+Rizin Landmark 4|2022-11-06|Female Super Atomweight 49 kg|JPN Satomi Takano|BRA Laura Fontoura|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 4|2022-11-06|Flyweight 57 kg|JPN Yusaku Nakamura|JPN Takaki Soya|W|Decision (Split)|3|5:00|
+Rizin Landmark 4|2022-11-06|Featherweight 66 kg|JPN Jin Aoi|JPN Hiroaki Suzuki|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 4|2022-11-06|Bantamweight 61 kg|BRA Alan Yamaniha|JPN Yasuhiro Kawamura|W|Decision (Unanimous)|3|5:00|
+Rizin Landmark 4|2022-11-06|Bantamweight 61 kg|KOR Yang Ji-yong|JPN Mamoru Uoi|W|KO (Punch)|2|4:13|
+Rizin Landmark 4|2022-11-06|Featherweight 66 kg|JPN Yuta Kubo|JPN Keisuke Okuda|W|TKO (Elbows and Punches)|1|4:43|
+Rizin Landmark 4|2022-11-06|Bantamweight 61 kg|JPN Riku Yoshida|JPN Junya Hibino|W|TKO (Punches)|2|3:00|
+Rizin Landmark 4|2022-11-06|Flyweight 57 kg|JPN Kenta Kubo|JPN Hideyoshi Okamoto|W|KO (Punches and Soccer Kick)|2|2:52|
