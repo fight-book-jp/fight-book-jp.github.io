@@ -1,0 +1,41 @@
+Loss|30–9–2|Makoto Takahashi|Decision (unanimous)|Rizin Landmark 14|2026-06-06|3|5:00|Lost the Rizin Flyweight Championship.
+Win|30–8–2|Yuki Motoya|Decision (unanimous)|Rizin: Shiwasu no Cho Tsuwamono Matsuri|2025-12-31|3|5:00|Won the vacant Rizin Flyweight Championship.
+Win|29–8–2|Alibek Gadzhammatov|Decision (unanimous)|Rizin 51|2025-09-28|3|5:00|
+Win|28–8–2|Jose Torres|Decision (unanimous)|Super Rizin 4|2025-07-27|3|5:00|
+Win|27–8–2|Makoto Takahashi|Decision (unanimous)|Super Rizin 3|2024-07-28|3|5:00|
+Win|26–8–2|John Dodson|Decision (unanimous)|Rizin 45|2023-12-31|3|5:00|
+Loss|25–8–2|Juan Archuleta|Decision (unanimous)|Super Rizin 2|2023-07-30|3|5:00|For the vacant Rizin Bantamweight Championship.
+Loss|25–7–2|Kyoji Horiguchi|Decision (unanimous)|Bellator MMA vs. Rizin|2022-12-31|3|5:00|
+Loss|25–6–2|Soo Chul Kim|Decision (unanimous)|Rizin 38|2022-09-25|3|5:00|
+Win|25–5–2|Kai Asakura|Decision (unanimous)|Rizin 33|2021-12-31|3|5:00|Won the 2021 Rizin Bantamweight Grand Prix.
+Win|24–5–2|Naoki Inoue|Decision (unanimous)|Rizin 33|2021-12-31|3|5:00|
+Win|23–5–2|Takafumi Otsuka|Decision (unanimous)|Rizin 30|2021-09-19|3|5:00|
+Win|22–5–2|Takeshi Kasugai|Decision (unanimous)|Rizin 28|2021-06-13|3|5:00|
+Win|21–5–2|Kenta Takizawa|Decision (unanimous)|Rizin 25|2020-11-21|3|5:00|
+Loss|20–5–2|Kai Asakura|KO (knee and soccer kicks)|Rizin 23|2020-08-10|1|4:31|For the vacant Rizin Bantamweight Championship.
+Win|20–4–2|Shintaro Ishiwatari|Decision (split)|Rizin 20|2019-12-31|3|5:00|
+Win|19–4–2|Yuki Motoya|Decision (split)|Rizin 17|2019-07-28|3|5:00|
+Win|18–4–2|Kiyotaka Shimizu|Technical Decision (unanimous)|Shooto 30th Anniversary Tour at Korakuen Hall|2019-05-06|4|0:40|
+Loss|17–4–2|Kyoji Horiguchi|Decision (unanimous)|Rizin 11|2018-07-28|2|5:00|
+Win|17–3–2|Tadaaki Yamamoto|Submission (rear-naked choke)|Professional Shooto 10/15|2017-10-15|1|4:26|
+Win|16–3–2|Danny Martinez|Decision (unanimous)|Professional Shooto 4/23|2017-04-23|3|5:00|
+Win|15–3–2|Masaaki Sugawara|Technical Submission (guillotine choke)|Mobstyles Presents Fight & Mosh|2016-04-23|5|4:48|
+Win|14–3–2|Yosuke Saruta|Decision (unanimous)|Professional Shooto 11/29|2015-11-29|3|5:00|
+Win|13–3–2|Czar Sklavos|Decision (unanimous)|VTJ 6th|2014-10-04|5|5:00|
+Win|12–3–2|Kana Hyatt|Submission (rear-naked choke)|VTJ 5th in Osaka|2014-06-28|1|1:20|
+Win|11–3–2|Takeshi Kasugai|Decision (majority)|VTJ 4th|2014-02-23|3|5:00|
+Loss|10–3–2|Kyoji Horiguchi|Submission (rear-naked choke)|Shooto - 2nd Round 2013|2013-03-16|2|1:35|
+Win|10–2–2|Koetsu Okazaki|Submission (rear-naked choke)|Shooto - 5th Round|2012-05-18|3|3:32|
+Win|9–2–2|Tetsu Suzuki|Decision (unanimous)|Survivor Tournament Final|2012-01-08|3|5:00|
+Win|8–2–2|Teruyuki Matsumoto|Decision (majority)|Shooto - Border: Season 3 - Spring Thunder|2011-04-03|3|5:00|
+Win|7–2–2|So Tazawa|Decision (unanimous)|The Way of Shooto 5: Like a Tiger, Like a Dragon|2010-09-23|3|5:00|
+Loss|6–2–2|Eduardo Dantas|Submission (rear-naked choke)|The Way of Shooto 3: Like a Tiger, Like a Dragon|2010-05-30|3|1:21|
+Loss|6–1–2|Koetsu Okazaki|TKO (punches)|Shooto - Gig Tokyo 3|2009-10-18|2|2:08|
+Win|6–0–2|Tetsu Suzuki|Decision (unanimous)|Shooto Tradition 6|2009-03-20|3|5:00|
+Draw|4–0–2|So Tazawa|Draw|Shooto Tradition 4|2008-11-29|3|5:00|
+Win|4–0–1|Hiroyuki Tanaka|TKO (punches)|Shooto Tradition 2|2008-07-18|1|1:35|
+Win|4–0–1|Yasuhiro Kanayama|Submission (rear-naked choke)|Shooto - Rookie Tournament 2007 Final|2007-12-08|2|3:35|
+Win|3–0–1|Kazuya Tamura|Submission (rear-naked choke)|Shooto - Back To Our Roots 5|2007-09-22|1|3:43|
+Win|2–0–1|Satoru Ota|Decision (unanimous)|Shooto 2007 - 6/30 in Kitazawa Town Hall|2007-06-30|2|5:00|
+Draw|1–0–1|Naoki Yahagi|Draw|Shooto - It's Strong Being a Man|2007-03-04|2|5:00|
+Win|1–0|Nobuhiro Hayakawa|Decision (unanimous)|Shooto 2006 - 10/1 in Kitazawa Town Hall|2006-10-01|2|5:00|
