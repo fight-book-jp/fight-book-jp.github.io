@@ -647,6 +647,192 @@
     if (e.target.checked) soundOn(); else { walk.player.pauseVideo(); walk.pendingSound = false; showHint(false); }
   });
 
+  /* ---------- 見たい対戦カード ---------- */
+  const MU_KEY = "fb_matchups";
+  const getMU = () => { try { return JSON.parse(localStorage.getItem(MU_KEY) || "[]"); } catch (e) { return []; } };
+  const setMU = a => { try { localStorage.setItem(MU_KEY, JSON.stringify(a)); } catch (e) {} };
+  const muId = (a, b) => [a, b].sort().join("~");
+  const winProb = (a, b) => 1 / (1 + Math.pow(10, (P(b).rating - P(a).rating) / 400));
+  const pickable = () => Object.values(S.profiles).filter(p => p.riz.total > 0);
+  const mu = { red: null, blue: null, pick: { corner: null, q: "", div: "すべて", active: true } };
+
+  function defaultPair() {
+    const fw = activeRanked().filter(p => p.division === "フェザー級");
+    return fw.length >= 2 ? [fw[0].key, fw[1].key] : [S.ranked[0].key, S.ranked[1].key];
+  }
+  function meetings(a, b) {
+    return S.fights.filter(f => (f.winner === a && f.loser === b) || (f.winner === b && f.loser === a)).slice().reverse();
+  }
+  function cornerHtml(k, side) {
+    const p = P(k);
+    return `<div class="mu-corner ${side}">
+      <div class="mu-side">${side === "red" ? "RED CORNER" : "BLUE CORNER"}</div>
+      <a class="mu-name" href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>
+      <div class="mu-en">${esc(subName(k))}</div>
+      <div class="mu-tags">${p.division ? `<span>${esc(p.division)}</span>` : ""}${statusBadge(k)}${p.active ? "" : "<span>直近2年試合なし</span>"}</div>
+      <div class="mu-rate"><b>${r1(p.rating)}</b><small>レート${p.rank ? `・#${p.rank}` : ""}</small></div>
+      <button class="mu-change" data-corner="${side}">選手を変更</button>
+    </div>`;
+  }
+  function compareRows(a, b) {
+    const A = P(a), B = P(b);
+    const rows = [
+      ["レーティング", r1(A.rating), r1(B.rating), A.rating - B.rating],
+      ["RIZIN戦績", rec(A.riz), rec(B.riz), (A.riz.w - A.riz.l) - (B.riz.w - B.riz.l)],
+      ["勝率", pct(A.riz.w / Math.max(1, A.riz.w + A.riz.l)), pct(B.riz.w / Math.max(1, B.riz.w + B.riz.l)), A.riz.w / Math.max(1, A.riz.w + A.riz.l) - B.riz.w / Math.max(1, B.riz.w + B.riz.l)],
+      ["KO率", pct(A.riz.koRate), pct(B.riz.koRate), A.riz.koRate - B.riz.koRate],
+      ["一本勝ち", A.riz.sub, B.riz.sub, A.riz.sub - B.riz.sub],
+      ["現在の連勝", A.riz.streak, B.riz.streak, A.riz.streak - B.riz.streak],
+      ["最長連勝", A.riz.best, B.riz.best, A.riz.best - B.riz.best],
+      ["注目度", A.x.spotlight, B.x.spotlight, A.x.spotlight - B.x.spotlight],
+    ];
+    return rows.map(([l, va, vb, d]) => `<div class="cmp-row"><span class="v ${d > 0 ? "win" : ""}">${va}</span><span class="l">${l}</span><span class="v ${d < 0 ? "win" : ""}">${vb}</span></div>`).join("");
+  }
+  function dreamCards(div) {
+    const pool = activeRanked().filter(p => p.division && p.division !== "重量級" && (div === "すべて" || p.division === div));
+    const byDiv = {};
+    pool.forEach(p => (byDiv[p.division] = byDiv[p.division] || []).push(p));
+    const cards = [];
+    for (const d in byDiv) {
+      const top = byDiv[d].slice(0, 6);
+      for (let i = 0; i < top.length; i++) for (let j = i + 1; j < top.length; j++) {
+        const a = top[i], b = top[j];
+        const met = meetings(a.key, b.key).length;
+        const close = 1 - Math.abs(winProb(a.key, b.key) - 0.5) * 2;     // 実力が近いほど高い
+        cards.push({ a: a.key, b: b.key, d, met, score: (a.rating + b.rating) / 2 + close * 60 - met * 25 });
+      }
+    }
+    return cards.sort((x, y) => y.score - x.score).slice(0, 12);
+  }
+  function miniCard(a, b, extra = "") {
+    const pa = winProb(a, b);
+    return `<a class="mu-mini" href="#/matchups/${encodeURIComponent(a)}~${encodeURIComponent(b)}">
+      <div class="mm-div">${esc(P(a).division || "")}${extra}</div>
+      <div class="mm-names"><b class="r">${esc(S.nameOf(a))}</b><span>VS</span><b class="b">${esc(S.nameOf(b))}</b></div>
+      <div class="mm-bar"><i style="width:${(pa * 100).toFixed(0)}%"></i></div>
+      <div class="mm-pct"><span>${Math.round(pa * 100)}%</span><span>${Math.round((1 - pa) * 100)}%</span></div>
+    </a>`;
+  }
+  const muDiv = { v: "すべて" };
+  function viewMatchups(arg) {
+    if (arg && arg.includes("~")) {
+      const [a, b] = arg.split("~").map(decodeURIComponent);
+      if (P(a) && P(b) && a !== b) { mu.red = a; mu.blue = b; }
+    }
+    if (!mu.red || !mu.blue) [mu.red, mu.blue] = defaultPair();
+    const a = mu.red, b = mu.blue, pa = winProb(a, b);
+    const saved = getMU(), isSaved = saved.some(m => muId(m.a, m.b) === muId(a, b));
+    const met = meetings(a, b);
+    const sameDiv = P(a).division && P(a).division === P(b).division;
+    return pageHero("Dream Match", "見たい対戦カードを作ろう。レーティングから勝率を予想します。") + `
+    <div class="wrap">
+      <section class="mu-board">
+        ${cornerHtml(a, "red")}
+        <div class="mu-vs">
+          <div class="vs">VS</div>
+          <div class="mu-prob"><div class="bar"><i class="r" style="width:${(pa * 100).toFixed(1)}%"></i><i class="b" style="width:${((1 - pa) * 100).toFixed(1)}%"></i></div>
+            <div class="pcts"><b class="r">${Math.round(pa * 100)}%</b><small>勝率予想</small><b class="b">${Math.round((1 - pa) * 100)}%</b></div></div>
+          <div class="mu-note">${sameDiv ? `${esc(P(a).division)}の一戦` : "階級が異なるカードです"}${met.length ? `・過去${met.length}戦` : "・初対戦"}</div>
+          <div class="mu-actions">
+            <button class="btn-want ${isSaved ? "on" : ""}" id="muWant" aria-pressed="${isSaved}">${isSaved ? "♥ 見たいリストに追加済み" : "♡ この対戦を見たい！"}</button>
+            <div class="mu-sub"><button class="ghost" id="muSwap" aria-label="コーナーを入れ替える">⇄ 入れ替え</button><button class="ghost" id="muShare">🔗 リンクをコピー</button></div>
+          </div>
+        </div>
+        ${cornerHtml(b, "blue")}
+      </section>
+
+      <section class="section">
+        <div class="sec-head"><h2>Tale of the Tape<small>データ比較（RIZIN）</small></h2></div>
+        <div class="cmp">${compareRows(a, b)}</div>
+      </section>
+
+      <section class="section">
+        <div class="sec-head"><h2>Head to Head<small>過去の対戦</small></h2></div>
+        ${met.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>日付</th><th>勝者</th><th>決着</th><th>大会</th></tr></thead><tbody>${met.map(f => `<tr><td class="num">${fmtDate(f.date)}</td><td class="opp">${f.outcome === "W" ? link(f.winner) : (f.outcome === "D" ? "引き分け" : "無効試合")}</td><td>${esc(METHOD_JA[f.cat] || "")}${f.round ? `<span class="ev">　${esc(f.round)}R ${esc(f.time)}</span>` : ""}</td><td class="ev">${esc(f.event)}</td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="note">まだ対戦したことのない、まさに「夢のカード」です。</p>`}
+      </section>
+
+      <section class="section">
+        <div class="sec-head"><h2>My List<small>あなたの見たいカード（${saved.length}）</small></h2></div>
+        ${saved.length ? `<div class="mu-grid">${saved.slice().reverse().filter(m => P(m.a) && P(m.b)).map(m => miniCard(m.a, m.b)).join("")}</div>`
+          : `<p class="note">「この対戦を見たい！」を押したカードがここに並びます（このブラウザに保存されます）。</p>`}
+      </section>
+
+      <section class="section">
+        <div class="sec-head"><h2>Dream Cards<small>実現したら熱いカード</small></h2></div>
+        <div class="filters">${tabs("muDiv", ["すべて", "フライ級", "バンタム級", "フェザー級", "ライト級", "女子"], muDiv.v)}</div>
+        <div class="mu-grid">${dreamCards(muDiv.v).map(c => miniCard(c.a, c.b, c.met ? `・再戦（過去${c.met}戦）` : "・初対戦")).join("") || '<p class="note">該当するカードがありません</p>'}</div>
+        <p class="note" style="margin-top:10px">各階級の現役上位選手どうしで、実力が近く、まだ対戦が少ない組み合わせを自動で選んでいます。</p>
+      </section>
+    </div>
+    <dialog class="picker" id="picker" aria-labelledby="pickerTitle"></dialog>`;
+  }
+
+  /* 選手を選ぶ画面 */
+  function pickerList() {
+    const st = mu.pick, q = st.q.trim().toLowerCase();
+    const other = st.corner === "red" ? mu.blue : mu.red;
+    const list = pickable().filter(p =>
+      (st.div === "すべて" || p.division === st.div) && (!st.active || p.active) &&
+      (!q || [S.nameOf(p.key), S.enOf(p.key), p.country].join(" ").toLowerCase().includes(q)))
+      .sort((x, y) => y.rating - x.rating).slice(0, 80);
+    if (!list.length) return '<li class="pk-empty">該当する選手がいません。「現役のみ」を外すと引退・移籍した選手も選べます。</li>';
+    return list.map(p => {
+      const cur = p.key === (st.corner === "red" ? mu.red : mu.blue), dis = p.key === other;
+      return `<li><button class="pk-item ${cur ? "cur" : ""}" data-key="${esc(p.key)}" ${dis ? "disabled" : ""}>
+        <span class="pk-main"><b>${esc(S.nameOf(p.key))}</b><small>${esc(subName(p.key))}</small></span>
+        <span class="pk-meta">${esc(p.division || "—")}<br><span class="num">${rec(p.riz)}</span></span>
+        <span class="pk-rate">${r1(p.rating)}</span>
+        <span class="pk-state">${cur ? "選択中" : dis ? "相手側" : "選ぶ"}</span></button></li>`;
+    }).join("");
+  }
+  function openPicker(corner) {
+    mu.pick.corner = corner; mu.pick.q = "";
+    const dlg = document.getElementById("picker");
+    dlg.innerHTML = `<div class="pk-head ${corner}">
+        <div><small>${corner === "red" ? "RED CORNER" : "BLUE CORNER"}</small><h3 id="pickerTitle">選手を選ぶ</h3></div>
+        <button class="pk-close" id="pkClose" aria-label="閉じる">×</button></div>
+      <div class="pk-tools">
+        <div class="search">${SEARCH_ICON}<input id="pkQ" type="search" placeholder="名前（日本語・英語）・国名で検索" autocomplete="off" aria-label="選手を検索"></div>
+        ${tabs("pkDiv", ["すべて", ...DIVS], mu.pick.div)}
+        <label class="toggle"><input type="checkbox" id="pkActive" ${mu.pick.active ? "checked" : ""}> 現役のみ</label>
+      </div>
+      <ul class="pk-list" id="pkList">${pickerList()}</ul>`;
+    dlg.showModal();
+    setTimeout(() => { const i = document.getElementById("pkQ"); if (i && matchMedia("(min-width:561px)").matches) i.focus(); }, 30);
+  }
+  function choose(key) {
+    if (mu.pick.corner === "red") mu.red = key; else mu.blue = key;
+    document.getElementById("picker").close();
+    location.hash = `#/matchups/${encodeURIComponent(mu.red)}~${encodeURIComponent(mu.blue)}`;
+  }
+  function muEvents(e) {
+    const ch = e.target.closest(".mu-change"); if (ch) { openPicker(ch.dataset.corner); return true; }
+    const it = e.target.closest(".pk-item"); if (it && !it.disabled) { choose(it.dataset.key); return true; }
+    if (e.target.closest("#pkClose")) { document.getElementById("picker").close(); return true; }
+    if (e.target.id === "picker") { e.target.close(); return true; }   // 背景クリックで閉じる
+    const pd = e.target.closest("#pkDiv .tab"); if (pd) { mu.pick.div = pd.dataset.d; document.querySelectorAll("#pkDiv .tab").forEach(b => b.setAttribute("aria-pressed", b === pd)); document.getElementById("pkList").innerHTML = pickerList(); return true; }
+    if (e.target.closest("#muSwap")) { location.hash = `#/matchups/${encodeURIComponent(mu.blue)}~${encodeURIComponent(mu.red)}`; return true; }
+    if (e.target.closest("#muWant")) {
+      const a = getMU(), id = muId(mu.red, mu.blue), i = a.findIndex(m => muId(m.a, m.b) === id);
+      if (i >= 0) a.splice(i, 1); else a.push({ a: mu.red, b: mu.blue, t: Date.now() });
+      setMU(a); const y = window.scrollY; $view.innerHTML = viewMatchups(); window.scrollTo(0, y); return true;
+    }
+    if (e.target.closest("#muShare")) {
+      const url = location.href, btn = e.target.closest("#muShare");
+      const done = () => { btn.textContent = "✓ コピーしました"; setTimeout(() => btn.textContent = "🔗 リンクをコピー", 1800); };
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => prompt("このリンクをコピーしてください", url)); else prompt("このリンクをコピーしてください", url);
+      return true;
+    }
+    const md = e.target.closest("#muDiv .tab"); if (md) { muDiv.v = md.dataset.d; const y = window.scrollY; $view.innerHTML = viewMatchups(); window.scrollTo(0, y); return true; }
+    return false;
+  }
+  $view.addEventListener("input", e => { if (e.target.id === "pkQ") { mu.pick.q = e.target.value; document.getElementById("pkList").innerHTML = pickerList(); } });
+  $view.addEventListener("change", e => { if (e.target.id === "pkActive") { mu.pick.active = e.target.checked; document.getElementById("pkList").innerHTML = pickerList(); } });
+  $view.addEventListener("keydown", e => {
+    if (e.target.id === "pkQ" && e.key === "Enter") { const f = document.querySelector("#pkList .pk-item:not([disabled])"); if (f) { e.preventDefault(); choose(f.dataset.key); } }
+  });
+
   /* ---------- ルーター ---------- */
   function route() {
     const h = location.hash.replace(/^#\/?/, "");
@@ -660,13 +846,14 @@
       case "champions": html = viewChampions(); break;
       case "events": html = viewEvents(); break;
       case "stats": html = viewStats(); break;
+      case "matchups": html = viewMatchups(arg); break;
       default: html = viewHome();
     }
     $view.innerHTML = html;
     document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters")));
     document.getElementById("nav").classList.remove("open");
     document.getElementById("menuBtn").setAttribute("aria-expanded", "false");
-    const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計" };
+    const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計", matchups: "見たい対戦カード" };
     document.title = (page === "fighter" && P(key) ? S.nameOf(key) : titles[page] || "RIZIN選手データベース") + "｜FIGHT BOOK";
     window.scrollTo(0, 0);
     loadInstagram();
@@ -675,6 +862,7 @@
 
   /* ---------- 画面内の操作 ---------- */
   $view.addEventListener("click", e => {
+    if (muEvents(e)) return;
     const c = e.target.closest("#catTabs .cat");
     if (c) { rankState.cat = c.dataset.cat; $view.innerHTML = viewRankings(); return; }
     const lk = e.target.closest("button.like");
