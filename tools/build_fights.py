@@ -50,7 +50,7 @@ ALIASES = {
   "Jae Hoon Lee":"Lee Jae-hoon", "Si Woo Park ":"Si Woo Park", "Tenya":"Tenya Yoshimura",
   "Tatsuya \"Yanbo\" Saika":"Tatsuya Saika", "Kate Oyama":"Kate Oyama", "Keito Oyama":"Kate Oyama",
   "Naoki":"Naoki Tanaka", "Ryota Renseigym":"Ryota Renseigym", "Shoko Sato":"Shoko Sato",
-  "Topnoi Kiwram":"Topnoi Thanongsaklek",
+  "Topnoi Kiwram":"Topnoi Thanongsaklek", "John Macapá":"John Teixeira",
 }
 
 # 大会名の表記ゆれ（都市名などを外したあと）
@@ -165,7 +165,7 @@ for key, me in ROSTER.items():
 # 名簿ファイル由来のRIZIN大会が、大会ファイルにない場合の警告
 ev_names = {x["event"] for x in bouts if x["wc"]}
 for x in bouts:
-    if x["rizin"] and not x["wc"] and x["event"] not in ev_names:
+    if x["rizin"] and not x["wc"]:
         print("note: RIZIN bout only in roster file:", x["date"], x["event"], x["a"], "vs", x["b"])
 
 bouts.sort(key=lambda r: (r["date"], r["event"]))
@@ -190,13 +190,20 @@ for n in names:
     c = countries[n].most_common(1)[0][0] if countries[n] else ""
     people[key_of[n]] = [n, c, last_div.get(n, "")]
 
-cols = ["date","event","winner","loser","outcome","cat","method","round","time","title","note","rizin"]
+# 大会ファイルは各大会の先頭がメインイベント（Wikipediaの並び順）
+seen_ev = set()
+for x in bouts:
+    k = (x["date"], x["event"])
+    x["main"] = bool(x["wc"]) and k not in seen_ev
+    if x["wc"]: seen_ev.add(k)
+
+cols = ["date","event","winner","loser","outcome","cat","method","round","time","title","note","rizin","main"]
 out = []
 for x in bouts:
     cat = method_cat(x["method"]) if x["outcome"] == "W" else x["outcome"]
     title = 1 if re.search(r"Championship", x["note"]) and re.search(r"Won|Defended|For the|Lost", x["note"]) else 0
     out.append([x["date"], x["event"], key_of[x["a"]], key_of[x["b"]], x["outcome"], cat, x["method"],
-                x["round"], x["time"], title, x["note"], 1 if x["rizin"] else 0])
+                x["round"], x["time"], title, x["note"], 1 if x["rizin"] else 0, 1 if x["main"] else 0])
 
 js = ("/* 自動生成: python3 tools/build_fights.py （data-src から作成。直接編集しない） */\n"
       "window.FIGHT_COLS=" + json.dumps(cols) + ";\n"

@@ -35,7 +35,7 @@
 
   const fights = window.FIGHTS.map((r, i) => {
     const o = {}; COLS.forEach((c, j) => o[c] = r[j]);
-    o.id = i; o.rizin = !!o.rizin;
+    o.id = i; o.rizin = !!o.rizin; o.main = !!o.main;
     const m = /Rizin (Light Heavyweight|Flyweight|Bantamweight|Featherweight|Lightweight|Super Atomweight) Championship/i.exec(o.note || "");
     o.titleDiv = m ? TITLE_DIV[m[1].toLowerCase()] || "" : "";
     o.rizinTitle = !!m && o.title === 1;
@@ -52,6 +52,7 @@
     f.delta = {};
     if (!f.rizin || f.outcome === "NC") continue;
     const a = f.winner, b = f.loser, ra = get(a), rb = get(b);
+    f.pre = { [a]: ra, [b]: rb };
     const ea = 1 / (1 + Math.pow(10, (rb - ra) / 400));
     const d = (f.title ? K_TITLE : K) * ((f.outcome === "D" ? 0.5 : 1) - ea);
     rating[a] = ra + d; rating[b] = rb - d;
@@ -91,8 +92,26 @@
     const rl = list.filter(f => f.rizin);
     const pro = tally(list, key), riz = tally(rl, key);
     const lastR = rl.length ? rl[rl.length - 1] : null;
+    // ---- 面白ランキング用の指標（RIZINの試合のみ）----
+    const x = { main: 0, title: 0, big: 0, nye: 0, challenge: 0, challengeWin: 0, upsets: 0, upsetGap: 0 };
+    for (const f of rl) {
+      if (f.main) x.main++;
+      if (f.rizinTitle) x.title++;
+      if (/Super Rizin/i.test(f.event) || /-12-(29|30|31)$/.test(f.date)) x.big++;
+      if (/-12-(29|30|31)$/.test(f.date)) x.nye++;
+      if (f.pre && f.outcome !== "NC") {
+        const opp = f.winner === key ? f.loser : f.winner;
+        const gap = f.pre[opp] - f.pre[key];
+        if (gap > 0) { x.challenge++; if (f.winner === key && f.outcome === "W") x.challengeWin++; }
+        if (f.winner === key && f.outcome === "W" && gap >= 40) { x.upsets++; x.upsetGap += gap; }
+      }
+    }
+    // 注目度：メインイベント×5＋タイトル戦×4＋ビッグイベント（大晦日・超RIZIN）×2＋出場数
+    x.spotlight = x.main * 5 + x.title * 4 + x.big * 2 + rl.length;
+    // 挑戦者魂：格上（試合前レートが上）との対戦数＋その勝利×2
+    x.grit = x.challenge + x.challengeWin * 2;
     profiles[key] = {
-      key, fights: list, rizinFights: rl, pro, riz,
+      key, fights: list, rizinFights: rl, pro, riz, x,
       // 名簿選手はプロ全戦績、それ以外はRIZIN戦績を主に使う
       main: roster[key] && !roster[key].partial ? pro : riz,
       rating: rating[key] ?? BASE, peak: peak[key] ?? BASE, history: hist[key] || [],
@@ -119,6 +138,15 @@
 
   const titleFights = fights.filter(f => f.rizinTitle && f.outcome === "W").slice().reverse();
 
-  window.STATS = { fights, profiles, ranked, events, titleFights, roster, BASE, lastDate,
+  // ---- 秒殺：1Rで決着したフィニッシュを決着タイムの早い順 ----
+  const secs = t => { const m = /^(\d+):(\d{1,2})$/.exec(t || ""); return m ? +m[1] * 60 + +m[2] : null; };
+  const quickest = fights.filter(f => f.rizin && f.outcome === "W" && (f.cat === "KO" || f.cat === "SUB") && String(f.round) === "1" && secs(f.time) !== null)
+    .map(f => Object.assign(f, { secs: secs(f.time) })).sort((a, b) => a.secs - b.secs);
+
+  // ---- 大物食い：試合前レートの差が大きい順の番狂わせ ----
+  const upsets = fights.filter(f => f.rizin && f.outcome === "W" && f.pre && f.pre[f.loser] - f.pre[f.winner] >= 40)
+    .map(f => Object.assign(f, { gap: f.pre[f.loser] - f.pre[f.winner] })).sort((a, b) => b.gap - a.gap);
+
+  window.STATS = { fights, profiles, ranked, events, titleFights, quickest, upsets, roster, BASE, lastDate,
     nameOf, enOf, countryOf, divOf, MIN_RANK_FIGHTS, TITLE_DIVS: Object.values(TITLE_DIV) };
 })();

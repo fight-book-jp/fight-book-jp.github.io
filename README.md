@@ -12,6 +12,7 @@
 - `data-src/events/*.txt` … RIZIN全大会のMMA試合結果（年ごと）
 - `data-src/<key>.txt` … 注目選手のプロ全戦績（RIZIN外の試合を補う）
 - `data/names-ja.js` … 英語名→日本語名の辞書
+- `data/entrance.js` … 入場曲（選手key → 曲名・アーティスト・YouTube動画ID）
 - `tools/build_fights.py` … `data-src` から `data/fights.js` を作るスクリプト
 
 ## 試合結果を追加するとき（新しい大会）
@@ -25,3 +26,7 @@
 1. `data/fighters.js` に1人分を追加（`key` を決める）
 2. `tools/build_fights.py` の `ROSTER` に `"key":"英語名"` を追加
 3. `data-src/<key>.txt` に戦績表を作成して、スクリプトを実行
+
+## 入場曲を追加するとき
+`data/entrance.js` に1行追加します（選手keyは選手ページURLの `#/fighter/` の後ろ）。
+`"akimoto": [{ title:"曲名", artist:"アーティスト", yt:"YouTube動画ID" }],`

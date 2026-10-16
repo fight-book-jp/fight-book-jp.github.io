@@ -144,18 +144,89 @@
   }
 
   /* ---------- ランキング ---------- */
-  const rankState = { div: "すべて", active: true };
+  const RANK_CATS = [
+    { id: "power",     label: "実力",     en: "Pound for Pound", desc: `RIZINのMMA試合から計算したEloレーティング順（初期値1500・RIZINで${S.MIN_RANK_FIGHTS}試合以上）。勝敗と相手の強さで決まり、タイトル戦は少し大きく動きます。` },
+    { id: "spotlight", label: "注目度",   en: "Spotlight",       desc: "RIZINの「顔」度。メインイベント×5点＋タイトル戦×4点＋大晦日・超RIZIN出場×2点＋出場1試合ごとに1点で計算。" },
+    { id: "grit",      label: "挑戦者魂", en: "Fighting Spirit",  desc: "男気ランキング。試合前のレートが自分より上の相手と戦った数＋その相手に勝った数×2で計算。格上に挑み続けた選手ほど上位です。" },
+    { id: "upset",     label: "大物食い", en: "Giant Killer",    desc: "番狂わせの大きさ。格上（試合前レートが40以上上）に勝った試合の、レート差の合計で順位を付けています。" },
+    { id: "quick",     label: "秒殺",     en: "Fastest Finish",  desc: "1ラウンドで決着したKO・一本勝ちを、決着タイムの早い順に並べた試合ランキング。" },
+    { id: "nye",       label: "大晦日",   en: "New Year's Eve",  desc: "年末の大晦日大会への出場回数ランキング。RIZINの年末を彩ってきた選手たち。" },
+    { id: "music",     label: "入場曲",   en: "Walkout Songs",   desc: "選手の入場曲コレクション。♡を押すと、このブラウザにお気に入りとして保存され「あなたのランキング」の上位に並びます。▶で試聴できます。" },
+  ];
+  const rankState = { cat: "power", div: "すべて", active: true };
+  const LIKE_KEY = "fb_song_likes";
+  const getLikes = () => { try { return JSON.parse(localStorage.getItem(LIKE_KEY) || "{}"); } catch (e) { return {}; } };
+  const setLikes = o => { try { localStorage.setItem(LIKE_KEY, JSON.stringify(o)); } catch (e) {} };
+
+  function scoreTable(list, head, cell, opts = {}) {
+    const rows = list.map((p, i) => `<tr>
+        <td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td>
+        <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}"><span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
+        <td>${esc(p.division || "—")}</td>
+        <td class="ev">${opts.detail ? opts.detail(p) : ""}</td>
+        <td class="r"><span class="rate">${cell(p)}</span></td></tr>`).join("");
+    return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>選手</th><th>階級</th><th>内訳</th><th class="r">${head}</th></tr></thead><tbody>${rows || '<tr><td colspan="5" class="empty">該当なし</td></tr>'}</tbody></table></div>`;
+  }
+  function boutTable(list, head, cell) {
+    const rows = list.map((f, i) => `<tr>
+        <td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td>
+        <td class="opp">${link(f.winner)}<div class="ev">vs ${esc(S.nameOf(f.loser))}</div></td>
+        <td>${esc(METHOD_JA[f.cat] || "")}<div class="ev">${esc(f.method)}</div></td>
+        <td class="ev">${esc(f.event)}<br>${fmtDate(f.date)}</td>
+        <td class="r"><span class="rate">${cell(f)}</span></td></tr>`).join("");
+    return `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>勝者</th><th>決着</th><th>大会</th><th class="r">${head}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+  function musicTable() {
+    const likes = getLikes();
+    const list = Object.keys(window.ENTRANCE || {}).filter(k => P(k)).map(k => ({ k, song: window.ENTRANCE[k][0], p: P(k) }))
+      .sort((a, b) => (likes[b.k] ? 1 : 0) - (likes[a.k] ? 1 : 0) || b.p.x.spotlight - a.p.x.spotlight);
+    const rows = list.map((r, i) => `<tr>
+        <td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td>
+        <td><a class="who" href="#/fighter/${encodeURIComponent(r.k)}"><span><b>${esc(S.nameOf(r.k))}</b><small>${esc(r.p.division || "")}</small></span></a></td>
+        <td><b>${esc(r.song.title)}</b><div class="ev">${esc(r.song.artist)}</div></td>
+        <td class="r nowrap">
+          <button class="icon-btn play-song" data-yt="${esc(r.song.yt)}" aria-label="${esc(r.song.title)}を試聴" title="試聴">▶</button>
+          <button class="icon-btn like ${likes[r.k] ? "on" : ""}" data-like="${esc(r.k)}" aria-pressed="${!!likes[r.k]}" aria-label="お気に入り" title="お気に入り">${likes[r.k] ? "♥" : "♡"}</button>
+        </td></tr>
+        <tr class="song-row" hidden><td colspan="4"><div class="yt-wrap" data-for="${esc(r.song.yt)}"></div></td></tr>`).join("");
+    const liked = Object.keys(likes).filter(k => likes[k] && window.ENTRANCE[k]).length;
+    return `<p class="note" style="margin:0 0 10px">お気に入り ${liked} 曲（あなたのランキング）／登録 ${list.length} 曲。並び順：お気に入り → 注目度。</p>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>選手</th><th>入場曲</th><th class="r"></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+
   function viewRankings() {
-    const list = S.ranked.filter(p => (rankState.div === "すべて" || p.division === rankState.div) && (!rankState.active || p.active));
-    return pageHero("Rankings", `RIZINのMMA試合から計算したEloレーティング順（初期値1500・RIZINで${S.MIN_RANK_FIGHTS}試合以上）。`) + `
+    const cat = RANK_CATS.find(c => c.id === rankState.cat) || RANK_CATS[0];
+    const pool = Object.values(S.profiles).filter(p => p.riz.total > 0 && (rankState.div === "すべて" || p.division === rankState.div) && (!rankState.active || p.active));
+    const sortBy = (fn, min = 1) => pool.filter(p => fn(p) >= min).sort((a, b) => fn(b) - fn(a) || b.rating - a.rating).slice(0, 50);
+    const needsFilter = ["power", "spotlight", "grit", "upset", "nye"].includes(cat.id);
+    let body = "";
+    if (cat.id === "power") {
+      const list = S.ranked.filter(p => (rankState.div === "すべて" || p.division === rankState.div) && (!rankState.active || p.active));
+      body = rankTable(list, { showGlobal: rankState.div !== "すべて" || rankState.active }) +
+        `<p class="note" style="margin-top:12px">左の数字は全体（引退・移籍した選手を含む）での順位です。階級は直近の試合の階級です。</p>`;
+    } else if (cat.id === "spotlight") {
+      body = scoreTable(sortBy(p => p.x.spotlight), "注目度", p => p.x.spotlight, { detail: p => `メイン${p.x.main}・タイトル戦${p.x.title}・ビッグイベント${p.x.big}・出場${p.riz.total}` });
+    } else if (cat.id === "grit") {
+      body = scoreTable(sortBy(p => p.x.grit), "挑戦者魂", p => p.x.grit, { detail: p => `格上と${p.x.challenge}戦・うち${p.x.challengeWin}勝` });
+    } else if (cat.id === "upset") {
+      body = scoreTable(sortBy(p => Math.round(p.x.upsetGap)), "番狂わせ度", p => Math.round(p.x.upsetGap), { detail: p => `格上撃破 ${p.x.upsets}回` }) +
+        `<div class="section"><div class="sec-head"><h2>Biggest Upsets<small>番狂わせ 試合ベスト10</small></h2></div>${boutTable(S.upsets.slice(0, 10), "レート差", f => "+" + Math.round(f.gap))}</div>`;
+    } else if (cat.id === "quick") {
+      body = boutTable(S.quickest.slice(0, 30), "決着", f => f.time);
+    } else if (cat.id === "nye") {
+      body = scoreTable(sortBy(p => p.x.nye), "大晦日出場", p => p.x.nye + "回", { detail: p => `RIZIN通算 ${rec(p.riz)}` });
+    } else if (cat.id === "music") {
+      body = musicTable();
+    }
+    return pageHero("Rankings", "強さだけじゃない、いろんな切り口のランキング。") + `
     <div class="wrap">
-      <div class="filters">
+      <div class="cat-tabs" id="catTabs" role="tablist">${RANK_CATS.map(c => `<button role="tab" class="cat ${c.id === cat.id ? "on" : ""}" aria-selected="${c.id === cat.id}" data-cat="${c.id}"><b>${c.label}</b><small>${c.en}</small></button>`).join("")}</div>
+      <p class="cat-desc">${cat.desc}</p>
+      ${needsFilter ? `<div class="filters">
         ${tabs("rankTabs", ["すべて", ...DIVS], rankState.div)}
         <label class="toggle"><input type="checkbox" id="activeOnly" ${rankState.active ? "checked" : ""}> 現役のみ（直近2年に試合）</label>
-        <div class="count">${list.length} 選手</div>
-      </div>
-      ${rankTable(list, { showGlobal: rankState.div !== "すべて" || rankState.active })}
-      <p class="note" style="margin-top:12px">左の数字は全体（引退・移籍した選手を含む）での順位です。レーティングは勝敗と相手の強さで決まり、タイトル戦は少し大きく動きます。階級は直近の試合の階級です。</p>
+      </div>` : ""}
+      ${body}
     </div>`;
   }
 
@@ -315,6 +386,7 @@
       </div>
       <div class="f-rating"><small>RIZINレーティング</small><b>${r1(p.rating)}</b><div class="rk">${p.rank ? `全体 #${p.rank}・` : ""}最高 ${r1(p.peak)}</div></div>
     </div></section>
+    ${walkoutBar(key)}
     <div class="wrap">
       <div class="f-record">
         <div><b>${t.w}</b><small>勝</small></div><div><b>${t.l}</b><small>敗</small></div>
@@ -342,6 +414,7 @@
           </div>
           ${kvHtml || (f && f.note) ? `<div class="panel" style="margin-top:16px"><h3>プロフィール</h3><table class="kv">${kvHtml}</table>${f && f.note ? `<p style="font-size:14px;margin:12px 0 0">${esc(f.note)}</p>` : ""}</div>` : ""}
           ${sns ? `<div class="panel" style="margin-top:16px"><h3>SNS</h3><div class="m-sns">${sns}</div></div>` : ""}
+          ${walkoutPanel(key)}
           ${ig ? `<div class="panel card-ig" style="margin-top:16px;padding:12px">${igEmbed(ig)}</div>` : ""}
         </div>
       </div>
@@ -424,6 +497,108 @@
     </div>`;
   }
 
+  /* ---------- 入場曲プレーヤー ---------- */
+  const AUTO_KEY = "fb_walkout_autoplay";
+  const autoOn = () => { try { return localStorage.getItem(AUTO_KEY) !== "0"; } catch (e) { return true; } };
+  const setAuto = v => { try { localStorage.setItem(AUTO_KEY, v ? "1" : "0"); } catch (e) {} };
+  const songsOf = k => (window.ENTRANCE && window.ENTRANCE[k]) || [];
+  const EQ = '<span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>';
+  const walk = { player: null, key: null, idx: 0, ready: false };
+
+  function walkoutBar(key) {
+    const s = songsOf(key)[0]; if (!s) return "";
+    return `<div class="walkout" id="walkout"><div class="in">
+      <button class="wo-play" id="woPlay" aria-label="入場曲を再生"><span class="wo-icon">▶</span></button>
+      <div class="wo-meta"><small>ENTRANCE MUSIC ${EQ}</small><b id="woTitle">${esc(s.title)}</b><span id="woArtist">${esc(s.artist)}</span></div>
+      <div class="wo-hint" id="woHint" hidden>▶ を押すと入場曲が流れます</div>
+      <label class="switch" title="選手ページを開いたときに入場曲を自動で流す"><input type="checkbox" id="woAuto" ${autoOn() ? "checked" : ""}><span class="slider"></span><em>自動再生</em></label>
+    </div></div>`;
+  }
+  function walkoutPanel(key) {
+    const list = songsOf(key); if (!list.length) return "";
+    return `<div class="panel" style="margin-top:16px"><h3>入場曲</h3>
+      <div class="yt-frame"><div id="ytPlayer"></div></div>
+      ${list.length > 1 ? `<div class="song-list">${list.map((s, i) => `<button class="song-pick ${i === 0 ? "on" : ""}" data-idx="${i}">♪ ${esc(s.title)} <small>${esc(s.artist)}</small></button>`).join("")}</div>` : ""}
+      <p class="note" style="margin:8px 0 0">YouTubeの動画を埋め込んでいます。</p></div>`;
+  }
+
+  let ytReady = null;
+  function loadYT() {
+    if (ytReady) return ytReady;
+    ytReady = new Promise(res => {
+      if (window.YT && window.YT.Player) return res();
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => { if (prev) prev(); res(); };
+      const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; s.async = true;
+      document.head.appendChild(s);
+    });
+    return ytReady;
+  }
+  function setPlaying(on) {
+    const bar = document.getElementById("walkout"); if (!bar) return;
+    bar.classList.toggle("playing", on);
+    const b = document.getElementById("woPlay");
+    b.querySelector(".wo-icon").textContent = on ? "❚❚" : "▶";
+    b.setAttribute("aria-label", on ? "入場曲を一時停止" : "入場曲を再生");
+    if (on) document.getElementById("woHint").hidden = true;
+  }
+  function stopWalkout() {
+    if (walk.player && walk.player.destroy) { try { walk.player.destroy(); } catch (e) {} }
+    walk.player = null; walk.key = null; walk.ready = false;
+  }
+  function initWalkout(key) {
+    stopWalkout();
+    const list = songsOf(key);
+    if (!list.length || !document.getElementById("ytPlayer")) return;
+    walk.key = key; walk.idx = 0;
+    const auto = autoOn();
+    loadYT().then(() => {
+      if (walk.key !== key || !document.getElementById("ytPlayer")) return;
+      walk.player = new YT.Player("ytPlayer", {
+        videoId: list[0].yt, host: "https://www.youtube-nocookie.com",
+        playerVars: { autoplay: auto ? 1 : 0, playsinline: 1, rel: 0, modestbranding: 1 },
+        events: {
+          onReady: e => {
+            walk.ready = true;
+            try { e.target.setVolume(70); } catch (_) {}
+            if (auto) {
+              e.target.playVideo();
+              // ブラウザが自動再生を止めた場合は、再生ボタンを案内する
+              setTimeout(() => {
+                if (walk.key !== key || !walk.player) return;
+                const st = walk.player.getPlayerState ? walk.player.getPlayerState() : -1;
+                if (st !== 1 && st !== 3) { const h = document.getElementById("woHint"); if (h) h.hidden = false; }
+              }, 1500);
+            }
+          },
+          onStateChange: e => setPlaying(e.data === 1 || e.data === 3),
+        },
+      });
+    });
+  }
+  function togglePlay() {
+    if (!walk.player || !walk.ready) return;
+    const st = walk.player.getPlayerState();
+    if (st === 1 || st === 3) walk.player.pauseVideo(); else walk.player.playVideo();
+  }
+  function pickSong(i) {
+    const list = songsOf(walk.key); const s = list[i]; if (!s || !walk.player) return;
+    walk.idx = i; walk.player.loadVideoById(s.yt);
+    document.getElementById("woTitle").textContent = s.title;
+    document.getElementById("woArtist").textContent = s.artist;
+    document.querySelectorAll(".song-pick").forEach(b => b.classList.toggle("on", +b.dataset.idx === i));
+  }
+  document.addEventListener("click", e => {
+    if (e.target.closest("#woPlay")) togglePlay();
+    const pk = e.target.closest(".song-pick"); if (pk) pickSong(+pk.dataset.idx);
+  });
+  document.addEventListener("change", e => {
+    if (e.target.id !== "woAuto") return;
+    setAuto(e.target.checked);
+    if (!walk.player || !walk.ready) return;
+    if (e.target.checked) walk.player.playVideo(); else walk.player.pauseVideo();
+  });
+
   /* ---------- ルーター ---------- */
   function route() {
     const h = location.hash.replace(/^#\/?/, "");
@@ -447,10 +622,27 @@
     document.title = (page === "fighter" && P(key) ? S.nameOf(key) : titles[page] || "RIZIN選手データベース") + "｜FIGHT BOOK";
     window.scrollTo(0, 0);
     loadInstagram();
+    if (page === "fighter" && P(key)) initWalkout(key); else stopWalkout();
   }
 
   /* ---------- 画面内の操作 ---------- */
   $view.addEventListener("click", e => {
+    const c = e.target.closest("#catTabs .cat");
+    if (c) { rankState.cat = c.dataset.cat; $view.innerHTML = viewRankings(); return; }
+    const lk = e.target.closest("button.like");
+    if (lk) { const o = getLikes(); o[lk.dataset.like] = !o[lk.dataset.like]; if (!o[lk.dataset.like]) delete o[lk.dataset.like]; setLikes(o); $view.innerHTML = viewRankings(); return; }
+    const ps = e.target.closest("button.play-song");
+    if (ps) {
+      const row = ps.closest("tr").nextElementSibling, box = row.querySelector(".yt-wrap");
+      const open = row.hidden;
+      document.querySelectorAll(".song-row").forEach(r => { r.hidden = true; r.querySelector(".yt-wrap").innerHTML = ""; });
+      document.querySelectorAll(".play-song").forEach(b => b.textContent = "▶");
+      if (open) {
+        row.hidden = false; ps.textContent = "■";
+        box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(ps.dataset.yt)}?autoplay=1&playsinline=1&rel=0" title="入場曲" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+      }
+      return;
+    }
     const t = e.target.closest("button.tab"); if (!t) return;
     if (t.closest("#rankTabs")) { rankState.div = t.dataset.d; $view.innerHTML = viewRankings(); }
     else if (t.closest("#divTabs")) { rosterState.div = t.dataset.d; refreshGrid(); }
