@@ -108,6 +108,8 @@ dialog::backdrop{background:rgba(0,0,0,.7)}
 .m-sns a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);text-decoration:none;font-size:13px;font-weight:700}
 .m-sns a:hover{border-color:var(--ink)}
 .m-sns svg{width:15px;height:15px}
+.ig-wrap{margin-top:20px;display:flex;justify-content:center}
+.ig-wrap .instagram-media{margin:0 auto!important;min-width:0!important;width:100%!important;max-width:420px!important}
 
 footer{background:var(--hero);color:#9a9a9a;font-size:12px;padding:28px 16px 40px}
 footer .in{max-width:1240px;margin:0 auto}
@@ -172,6 +174,8 @@ footer ul{padding-left:18px;margin:8px 0 0}
    photo    : 画像のURLやファイル名。使用許可のある写真だけを入れてください。
               空なら自動でシルエット表示になります。
    sns      : x / instagram / youtube / tiktok のURL（無い項目は省略）
+   igPost   : プロフィール画面に埋め込むInstagram投稿のURL
+              （例: "https://www.instagram.com/p/XXXXXXXXX/"）。空なら表示しません。
    ===================================================================== */
 const FIGHTERS = [
   // ---------------- フライ級 ----------------
@@ -369,9 +373,33 @@ $("grid").addEventListener("click", e => {
       <table>${rows}</table>
       ${f.note ? `<p>${esc(f.note)}</p>` : ""}
       ${sns ? `<div class="m-sns">${sns}</div>` : ""}
+      ${igEmbed(f)}
     </div>`;
   $("modal").showModal();
+  if (igPermalink(f)) loadInstagram();
 });
+/* ---- Instagram公式埋め込み ---- */
+function igPermalink(f){
+  const m = String(f.igPost || "").match(/^https:\/\/(?:www\.)?instagram\.com\/(p|reel)\/([A-Za-z0-9_-]+)/);
+  return m ? `https://www.instagram.com/${m[1]}/${m[2]}/` : "";
+}
+function igEmbed(f){
+  const url = igPermalink(f);
+  if (!url) return "";
+  return `<div class="ig-wrap">
+    <blockquote class="instagram-media" data-instgrm-permalink="${url}?utm_source=ig_embed" data-instgrm-version="14">
+      <a href="${url}" target="_blank" rel="noopener">Instagramで投稿を見る</a>
+    </blockquote></div>`;
+}
+function loadInstagram(){
+  if (window.instgrm) { window.instgrm.Embeds.process(); return; }
+  if (document.getElementById("ig-embed-js")) return;
+  const s = document.createElement("script");
+  s.id = "ig-embed-js"; s.async = true; s.src = "https://www.instagram.com/embed.js";
+  s.onload = () => window.instgrm && window.instgrm.Embeds.process();
+  document.body.appendChild(s);
+}
+
 $("modal").addEventListener("click", e => {
   if(e.target === $("modal") || e.target.closest(".m-close")) $("modal").close();
 });
