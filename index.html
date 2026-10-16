@@ -108,7 +108,10 @@ dialog::backdrop{background:rgba(0,0,0,.7)}
 .m-sns a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);text-decoration:none;font-size:13px;font-weight:700}
 .m-sns a:hover{border-color:var(--ink)}
 .m-sns svg{width:15px;height:15px}
-.ig-wrap{margin-top:20px;display:flex;justify-content:center}
+.ig-wrap{display:flex;justify-content:center}
+.card-ig{position:relative;background:linear-gradient(180deg,var(--photo-top),var(--photo-bot));padding:44px 10px 10px}
+.card-ig .badge{z-index:2}
+.card-ig iframe{min-width:0!important;width:100%!important;max-width:100%!important;margin:0!important}
 .ig-wrap .instagram-media{margin:0 auto!important;min-width:0!important;width:100%!important;max-width:420px!important}
 
 footer{background:var(--hero);color:#9a9a9a;font-size:12px;padding:28px 16px 40px}
@@ -125,6 +128,7 @@ footer ul{padding-left:18px;margin:8px 0 0}
   .photo .initial{font-size:44px}
   .foot{flex-direction:column;align-items:flex-start}
   .sns a{width:28px;height:28px}
+  .card.has-ig{grid-column:1/-1}
 }
 </style>
 </head>
@@ -155,7 +159,7 @@ footer ul{padding-left:18px;margin:8px 0 0}
 <dialog id="modal" aria-label="選手プロフィール"></dialog>
 
 <footer><div class="in">
-  <div>本サイトはファンによる非公式の名簿で、RIZIN公式とは関係ありません。戦績は2026年10月時点の調査値です。<span style="opacity:.6">（ページ版: v3）</span>数え方（RIZINのみ／プロ通算）は選手ごとに表示しています。</div>
+  <div>本サイトはファンによる非公式の名簿で、RIZIN公式とは関係ありません。戦績は2026年10月時点の調査値です。<span style="opacity:.6">（ページ版: v4）</span>数え方（RIZINのみ／プロ通算）は選手ごとに表示しています。</div>
   <div style="margin-top:10px">主な出典：</div>
   <ul>
     <li><a href="https://en.wikipedia.org/wiki/Rizin_Fighting_Federation" target="_blank" rel="noopener">Wikipedia: Rizin Fighting Federation</a>（現王者・各選手ページ）</li>
@@ -320,6 +324,7 @@ function snsLinks(f){
 }
 
 function photo(f){
+  if (igPermalink(f)) return `<div class="card-ig">${badge(f)}${igEmbed(f)}</div>`;
   const initial = f.en ? f.en.trim().split(/\s+/).pop().charAt(0) : "";
   const img = safeUrl(f.photo) || (f.photo && !/^[a-z]+:/i.test(f.photo) ? f.photo : "");
   return `<div class="photo">${badge(f)}${img ? `<img src="${esc(img)}" alt="${esc(f.name)}" loading="lazy">` : `<span class="initial">${esc(initial)}</span>${SILHOUETTE}`}</div>`;
@@ -335,7 +340,7 @@ function render(){
   );
   $("count").textContent = `${list.length} 選手`;
   $("grid").innerHTML = list.length ? list.map(f => `
-    <article class="card">
+    <article class="card${igPermalink(f) ? " has-ig" : ""}">
       ${photo(f)}
       <div class="card-body">
         <div class="nick">${f.nick ? `"${esc(f.nick)}"` : ""}</div>
@@ -349,6 +354,7 @@ function render(){
         </div>
       </div>
     </article>`).join("") : '<div class="empty">該当する選手が見つかりません</div>';
+  if (list.some(igPermalink)) loadInstagram();
 }
 
 $("grid").addEventListener("click", e => {
@@ -374,10 +380,8 @@ $("grid").addEventListener("click", e => {
       <table>${rows}</table>
       ${f.note ? `<p>${esc(f.note)}</p>` : ""}
       ${sns ? `<div class="m-sns">${sns}</div>` : ""}
-      ${igEmbed(f)}
     </div>`;
   $("modal").showModal();
-  if (igPermalink(f)) loadInstagram();
 });
 /* ---- Instagram公式埋め込み ---- */
 function igPermalink(f){
