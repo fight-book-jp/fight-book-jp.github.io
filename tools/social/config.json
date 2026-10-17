@@ -1,0 +1,8 @@
+{
+  "intervalMinutes": 60,
+  "youtube": {
+    "count": 3,
+    "excludeShorts": false
+  },
+  "logKeep": 50
+}

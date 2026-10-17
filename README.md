@@ -30,3 +30,20 @@
 ## 入場曲を追加するとき
 `data/entrance.js` に1行追加します（選手keyは選手ページURLの `#/fighter/` の後ろ）。
 `"akimoto": [{ title:"曲名", artist:"アーティスト", yt:"YouTube動画ID" }],`
+
+## SOCIAL UPDATES（YouTube 最新動画）
+
+- 選手詳細の「SOCIAL UPDATES」に、登録済み YouTube チャンネルの最新動画を3件表示します。
+- 取得は GitHub Actions（`.github/workflows/social.yml`）が **毎時17分** に実行し、結果を `data/social.json` に保存します。ブラウザから外部APIへは直接アクセスしません。
+  - 頻度の変更：workflow の `cron` を編集（例 `"17,47 * * * *"` で30分ごと）。`tools/social/config.json` の `intervalMinutes` も合わせて変更。
+- 取得方法：既定は YouTube 公式の新着フィード（RSS・キー不要・無料）。
+  リポジトリの Settings → Secrets → Actions に `YOUTUBE_API_KEY`（Google Cloud の無料枠）を登録すると YouTube Data API v3 に切り替わり、非公開・年齢制限・埋め込み不可の動画を除外します。キーはコードに書かないでください。
+- 失敗時は直前に正常取得した動画を表示し続け、エラーは `data/social-log.json`（直近50件）と Actions のログに残ります。
+- X（旧Twitter）は公式APIが有料のため投稿取得は行わず、アカウントへのリンクのみ表示します。
+- テスト：`node --test tools/social/fetch.test.mjs`
+
+### 選手データの項目（`data/fighters.js`）
+
+- `ringName`：詳細ヘッダー背景に大きく表示する名前（未登録なら英語名→日本語名）
+- `sns.x / instagram / youtube / tiktok / site`：登録された項目だけアイコン表示（`site` は公式サイト）
+- `youtubeChannelId`：`UC…` で始まるチャンネルID（任意。未指定なら `sns.youtube` のURLから判定）

@@ -32,10 +32,12 @@
     youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.6 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.2.4-2.5.4-3.8s-.1-2.6-.4-3.8ZM10 15V9l5.2 3L10 15Z"/></svg>',
     tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.3v13.2a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9a6.3 6.3 0 1 0 5.3 6.2V8.6a7.7 7.7 0 0 0 4.4 1.4V6.7a4.4 4.4 0 0 1-4.4-4.7Z"/></svg>'
   };
-  const SNS_LABEL = { x: "X", instagram: "Instagram", youtube: "YouTube", tiktok: "TikTok" };
+  ICONS.site = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3Z"/></svg>';
+  const SNS_LABEL = { x: "X", instagram: "Instagram", youtube: "YouTube", tiktok: "TikTok", site: "公式サイト" };
+  const SNS_ORDER = ["x", "instagram", "youtube", "tiktok", "site"];
   const SIL = '<svg class="sil" viewBox="0 0 200 180" fill="currentColor" aria-hidden="true"><circle cx="100" cy="46" r="30"/><path d="M28 180c4-46 30-80 72-80s68 34 72 80Z"/></svg>';
   const SEARCH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
-  const snsItems = f => Object.entries((f && f.sns) || {}).filter(([k, u]) => ICONS[k] && safeUrl(u));
+  const snsItems = f => SNS_ORDER.map(k => [k, f && f.sns && f.sns[k]]).filter(([k, u]) => ICONS[k] && safeUrl(u));
 
   /* ---------- Instagram公式埋め込み ---------- */
   function igPermalink(f) {
@@ -344,8 +346,8 @@
     return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="レーティングの推移">
       <line x1="${PD}" x2="${W - PD}" y1="${baseY}" y2="${baseY}" stroke="currentColor" stroke-opacity=".2" stroke-dasharray="4 4"/>
       <text x="${PD}" y="${+baseY - 6}" font-size="11" fill="currentColor" opacity=".5">1500</text>
-      <polyline points="${pts}" fill="none" stroke="#d20a0a" stroke-width="2.5" stroke-linejoin="round"/>
-      <circle cx="${x(hist.length - 1)}" cy="${y(last.r)}" r="4.5" fill="#d20a0a"/>
+      <polyline points="${pts}" fill="none" style="stroke:var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
+      <circle cx="${x(hist.length - 1)}" cy="${y(last.r)}" r="4.5" style="fill:var(--accent)"/>
       <text x="${PD}" y="${H - 8}" font-size="11" fill="currentColor" opacity=".6">${hist[0].date.slice(0, 4)}</text>
       <text x="${W - PD}" y="${H - 8}" font-size="11" fill="currentColor" opacity=".6" text-anchor="end">${last.date.slice(0, 4)}</text>
       <text x="${W - PD}" y="${y(last.r) - 10}" font-size="13" font-weight="700" fill="currentColor" text-anchor="end">${r1(last.r)}</text>
@@ -374,15 +376,19 @@
       : [["階級（直近）", p.division], ["国", p.country], ["RIZIN初出場", p.rizinFights[0] ? fmtDate(p.rizinFights[0].date) : ""]];
     const kvHtml = kv.filter(r => r[1]).map(r => `<tr><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("");
     const tot = t.w || 1;
-    const sns = snsItems(f).map(([k, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${ICONS[k]}${SNS_LABEL[k]}</a>`).join("");
+    const sns = snsItems(f).map(([k, u]) => `<a class="sns-${k}" href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(S.nameOf(key))}の${SNS_LABEL[k]}（新しいタブで開く）" title="${SNS_LABEL[k]}">${ICONS[k]}<span>${SNS_LABEL[k]}</span></a>`).join("");
     const name = S.nameOf(key), en = S.enOf(key);
+    // 背景のリングネーム（未登録なら英語名→表示名の順でフォールバック）
+    const ring = (f && f.ringName) || en || name;
+    const ringLen = [...ring].length;
     return `
-    <section class="f-hero"><div class="in">
+    <section class="f-hero"><div class="f-bgname ${ringLen > 18 ? "xl" : ringLen > 11 ? "lg" : ""}" aria-hidden="true">${esc(ring)}</div><div class="in">
       <div>
         <div class="nick">${f && f.status === "champion" ? "現王者　" : f && f.status === "former" ? "元王者　" : ""}${f && f.nick ? `"${esc(f.nick)}"` : ""}</div>
         <h1>${esc(name)}</h1>
         ${name !== en ? `<div class="en">${esc(en)}</div>` : ""}
         <div class="tags">${p.division ? `<span>${esc(p.division)}</span>` : ""}${p.country ? `<span>${esc(p.country)}</span>` : ""}${t.streak >= 2 ? `<span>RIZIN ${t.streak}連勝中</span>` : ""}${p.active ? "" : "<span>直近2年試合なし</span>"}</div>
+        ${sns ? `<div class="f-sns" role="list" aria-label="SNS">${sns}</div>` : ""}
       </div>
       <div class="f-rating"><small>RIZINレーティング</small><b>${r1(p.rating)}</b><div class="rk">${p.rank ? `全体 #${p.rank}・` : ""}最高 ${r1(p.peak)}</div></div>
     </div></section>
@@ -393,6 +399,7 @@
         <div><b>${t.d}</b><small>分</small></div><div><b>${t.nc}</b><small>無効</small></div>
       </div>
       <p class="note" style="margin-top:8px">上の数字はRIZINでのMMA戦績です。${f && !f.partial ? `プロ通算は ${rec(p.pro)}${p.pro.nc ? `（無効${p.pro.nc}）` : ""}。` : ""}${f && f.partial ? "この選手はRIZIN外の戦績を集めきれていません。" : ""}</p>
+      ${socialSection(key)}
       <div class="f-cols">
         <div>
           <div class="panel chart"><h3>レーティングの推移（RIZIN）</h3>${ratingChart(p.history)}</div>
@@ -403,8 +410,8 @@
         </div>
         <div>
           <div class="panel"><h3>勝ち方（RIZIN）</h3>
-            <div class="bar"><span style="width:${t.ko / tot * 100}%;background:#d20a0a"></span><span style="width:${t.sub / tot * 100}%;background:#c9a227"></span><span style="width:${(t.dec + t.other) / tot * 100}%;background:#888"></span></div>
-            <div class="legend"><span><i style="background:#d20a0a"></i>KO/TKO ${t.ko}</span><span><i style="background:#c9a227"></i>一本 ${t.sub}</span><span><i style="background:#888"></i>判定ほか ${t.dec + t.other}</span></div>
+            <div class="bar"><span style="width:${t.ko / tot * 100}%;background:var(--accent)"></span><span style="width:${t.sub / tot * 100}%;background:var(--gold)"></span><span style="width:${(t.dec + t.other) / tot * 100}%;background:var(--draw)"></span></div>
+            <div class="legend"><span><i style="background:var(--accent)"></i>KO/TKO ${t.ko}</span><span><i style="background:var(--gold)"></i>一本 ${t.sub}</span><span><i style="background:var(--draw)"></i>判定ほか ${t.dec + t.other}</span></div>
             <table class="kv" style="margin-top:12px">
               <tr><th>フィニッシュ率</th><td>${pct(t.finishRate)}</td></tr>
               <tr><th>現在の連勝</th><td>${t.streak}</td></tr>
@@ -413,7 +420,6 @@
             </table>
           </div>
           ${kvHtml || (f && f.note) ? `<div class="panel" style="margin-top:16px"><h3>プロフィール</h3><table class="kv">${kvHtml}</table>${f && f.note ? `<p style="font-size:14px;margin:12px 0 0">${esc(f.note)}</p>` : ""}</div>` : ""}
-          ${sns ? `<div class="panel" style="margin-top:16px"><h3>SNS</h3><div class="m-sns">${sns}</div></div>` : ""}
           ${walkoutPanel(key)}
           ${ig ? `<div class="panel card-ig" style="margin-top:16px;padding:12px">${igEmbed(ig)}</div>` : ""}
         </div>
@@ -833,6 +839,104 @@
     if (e.target.id === "pkQ" && e.key === "Enter") { const f = document.querySelector("#pkList .pk-item:not([disabled])"); if (f) { e.preventDefault(); choose(f.dataset.key); } }
   });
 
+  /* ---------- SOCIAL UPDATES（X・YouTubeの最新投稿） ----------
+     data/social.json は GitHub Actions が定期的に（初期値60分）YouTubeから取得して更新するキャッシュ。
+     ブラウザからは外部APIを直接呼ばない。Xは公式APIが有料のため取得せず、リンクのみ表示。 */
+  const X_LOGO = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.8 3h6.4l4.4 5.9L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z"/></svg>';
+  const YT_LOGO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FF0000" d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.6 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1c.3-1.2.4-2.5.4-3.8s-.1-2.6-.4-3.8Z"/><path fill="#fff" d="M10 15V9l5.2 3L10 15Z"/></svg>';
+  let socialData = null, socialPromise = null;
+  function loadSocialData() {
+    if (socialData) return Promise.resolve(socialData);
+    if (!socialPromise) {
+      const bust = Math.floor(Date.now() / 6e5);     // 10分ごとに新しいファイルを取りに行く
+      socialPromise = fetch(`data/social.json?v=${bust}`, { cache: "no-cache" })
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(j => (socialData = j))
+        .catch(e => { socialPromise = null; throw e; });
+    }
+    return socialPromise;
+  }
+  const hasX = f => !!(f && (f.xUser || (f.sns && safeUrl(f.sns.x))));
+  const hasYT = f => !!(f && (f.youtubeChannelId || (f.sns && safeUrl(f.sns.youtube))));
+  const fmtDT = iso => { const d = new Date(iso); if (isNaN(d)) return ""; return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; };
+  const fmtDTm = iso => { const d = new Date(iso); if (isNaN(d)) return ""; return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+  const skeleton = n => Array.from({ length: n }, () => '<div class="sc sc-skel" aria-hidden="true"><div class="sc-media"></div><div class="sc-body"><i></i><i></i><i></i></div></div>').join("");
+
+  function socialSection(key) {
+    const f = S.roster[key];
+    const x = false, y = hasYT(f);   // Xの投稿取得は有料APIのため行わない（Xはヘッダーのリンクのみ）
+    if (!y) return "";              // YouTube未登録の選手はセクションごと出さない
+    return `<section class="section social" id="social" data-key="${esc(key)}" aria-labelledby="socialTitle">
+      <div class="sec-head"><h2 id="socialTitle">Social Updates<small>YouTubeの最新動画</small></h2><span class="note" id="socialUpdated" aria-live="polite"></span></div>
+      ${x ? `<div class="sc-block" id="scX"><div class="sc-label">${X_LOGO}<b>X</b><span>最新の投稿</span></div><div class="sc-grid" aria-busy="true">${skeleton(3)}</div></div>` : ""}
+      ${y ? `<div class="sc-block" id="scYT"><div class="sc-label">${YT_LOGO}<b>YouTube</b><span>最新の動画</span></div><div class="sc-grid" aria-busy="true">${skeleton(3)}</div></div>` : ""}
+    </section>`;
+  }
+  const STATUS_MSG = {
+    not_configured: "連携の準備中です。", auth_error: "現在表示できません（連携の設定を確認中）。",
+    rate_limited: "アクセスが集中しているため、しばらくしてから更新されます。", unavailable: "サービス側の障害のため、現在表示できません。",
+    not_found: "アカウントが見つかりませんでした。", error: "現在表示できません。",
+  };
+  function stateBox(msg, kind = "") { return `<div class="sc-state ${kind}"><p>${esc(msg)}</p></div>`; }
+  function staleNote(src) {
+    if (!src || src.status === "ok" || !src.lastSuccessAt) return "";
+    return `<p class="sc-stale">最新の取得に失敗したため、${esc(fmtDTm(src.lastSuccessAt))} 時点の内容を表示しています。</p>`;
+  }
+  function xCards(src, f) {
+    if (!src) return stateBox(STATUS_MSG.not_configured);
+    const posts = (src.posts || []).slice(0, 3);
+    if (!posts.length) return src.status === "ok" ? stateBox("最近の投稿はありません。", "empty") : stateBox(STATUS_MSG[src.status] || STATUS_MSG.error, "err");
+    const acc = src.account || {};
+    return posts.map(pt => {
+      const m = (pt.media || [])[0];
+      const img = m && (m.url || m.preview);
+      return `<a class="sc sc-x" href="${esc(safeUrl(pt.url))}" target="_blank" rel="noopener" aria-label="Xの投稿を開く（${esc(fmtDT(pt.createdAt))}）">
+        ${img ? `<div class="sc-media"><img src="${esc(img)}" alt="${esc(m.alt || "投稿の画像")}" loading="lazy" decoding="async" width="${m.width || 1200}" height="${m.height || 675}">${m.type !== "photo" ? '<span class="sc-play" aria-hidden="true">▶</span>' : ""}</div>` : ""}
+        <div class="sc-body">
+          <div class="sc-src">${X_LOGO}<span><b>${esc(acc.name || S.nameOf(f.key))}</b> @${esc(acc.username || "")}</span></div>
+          <p class="sc-text">${esc(pt.text || "")}</p>
+          <time class="sc-date" datetime="${esc(pt.createdAt)}">${esc(fmtDT(pt.createdAt))}</time>
+        </div></a>`;
+    }).join("") + staleNote(src);
+  }
+  function ytCards(src) {
+    if (!src) return stateBox(STATUS_MSG.not_configured);
+    const vids = (src.videos || []).slice(0, 3);
+    if (!vids.length) return src.status === "ok" ? stateBox("最近の動画はありません。", "empty") : stateBox(STATUS_MSG[src.status] || STATUS_MSG.error, "err");
+    return vids.map(v => `<article class="sc sc-yt">
+        <div class="sc-media yt-lite" data-yt="${esc(v.id)}">
+          <img src="${esc(v.thumbnail && v.thumbnail.url || `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`)}" alt="" loading="lazy" decoding="async" width="480" height="270">
+          <button class="sc-playbtn" data-yt="${esc(v.id)}" aria-label="「${esc(v.title)}」をこのページで再生">▶</button>
+        </div>
+        <div class="sc-body">
+          <div class="sc-src">${YT_LOGO}<span><b>${esc(src.channel && src.channel.title || "YouTube")}</b></span></div>
+          <h3 class="sc-title"><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.title)}</a></h3>
+          <div class="sc-foot"><time class="sc-date" datetime="${esc(v.publishedAt)}">${esc(fmtDT(v.publishedAt))}</time><a class="sc-out" href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">YouTubeで見る ↗</a></div>
+        </div></article>`).join("") + staleNote(src);
+  }
+  function fillSocial(key) {
+    const sec = document.getElementById("social"); if (!sec || sec.dataset.key !== key) return;
+    const f = S.roster[key];
+    const put = (id, html) => { const g = document.querySelector(`#${id} .sc-grid`); if (g) { g.innerHTML = html; g.removeAttribute("aria-busy"); } };
+    loadSocialData().then(d => {
+      if (!document.getElementById("social") || document.getElementById("social").dataset.key !== key) return;
+      const e = (d.fighters || {})[key] || {};
+      put("scX", xCards(e.x, f));
+      put("scYT", ytCards(e.youtube));
+      const u = document.getElementById("socialUpdated");
+      if (u && d.generatedAt) u.textContent = `更新：${fmtDTm(d.generatedAt)}`;
+    }).catch(() => {
+      put("scX", stateBox("投稿を読み込めませんでした。時間をおいて再読み込みしてください。", "err"));
+      put("scYT", stateBox("動画を読み込めませんでした。時間をおいて再読み込みしてください。", "err"));
+    });
+  }
+  document.addEventListener("click", e => {
+    const b = e.target.closest(".sc-playbtn"); if (!b) return;
+    const box = b.closest(".yt-lite");
+    if (walk.player && walk.ready) { try { walk.player.pauseVideo(); } catch (_) {} }   // 入場曲は止める
+    box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(b.dataset.yt)}?autoplay=1&playsinline=1&rel=0" title="YouTube動画" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+  });
+
   /* ---------- ルーター ---------- */
   function route() {
     const h = location.hash.replace(/^#\/?/, "");
@@ -857,7 +961,7 @@
     document.title = (page === "fighter" && P(key) ? S.nameOf(key) : titles[page] || "RIZIN選手データベース") + "｜FIGHT BOOK";
     window.scrollTo(0, 0);
     loadInstagram();
-    if (page === "fighter" && P(key)) initWalkout(key); else stopWalkout();
+    if (page === "fighter" && P(key)) { initWalkout(key); fillSocial(key); } else stopWalkout();
   }
 
   /* ---------- 画面内の操作 ---------- */

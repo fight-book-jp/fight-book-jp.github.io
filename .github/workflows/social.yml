@@ -1,0 +1,49 @@
+# SOCIAL UPDATES（YouTubeの最新動画）を定期取得して data/social.json を更新する
+# 更新頻度は下の cron で変更できます（初期値：毎時17分＝60分ごと）。例：30分ごと → "17,47 * * * *"
+name: Update social feed
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "tools/social/**"
+      - "data/fighters.js"
+      - ".github/workflows/social.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: social-feed
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Test
+        run: node --test tools/social/fetch.test.mjs
+      - name: Fetch latest videos
+        env:
+          # 任意：GitHub Secrets に YOUTUBE_API_KEY を登録すると YouTube Data API を使う（未登録なら無料のRSSを使う）
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node tools/social/fetch.mjs
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- data/social.json data/social-log.json; then
+            echo "no changes"; exit 0
+          fi
+          git config user.name "social-feed-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/social.json data/social-log.json
+          git commit -m "SNSフィード自動更新"
+          git pull --rebase --autostash origin main
+          git push
