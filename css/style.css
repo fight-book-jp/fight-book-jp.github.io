@@ -471,12 +471,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
 /* ---------- Fighter header: ring name watermark & SNS ---------- */
 .f-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--hero) 0%,var(--hero-2) 100%)}
 .f-hero .in{position:relative;z-index:1}
-.f-bgname{position:absolute;inset:auto -2% -0.12em -1%;z-index:0;pointer-events:none;user-select:none;
-  font-family:"Barlow Condensed","Noto Sans JP",sans-serif;font-weight:800;text-transform:uppercase;line-height:.85;
-  font-size:clamp(64px,13vw,200px);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:clip;
-  color:transparent;-webkit-text-stroke:1.5px rgba(181,199,131,.22);opacity:1}
-.f-bgname.lg{font-size:clamp(48px,9vw,150px)}
-.f-bgname.xl{font-size:clamp(40px,6.5vw,110px);white-space:normal;line-height:.9;max-height:2em}
+.f-bgname{position:absolute;inset:auto 0 -0.08em 0;padding:0 16px;z-index:0;pointer-events:none;user-select:none;
+  font-family:"Barlow Condensed","Noto Sans JP",sans-serif;font-weight:900;text-transform:uppercase;line-height:.9;
+  font-size:clamp(40px,calc((100vw - 48px) / var(--w,10) / 1.04),200px);letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:clip;
+  color:transparent;-webkit-text-stroke:1.5px rgba(181,199,131,.18);opacity:1}
 @supports not (-webkit-text-stroke:1px black){ .f-bgname{color:rgba(181,199,131,.10)} }
 .f-sns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .f-sns a{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 12px;border:1px solid var(--hero-line);background:rgba(247,246,240,.06);color:var(--hero-ink);text-decoration:none;font-size:12px;font-weight:700;transition:background .15s,border-color .15s}
@@ -485,9 +483,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
 @media (max-width:560px){
   .f-sns a{width:40px;height:40px;padding:0;justify-content:center}
   .f-sns a span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .f-bgname{font-size:clamp(46px,17vw,90px);bottom:auto;top:58%}
-  .f-bgname.lg{font-size:clamp(36px,12vw,70px)}
-  .f-bgname.xl{font-size:clamp(30px,9vw,54px)}
+  .f-bgname{font-size:clamp(26px,calc((100vw - 32px) / var(--w,10) / 1.04),72px);-webkit-text-stroke-width:1px}
 }
 
 /* ---------- SOCIAL UPDATES ---------- */
@@ -534,5 +530,5 @@ a.sc:hover,.sc-yt:hover{box-shadow:0 8px 22px var(--shadow);border-color:var(--a
   .social .sec-head{flex-wrap:wrap;align-items:baseline}
   .social .sec-head h2{font-size:22px;white-space:nowrap}
   .social .sec-head h2 small{display:block;margin:2px 0 0}
-  .f-bgname{top:auto;bottom:8px}
+  .f-bgname{top:auto;bottom:6px}
 }

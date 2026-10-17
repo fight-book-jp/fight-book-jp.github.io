@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { classify, youtubeRef, parseFeed, fetchYouTube, run } from "./fetch.mjs";
+import { classify, youtubeRef, parseFeed, fetchYouTube, run, loadRoster } from "./fetch.mjs";
 
 const FEED = (n = 4) => `<?xml version="1.0"?><feed xmlns:yt="http://www.youtube.com/xml/schemas/2015"><yt:channelId>UCabcdefghijklmnopqrstuv</yt:channelId><title>Test &amp; Channel</title>
 ${Array.from({ length: n }, (_, i) => `<entry><yt:videoId>vid${i}</yt:videoId><title>Video ${i} &lt;new&gt;</title><link rel="alternate" href="https://www.youtube.com/watch?v=vid${i}"/><published>2026-10-1${i}T00:00:00+00:00</published><media:group><media:thumbnail url="https://i.ytimg.com/vi/vid${i}/hqdefault.jpg" width="480" height="360"/></media:group></entry>`).join("")}</feed>`;
@@ -98,4 +98,15 @@ test("run：失敗時はログに記録し、前回データを保持したま�
   const log = JSON.parse(fs.readFileSync(logFile, "utf8"));
   assert.equal(log.at(-1).status, "unavailable");
   assert.equal(r.errors, 1);
+});
+
+test("名簿にprofiles.jsのSNS_EXTRAを重ねる（名簿外の選手も対象）", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "roster-"));
+  const a = path.join(dir, "f.js"), b = path.join(dir, "p.js");
+  fs.writeFileSync(a, 'window.FIGHTERS=[{key:"a",sns:{x:"https://x.com/a"}}];');
+  fs.writeFileSync(b, 'window.SNS_EXTRA={a:{youtube:"https://www.youtube.com/@a"},b:{youtube:"https://www.youtube.com/@b"}};');
+  const r = loadRoster(a, b);
+  assert.equal(r.length, 2);
+  assert.deepEqual(r[0].sns, { x: "https://x.com/a", youtube: "https://www.youtube.com/@a" });
+  assert.equal(r[1].key, "b");
 });

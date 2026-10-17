@@ -41,10 +41,20 @@ async function get(url, fetchImpl) {
 }
 
 /* ---------- 名簿の読み込み ---------- */
-export function loadRoster(file = path.join(ROOT, "data", "fighters.js")) {
+/** 名簿(fighters.js)に data/profiles.js の SNS_EXTRA を重ねた一覧を返す（名簿外の選手も含む） */
+export function loadRoster(file = path.join(ROOT, "data", "fighters.js"), extraFile = path.join(ROOT, "data", "profiles.js")) {
   const ctx = { window: {} };
   vm.runInNewContext(fs.readFileSync(file, "utf8"), ctx);
-  return ctx.window.FIGHTERS || [];
+  if (extraFile && fs.existsSync(extraFile)) vm.runInNewContext(fs.readFileSync(extraFile, "utf8"), ctx);
+  const list = (ctx.window.FIGHTERS || []).map(f => ({ ...f, sns: { ...(f.sns || {}) } }));
+  const byKey = new Map(list.map(f => [f.key, f]));
+  for (const [key, x] of Object.entries(ctx.window.SNS_EXTRA || {})) {
+    const f = byKey.get(key) || { key, sns: {} };
+    Object.assign(f.sns, x);
+    if (x.youtubeChannelId) f.youtubeChannelId = x.youtubeChannelId;
+    if (!byKey.has(key)) { byKey.set(key, f); list.push(f); }
+  }
+  return list;
 }
 /** YouTube のURL（/channel/UC… /@handle /user/name）または youtubeChannelId から参照先を決める */
 export function youtubeRef(f) {

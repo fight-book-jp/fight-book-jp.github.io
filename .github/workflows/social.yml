@@ -11,6 +11,7 @@ on:
     paths:
       - "tools/social/**"
       - "data/fighters.js"
+      - "data/profiles.js"
       - ".github/workflows/social.yml"
 
 permissions:

@@ -44,6 +44,11 @@
 
 ### 選手データの項目（`data/fighters.js`）
 
-- `ringName`：詳細ヘッダー背景に大きく表示する名前（未登録なら英語名→日本語名）
+- `ringName`：詳細ヘッダー背景に大きく表示する名前（`data/profiles.js` のキャッチコピーが優先。どちらも無ければ英語名→日本語名）
 - `sns.x / instagram / youtube / tiktok / site`：登録された項目だけアイコン表示（`site` は公式サイト）
 - `youtubeChannelId`：`UC…` で始まるチャンネルID（任意。未指定なら `sns.youtube` のURLから判定）
+
+### 追加プロフィール（`data/profiles.js`）
+
+- `CATCHPHRASE`：選手キー → キャッチコピー（参考：data-mma.com/nickname）。選手詳細ヘッダーの背景に表示。
+- `SNS_EXTRA`：選手キー → SNSリンク。名簿外の選手にも使え、`youtube` を入れると SOCIAL UPDATES の自動取得対象になります（本人の公式チャンネルのみ登録）。

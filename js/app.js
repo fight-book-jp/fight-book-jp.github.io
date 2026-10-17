@@ -37,6 +37,9 @@
   const SNS_ORDER = ["x", "instagram", "youtube", "tiktok", "site"];
   const SIL = '<svg class="sil" viewBox="0 0 200 180" fill="currentColor" aria-hidden="true"><circle cx="100" cy="46" r="30"/><path d="M28 180c4-46 30-80 72-80s68 34 72 80Z"/></svg>';
   const SEARCH_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  // 名簿のSNSに data/profiles.js の追加分（名簿外の選手を含む）を重ねる
+  const profileOf = key => { const f = S.roster[key] || {}; const x = (window.SNS_EXTRA || {})[key] || {};
+    return { ...f, key, sns: { ...(f.sns || {}), ...x }, youtubeChannelId: f.youtubeChannelId || x.youtubeChannelId }; };
   const snsItems = f => SNS_ORDER.map(k => [k, f && f.sns && f.sns[k]]).filter(([k, u]) => ICONS[k] && safeUrl(u));
 
   /* ---------- Instagram公式埋め込み ---------- */
@@ -376,13 +379,14 @@
       : [["階級（直近）", p.division], ["国", p.country], ["RIZIN初出場", p.rizinFights[0] ? fmtDate(p.rizinFights[0].date) : ""]];
     const kvHtml = kv.filter(r => r[1]).map(r => `<tr><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("");
     const tot = t.w || 1;
-    const sns = snsItems(f).map(([k, u]) => `<a class="sns-${k}" href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(S.nameOf(key))}の${SNS_LABEL[k]}（新しいタブで開く）" title="${SNS_LABEL[k]}">${ICONS[k]}<span>${SNS_LABEL[k]}</span></a>`).join("");
+    const sns = snsItems(profileOf(key)).map(([k, u]) => `<a class="sns-${k}" href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(S.nameOf(key))}の${SNS_LABEL[k]}（新しいタブで開く）" title="${SNS_LABEL[k]}">${ICONS[k]}<span>${SNS_LABEL[k]}</span></a>`).join("");
     const name = S.nameOf(key), en = S.enOf(key);
-    // 背景のリングネーム（未登録なら英語名→表示名の順でフォールバック）
-    const ring = (f && f.ringName) || en || name;
-    const ringLen = [...ring].length;
+    // 背景のキャッチコピー（未登録ならリングネーム→英語名→表示名の順でフォールバック）
+    const ring = (window.CATCHPHRASE || {})[key] || (f && f.ringName) || en || name;
+    // 全角は1、半角は0.55として幅を見積もり、画面幅に収まる文字サイズをCSSで計算する
+    const ringW = Math.max(4, [...ring].reduce((w, ch) => w + (/[\u0000-\u00ff]/.test(ch) ? 0.55 : 1), 0)).toFixed(2);
     return `
-    <section class="f-hero"><div class="f-bgname ${ringLen > 18 ? "xl" : ringLen > 11 ? "lg" : ""}" aria-hidden="true">${esc(ring)}</div><div class="in">
+    <section class="f-hero"><div class="f-bgname" style="--w:${ringW}" aria-hidden="true">${esc(ring)}</div><div class="in">
       <div>
         <div class="nick">${f && f.status === "champion" ? "現王者　" : f && f.status === "former" ? "元王者　" : ""}${f && f.nick ? `"${esc(f.nick)}"` : ""}</div>
         <h1>${esc(name)}</h1>
@@ -863,7 +867,7 @@
   const skeleton = n => Array.from({ length: n }, () => '<div class="sc sc-skel" aria-hidden="true"><div class="sc-media"></div><div class="sc-body"><i></i><i></i><i></i></div></div>').join("");
 
   function socialSection(key) {
-    const f = S.roster[key];
+    const f = profileOf(key);
     const x = false, y = hasYT(f);   // Xの投稿取得は有料APIのため行わない（Xはヘッダーのリンクのみ）
     if (!y) return "";              // YouTube未登録の選手はセクションごと出さない
     return `<section class="section social" id="social" data-key="${esc(key)}" aria-labelledby="socialTitle">
@@ -916,7 +920,7 @@
   }
   function fillSocial(key) {
     const sec = document.getElementById("social"); if (!sec || sec.dataset.key !== key) return;
-    const f = S.roster[key];
+    const f = profileOf(key);
     const put = (id, html) => { const g = document.querySelector(`#${id} .sc-grid`); if (g) { g.innerHTML = html; g.removeAttribute("aria-busy"); } };
     loadSocialData().then(d => {
       if (!document.getElementById("social") || document.getElementById("social").dataset.key !== key) return;
