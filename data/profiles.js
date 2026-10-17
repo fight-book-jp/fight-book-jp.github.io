@@ -242,7 +242,6 @@ window.SNS_EXTRA = {
   "tatsuya-kawajiri":{ youtube:"https://www.youtube.com/channel/UCQSQTofrIsryeE-adiAKbiA" },
   "tenshin-nasukawa":{ youtube:"https://www.youtube.com/channel/UC_Y6rtEtWxf-7xn15ik1Z2g" },
   "toki-tamaru":{ youtube:"https://www.youtube.com/channel/UCVWaYVKObRJ6Nzi8xb7j7eQ" },
-  "tsuyoshi-sudario":{ youtube:"https://www.youtube.com/channel/UC-8-vgBpaOsuQIBsiC57ZpQ" },
   "ya-man":{ youtube:"https://www.youtube.com/channel/UCjTTrRFzE6DW1NA0QOFFciQ" },
   "yoshinori-horie":{ youtube:"https://www.youtube.com/channel/UCCpxmSVNPjgWSq5DTCby4aQ" },
   "yusuke-yachi":{ youtube:"https://www.youtube.com/channel/UC1sCMCM2yQqS3dggBcTbNSg" },
