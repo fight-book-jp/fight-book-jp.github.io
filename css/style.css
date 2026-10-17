@@ -532,3 +532,19 @@ a.sc:hover,.sc-yt:hover{box-shadow:0 8px 22px var(--shadow);border-color:var(--a
   .social .sec-head h2 small{display:block;margin:2px 0 0}
   .f-bgname{top:auto;bottom:6px}
 }
+
+/* ---------- Home hero background image ---------- */
+.hero{background-color:var(--hero-2);
+  background-image:image-set(url("../img/hero-bg.webp") type("image/webp"),url("../img/hero-bg.jpg") type("image/jpeg"));
+  background-size:cover;background-position:center;background-repeat:no-repeat}
+@supports not (background-image:image-set(url("x.webp") type("image/webp"))){ .hero{background-image:url("../img/hero-bg.jpg")} }
+/* 文字の読みやすさのため中央を暗く */
+.hero::before{background:radial-gradient(ellipse 46% 80% at 50% 50%,rgba(12,16,8,.72) 0%,rgba(12,16,8,.45) 60%,rgba(12,16,8,.15) 100%)}
+.hero h1,.hero p,.hero-stats{text-shadow:0 2px 14px rgba(0,0,0,.55)}
+@media (max-width:700px){
+  .hero{background-image:image-set(url("../img/hero-bg-sp.webp") type("image/webp"),url("../img/hero-bg-sp.jpg") type("image/jpeg"));
+    background-position:30% 20%}
+  @supports not (background-image:image-set(url("x.webp") type("image/webp"))){ .hero{background-image:url("../img/hero-bg-sp.jpg")} }
+  .hero::before{background:linear-gradient(180deg,rgba(12,16,8,.38) 0%,rgba(12,16,8,.55) 50%,rgba(12,16,8,.75) 100%)}
+}
+@media (prefers-color-scheme:dark){ .hero::before{opacity:1} }
