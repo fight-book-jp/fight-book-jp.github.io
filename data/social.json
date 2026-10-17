@@ -1,1 +1,477 @@
-{"version":1,"generatedAt":null,"intervalMinutes":60,"fighters":{}}
+{
+ "version": 1,
+ "generatedAt": "2026-10-17T08:00:38.247Z",
+ "intervalMinutes": 60,
+ "fighters": {
+  "shinryu": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UCmfh-87a6MXbwpht28pyroA",
+     "title": "神龍誠ちゃんねる"
+    },
+    "videos": [
+     {
+      "id": "MrdcjuhiLLA",
+      "title": "【UFC331】神龍誠に聞くUFCフライ級タイトルマッチ",
+      "url": "https://www.youtube.com/watch?v=MrdcjuhiLLA",
+      "publishedAt": "2026-09-21T02:55:23+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/MrdcjuhiLLA/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "5VlUW56xfqU",
+      "title": "【神龍誠】RIZINチャンピオンが10年ぶりにレスリング大会に出場してみた【RIZIN】",
+      "url": "https://www.youtube.com/watch?v=5VlUW56xfqU",
+      "publishedAt": "2026-09-19T04:00:18+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/5VlUW56xfqU/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "fAFHeCbMNaA",
+      "title": "【神龍誠】超RIZIN.5イベントに密着！",
+      "url": "https://www.youtube.com/watch?v=fAFHeCbMNaA",
+      "publishedAt": "2026-09-13T07:00:44+00:00",
+      "thumbnail": {
+       "url": "https://i3.ytimg.com/vi/fAFHeCbMNaA/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "ougikubo": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UC7vKmzcPgsVUJXtHWsGVq-A",
+     "title": "扇久保博正 おぎちゃんねる。Ogichannel"
+    },
+    "videos": [
+     {
+      "id": "CDipSZf6aPg",
+      "title": "【悪夢再び】ボコボコにされた相手とまさか対戦することに…その結果とは？そしてアマ修全日本大会を優勝することはできたのか？！上京物語16",
+      "url": "https://www.youtube.com/watch?v=CDipSZf6aPg",
+      "publishedAt": "2026-10-16T09:00:00+00:00",
+      "thumbnail": {
+       "url": "https://i4.ytimg.com/vi/CDipSZf6aPg/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "p2HoV81EoCM",
+      "title": "【緊急】越智晴雄さんと対談　RIZIN",
+      "url": "https://www.youtube.com/watch?v=p2HoV81EoCM",
+      "publishedAt": "2026-10-12T11:41:45+00:00",
+      "thumbnail": {
+       "url": "https://i1.ytimg.com/vi/p2HoV81EoCM/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "EkAqNDMkaws",
+      "title": "ふざけるなよ！RIZIN55に出場が決まった濱田巧くんと対談してみた。",
+      "url": "https://www.youtube.com/watch?v=EkAqNDMkaws",
+      "publishedAt": "2026-10-11T03:00:13+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/EkAqNDMkaws/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "inoue": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UCuLHbp1vovgv2JUdXdot_DA",
+     "title": "【井上直樹】なおきっきちゃんねる"
+    },
+    "videos": [
+     {
+      "id": "McrqTLsGTU0",
+      "title": "【超RIZIN5】メインの勝者はどっちになるのか？気になる試合＆勝敗予想！",
+      "url": "https://www.youtube.com/watch?v=McrqTLsGTU0",
+      "publishedAt": "2026-08-30T12:54:10+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/McrqTLsGTU0/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "RQ2YcZur2IY",
+      "title": "遅くなりましたが、RIZIN過去の2大会を一気に振り返り！",
+      "url": "https://www.youtube.com/watch?v=RQ2YcZur2IY",
+      "publishedAt": "2026-08-23T10:30:55+00:00",
+      "thumbnail": {
+       "url": "https://i3.ytimg.com/vi/RQ2YcZur2IY/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "4ckU__i1Uco",
+      "title": "バンタム級の勢力図が変わる大会？RIZIN LANDMARK 15 HIROSHIMA大会勝敗予想！",
+      "url": "https://www.youtube.com/watch?v=4ckU__i1Uco",
+      "publishedAt": "2026-07-12T11:00:28+00:00",
+      "thumbnail": {
+       "url": "https://i1.ytimg.com/vi/4ckU__i1Uco/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "asakura": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UCJZVj2iBrdvbNc416i0V-UA",
+     "title": "朝倉未来 Mikuru Asakura"
+    },
+    "videos": [
+     {
+      "id": "kdfF_azdOyc",
+      "title": "勝利祝いでステーキ600g食べていく",
+      "url": "https://www.youtube.com/watch?v=kdfF_azdOyc",
+      "publishedAt": "2026-10-08T10:51:09+00:00",
+      "thumbnail": {
+       "url": "https://i4.ytimg.com/vi/kdfF_azdOyc/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "8iP4jKRKeRc",
+      "title": "BreakingDown北海道がすごかった",
+      "url": "https://www.youtube.com/watch?v=8iP4jKRKeRc",
+      "publishedAt": "2026-09-20T12:06:26+00:00",
+      "thumbnail": {
+       "url": "https://i1.ytimg.com/vi/8iP4jKRKeRc/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "xa5SVGq55SY",
+      "title": "BreakingDown 21",
+      "url": "https://www.youtube.com/watch?v=xa5SVGq55SY",
+      "publishedAt": "2026-09-19T05:40:58+00:00",
+      "thumbnail": {
+       "url": "https://i1.ytimg.com/vi/xa5SVGq55SY/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "koike": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UC2yf1R3Z48xe7faHhvhaVQA",
+     "title": "Kleber Koikeクレベル コイケ"
+    },
+    "videos": [
+     {
+      "id": "8ENV_sGaILc",
+      "title": "クレベルコイケの超RIZIN.5浪速の超復活祭り勝敗予想",
+      "url": "https://www.youtube.com/watch?v=8ENV_sGaILc",
+      "publishedAt": "2026-09-05T10:00:00+00:00",
+      "thumbnail": {
+       "url": "https://i1.ytimg.com/vi/8ENV_sGaILc/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "PSA287ZtKLQ",
+      "title": "「引退ですかな」　クレベル・コイケ",
+      "url": "https://www.youtube.com/watch?v=PSA287ZtKLQ",
+      "publishedAt": "2026-08-29T10:00:21+00:00",
+      "thumbnail": {
+       "url": "https://i1.ytimg.com/vi/PSA287ZtKLQ/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "sAWtco7kfN0",
+      "title": "RIZIN.54 秋元強真戦について　クレベル・コイケ",
+      "url": "https://www.youtube.com/watch?v=sAWtco7kfN0",
+      "publishedAt": "2026-06-16T10:30:05+00:00",
+      "thumbnail": {
+       "url": "https://i4.ytimg.com/vi/sAWtco7kfN0/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "akimoto": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UCd7FROEsP6LNEV3XT7TUFzg",
+     "title": "秋元強真　Kyoma Akimoto"
+    },
+    "videos": [
+     {
+      "id": "JN1bTyKevOs",
+      "title": "未来さん来ないドッキリをかけられました...",
+      "url": "https://www.youtube.com/watch?v=JN1bTyKevOs",
+      "publishedAt": "2026-10-13T10:00:09+00:00",
+      "thumbnail": {
+       "url": "https://i3.ytimg.com/vi/JN1bTyKevOs/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "CbXPmSNevX4",
+      "title": "バケモノになる前の試合を振り返ってみた",
+      "url": "https://www.youtube.com/watch?v=CbXPmSNevX4",
+      "publishedAt": "2026-10-09T10:00:17+00:00",
+      "thumbnail": {
+       "url": "https://i4.ytimg.com/vi/CbXPmSNevX4/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "zZNVJr5wqLg",
+      "title": "マネーで散財するはずが違う方向に進んでしまいました...",
+      "url": "https://www.youtube.com/watch?v=zZNVJr5wqLg",
+      "publishedAt": "2026-09-30T10:00:06+00:00",
+      "thumbnail": {
+       "url": "https://i3.ytimg.com/vi/zZNVJr5wqLg/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "suzuki": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UCqGGEgRROwOFdagbsKsh5OA",
+     "title": "鈴木 千裕 Chihiro Suzuki"
+    },
+    "videos": [
+     {
+      "id": "3rN1EGS7Kps",
+      "title": "【再起】あの頃の拳を、もう一度。鈴木千裕・原点回帰へ",
+      "url": "https://www.youtube.com/watch?v=3rN1EGS7Kps",
+      "publishedAt": "2026-10-04T01:30:25+00:00",
+      "thumbnail": {
+       "url": "https://i4.ytimg.com/vi/3rN1EGS7Kps/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "GRQAOcvft6E",
+      "title": "【再起】あの頃の拳を、もう一度。鈴木千裕・原点回帰へ",
+      "url": "https://www.youtube.com/watch?v=GRQAOcvft6E",
+      "publishedAt": "2026-10-03T12:04:06+00:00",
+      "thumbnail": {
+       "url": "https://i4.ytimg.com/vi/GRQAOcvft6E/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "kVztI6Qi_go",
+      "title": "【再起】あの頃の拳を、もう一度。鈴木千裕・原点回帰へ",
+      "url": "https://www.youtube.com/watch?v=kVztI6Qi_go",
+      "publishedAt": "2026-10-02T14:00:06+00:00",
+      "thumbnail": {
+       "url": "https://i4.ytimg.com/vi/kVztI6Qi_go/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "hiramoto": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UCmddHtZJvNrFdKJ9GBO401w",
+     "title": "平本蓮  BLACKROSE"
+    },
+    "videos": [
+     {
+      "id": "ZvJTIr3SLSM",
+      "title": "青木さんと緊急対談したら使えない話だらけになった",
+      "url": "https://www.youtube.com/watch?v=ZvJTIr3SLSM",
+      "publishedAt": "2026-09-24T09:00:06+00:00",
+      "thumbnail": {
+       "url": "https://i3.ytimg.com/vi/ZvJTIr3SLSM/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "iWaQtrKKhus",
+      "title": "【超RIZIN.5】ダウトベックに勝ちました",
+      "url": "https://www.youtube.com/watch?v=iWaQtrKKhus",
+      "publishedAt": "2026-09-11T09:02:26+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/iWaQtrKKhus/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "mJDTBPDwdhk",
+      "title": "ジョリーのお見舞い行ってみた",
+      "url": "https://www.youtube.com/watch?v=mJDTBPDwdhk",
+      "publishedAt": "2026-08-19T11:16:53+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/mJDTBPDwdhk/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "satoshi": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UC_y74TtJIX_ugYDBlYXxlxg",
+     "title": "ホベルト サトシ ソウザ Roberto Satoshi Souza"
+    },
+    "videos": [
+     {
+      "id": "ABQWDDeD5MM",
+      "title": "今度のRIZINライト級タイトルマッチについて思う事 ノジモフvsグスタボ戦　ホベルト・サトシ・ソウザ",
+      "url": "https://www.youtube.com/watch?v=ABQWDDeD5MM",
+      "publishedAt": "2026-04-04T10:00:14+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/ABQWDDeD5MM/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "yRDe0uGczAI",
+      "title": "RIZIN師走の超強者祭りでの敗戦から　ホベルト・サトシ・ソウザ",
+      "url": "https://www.youtube.com/watch?v=yRDe0uGczAI",
+      "publishedAt": "2026-01-12T09:01:26+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/yRDe0uGczAI/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "I97gW49YLyI",
+      "title": "悲しいお知らせ　ホベルト・サトシ・ソウザ",
+      "url": "https://www.youtube.com/watch?v=I97gW49YLyI",
+      "publishedAt": "2025-12-18T09:00:24+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/I97gW49YLyI/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  },
+  "izawa": {
+   "youtube": {
+    "status": "ok",
+    "source": "youtube-rss",
+    "fetchedAt": "2026-10-17T08:00:38.247Z",
+    "lastSuccessAt": "2026-10-17T08:00:38.247Z",
+    "channel": {
+     "id": "UCDXe3wEy3AfZOyMbIwXW9rw",
+     "title": "伊澤星花と風我の姉弟ch"
+    },
+    "videos": [
+     {
+      "id": "zO8qDebLsTk",
+      "title": "【前編】お菓子を与えて過去の自分語りさせてみた",
+      "url": "https://www.youtube.com/watch?v=zO8qDebLsTk",
+      "publishedAt": "2022-06-24T11:00:51+00:00",
+      "thumbnail": {
+       "url": "https://i3.ytimg.com/vi/zO8qDebLsTk/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "FQL3XcgdPBI",
+      "title": "女子格が3倍楽しくなる沖縄RIZINの見どころ紹介！",
+      "url": "https://www.youtube.com/watch?v=FQL3XcgdPBI",
+      "publishedAt": "2022-06-17T11:00:12+00:00",
+      "thumbnail": {
+       "url": "https://i3.ytimg.com/vi/FQL3XcgdPBI/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     },
+     {
+      "id": "M_BO0-3jafE",
+      "title": "互いに褒め語れ！姉弟の魅力発表会！【最後に告知あり】",
+      "url": "https://www.youtube.com/watch?v=M_BO0-3jafE",
+      "publishedAt": "2022-06-10T11:00:13+00:00",
+      "thumbnail": {
+       "url": "https://i2.ytimg.com/vi/M_BO0-3jafE/hqdefault.jpg",
+       "width": 480,
+       "height": 360
+      }
+     }
+    ]
+   }
+  }
+ }
+}
