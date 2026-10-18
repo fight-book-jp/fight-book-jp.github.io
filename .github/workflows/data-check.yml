@@ -11,6 +11,7 @@ on:
       - "data-src/**"
       - "tools/build_fights.py"
       - "tools/sync/**"
+      - "tools/gyms/**"
       - "data/fighters.js"
       - "data/profiles.js"
       - ".github/workflows/data-check.yml"
@@ -44,19 +45,23 @@ jobs:
       - name: Validate
         run: python3 tools/sync/validate.py
       - name: Test
-        run: python3 -m unittest discover -s tools/sync/tests
+        run: |
+          python3 -m unittest discover -s tools/sync/tests
+          python3 -m unittest discover -s tools/gyms -p 'test_*.py'
+      - name: Rebuild gyms.js
+        run: python3 tools/gyms/build.py
       - name: Rebuild fights.js
         run: python3 tools/build_fights.py
       - name: Fail if fights.js is stale (pull request)
         if: github.event_name == 'pull_request'
-        run: git diff --exit-code -- data/fights.js || (echo "::error::data/fights.js が data-src と一致しません。python3 tools/build_fights.py を実行してください"; exit 1)
+        run: git diff --exit-code -- data/fights.js data/gyms.js || (echo "::error::data/fights.js が data-src と一致しません。python3 tools/build_fights.py を実行してください"; exit 1)
       - name: Commit regenerated fights.js (main)
         if: github.event_name != 'pull_request'
         run: |
-          if git diff --quiet -- data/fights.js; then echo "fights.js は最新です"; exit 0; fi
+          if git diff --quiet -- data/fights.js data/gyms.js; then echo "fights.js / gyms.js は最新です"; exit 0; fi
           git config user.name "fightbook-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/fights.js
-          git commit -m "data/fights.js を再生成"
+          git add data/fights.js data/gyms.js
+          git commit -m "data/fights.js・data/gyms.js を再生成"
           git pull --rebase --autostash origin main
           git push

@@ -43,6 +43,7 @@ jobs:
       - name: Test (sync / regression)
         run: |
           python3 -m unittest discover -s tools/sync/tests -v
+          python3 -m unittest discover -s tools/gyms -p 'test_*.py' -v
           node --test tools/social/fetch.test.mjs
 
       - name: Check data and prepare updates
@@ -50,7 +51,9 @@ jobs:
         run: |
           set -o pipefail
           python3 tools/sync/run.py --out sync-out
-          if [ -z "$(git status --porcelain -- data-src data/fights.js data/profiles.js)" ]; then
+          # 所属ジム：Wikipedia の選手記事から所属欄を取り直し、data/gyms.js を作り直す（失敗しても既存データは残す）
+          if python3 tools/gyms/collect.py && python3 tools/gyms/build.py; then echo "gyms updated"; else git checkout -- data-src/gyms data/gyms.js; echo "::warning::所属ジムの更新に失敗しました（既存データを維持）"; fi
+          if [ -z "$(git status --porcelain -- data-src data/fights.js data/profiles.js data/gyms.js)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"; echo "データの変更はありません。PRは作成しません。" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -73,12 +76,12 @@ jobs:
           git config user.name "fightbook-weekly-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B "$BRANCH"
-          git add data-src data/fights.js data/profiles.js
+          git add data-src data/fights.js data/profiles.js data/gyms.js
           git commit -m "週次データ更新 $(TZ=Asia/Tokyo date +%Y-%m-%d)"
           # 既に同じ内容のブランチがあれば何もしない（重複PR・無駄な更新を防ぐ）
           if git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1; then
             git fetch origin "$BRANCH"
-            if git diff --quiet "origin/$BRANCH" HEAD -- data-src data/fights.js data/profiles.js; then
+            if git diff --quiet "origin/$BRANCH" HEAD -- data-src data/fights.js data/profiles.js data/gyms.js; then
               echo "同じ内容の更新ブランチが既にあります。PRは作成しません。" | tee -a "$GITHUB_STEP_SUMMARY"
               exit 0
             fi

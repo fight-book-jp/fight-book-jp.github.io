@@ -273,6 +273,7 @@
         <h2 class="name"><a href="#/fighter/${f.key}">${esc(f.name)}</a></h2>
         <div class="en">${esc(f.en)}</div>
         <div class="meta"><strong>${esc(f.division)}</strong>　${esc(f.country)}</div>
+        ${curGyms(f.key).length ? `<div class="card-gym">${gymChip(f.key)}</div>` : ""}
         <div class="card-nums">
           <div><small>RIZIN戦績</small><b>${rec(p.riz)}</b></div>
           <div><small>レート</small><b>${r1(p.rating)}</b></div>
@@ -412,6 +413,7 @@
         <h1>${esc(name)}</h1>
         ${name !== en ? `<div class="en">${esc(en)}</div>` : ""}
         <div class="tags">${p.division ? `<span>${esc(p.division)}</span>` : ""}${p.country ? `<span>${esc(p.country)}</span>` : ""}${t.streak >= 2 ? `<span>RIZIN ${t.streak}連勝中</span>` : ""}${p.active ? "" : "<span>直近2年試合なし</span>"}</div>
+        ${gymChip(key) ? `<div class="f-gym">所属 ${gymChip(key)}</div>` : ""}
         ${sns ? `<div class="f-sns" role="list" aria-label="SNS">${sns}</div>` : ""}
       </div>
       <div class="f-rating"><small>RIZINレーティング</small><b>${r1(p.rating)}</b><div class="rk">${p.rank ? `全体 #${p.rank}・` : ""}最高 ${r1(p.peak)}</div></div>
@@ -444,6 +446,7 @@
             </table>
           </div>
           ${kvHtml || (f && f.note) ? `<div class="panel" style="margin-top:16px"><h3>プロフィール</h3><table class="kv">${kvHtml}</table>${f && f.note ? `<p style="font-size:14px;margin:12px 0 0">${esc(f.note)}</p>` : ""}</div>` : ""}
+          ${fighterGymPanel(key)}
           ${walkoutPanel(key)}
           ${ig ? `<div class="panel card-ig" style="margin-top:16px;padding:12px">${igEmbed(ig)}</div>` : ""}
         </div>
@@ -962,6 +965,338 @@
     box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(b.dataset.yt)}?autoplay=1&playsinline=1&rel=0" title="YouTube動画" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
   });
 
+  /* ---------- ジム（data/gyms.js：GYMS＝ジム、AFFIL＝選手→所属の履歴） ----------
+     戦績は既存の試合データ（S.fights）から集計する。2種類を区別：
+       cur    … 現所属選手のRIZIN通算戦績（移籍前の試合も含む参考値）
+       period … 所属期間（年）が確認できた試合だけ（期間が不明な所属は数えない） */
+  const GYMS = window.GYMS || {}, AFFIL = window.AFFIL || {}, GYM_SRC = window.GYM_SOURCES || {};
+  const UNK = '<span class="unk">未確認</span>';
+  const gymName = id => (GYMS[id] ? GYMS[id].name : id);
+  const gymPlace = g => [g.country && g.country !== "日本" ? g.country : "", g.prefecture, g.city].filter(Boolean).join(" ") || g.location_text || "";
+  const gymInitials = g => {
+    const en = (g.name_en || (/^[\x00-\x7f]+$/.test(g.name) ? g.name : "")).replace(/[^A-Za-z0-9 ]/g, " ").trim();
+    if (en) { const w = en.split(/\s+/).filter(x => !/^(the|of|and|mma|gym|team|fc)$/i.test(x)); return (w.length > 1 ? w.slice(0, 3).map(x => x[0]) .join("") : (w[0] || en).slice(0, 3)).toUpperCase(); }
+    return [...g.name.replace(/[・\s]/g, "")].slice(0, 2).join("");
+  };
+  const gymHue = id => { let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+  const gymBadge = (id, size = "m") => { const g = GYMS[id] || { name: id }; return `<span class="gb gb-${size}" style="--h:${gymHue(id)}" aria-hidden="true">${esc(gymInitials(g))}</span>`; };
+  const mapsUrl = g => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent([g.name, g.address || gymPlace(g)].filter(Boolean).join(" "));
+  const affilOf = k => AFFIL[k] || [];
+  const curGyms = k => affilOf(k).filter(r => r.cur === true).map(r => r.g);
+  const inPeriod = (r, date) => { const y = +date.slice(0, 4); return r.from != null && y >= r.from && (r.to == null || y <= r.to); };
+
+  const _gm = {};
+  function gymMembers(id) {
+    if (_gm[id]) return _gm[id];
+    const cur = [], past = [], unknown = [];
+    for (const k in AFFIL) {
+      if (!P(k) || P(k).riz.total === 0) continue;
+      for (const r of AFFIL[k]) if (r.g === id) { (r.cur === true ? cur : r.cur === false ? past : unknown).push(k); break; }
+    }
+    const byRate = (a, b) => P(b).rating - P(a).rating;
+    return (_gm[id] = { cur: cur.sort(byRate), past: past.sort(byRate), unknown: unknown.sort(byRate) });
+  }
+  const _gs = {};
+  function gymStats(id, mode) {
+    const ck = id + "|" + mode; if (_gs[ck]) return _gs[ck];
+    const t = { w: 0, l: 0, d: 0, nc: 0, ko: 0, sub: 0, dec: 0, other: 0, fights: 0, champs: 0, members: 0, avg: null };
+    const champs = new Set(), rated = [];
+    const titleWins = k => S.titleFights.filter(f => f.winner === k);
+    for (const k in AFFIL) {
+      const p = P(k); if (!p) continue;
+      const rows = AFFIL[k].filter(r => r.g === id); if (!rows.length) continue;
+      const isCur = rows.some(r => r.cur === true);
+      if (mode === "cur" && !isCur) continue;
+      const list = p.rizinFights.filter(f => mode === "cur" || rows.some(r => inPeriod(r, f.date)));
+      if (mode === "cur") { if (p.riz.total > 0) { t.members++; rated.push(p.rating); } }
+      else if (list.length) t.members++;
+      for (const f of list) {
+        t.fights++;
+        if (f.outcome === "NC") { t.nc++; continue; }
+        if (f.outcome === "D") { t.d++; continue; }
+        if (f.winner === k) { t.w++; if (f.cat === "KO") t.ko++; else if (f.cat === "SUB") t.sub++; else if (f.cat === "DEC") t.dec++; else t.other++; }
+        else t.l++;
+      }
+      const tw = titleWins(k).filter(f => mode === "cur" || rows.some(r => inPeriod(r, f.date)));
+      if (tw.length) champs.add(k);
+    }
+    t.champs = champs.size; t.champList = [...champs];
+    t.rate = t.w + t.l ? t.w / (t.w + t.l) : null;
+    t.avg = rated.length ? rated.reduce((a, b) => a + b, 0) / rated.length : null;
+    t.koR = t.w ? t.ko / t.w : 0; t.subR = t.w ? t.sub / t.w : 0; t.decR = t.w ? t.dec / t.w : 0;
+    return (_gs[ck] = t);
+  }
+  // 試合データから見た傾向（勝ち方の内訳）。5勝未満は判定しない
+  function gymStyle(id) {
+    const t = gymStats(id, "cur");
+    if (t.w < 5) return "";
+    if (t.koR >= 0.5) return "打撃（KO/TKO）";
+    if (t.subR >= 0.4) return "寝技（一本）";
+    if (t.decR >= 0.5) return "判定・総合力";
+    return "バランス型";
+  }
+  const pctOrDash = x => x == null ? "—" : Math.round(x * 100) + "%";
+  const recTxt = t => `${t.w}勝${t.l}敗${t.d ? t.d + "分" : ""}`;
+  const listedGyms = () => Object.keys(GYMS).filter(id => gymMembers(id).cur.length > 0);
+
+  const gymState = { q: "", region: "すべて", style: "すべて", min: 1, sort: "members", rankCat: "rate", rankMode: "cur", rankMin: 10 };
+  const CMP_KEY = "fb_gym_compare";
+  const getCmp = () => { try { return JSON.parse(localStorage.getItem(CMP_KEY) || "[]").filter(id => GYMS[id]); } catch (e) { return []; } };
+  const setCmp = a => { try { localStorage.setItem(CMP_KEY, JSON.stringify(a.slice(0, 3))); } catch (e) {} gymCmpMem = a.slice(0, 3); };
+  let gymCmpMem = null;
+  const cmpList = () => gymCmpMem || (gymCmpMem = getCmp());
+  const regionOf = id => { const g = GYMS[id]; return g.prefecture ? (g.country && g.country !== "日本" ? g.country : g.prefecture) : (g.country || "未確認"); };
+
+  function gymCard(id) {
+    const g = GYMS[id], m = gymMembers(id), t = gymStats(id, "cur"), style = gymStyle(id);
+    const inCmp = cmpList().includes(id);
+    const reps = m.cur.slice(0, 3);
+    return `<article class="gym-card">
+      <a class="gym-visual" href="#/gym/${encodeURIComponent(id)}" style="--h:${gymHue(id)}"><span class="gv-ini">${esc(gymInitials(g))}</span>
+        <span class="gv-faces">${reps.map(k => av(k, "l")).join("")}</span></a>
+      <div class="gym-body">
+        <h3 class="gym-name"><a href="#/gym/${encodeURIComponent(id)}">${esc(g.name)}</a></h3>
+        ${g.name_en && g.name_en !== g.name ? `<div class="gym-en">${esc(g.name_en)}</div>` : ""}
+        <div class="gym-loc">📍 ${gymPlace(g) ? esc(gymPlace(g)) : UNK}</div>
+        <div class="gym-nums">
+          <div><small>RIZIN所属選手</small><b>${m.cur.length}<i>名</i></b></div>
+          <div><small>勝率</small><b>${pctOrDash(t.rate)}</b><em>${recTxt(t)}</em></div>
+          <div><small>王者輩出</small><b>${t.champs}<i>名</i></b></div>
+        </div>
+        <div class="gym-reps"><small>代表選手</small>${reps.map(k => `<a href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>`).join("・")}</div>
+        <div class="gym-tags">${style ? `<span title="試合データから算出">${esc(style)}</span>` : ""}<a class="gmap" href="${esc(mapsUrl(g))}" target="_blank" rel="noopener">Googleマップ</a></div>
+        <div class="gym-foot"><button class="cmp-btn ${inCmp ? "on" : ""}" data-cmp="${esc(id)}" aria-pressed="${inCmp}">${inCmp ? "✓ 比較に追加済み" : "＋ 比較"}</button><a class="more" href="#/gym/${encodeURIComponent(id)}">ジム詳細を見る ›</a></div>
+      </div></article>`;
+  }
+  function gymFiltered() {
+    const q = gymState.q.trim().toLowerCase();
+    let list = listedGyms().filter(id => {
+      const g = GYMS[id], m = gymMembers(id);
+      if (gymState.region !== "すべて" && regionOf(id) !== gymState.region) return false;
+      if (gymState.style !== "すべて" && gymStyle(id) !== gymState.style) return false;
+      if (m.cur.length < gymState.min) return false;
+      if (!q) return true;
+      const hay = [g.name, g.name_en, ...(g.aliases || []), gymPlace(g), gymStyle(id), ...m.cur.map(k => S.nameOf(k) + " " + S.enOf(k))].join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+    const st = id => gymStats(id, "cur");
+    const sorters = {
+      // 勝率順は試合数が少ないジムが上に来すぎないよう、勝敗10試合以上を先に並べる
+      rate: (a, b) => (st(b).w + st(b).l >= 10) - (st(a).w + st(a).l >= 10) || (st(b).rate ?? -1) - (st(a).rate ?? -1) || st(b).w - st(a).w,
+      members: (a, b) => gymMembers(b).cur.length - gymMembers(a).cur.length || st(b).w - st(a).w,
+      wins: (a, b) => st(b).w - st(a).w,
+      champs: (a, b) => st(b).champs - st(a).champs || st(b).w - st(a).w,
+    };
+    return list.sort(sorters[gymState.sort]);
+  }
+  function gymGrid() {
+    const list = gymFiltered();
+    if (!list.length) return `<div class="empty">条件に合うジムがありません。<button class="btn-link" id="gymReset">条件をクリア</button></div>`;
+    return `<div class="count" style="margin:0 0 10px">${list.length} ジム</div><div class="gym-grid">${list.map(gymCard).join("")}</div>`;
+  }
+  const GYM_RANKS = [
+    { id: "rate", label: "勝率", fn: t => t.rate, fmt: t => pctOrDash(t.rate), sub: t => `${recTxt(t)}（${t.w + t.l}試合）` },
+    { id: "wins", label: "勝利数", fn: t => t.w, fmt: t => t.w + "勝", sub: t => recTxt(t) },
+    { id: "members", label: "所属選手数", fn: (t, id) => gymMembers(id).cur.length, fmt: (t, id) => gymMembers(id).cur.length + "名", sub: t => recTxt(t) },
+    { id: "champs", label: "王者輩出", fn: t => t.champs, fmt: t => t.champs + "名", sub: t => t.champList.map(k => S.nameOf(k)).join("・") },
+    { id: "ko", label: "KO/TKO勝利", fn: t => t.ko, fmt: t => t.ko + "回", sub: t => `KO率 ${pctOrDash(t.koR)}` },
+    { id: "sub", label: "一本勝利", fn: t => t.sub, fmt: t => t.sub + "回", sub: t => `一本率 ${pctOrDash(t.subR)}` },
+  ];
+  function gymRanking() {
+    const cat = GYM_RANKS.find(c => c.id === gymState.rankCat) || GYM_RANKS[0];
+    const mode = gymState.rankMode;
+    let ids = Object.keys(GYMS).filter(id => mode === "cur" ? gymMembers(id).cur.length : gymStats(id, "period").fights);
+    if (cat.id === "rate") ids = ids.filter(id => { const t = gymStats(id, mode); return t.w + t.l >= gymState.rankMin; });
+    ids = ids.filter(id => (cat.fn(gymStats(id, mode), id) || 0) > 0)
+      .sort((a, b) => cat.fn(gymStats(b, mode), b) - cat.fn(gymStats(a, mode), a) || gymStats(b, mode).w - gymStats(a, mode).w).slice(0, 20);
+    const rows = ids.map((id, i) => { const t = gymStats(id, mode); return `<li class="gr-row ${i < 3 ? "top top" + (i + 1) : ""}">
+        <span class="gr-rank">${i + 1}</span>${gymBadge(id, "s")}
+        <a class="gr-name" href="#/gym/${encodeURIComponent(id)}"><b>${esc(gymName(id))}</b><small>${esc(cat.sub(t, id) || "")}</small></a>
+        <span class="gr-val">${cat.fmt(t, id)}</span></li>`; }).join("");
+    return `<div class="gr-tools">
+        <div class="tabs" id="gymRankTabs" role="tablist">${GYM_RANKS.map(c => `<button class="tab" role="tab" aria-pressed="${c.id === cat.id}" data-gr="${c.id}">${c.label}</button>`).join("")}</div>
+        <div class="gr-opts">
+          <label class="toggle">集計方法
+            <select id="gymRankMode" class="sel"><option value="cur" ${mode === "cur" ? "selected" : ""}>現所属選手のRIZIN通算（参考値）</option><option value="period" ${mode === "period" ? "selected" : ""}>所属期間が確認できた試合のみ</option></select></label>
+          ${cat.id === "rate" ? `<label class="toggle">最低試合数 <input id="gymRankMin" class="sel num-in" type="number" min="1" max="50" value="${gymState.rankMin}"></label>` : ""}
+        </div></div>
+      <p class="note" style="margin:0 0 10px">${mode === "cur" ? "現在そのジムに所属している選手の、RIZINでの通算戦績の合計です。移籍前の試合も含むため参考値です。" : "所属していた期間（年）が出典で確認できた試合だけを数えています。期間が分からない所属は数えていないため、件数が少なくなります。"}</p>
+      ${rows ? `<ol class="gym-rank">${rows}</ol>` : '<p class="note">条件に合うジムがありません。最低試合数を下げるか、集計方法を切り替えてください。</p>'}`;
+  }
+  function viewGyms() {
+    const regions = [...new Set(listedGyms().map(regionOf))].sort((a, b) => (a === "未確認") - (b === "未確認") || a.localeCompare(b, "ja"));
+    const styles = ["打撃（KO/TKO）", "寝技（一本）", "判定・総合力", "バランス型"];
+    const cmp = cmpList();
+    return pageHero("Gym Database", "RIZIN選手の所属ジムを探す。所属選手・RIZINでの実績から、ジムの強さと特徴が分かります。") + `
+    <div class="wrap">
+      <section class="section">
+        <div class="filters">
+          <div class="search">${SEARCH_ICON}<input id="gq" type="search" placeholder="ジム名・選手名・地域で検索" value="${esc(gymState.q)}" aria-label="ジムを検索"></div>
+          <label class="toggle">地域 <select id="gRegion" class="sel"><option>すべて</option>${regions.map(r => `<option ${gymState.region === r ? "selected" : ""}>${esc(r)}</option>`).join("")}</select></label>
+          <label class="toggle">傾向 <select id="gStyle" class="sel"><option>すべて</option>${styles.map(r => `<option ${gymState.style === r ? "selected" : ""}>${esc(r)}</option>`).join("")}</select></label>
+          <label class="toggle">所属人数 <select id="gMin" class="sel">${[1, 2, 3, 5].map(n => `<option value="${n}" ${gymState.min === n ? "selected" : ""}>${n}名以上</option>`).join("")}</select></label>
+          <label class="toggle">並び順 <select id="gSort" class="sel">${[["members", "所属選手数が多い順"], ["rate", "勝率が高い順（10試合以上を優先）"], ["wins", "RIZIN勝利数が多い順"], ["champs", "王者輩出数が多い順"]].map(([v, l]) => `<option value="${v}" ${gymState.sort === v ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+        </div>
+        <div class="cmp-bar ${cmp.length ? "" : "empty"}" id="cmpBar">${cmpBarHtml()}</div>
+        <div id="gymGrid">${gymGrid()}</div>
+        <p class="note" style="margin-top:12px">勝率・戦績は現在の所属選手のRIZINでの通算です（引き分け・無効試合は勝率の計算から除外）。所属情報はWikipediaの選手記事などの出典に基づき、確認できない選手は含めていません。「傾向」は勝ち方の内訳から算出したもので、ジムの指導方針ではありません。</p>
+      </section>
+      <section class="section" id="gymRank">
+        <div class="sec-head"><h2>Gym Ranking<small>ジムランキング</small></h2></div>
+        <div id="gymRankBody">${gymRanking()}</div>
+      </section>
+    </div>`;
+  }
+  function cmpBarHtml() {
+    const c = cmpList();
+    if (!c.length) return `<span class="note">ジムの「＋ 比較」を押すと、最大3ジムまで並べて比べられます。</span>`;
+    return `<span class="cb-lbl">比較（${c.length}/3）</span>${c.map(id => `<span class="cb-chip">${gymBadge(id, "s")}${esc(gymName(id))}<button data-uncmp="${esc(id)}" aria-label="${esc(gymName(id))}を比較から外す">×</button></span>`).join("")}
+      <a class="btn primary cb-go ${c.length < 2 ? "disabled" : ""}" href="#/gyms/compare" ${c.length < 2 ? 'aria-disabled="true"' : ""}>比較する</a>`;
+  }
+  function refreshGyms(what = "grid") {
+    if (what === "bar") { const b0 = document.getElementById("cmpBar"); if (b0) { b0.innerHTML = cmpBarHtml(); b0.classList.toggle("empty", !cmpList().length); } return; }
+    if (what !== "rank") { const g = document.getElementById("gymGrid"); if (g) g.innerHTML = gymGrid(); }
+    if (what !== "grid") { const r = document.getElementById("gymRankBody"); if (r) r.innerHTML = gymRanking(); }
+    const b = document.getElementById("cmpBar"); if (b) { b.innerHTML = cmpBarHtml(); b.classList.toggle("empty", !cmpList().length); }
+  }
+
+  function statBox(t, label, note) {
+    return `<div class="gs-box"><div class="gs-head">${label}${note ? `<small>${note}</small>` : ""}</div>
+      ${t.fights ? `<div class="gs-main"><b>${pctOrDash(t.rate)}</b><span>勝率（${t.w + t.l}試合）</span></div>
+      <div class="gs-grid">
+        <div><small>総試合</small><b>${t.fights}</b></div><div><small>勝利</small><b>${t.w}</b></div><div><small>敗北</small><b>${t.l}</b></div><div><small>引分</small><b>${t.d}</b></div>
+        <div><small>KO/TKO</small><b>${t.ko}</b></div><div><small>一本</small><b>${t.sub}</b></div><div><small>判定</small><b>${t.dec}</b></div><div><small>王者輩出</small><b>${t.champs}</b></div>
+      </div>` : `<p class="note" style="margin:8px 0 0">対象の試合がありません。</p>`}</div>`;
+  }
+  function fighterTile(k, gid) {
+    const p = P(k), f = S.roster[k];
+    const champ = S.titleFights.some(x => x.winner === k);
+    return `<a class="gf-card" href="#/fighter/${encodeURIComponent(k)}">${av(k, "l")}
+      <span class="gf-body"><b>${esc(S.nameOf(k))}</b><small>${esc(p.division || "—")}${champ ? ' <span class="mini-badge">王者経験</span>' : ""}</small>
+      <span class="gf-nums"><span>${rec(p.riz)}</span><span>レート ${r1(p.rating)}</span>${p.rank ? `<span>#${p.rank}</span>` : ""}</span></span></a>`;
+  }
+  const infoRow = (lbl, v) => `<tr><th>${lbl}</th><td>${v || UNK}</td></tr>`;
+  function viewGym(id) {
+    const g = GYMS[id];
+    if (!g) return pageHero("Not Found", "ジムが見つかりません。") + `<div class="wrap"><a href="#/gyms">ジム一覧へ戻る</a></div>`;
+    const m = gymMembers(id), tc = gymStats(id, "cur"), tp = gymStats(id, "period"), style = gymStyle(id);
+    const inCmp = cmpList().includes(id);
+    const site = safeUrl(g.official_website) || (/^http:\/\//.test(g.official_website || "") ? g.official_website : "");
+    const bar = (lbl, v, color) => `<div class="st-row"><span>${lbl}</span><div class="st-bar"><i style="width:${Math.round(v * 100)}%;background:${color}"></i></div><b>${pctOrDash(v)}</b></div>`;
+    return `
+    <section class="gym-hero" style="--h:${gymHue(id)}"><div class="in">
+      <span class="gh-ini" aria-hidden="true">${esc(gymInitials(g))}</span>
+      <div class="gh-main">
+        <div class="kicker">GYM</div>
+        <h1>${esc(g.name)}</h1>
+        ${g.name_en && g.name_en !== g.name ? `<div class="en">${esc(g.name_en)}</div>` : ""}
+        <div class="tags"><span>📍 ${gymPlace(g) ? esc(gymPlace(g)) : "所在地 未確認"}</span>${style ? `<span>${esc(style)}</span>` : ""}<span>RIZIN所属 ${m.cur.length}名</span></div>
+        <div class="gh-links">${site ? `<a href="${esc(site)}" target="_blank" rel="noopener">公式サイト ↗</a>` : ""}<a href="${esc(mapsUrl(g))}" target="_blank" rel="noopener">Googleマップ（評価・口コミ）↗</a>
+          <button class="cmp-btn ${inCmp ? "on" : ""}" data-cmp="${esc(id)}" aria-pressed="${inCmp}">${inCmp ? "✓ 比較に追加済み" : "＋ 比較に追加"}</button></div>
+      </div>
+      <div class="gh-faces">${m.cur.slice(0, 4).map(k => `<a href="#/fighter/${encodeURIComponent(k)}" title="${esc(S.nameOf(k))}">${av(k, "l")}</a>`).join("")}</div>
+    </div></section>
+    <div class="wrap">
+      <section class="section">
+        <div class="sec-head"><h2>Fighters<small>所属RIZIN選手（${m.cur.length}名）</small></h2></div>
+        ${m.cur.length ? `<div class="gf-grid">${m.cur.map(k => fighterTile(k, id)).join("")}</div>` : '<p class="note">現在所属が確認できているRIZIN選手はいません。</p>'}
+        ${m.past.length ? `<h3 class="sub-h">過去に所属していた選手</h3><div class="gf-list">${m.past.map(k => link(k)).join("")}</div>` : ""}
+        ${m.unknown.length ? `<h3 class="sub-h">所属の時期が確認できていない選手</h3><div class="gf-list">${m.unknown.map(k => link(k)).join("")}</div>` : ""}
+      </section>
+      <section class="section">
+        <div class="sec-head"><h2>RIZIN Record<small>ジムのRIZIN実績</small></h2></div>
+        <div class="gs-cols">
+          ${statBox(tc, "現所属選手のRIZIN通算", "参考値（移籍前の試合も含む）")}
+          ${statBox(tp, "所属期間中の試合", "所属期間（年）が確認できた試合のみ")}
+        </div>
+        <p class="note" style="margin-top:8px">勝率＝勝利数÷（勝利数＋敗北数）。引き分け・無効試合は分母に含めません。RIZIN以外の団体の試合は含めていません。</p>
+      </section>
+      <section class="section">
+        <div class="sec-head"><h2>Strengths<small>ジムの強み（試合データから算出）</small></h2></div>
+        ${tc.w ? `<div class="panel st-panel">
+          ${bar("KO/TKO勝利率", tc.koR, "var(--accent)")}${bar("一本勝利率", tc.subR, "var(--gold)")}${bar("判定勝利率", tc.decR, "var(--draw)")}${bar("RIZIN勝率", tc.rate || 0, "var(--win)")}
+          <div class="st-facts"><div><small>王者輩出</small><b>${tc.champs}名</b>${tc.champList.length ? `<em>${tc.champList.map(k => esc(S.nameOf(k))).join("・")}</em>` : ""}</div><div><small>所属選手の平均レーティング</small><b>${tc.avg ? r1(tc.avg) : "—"}</b></div></div>
+          <p class="note" style="margin:10px 0 0">現所属選手のRIZINでの勝ち方の内訳です。ジムの指導方針や公式に掲げる強みとは別のものです。</p></div>` : '<p class="note">RIZINでの勝利がまだ無いため算出できません。</p>'}
+      </section>
+      <section class="section gym-info-cols">
+        <div class="panel"><h3>ジム紹介</h3>
+          <table class="kv">${infoRow("設立", g.established_year ? g.established_year + "年" : esc(g.established_text || ""))}${infoRow("代表者", esc(g.representative || ""))}${infoRow("ヘッドコーチ", esc(g.head_coach || ""))}${infoRow("得意な格闘スタイル", "")}${infoRow("トレーニング方針", "")}</table>
+          ${g.note ? `<p style="font-size:14px;margin:12px 0 0">${esc(g.note)}</p>` : ""}
+          <p class="note" style="margin:10px 0 0">確認できた情報だけを載せています。${(g.sources || []).length ? "出典：" + g.sources.map(u => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(decodeURIComponent(u).replace(/^https?:\/\//, "").slice(0, 60))}</a>`).join("、") : ""}${g.verified_at ? `（${esc(g.verified_at)} 確認）` : ""}</p>
+        </div>
+        <div class="panel"><h3>Gym Information</h3>
+          <table class="kv">${infoRow("ジム名", esc(g.name))}${infoRow("所在地", esc(gymPlace(g)))}${infoRow("住所", esc(g.address || ""))}${infoRow("最寄駅", "")}${infoRow("営業時間", "")}${infoRow("定休日", "")}${infoRow("電話番号", "")}
+            ${infoRow("公式サイト", site ? `<a href="${esc(site)}" target="_blank" rel="noopener">${esc(site.replace(/^https?:\/\//, ""))}</a>` : "")}${infoRow("Instagram", safeUrl(g.instagram) ? `<a href="${esc(g.instagram)}" target="_blank" rel="noopener">開く</a>` : "")}
+            ${infoRow("Google Maps", `<a href="${esc(mapsUrl(g))}" target="_blank" rel="noopener">地図・評価・口コミを見る</a>`)}${infoRow("一般入会", "")}</table>
+          <p class="note" style="margin:10px 0 0">Googleの評価・口コミはGoogleマップでご確認ください（このサイトでは取得・保存していません）。</p>
+        </div>
+      </section>
+    </div>`;
+  }
+
+  function viewGymCompare() {
+    const ids = cmpList();
+    if (ids.length < 2) return pageHero("Gym Compare", "ジムを並べて比べる。") + `<div class="wrap"><p class="note">比較するジムを2つ以上選んでください（最大3つ）。</p><a class="btn primary" href="#/gyms">ジム一覧で選ぶ</a></div>`;
+    const S2 = id => gymStats(id, "cur");
+    const best = (fn, hi = true) => { const v = ids.map(id => fn(id)).filter(x => x != null); if (!v.length) return null; return hi ? Math.max(...v) : Math.min(...v); };
+    const row = (lbl, fn, fmt, cmp = true) => { const b = cmp ? best(fn) : null; return `<tr><th>${lbl}</th>${ids.map(id => { const v = fn(id); return `<td class="${cmp && v != null && v === b && v > 0 ? "win" : ""}">${fmt(v, id)}</td>`; }).join("")}</tr>`; };
+    return pageHero("Gym Compare", "最大3ジムを並べて、実績と特徴を比べる。") + `
+    <div class="wrap">
+      <div class="cmp-wrap"><table class="cmp-tbl">
+        <thead><tr><th></th>${ids.map(id => `<th><a href="#/gym/${encodeURIComponent(id)}" class="ch">${gymBadge(id, "l")}<b>${esc(gymName(id))}</b></a>
+          <span class="ch-faces">${gymMembers(id).cur.slice(0, 3).map(k => av(k)).join("")}</span><button class="ghost" data-uncmp="${esc(id)}">外す</button></th>`).join("")}</tr></thead>
+        <tbody>
+          ${row("所在地", id => null, (v, id) => gymPlace(GYMS[id]) ? esc(gymPlace(GYMS[id])) : UNK, false)}
+          ${row("傾向（試合データ）", id => null, (v, id) => gymStyle(id) ? `<span class="chip">${esc(gymStyle(id))}</span>` : "—", false)}
+          ${row("RIZIN所属選手数", id => gymMembers(id).cur.length, v => v + "名")}
+          ${row("RIZIN勝率", id => S2(id).rate, (v, id) => `${pctOrDash(v)}<small>${recTxt(S2(id))}</small>`)}
+          ${row("RIZIN勝利数", id => S2(id).w, v => v + "勝")}
+          ${row("KO/TKO勝利率", id => S2(id).w ? S2(id).koR : null, v => pctOrDash(v))}
+          ${row("一本勝利率", id => S2(id).w ? S2(id).subR : null, v => pctOrDash(v))}
+          ${row("王者輩出数", id => S2(id).champs, v => v + "名")}
+          ${row("平均レーティング", id => S2(id).avg, v => v == null ? "—" : r1(v))}
+          ${row("Google評価", id => null, (v, id) => `<a href="${esc(mapsUrl(GYMS[id]))}" target="_blank" rel="noopener">Googleマップで見る</a>`, false)}
+          ${row("一般入会", id => null, () => UNK, false)}
+        </tbody></table></div>
+      <p class="note" style="margin-top:10px">太字は比較したジムの中で最も高い値です。戦績は現所属選手のRIZIN通算（参考値）です。<a href="#/gyms">ジム一覧に戻って変更する</a></p>
+    </div>`;
+  }
+
+  // 選手詳細・カードでの所属ジム表示
+  function fighterGymPanel(k) {
+    const rows = affilOf(k);
+    const cur = rows.filter(r => r.cur === true), past = rows.filter(r => r.cur === false), unk = rows.filter(r => r.cur == null);
+    const period = r => r.from ? `${r.from}年〜${r.to ? r.to + "年" : "現在"}` : "";
+    const card = r => { const g = GYMS[r.g]; return `<a class="fg-card" href="#/gym/${encodeURIComponent(r.g)}">${gymBadge(r.g, "m")}<span><b>${esc(g.name)}</b><small>${gymPlace(g) ? esc(gymPlace(g)) : "所在地 未確認"}${period(r) ? "・" + period(r) : ""}</small><em>ジム詳細を見る →</em></span></a>`; };
+    const src = rows.find(r => r.src);
+    return `<div class="panel" style="margin-top:16px"><h3>所属ジム</h3>
+      ${cur.length ? cur.map(card).join("") : unk.length ? "" : '<p class="note" style="margin:0">所属ジム未確認</p>'}
+      ${unk.length ? `<div class="fg-sub">時期不明の所属</div>${unk.map(card).join("")}` : ""}
+      ${past.length ? `<div class="fg-sub">過去の所属</div><div class="fg-past">${past.map(r => `<a href="#/gym/${encodeURIComponent(r.g)}">${esc(gymName(r.g))}</a>${period(r) ? `<small>${period(r)}</small>` : ""}`).join("")}</div>` : ""}
+      ${src ? `<p class="note" style="margin:10px 0 0">出典：<a href="${esc(src.src)}" target="_blank" rel="noopener">${esc(GYM_SRC[src.via] || "Wikipedia")}</a></p>` : rows.length ? `<p class="note" style="margin:10px 0 0">出典：${esc(GYM_SRC[rows[0].via] || "")}</p>` : ""}
+    </div>`;
+  }
+  const gymChip = k => { const c = curGyms(k); return c.length ? `<a class="gym-chip" href="#/gym/${encodeURIComponent(c[0])}">${gymBadge(c[0], "s")}${esc(gymName(c[0]))}${c.length > 1 ? ` ほか${c.length - 1}` : ""}</a>` : ""; };
+
+  function gymEvents(e) {
+    const cb = e.target.closest("[data-cmp]");
+    if (cb) {
+      const id = cb.dataset.cmp; let c = cmpList().slice();
+      if (c.includes(id)) c = c.filter(x => x !== id);
+      else { if (c.length >= 3) { alert("比較できるのは3ジムまでです。どれかを外してから追加してください。"); return true; } c.push(id); }
+      setCmp(c);
+      document.querySelectorAll(`[data-cmp="${CSS.escape(id)}"]`).forEach(b => { const on = c.includes(id); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); b.textContent = on ? "✓ 比較に追加済み" : (b.closest(".gym-hero") ? "＋ 比較に追加" : "＋ 比較"); });
+      refreshGyms("bar");
+      return true;
+    }
+    const un = e.target.closest("[data-uncmp]");
+    if (un) { setCmp(cmpList().filter(x => x !== un.dataset.uncmp)); if (location.hash.startsWith("#/gyms/compare")) $view.innerHTML = viewGymCompare(); else { refreshGyms("grid"); } return true; }
+    const go = e.target.closest(".cb-go.disabled"); if (go) { e.preventDefault(); return true; }
+    if (e.target.closest("#gymReset")) { Object.assign(gymState, { q: "", region: "すべて", style: "すべて", min: 1 }); $view.innerHTML = viewGyms(); return true; }
+    const gr = e.target.closest("#gymRankTabs .tab"); if (gr) { gymState.rankCat = gr.dataset.gr; refreshGyms("rank"); return true; }
+    return false;
+  }
+
   /* ---------- ルーター ---------- */
   function route() {
     const h = location.hash.replace(/^#\/?/, "");
@@ -976,14 +1311,16 @@
       case "events": html = viewEvents(); break;
       case "stats": html = viewStats(); break;
       case "matchups": html = viewMatchups(arg); break;
+      case "gyms": html = arg === "compare" ? viewGymCompare() : viewGyms(); break;
+      case "gym": html = viewGym(key); break;
       default: html = viewHome();
     }
     $view.innerHTML = html;
-    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters")));
+    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters") || (page === "gym" && a.dataset.r === "gyms")));
     document.getElementById("nav").classList.remove("open");
     document.getElementById("menuBtn").setAttribute("aria-expanded", "false");
-    const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計", matchups: "見たい対戦カード" };
-    document.title = (page === "fighter" && P(key) ? S.nameOf(key) : titles[page] || "RIZIN選手データベース") + "｜FIGHT BOOK";
+    const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計", matchups: "見たい対戦カード", gyms: arg === "compare" ? "ジム比較" : "ジム一覧" };
+    document.title = (page === "fighter" && P(key) ? S.nameOf(key) : page === "gym" && GYMS[key] ? GYMS[key].name : titles[page] || "RIZIN選手データベース") + "｜FIGHT BOOK";
     window.scrollTo(0, 0);
     loadInstagram();
     if (page === "fighter" && P(key)) { initWalkout(key); fillSocial(key); } else stopWalkout();
@@ -992,6 +1329,7 @@
   /* ---------- 画面内の操作 ---------- */
   $view.addEventListener("click", e => {
     if (muEvents(e)) return;
+    if (gymEvents(e)) return;
     const c = e.target.closest("#catTabs .cat");
     if (c) { rankState.cat = c.dataset.cat; $view.innerHTML = viewRankings(); return; }
     const lk = e.target.closest("button.like");
@@ -1018,12 +1356,19 @@
   $view.addEventListener("input", e => {
     if (e.target.id === "q") { rosterState.q = e.target.value; refreshGrid(); }
     if (e.target.id === "qa") { allState.q = e.target.value; allState.page = 1; refreshAll(); }
+    if (e.target.id === "gq") { gymState.q = e.target.value; refreshGyms("grid"); }
   });
   $view.addEventListener("change", e => {
     if (e.target.id === "champ") { rosterState.champ = e.target.checked; refreshGrid(); }
     if (e.target.id === "allSort") { allState.sort = e.target.value; allState.page = 1; refreshAll(); }
     if (e.target.id === "activeOnly") { rankState.active = e.target.checked; $view.innerHTML = viewRankings(); }
     if (e.target.id === "rizinOnly") { evState.rizin = e.target.checked; $view.innerHTML = viewEvents(); }
+    if (e.target.id === "gRegion") { gymState.region = e.target.value; refreshGyms("grid"); }
+    if (e.target.id === "gStyle") { gymState.style = e.target.value; refreshGyms("grid"); }
+    if (e.target.id === "gMin") { gymState.min = +e.target.value; refreshGyms("grid"); }
+    if (e.target.id === "gSort") { gymState.sort = e.target.value; refreshGyms("grid"); }
+    if (e.target.id === "gymRankMode") { gymState.rankMode = e.target.value; refreshGyms("rank"); }
+    if (e.target.id === "gymRankMin") { gymState.rankMin = Math.max(1, Math.min(50, +e.target.value || 1)); refreshGyms("rank"); }
   });
   document.getElementById("menuBtn").addEventListener("click", () => {
     const n = document.getElementById("nav"); n.classList.toggle("open");

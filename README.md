@@ -86,3 +86,12 @@
 
 `"選手キー": { src:"img/fighters/xxx.webp", face:"img/fighters/xxx-face.webp" }` を書くと、その選手の画像がサイト全体（トップ・選手一覧・選手詳細・ランキング・大会結果・王者・統計・見たい対戦）に表示されます。
 `src` は大きい画像（正方形 800px 程度）、`face` は丸いアイコン用の顔まわり（正方形 240px 程度）。登録の無い選手・読み込めない画像はシルエットになります。
+
+## ジムデータベース（`#/gyms`・`#/gym/{id}`・`#/gyms/compare`）
+
+- 所属情報：`tools/gyms/collect.py` が Wikipedia（日本語版・英語版）の選手記事の所属欄を公式APIで取得 → `data-src/gyms/wiki-affiliations.json`。記事本文に RIZIN の記述がある記事だけを使い、推測で所属を決めません。
+- ジム台帳：`data-src/gyms/gyms.json`（表記ゆれ・旧名の統一、確認できた所在地・設立・代表と出典）。所属の手動修正は `data-src/gyms/overrides.json`。
+- 生成：`python3 tools/gyms/build.py` → `data/gyms.js`（`GYMS`・`AFFIL`）。毎週の自動更新（weekly-update.yml）でも取り直します。
+- 戦績：既存の試合データから集計。「現所属選手のRIZIN通算（参考値）」と「所属期間（年）が確認できた試合のみ」を区別して表示。
+- Googleの評価・口コミ：Places API は有料で、取得結果の保存も規約上制限があるため取得せず、Googleマップへのリンクのみ表示。
+- テスト：`python3 -m unittest discover -s tools/gyms -p 'test_*.py'`
