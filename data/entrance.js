@@ -5,8 +5,7 @@
    出典：RAG Music「RIZINの入場曲まとめ」(https://www.ragnet.co.jp/rizin-entrance-songs)
    ===================================================================== */
 window.ENTRANCE = {
-  "asakura":            [{ title:"Resplendent", artist:"Geoplex", yt:"cJglBxApcDM" },
-                         { title:"Battle Scars ft. Lupe Fiasco", artist:"Guy Sebastian", yt:"4ka1Lgd3SAI" }],
+  "asakura":            [{ title:"Battle Scars ft. Lupe Fiasco", artist:"Guy Sebastian", yt:"4ka1Lgd3SAI" }],
   "hiramoto":           [{ title:"Champion Road", artist:"CHEHON", yt:"oUZLNuynjHg" }],
   "shinryu":            [{ title:"公開処刑", artist:"キングギドラ", yt:"WMEqxvy9qow" }],
   "motoya":             [{ title:"Lose Yourself", artist:"Eminem", yt:"_Yhyp-_hX2s" }],
