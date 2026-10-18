@@ -1,6 +1,6 @@
 # FIGHT BOOK（RIZIN選手データベース）
 
-公開URL: https://fishboy88.github.io/fight-book/
+公開URL: https://fight-book-jp.github.io/
 
 ## ファイル構成
 - `index.html` … ページの枠組み

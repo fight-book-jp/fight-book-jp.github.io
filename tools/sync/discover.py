@@ -17,7 +17,7 @@ from datetime import datetime, timedelta, timezone
 from normalize import (card_kind, event_name, fighter, method, note, parse_date,
                        result_of, round_, strip_wiki, time_, weight_class)
 
-UA = "FightBookSync/1.0 (+https://github.com/fishboy88/fight-book; weekly data check)"
+UA = "FightBookSync/1.0 (+https://github.com/fight-book-jp/fight-book-jp.github.io; weekly data check)"
 
 
 class FetchError(Exception):
