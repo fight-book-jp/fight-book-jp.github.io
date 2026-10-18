@@ -51,6 +51,9 @@ ALIASES = {
   "Tatsuya \"Yanbo\" Saika":"Tatsuya Saika", "Kate Oyama":"Kate Oyama", "Keito Oyama":"Kate Oyama",
   "Naoki":"Naoki Tanaka", "Ryota Renseigym":"Ryota Renseigym", "Shoko Sato":"Shoko Sato",
   "Topnoi Kiwram":"Topnoi Thanongsaklek", "John Macapá":"John Teixeira",
+  # リングネーム／本名の統一（同一試合を別名で二重登録しないため）
+  "Kintaro":"Yuto Hokamura", "Daiki Lightyear":"Daiki Tsubota", "Jolly":"Ryoma Shishimoto",
+  "Kate Lotus":"Kate Oyama", "Lee Jae-hun":"Lee Jae-hoon",
 }
 
 # 大会名の表記ゆれ（都市名などを外したあと）

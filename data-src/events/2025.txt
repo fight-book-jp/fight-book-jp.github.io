@@ -1,15 +1,15 @@
-Rizin 50|2025-03-29|Bantamweight 61 kg|JPN Naoki Inoue|JPN Yuki Motoya|W|Decision (split)|3|5:00|Defended the Rizin Bantamweight Championship.
-Rizin 50|2025-03-29|Featherweight 66 kg|KAZ Karshyga Dautbek|JPN Chihiro Suzuki|W|Decision (split)|3|5:00|
-Rizin 50|2025-03-29|Lightweight 71 kg|JPN Shunta Nomura|BRA Luiz Gustavo|W|Technical Decision (unanimous)|3|2:29|
-Rizin 50|2025-03-29|Heavyweight 120 kg|JPN King Edokpolo|JPN Ryo Sakai|W|TKO (punches)|2|2:32|
-Rizin 50|2025-03-29|Featherweight 66 kg|JPN Kyohei Hagiwara|USA Toby Misech|W|TKO (punches)|1|0:26|
-Rizin 50|2025-03-29|Featherweight 66 kg|JPN Shuya Kimura|JPN Takeji Yokoyama|W|KO (punches)|1|0:54|
-Rizin 50|2025-03-29|Catchweight 59 kg|JPN Yuki Ito|CAN Tony Laramie|W|Decision (unanimous)|3|5:00|
-Rizin 50|2025-03-29|Catchweight 59 kg|JPN Yoshiro Maeda|JPN Sanou Yokouchi|W|Submission (rear-naked choke)|3|2:55|
-Rizin 50|2025-03-29|Lightweight 71 kg|JPN Takeshi Izumi|USA Spike Carlyle|W|Decision (unanimous)|3|5:00|
-Rizin 50|2025-03-29|Female Strawweight 52 kg|JPN Machi Fukuda|KOR Park Seo-young|W|TKO (punches)|2|4:04|
-Rizin 50|2025-03-29|Strawweight 53 kg|JPN Haruo Ochi|JPN Nobuyoshi Nakatsukasa|W|Submission (guillotine choke)|3|1:22|
-Rizin 50|2025-03-29|Bantamweight 61 kg|JPN Mamoru Uoi|JPN Koki Akada|W|Decision (split)|3|5:00|
+Rizin 50|2025-03-30|Bantamweight 61 kg|JPN Naoki Inoue|JPN Yuki Motoya|W|Decision (split)|3|5:00|Defended the Rizin Bantamweight Championship.
+Rizin 50|2025-03-30|Featherweight 66 kg|KAZ Karshyga Dautbek|JPN Chihiro Suzuki|W|Decision (split)|3|5:00|
+Rizin 50|2025-03-30|Lightweight 71 kg|JPN Shunta Nomura|BRA Luiz Gustavo|W|Technical Decision (unanimous)|3|2:29|
+Rizin 50|2025-03-30|Heavyweight 120 kg|JPN King Edokpolo|JPN Ryo Sakai|W|TKO (punches)|2|2:32|
+Rizin 50|2025-03-30|Featherweight 66 kg|JPN Kyohei Hagiwara|USA Toby Misech|W|TKO (punches)|1|0:26|
+Rizin 50|2025-03-30|Featherweight 66 kg|JPN Shuya Kimura|JPN Takeji Yokoyama|W|KO (punches)|1|0:54|
+Rizin 50|2025-03-30|Catchweight 59 kg|JPN Yuki Ito|CAN Tony Laramie|W|Decision (unanimous)|3|5:00|
+Rizin 50|2025-03-30|Catchweight 59 kg|JPN Yoshiro Maeda|JPN Sanou Yokouchi|W|Submission (rear-naked choke)|3|2:55|
+Rizin 50|2025-03-30|Lightweight 71 kg|JPN Takeshi Izumi|USA Spike Carlyle|W|Decision (unanimous)|3|5:00|
+Rizin 50|2025-03-30|Female Strawweight 52 kg|JPN Machi Fukuda|KOR Park Seo-young|W|TKO (punches)|2|4:04|
+Rizin 50|2025-03-30|Strawweight 53 kg|JPN Haruo Ochi|JPN Nobuyoshi Nakatsukasa|W|Submission (guillotine choke)|3|1:22|
+Rizin 50|2025-03-30|Bantamweight 61 kg|JPN Mamoru Uoi|JPN Koki Akada|W|Decision (split)|3|5:00|
 Rizin: Otoko Matsuri|2025-05-04|Featherweight 66 kg|KGZ Razhabali Shaydullaev|JPN Kleber Koike Erbst|W|KO (punches)|1|1:02|Won the Rizin Featherweight Championship.
 Rizin: Otoko Matsuri|2025-05-04|Featherweight 66 kg|JPN Mikuru Asakura|JPN Chihiro Suzuki|W|TKO (doctor stoppage)|3|1:56|
 Rizin: Otoko Matsuri|2025-05-04|Featherweight 66 kg|JPN Kyoma Akimoto|JPN Ryo Takagi|W|Decision (unanimous)|3|5:00|
@@ -103,3 +103,14 @@ Rizin: Shiwasu no Cho Tsuwamono Matsuri|2025-12-31|Flyweight 57 kg|JPN Tatsuki S
 Rizin: Shiwasu no Cho Tsuwamono Matsuri|2025-12-31|Catchweight 73 kg|JPN Tatsuya Saika|USA BeyNoah|W|KO (head kick)|1|0:32|
 Rizin: Shiwasu no Cho Tsuwamono Matsuri|2025-12-31|Bantamweight 61 kg|JPN Ryoma Shishimoto|JPN Ryusei Ashizawa|W|Submission (armbar)|1|0:25|
 Rizin: Shiwasu no Cho Tsuwamono Matsuri|2025-12-31|Flyweight 57 kg|BRA Enzo Massami Iamazato|JPN Yuri Suda|W|Technical Submission (armbar)|1|3:15|
+Rizin: Otoko Matsuri|2025-05-04|Catchweight 75 kg|JPN Yuga Nakaya|JPN Hiro Sasaki|W|Decision (unanimous)|2|5:00|Rizin MMA Special Rules (5min / 2R).
+Rizin: Otoko Matsuri|2025-05-04|Featherweight 66 kg|BRA Vinicius Tsuchihashi Silveira|JPN Takao Ueda|W|Decision (unanimous)|2|5:00|Rizin MMA Special Rules (5min / 2R).
+Rizin Landmark 11|2025-06-14|Bantamweight 61 kg|JPN Yukito Morinaga|JPN Daiki Kobayashi|W|Technical Submission (arm-triangle choke)|1|0:53|
+Rizin Landmark 11|2025-06-14|Catchweight 56 kg|JPN Suguru Hayasaka|JPN Arashi Suzuki|W|Submission (toe hold)|1|3:41|
+Rizin Landmark 11|2025-06-14|Welterweight 77 kg|JPN Takashi Noto|JPN Yuki Narita|W|Submission (armbar)|2|4:50|
+Rizin 51|2025-09-28|Bantamweight 61 kg|JPN Kushi Ishizaka|JPN Mahiro Yamaki|W|Decision (unanimous)|2|5:00|
+Rizin 51|2025-09-28|Featherweight 66 kg|JPN Yuhei Tsuda|JPN Jin Wakita|W|Decision (unanimous)|2|5:00|
+Rizin 51|2025-09-28|Flyweight 57 kg|JPN Daisuke Kobayashi|JPN Syuto Sato|W|Decision (unanimous)|2|5:00|
+Rizin 51|2025-09-28|Lightweight 71 kg|JPN Kosuke Sugimura|JPN Shogo Ota|W|Decision (unanimous)|2|5:00|
+Rizin Landmark 12|2025-11-03|Bantamweight 61 kg|JPN Jinnosuke Kashimura|JPN Hyuma Yasui|W|Decision (unanimous)|3|5:00|
+Rizin Landmark 12|2025-11-03|Female Super Atomweight 49 kg|JPN Noeru Narita|JPN Misaki Suda|W|Submission (armbar)|2|2:46|Rizin MMA Special Rules (5min / 2R).

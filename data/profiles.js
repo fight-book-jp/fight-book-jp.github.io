@@ -65,7 +65,7 @@ window.CATCHPHRASE = {
   "kana-watanabe":"マッチョ過ぎるYAWARAちゃん",
   "kanna-asakura":"純情可憐タックル女子",
   "karamov":"コーカサスの雷",
-  "kate-lotus":"不屈の睡蓮",
+  "kate-oyama":"不屈の睡蓮",
   "kazuki-tokudome":"八王子のパウンドキング",
   "kazuma-kuramoto":"投神",
   "kazuma-sone":"鋼のオールラウンダー",
@@ -82,7 +82,6 @@ window.CATCHPHRASE = {
   "kiichi-kunimoto":"UFC帰りの黒コブラ",
   "kim-kyung-pyo":"RED HORSE",
   "king-edokpolo":"アンダーグラウンド・ホームランキング",
-  "kintaro":"マサカリ殺法",
   "koike":"柔術界の鬼神",
   "koji-takeda":"漆黒のヘラクレス",
   "koki-akada":"流浪の格闘亜種",
@@ -205,6 +204,7 @@ window.CATCHPHRASE = {
   "yuta-kubo":"闘う投資家",
   "yutaka-saito":"令和の修斗伝承者",
   "yutaro-muramoto":"北陸の牛若丸",
+  "yuto-hokamura":"マサカリ殺法",
   "zach-zane":"ハワイアン・バーサーカー",
 };
 
