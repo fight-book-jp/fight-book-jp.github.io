@@ -114,7 +114,8 @@
     <section class="hero"><div class="hero-in">
       <div class="kicker">RIZIN FIGHTER DATABASE</div>
       <h1>Fight Book</h1>
-      <p>2015年からのRIZIN全大会のMMA試合をもとに、全選手のレーティング・戦績・王座の歴史・統計を自動で計算する選手データベース</p>
+      <p class="hero-lead">格闘技の素晴らしさを、もっと多くの人へ。</p>
+      <p>2015年からのRIZIN全大会のMMA試合をもとに、全選手のレーティング・戦績・王座の歴史・統計を自動で算出。格闘技の魅力と選手たちの軌跡を、データで可視化する選手データベース<span class="nowrap">「FIGHT BOOK」</span>。</p>
       <div class="cta"><a class="btn primary" href="#/rankings">ランキングを見る</a><a class="btn" href="#/fighters">選手一覧</a></div>
       <div class="hero-stats">
         <div><b>${fighters}</b><small>出場選手</small></div>
