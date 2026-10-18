@@ -81,3 +81,8 @@
 
 テスト：`python3 -m unittest discover -s tools/sync/tests -v`（外部にはアクセスしません）
 初回設定：Settings → Actions → General → Workflow permissions で「Allow GitHub Actions to create and approve pull requests」にチェック。
+
+## 選手プロフィール画像（`data/photos.js`）
+
+`"選手キー": { src:"img/fighters/xxx.webp", face:"img/fighters/xxx-face.webp" }` を書くと、その選手の画像がサイト全体（トップ・選手一覧・選手詳細・ランキング・大会結果・王者・統計・見たい対戦）に表示されます。
+`src` は大きい画像（正方形 800px 程度）、`face` は丸いアイコン用の顔まわり（正方形 240px 程度）。登録の無い選手・読み込めない画像はシルエットになります。

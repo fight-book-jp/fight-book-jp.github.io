@@ -19,7 +19,22 @@
   const fmtDate = d => d ? d.replace(/-/g, ".") : "";
   const rec = t => `${t.w}-${t.l}-${t.d}`;
   const P = k => S.profiles[k];
-  const link = k => `<a href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>`;
+  /* ---------- 選手画像（data/photos.js を全画面で共通に参照） ---------- */
+  const localOrHttps = u => /^(img\/[\w./-]+|https:\/\/\S+)$/.test(u || "") ? u : "";
+  const photoOf = k => {
+    const x = (window.PHOTOS || {})[k];
+    if (x && localOrHttps(x.src)) return { src: x.src, face: localOrHttps(x.face) || x.src, pos: x.pos || "50% 20%" };
+    const f = S.roster[k], u = f && safeUrl(f.photo);
+    return u ? { src: u, face: u, pos: "50% 15%" } : null;
+  };
+  const AV_PX = { s: 32, m: 44, l: 76 };
+  // 丸い選手アイコン（s=表・試合結果、m=カード・タイル、l=対戦カード）。画像が無い・読めないときはシルエット
+  const av = (k, size = "s") => {
+    const ph = photoOf(k), px = AV_PX[size] || 32;
+    return `<span class="av av-${size}" aria-hidden="true">${SIL}${ph ? `<img src="${esc(ph.face)}" alt="" width="${px}" height="${px}" loading="lazy" decoding="async" onerror="this.remove()">` : ""}</span>`;
+  };
+  const linkTxt = k => `<a href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>`;
+  const link = k => `<a class="pl" href="#/fighter/${encodeURIComponent(k)}">${av(k)}<span>${esc(S.nameOf(k))}</span></a>`;
   const deltaHtml = d => !d ? "" : `<span class="delta ${d > 0 ? "up" : "down"}">${d > 0 ? "▲" : "▼"}${Math.abs(r1(d))}</span>`;
   const statusBadge = k => { const f = S.roster[k]; if (!f) return "";
     return f.status === "champion" ? '<span class="mini-badge">王者</span>' : f.status === "former" ? '<span class="mini-badge former">元王者</span>' : ""; };
@@ -65,7 +80,7 @@
   function rankTable(list, opts = {}) {
     const rows = list.map((p, i) => `<tr>
         <td class="rank ${i < 3 && !opts.offset ? "top" : ""}">${opts.showGlobal ? p.rank : i + 1 + (opts.offset || 0)}</td>
-        <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}"><span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
+        <td><a class="who${opts.avRight ? " rev" : ""}" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
         <td>${esc(p.division || "—")}</td>
         <td class="num">${rec(p.riz)}${p.riz.nc ? ` <span class="note">(${p.riz.nc}NC)</span>` : ""}</td>
         <td class="r"><span class="rate">${r1(p.rating)}</span>${deltaHtml(p.lastDelta)}</td>
@@ -81,7 +96,7 @@
         return `<div class="champ vacant"><div class="div">${t}</div><div class="nm">空位</div><div class="meta">${last ? `最後の王者：${esc(S.nameOf(last.winner))}` : ""}</div></div>`;
       }
       const p = P(c.key);
-      return `<a class="champ" href="#/fighter/${c.key}"><div class="div">${t}</div><div class="nm">${esc(c.name)}</div><div class="meta">RIZIN ${rec(p.riz)}・レート ${r1(p.rating)}</div></a>`;
+      return `<a class="champ with-av" href="#/fighter/${c.key}">${av(c.key, "m")}<div class="div">${t}</div><div class="nm">${esc(c.name)}</div><div class="meta">RIZIN ${rec(p.riz)}・レート ${r1(p.rating)}</div></a>`;
     }).join("")}</div>`;
   }
 
@@ -110,7 +125,7 @@
     <div class="wrap">
       <section class="section">
         <div class="sec-head"><h2>Top 10<small>現役選手のレーティング順</small></h2><a href="#/rankings">すべて見る ›</a></div>
-        ${rankTable(top)}
+        ${rankTable(top, { avRight: true })}
       </section>
       <section class="section">
         <div class="sec-head"><h2>Champions<small>現王者</small></h2><a href="#/champions">王座の歴史 ›</a></div>
@@ -118,7 +133,7 @@
       </section>
       <section class="section">
         <div class="sec-head"><h2>Win Streak<small>RIZINで連勝中</small></h2><a href="#/stats">統計 ›</a></div>
-        <div class="tiles">${streaks.map(p => `<div class="tile"><div class="lbl">${esc(p.division)}</div><div class="big">${p.riz.streak}<small>連勝</small></div><div>${link(p.key)}</div><div class="sub">レート ${r1(p.rating)}・RIZIN ${rec(p.riz)}</div></div>`).join("")}</div>
+        <div class="tiles">${streaks.map(p => `<div class="tile with-av">${av(p.key, "m")}<div class="lbl">${esc(p.division)}</div><div class="big">${p.riz.streak}<small>連勝</small></div><div>${linkTxt(p.key)}</div><div class="sub">レート ${r1(p.rating)}・RIZIN ${rec(p.riz)}</div></div>`).join("")}</div>
       </section>
       ${latest ? `<section class="section">
         <div class="sec-head"><h2>Latest<small>最新大会</small></h2><a href="#/events">大会一覧 ›</a></div>
@@ -138,7 +153,7 @@
     const most = leader(p => p.riz.total);
     const best = leader(p => p.riz.best);
     const peak = leader(p => p.peak);
-    const t = (lbl, p, big, unit, sub) => `<div class="tile"><div class="lbl">${lbl}</div><div class="big">${big}<small>${unit}</small></div><div>${link(p.key)}</div><div class="sub">${sub}</div></div>`;
+    const t = (lbl, p, big, unit, sub) => `<div class="tile with-av">${av(p.key, "m")}<div class="lbl">${lbl}</div><div class="big">${big}<small>${unit}</small></div><div>${linkTxt(p.key)}</div><div class="sub">${sub}</div></div>`;
     return `<div class="tiles">
       ${t("KO率（RIZIN 5勝以上）", ko, pct(ko.riz.koRate), "", `KO ${ko.riz.ko} / ${ko.riz.w}勝`)}
       ${t("一本勝ち数", sub, sub.riz.sub, "回", `RIZIN ${rec(sub.riz)}`)}
@@ -166,7 +181,7 @@
   function scoreTable(list, head, cell, opts = {}) {
     const rows = list.map((p, i) => `<tr>
         <td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td>
-        <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}"><span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
+        <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
         <td>${esc(p.division || "—")}</td>
         <td class="ev">${opts.detail ? opts.detail(p) : ""}</td>
         <td class="r"><span class="rate">${cell(p)}</span></td></tr>`).join("");
@@ -187,7 +202,7 @@
       .sort((a, b) => (likes[b.k] ? 1 : 0) - (likes[a.k] ? 1 : 0) || b.p.x.spotlight - a.p.x.spotlight);
     const rows = list.map((r, i) => `<tr>
         <td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td>
-        <td><a class="who" href="#/fighter/${encodeURIComponent(r.k)}"><span><b>${esc(S.nameOf(r.k))}</b><small>${esc(r.p.division || "")}</small></span></a></td>
+        <td><a class="who" href="#/fighter/${encodeURIComponent(r.k)}">${av(r.k)}<span><b>${esc(S.nameOf(r.k))}</b><small>${esc(r.p.division || "")}</small></span></a></td>
         <td><b>${esc(r.song.title)}</b><div class="ev">${esc(r.song.artist)}</div></td>
         <td class="r nowrap">
           <button class="icon-btn play-song" data-yt="${esc(r.song.yt)}" aria-label="${esc(r.song.title)}を試聴" title="試聴">▶</button>
@@ -245,11 +260,13 @@
     const ig = igPermalink(f);
     const badge = f.status === "champion" ? '<span class="badge">Champion</span>' : f.status === "former" ? '<span class="badge former">元王者</span>' : "";
     const initial = f.en ? f.en.trim().split(/\s+/).pop().charAt(0) : "";
-    const img = safeUrl(f.photo);
-    const top = ig ? `<div class="card-ig">${badge}${igEmbed(ig)}</div>`
-      : `<a class="photo" href="#/fighter/${f.key}">${badge}${img ? `<img src="${esc(img)}" alt="${esc(f.name)}" loading="lazy">` : `<span class="initial">${esc(initial)}</span>${SIL}`}</a>`;
+    const ph = photoOf(f.key);
+    // プロフィール画像があれば最優先で大きく表示。無ければ従来どおり Instagram 埋め込み → シルエット
+    const top = ph ? `<a class="photo has-img" href="#/fighter/${f.key}">${badge}${SIL}<img src="${esc(ph.src)}" alt="${esc(f.name)}" width="800" height="800" loading="lazy" decoding="async" style="object-position:${esc(ph.pos)}" onerror="this.remove()"></a>`
+      : ig ? `<div class="card-ig">${badge}${igEmbed(ig)}</div>`
+      : `<a class="photo" href="#/fighter/${f.key}">${badge}<span class="initial">${esc(initial)}</span>${SIL}</a>`;
     const sns = snsItems(f).map(([k, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(f.name)}の${SNS_LABEL[k]}" title="${SNS_LABEL[k]}">${ICONS[k]}</a>`).join("") || '<span class="none">SNS情報なし</span>';
-    return `<article class="card${ig ? " has-ig" : ""}">${top}
+    return `<article class="card${ig && !ph ? " has-ig" : ""}">${top}
       <div class="card-body">
         <div class="nick">${f.nick ? `"${esc(f.nick)}"` : ""}</div>
         <h2 class="name"><a href="#/fighter/${f.key}">${esc(f.name)}</a></h2>
@@ -292,7 +309,7 @@
     allState.page = Math.min(allState.page, pages);
     const slice = list.slice((allState.page - 1) * PAGE, allState.page * PAGE);
     const rows = slice.map(p => `<tr>
-      <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}"><span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
+      <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key, "m")}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
       <td>${esc(p.country || "")}</td><td>${esc(p.division || "—")}</td>
       <td class="num">${rec(p.riz)}${p.riz.nc ? ` <span class="note">(${p.riz.nc}NC)</span>` : ""}</td>
       <td class="r"><span class="rate">${r1(p.rating)}</span>${p.rank ? ` <span class="note">#${p.rank}</span>` : ""}</td>
@@ -381,13 +398,15 @@
     const tot = t.w || 1;
     const sns = snsItems(profileOf(key)).map(([k, u]) => `<a class="sns-${k}" href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(S.nameOf(key))}の${SNS_LABEL[k]}（新しいタブで開く）" title="${SNS_LABEL[k]}">${ICONS[k]}<span>${SNS_LABEL[k]}</span></a>`).join("");
     const name = S.nameOf(key), en = S.enOf(key);
+    const ph = photoOf(key);
     // 背景のキャッチコピー（未登録ならリングネーム→英語名→表示名の順でフォールバック）
     const ring = (window.CATCHPHRASE || {})[key] || (f && f.ringName) || en || name;
     // 全角は1、半角は0.55として幅を見積もり、画面幅に収まる文字サイズをCSSで計算する
     const ringW = Math.max(4, [...ring].reduce((w, ch) => w + (/[\u0000-\u00ff]/.test(ch) ? 0.55 : 1), 0)).toFixed(2);
     return `
-    <section class="f-hero"><div class="f-bgname" style="--w:${ringW}" aria-hidden="true">${esc(ring)}</div><div class="in">
-      <div>
+    <section class="f-hero"><div class="f-bgname" style="--w:${ringW}" aria-hidden="true">${esc(ring)}</div><div class="in has-photo">
+      <div class="f-photo${ph ? "" : " none"}">${SIL}${ph ? `<img src="${esc(ph.src)}" alt="${esc(name)}" width="800" height="800" decoding="async" fetchpriority="high" style="object-position:${esc(ph.pos)}" onerror="this.remove()">` : ""}</div>
+      <div class="f-main">
         <div class="nick">${f && f.status === "champion" ? "現王者　" : f && f.status === "former" ? "元王者　" : ""}${f && f.nick ? `"${esc(f.nick)}"` : ""}</div>
         <h1>${esc(name)}</h1>
         ${name !== en ? `<div class="en">${esc(en)}</div>` : ""}
@@ -485,7 +504,7 @@
   /* ---------- 統計 ---------- */
   function statTable(title, sub, fn, fmt, filter = () => true, n = 10) {
     const list = S.ranked.filter(filter).slice().sort((a, b) => fn(b) - fn(a) || b.rating - a.rating).slice(0, n);
-    const rows = list.map((p, i) => `<tr><td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td><td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}"><span><b>${esc(S.nameOf(p.key))}</b><small>${esc(p.division || "")}</small></span></a></td><td class="r"><span class="rate">${fmt(p)}</span></td></tr>`).join("");
+    const rows = list.map((p, i) => `<tr><td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td><td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b><small>${esc(p.division || "")}</small></span></a></td><td class="r"><span class="rate">${fmt(p)}</span></td></tr>`).join("");
     return `<section class="section"><div class="sec-head"><h2>${title}<small>${sub}</small></h2></div>
       <div class="tbl-wrap"><table class="tbl" style="min-width:0"><tbody>${rows}</tbody></table></div></section>`;
   }
@@ -677,6 +696,7 @@
     const p = P(k);
     return `<div class="mu-corner ${side}">
       <div class="mu-side">${side === "red" ? "RED CORNER" : "BLUE CORNER"}</div>
+      <a class="mu-av" href="#/fighter/${encodeURIComponent(k)}" tabindex="-1">${av(k, "l")}</a>
       <a class="mu-name" href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>
       <div class="mu-en">${esc(subName(k))}</div>
       <div class="mu-tags">${p.division ? `<span>${esc(p.division)}</span>` : ""}${statusBadge(k)}${p.active ? "" : "<span>直近2年試合なし</span>"}</div>
@@ -718,7 +738,7 @@
     const pa = winProb(a, b);
     return `<a class="mu-mini" href="#/matchups/${encodeURIComponent(a)}~${encodeURIComponent(b)}">
       <div class="mm-div">${esc(P(a).division || "")}${extra}</div>
-      <div class="mm-names"><b class="r">${esc(S.nameOf(a))}</b><span>VS</span><b class="b">${esc(S.nameOf(b))}</b></div>
+      <div class="mm-names"><b class="r">${av(a)}<span>${esc(S.nameOf(a))}</span></b><span>VS</span><b class="b"><span>${esc(S.nameOf(b))}</span>${av(b)}</b></div>
       <div class="mm-bar"><i style="width:${(pa * 100).toFixed(0)}%"></i></div>
       <div class="mm-pct"><span>${Math.round(pa * 100)}%</span><span>${Math.round((1 - pa) * 100)}%</span></div>
     </a>`;
@@ -790,7 +810,7 @@
     return list.map(p => {
       const cur = p.key === (st.corner === "red" ? mu.red : mu.blue), dis = p.key === other;
       return `<li><button class="pk-item ${cur ? "cur" : ""}" data-key="${esc(p.key)}" ${dis ? "disabled" : ""}>
-        <span class="pk-main"><b>${esc(S.nameOf(p.key))}</b><small>${esc(subName(p.key))}</small></span>
+        <span class="pk-main">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b><small>${esc(subName(p.key))}</small></span></span>
         <span class="pk-meta">${esc(p.division || "—")}<br><span class="num">${rec(p.riz)}</span></span>
         <span class="pk-rate">${r1(p.rating)}</span>
         <span class="pk-state">${cur ? "選択中" : dis ? "相手側" : "選ぶ"}</span></button></li>`;

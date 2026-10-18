@@ -548,3 +548,57 @@ a.sc:hover,.sc-yt:hover{box-shadow:0 8px 22px var(--shadow);border-color:var(--a
   .hero::before{background:linear-gradient(180deg,rgba(12,16,8,.38) 0%,rgba(12,16,8,.55) 50%,rgba(12,16,8,.75) 100%)}
 }
 @media (prefers-color-scheme:dark){ .hero::before{opacity:1} }
+
+/* ---------- 選手プロフィール画像（共通） ---------- */
+.av{position:relative;flex:none;display:inline-flex;align-items:flex-end;justify-content:center;width:32px;height:32px;border-radius:50%;overflow:hidden;
+  background:linear-gradient(180deg,var(--photo-top),var(--photo-bot));box-shadow:inset 0 0 0 1px var(--line);vertical-align:middle}
+.av .sil{width:78%;height:auto;color:var(--sil)}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%}
+.av-m{width:44px;height:44px}
+.av-l{width:76px;height:76px;box-shadow:inset 0 0 0 2px var(--line)}
+a.pl{display:inline-flex;align-items:center;gap:8px;text-decoration:none;vertical-align:middle}
+a.pl:hover span{text-decoration:underline}
+.who.rev{flex-direction:row-reverse;justify-content:flex-end}
+.who.rev .av{margin-left:2px}
+/* タイル・王者カード：左に文字、右上にアイコン */
+.tile.with-av,.champ.with-av{position:relative;padding-right:70px}
+.tile.with-av>.av,.champ.with-av>.av{position:absolute;top:14px;right:14px}
+/* 選手一覧カード：画像を大きく（正方形） */
+.photo{aspect-ratio:1/1}
+.photo.has-img .sil{display:block}
+.photo img{z-index:1}
+.photo .badge{z-index:2}
+/* 選手詳細：PCは左に大きな画像、SPは上 */
+.f-hero .in.has-photo{grid-template-columns:auto 1fr auto;align-items:center}
+.f-photo{position:relative;width:220px;aspect-ratio:1/1;border-radius:6px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;
+  background:linear-gradient(180deg,rgba(247,246,240,.14),rgba(247,246,240,.04));box-shadow:0 0 0 1px var(--hero-line),0 10px 30px rgba(0,0,0,.25);z-index:1}
+.f-photo .sil{width:72%;height:auto;color:rgba(247,246,240,.22)}
+.f-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.f-main,.f-rating{position:relative;z-index:1}
+/* 対戦カード */
+.mu-av{display:inline-block;margin:4px 0 2px;line-height:0}
+.mu-corner.red .mu-av .av{box-shadow:0 0 0 3px var(--corner-red)}
+.mu-corner.blue .mu-av .av{box-shadow:0 0 0 3px var(--corner-blue)}
+.mm-names b{display:flex;align-items:center;gap:8px;min-width:0}
+.mm-names b.b{justify-content:flex-end}
+.mm-names b span{min-width:0}
+.pk-main{display:flex;align-items:center;gap:10px;min-width:0}
+.pk-main>span{min-width:0}
+@media (max-width:900px){
+  .f-hero .in.has-photo{grid-template-columns:auto 1fr;align-items:end}
+  .f-hero .in.has-photo .f-rating{grid-column:1 / -1}
+  .f-photo{width:150px}
+}
+@media (max-width:560px){
+  .f-hero .in.has-photo{grid-template-columns:1fr}
+  .f-photo{width:min(62vw,240px)}
+  .av-m{width:40px;height:40px}
+  .av-l{width:60px;height:60px}
+  .tile.with-av,.champ.with-av{padding-right:62px}
+  .tbl .av{width:28px;height:28px}
+  .tbl .av-m{width:34px;height:34px}
+  a.pl{gap:6px}
+}
+.opp a.pl{border-bottom:0}
+.opp a.pl span{border-bottom:1px solid var(--line)}
+.opp a.pl:hover span{border-color:var(--accent);text-decoration:none}
