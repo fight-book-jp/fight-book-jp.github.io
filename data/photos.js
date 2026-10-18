@@ -8,4 +8,5 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "shinryu": { src:"img/fighters/shinryu.webp", face:"img/fighters/shinryu-face.webp" },
 };
