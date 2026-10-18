@@ -1,0 +1,139 @@
+{{short description|テスト用の架空データ（本番データには入らない）}}
+== List of events ==
+{| class="wikitable"
+| [[#Rizin 99|Rizin 99]] || {{dts|2026|Oct|10}}
+|}
+
+==Rizin 99 in Testcity==
+{{Infobox MMA event
+| name= Rizin 99 in Testcity
+|date= {{dts|2026|10|10}}
+}}
+===Results===
+{{MMAevent}}
+{{MMAevent card|Main card (Rizin.tv)}}
+{{MMAevent bout
+|Featherweight
+|[[Kyoji Horiguchi]] (c)
+|def.
+|Testo Newman
+|TKO (punches)
+|1
+|2:00
+|For the [[Rizin Fighting Federation#Featherweight Championship|Rizin Featherweight Championship]].<ref>{{cite web|url=https://example.com|title=x}}</ref>
+}}
+{{MMAevent bout
+|Women's Strawweight
+|[[Seika Izawa]]
+|def.
+|Hana Fictional
+|Decision (unanimous) (30–27, 30–27, 30–27)
+|3
+|5:00
+|
+}}
+{{MMAevent bout
+|Lightweight
+|Yusuke Yachi
+|vs.
+|Roberto de Souza
+|Draw (split)
+|3
+|5:00
+|
+}}
+{{MMAevent bout
+|Bantamweight
+|Future Fighter
+|vs.
+|Another Future
+|
+|
+|
+|
+}}
+{{MMAevent card|Kickboxing bouts|header=no}}
+{{MMAevent bout
+|Flyweight
+|Kick Person
+|def.
+|Other Person
+|KO (punch)
+|1
+|1:00
+|
+}}
+{{MMAevent end}}
+
+==Rizin 98==
+{{Infobox MMA event
+| name= Rizin 98
+|date= {{dts|2026|Oct|11}}
+}}
+===Results===
+{| class="wikitable" style="font-size: 80%;"
+|-
+! colspan="8" style="background-color: #ccf;" | '''Main card'''
+|-
+! colspan="1" | Weight Class
+! colspan="1" |
+|-
+|Featherweight 66&nbsp;kg
+|{{flagicon|JPN}} Kyomma Akimoto
+|align=center|def.
+|{{flagicon|USA}} Testo Newman
+|Submission (rear-naked choke)
+|align=center|2
+|align=center|1:11
+|
+|-
+|Lightweight 71&nbsp;kg
+|{{flagicon|JPN}} [[Yoshinori Horie]]
+|align=center|vs.
+|{{flagicon|BRA}} [[Luiz Gustavo]]
+|No Contest (accidental eye poke)
+|align=center|1
+|align=center|0:45
+|
+|}
+
+==Rizin 53==
+{{Infobox MMA event
+| name= Rizin 53
+|date= {{dts|2026|05|10}}
+}}
+===Results===
+{{MMAevent}}
+{{MMAevent card|Main card}}
+{{MMAevent bout
+|Lightweight
+|Luiz Gustavo
+|def.
+|Ilkhom Nozimov
+|KO (punches)
+|2
+|2:08
+|
+}}
+{{MMAevent end}}
+
+==Rizin 100==
+{{Infobox MMA event
+| name= Rizin 100
+|date= {{dts|2026|12|31}}
+}}
+===Results===
+{{MMAevent}}
+{{MMAevent bout
+|Featherweight
+|Testo Newman
+|def.
+|Hana Fictional
+|KO (punch)
+|1
+|0:10
+|
+}}
+{{MMAevent end}}
+
+==References==

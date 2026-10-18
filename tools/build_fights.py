@@ -112,104 +112,114 @@ def d2o(s):
     try: return date.fromisoformat(s).toordinal()
     except Exception: return 0
 
-bouts = []
-countries = collections.defaultdict(collections.Counter)
+def build(root=ROOT, write=True, verbose=True):
+    """data-src を読み、試合と選手の一覧を作る。write=True なら data/fights.js に書き出す。
+    戻り値: dict(cols, people, fights) … 週次同期（tools/sync）の検証でも使う"""
+    src = os.path.join(root, "data-src")
+    bouts = []
+    countries = collections.defaultdict(collections.Counter)
 
-# ---- 1) RIZIN 全大会 ----
-for path in sorted(glob.glob(os.path.join(SRC, "events", "*.txt"))):
-    for line in open(path, encoding="utf-8"):
-        line = line.strip()
-        if not line or line.startswith(("Event|", "TOTAL", "MISSING")): continue
-        p = (line.split("|") + [""] * 10)[:10]
-        ev, dt, wc, a, b, res, method, rnd, tm, note = [x.strip() for x in p]
-        if wc.upper().startswith(("KICK", "BOX", "EXH")): continue
-        if res not in ("W", "D", "NC") or "/" in a or "/" in b or not a or not b: continue
-        a, ca = norm_name(a); b, cb = norm_name(b)
-        if ca: countries[a][ca] += 1
-        if cb: countries[b][cb] += 1
-        bouts.append(dict(date=dt, event=norm_event(ev), a=a, b=b, outcome=res, method=method,
-                          round=rnd, time=tm, note=note, wc=wc, rizin=True))
+    # ---- 1) RIZIN 全大会 ----
+    for path in sorted(glob.glob(os.path.join(src, "events", "*.txt"))):
+        for line in open(path, encoding="utf-8"):
+            line = line.strip()
+            if not line or line.startswith(("Event|", "TOTAL", "MISSING")): continue
+            p = (line.split("|") + [""] * 10)[:10]
+            ev, dt, wc, a, b, res, method, rnd, tm, note = [x.strip() for x in p]
+            if wc.upper().startswith(("KICK", "BOX", "EXH")): continue
+            if res not in ("W", "D", "NC") or "/" in a or "/" in b or not a or not b: continue
+            a, ca = norm_name(a); b, cb = norm_name(b)
+            if ca: countries[a][ca] += 1
+            if cb: countries[b][cb] += 1
+            bouts.append(dict(date=dt, event=norm_event(ev), a=a, b=b, outcome=res, method=method,
+                              round=rnd, time=tm, note=note, wc=wc, rizin=True))
 
-# ---- 2) 名簿選手のプロ全戦績（RIZIN外の試合を補う） ----
-def find_match(me, opp, dt):
-    o = d2o(dt)
+    # ---- 2) 名簿選手のプロ全戦績（RIZIN外の試合を補う） ----
+    def find_match(me, opp, dt):
+        o = d2o(dt)
+        for x in bouts:
+            if {x["a"], x["b"]} == {me, opp} and abs(d2o(x["date"]) - o) <= 3:
+                return x
+        return None
+
+    for key, me in ROSTER.items():
+        path = os.path.join(src, key + ".txt")
+        if not os.path.exists(path): continue
+        for line in open(path, encoding="utf-8"):
+            line = line.strip()
+            if not line or line.startswith("Res|"): continue
+            p = (line.split("|") + [""] * 9)[:9]
+            res, _, opp, method, event, dt, rnd, tm, note = [x.strip() for x in p]
+            opp, _c = norm_name(opp)
+            hit = find_match(me, opp, dt)
+            if hit:
+                if not hit["note"] and note: hit["note"] = note
+                if not hit["round"] and rnd: hit["round"] = rnd
+                if not hit["time"] and tm: hit["time"] = tm
+                continue
+            res = res.capitalize()
+            if res == "Win": a, b, out = me, opp, "W"
+            elif res == "Loss": a, b, out = opp, me, "W"
+            elif res == "Draw": a, b, out = me, opp, "D"
+            else: a, b, out = me, opp, "NC"
+            ev = norm_event(event)
+            bouts.append(dict(date=dt, event=ev, a=a, b=b, outcome=out, method=method, round=rnd,
+                              time=tm, note=note, wc="", rizin=bool(re.search(r"rizin", ev, re.I))))
+
+    # 名簿ファイル由来のRIZIN大会が、大会ファイルにない場合の警告
+    ev_names = {x["event"] for x in bouts if x["wc"]}
     for x in bouts:
-        if {x["a"], x["b"]} == {me, opp} and abs(d2o(x["date"]) - o) <= 3:
-            return x
-    return None
+        if x["rizin"] and not x["wc"]:
+            if verbose: print("note: RIZIN bout only in roster file:", x["date"], x["event"], x["a"], "vs", x["b"])
 
-for key, me in ROSTER.items():
-    path = os.path.join(SRC, key + ".txt")
-    if not os.path.exists(path): continue
-    for line in open(path, encoding="utf-8"):
-        line = line.strip()
-        if not line or line.startswith("Res|"): continue
-        p = (line.split("|") + [""] * 9)[:9]
-        res, _, opp, method, event, dt, rnd, tm, note = [x.strip() for x in p]
-        opp, _c = norm_name(opp)
-        hit = find_match(me, opp, dt)
-        if hit:
-            if not hit["note"] and note: hit["note"] = note
-            if not hit["round"] and rnd: hit["round"] = rnd
-            if not hit["time"] and tm: hit["time"] = tm
-            continue
-        res = res.capitalize()
-        if res == "Win": a, b, out = me, opp, "W"
-        elif res == "Loss": a, b, out = opp, me, "W"
-        elif res == "Draw": a, b, out = me, opp, "D"
-        else: a, b, out = me, opp, "NC"
-        ev = norm_event(event)
-        bouts.append(dict(date=dt, event=ev, a=a, b=b, outcome=out, method=method, round=rnd,
-                          time=tm, note=note, wc="", rizin=bool(re.search(r"rizin", ev, re.I))))
+    bouts.sort(key=lambda r: (r["date"], r["event"]))
 
-# 名簿ファイル由来のRIZIN大会が、大会ファイルにない場合の警告
-ev_names = {x["event"] for x in bouts if x["wc"]}
-for x in bouts:
-    if x["rizin"] and not x["wc"]:
-        print("note: RIZIN bout only in roster file:", x["date"], x["event"], x["a"], "vs", x["b"])
+    # ---- 選手ID ----
+    names = sorted({x["a"] for x in bouts} | {x["b"] for x in bouts})
+    key_of, used = {}, set()
+    for n in names:
+        k = NAME2KEY.get(n) or slug(n)
+        while k in used and n not in NAME2KEY: k += "-2"
+        used.add(k); key_of[n] = k
 
-bouts.sort(key=lambda r: (r["date"], r["event"]))
+    # 最新の試合の階級を、その選手の主な階級とする
+    last_div = {}
+    for x in bouts:
+        d = div_of(x["wc"]) if x["wc"] else ""
+        if d:
+            last_div[x["a"]] = d; last_div[x["b"]] = d
 
-# ---- 選手ID ----
-names = sorted({x["a"] for x in bouts} | {x["b"] for x in bouts})
-key_of, used = {}, set()
-for n in names:
-    k = NAME2KEY.get(n) or slug(n)
-    while k in used and n not in NAME2KEY: k += "-2"
-    used.add(k); key_of[n] = k
+    people = {}
+    for n in names:
+        c = countries[n].most_common(1)[0][0] if countries[n] else ""
+        people[key_of[n]] = [n, c, last_div.get(n, "")]
 
-# 最新の試合の階級を、その選手の主な階級とする
-last_div = {}
-for x in bouts:
-    d = div_of(x["wc"]) if x["wc"] else ""
-    if d:
-        last_div[x["a"]] = d; last_div[x["b"]] = d
+    # 大会ファイルは各大会の先頭がメインイベント（Wikipediaの並び順）
+    seen_ev = set()
+    for x in bouts:
+        k = (x["date"], x["event"])
+        x["main"] = bool(x["wc"]) and k not in seen_ev
+        if x["wc"]: seen_ev.add(k)
 
-people = {}
-for n in names:
-    c = countries[n].most_common(1)[0][0] if countries[n] else ""
-    people[key_of[n]] = [n, c, last_div.get(n, "")]
+    cols = ["date","event","winner","loser","outcome","cat","method","round","time","title","note","rizin","main"]
+    out = []
+    for x in bouts:
+        cat = method_cat(x["method"]) if x["outcome"] == "W" else x["outcome"]
+        title = 1 if re.search(r"Championship", x["note"]) and re.search(r"Won|Defended|For the|Lost", x["note"]) else 0
+        out.append([x["date"], x["event"], key_of[x["a"]], key_of[x["b"]], x["outcome"], cat, x["method"],
+                    x["round"], x["time"], title, x["note"], 1 if x["rizin"] else 0, 1 if x["main"] else 0])
 
-# 大会ファイルは各大会の先頭がメインイベント（Wikipediaの並び順）
-seen_ev = set()
-for x in bouts:
-    k = (x["date"], x["event"])
-    x["main"] = bool(x["wc"]) and k not in seen_ev
-    if x["wc"]: seen_ev.add(k)
+    js = ("/* 自動生成: python3 tools/build_fights.py （data-src から作成。直接編集しない） */\n"
+          "window.FIGHT_COLS=" + json.dumps(cols) + ";\n"
+          "window.PEOPLE=" + json.dumps(people, ensure_ascii=False, separators=(",", ":")) + ";\n"
+          "window.FIGHTS=[\n" + ",\n".join(json.dumps(r, ensure_ascii=False, separators=(",", ":")) for r in out) + "\n];\n")
+    if write:
+        open(os.path.join(root, "data", "fights.js"), "w", encoding="utf-8").write(js)
+    riz = [x for x in out if x[11]]
+    if verbose: print(len(out), "bouts total,", len(riz), "RIZIN bouts,", len({x[1] for x in riz}), "RIZIN events,",
+          len({p for x in riz for p in (x[2], x[3])}), "RIZIN fighters")
+    return dict(cols=cols, people=people, fights=out, bouts=bouts, key_of=key_of)
 
-cols = ["date","event","winner","loser","outcome","cat","method","round","time","title","note","rizin","main"]
-out = []
-for x in bouts:
-    cat = method_cat(x["method"]) if x["outcome"] == "W" else x["outcome"]
-    title = 1 if re.search(r"Championship", x["note"]) and re.search(r"Won|Defended|For the|Lost", x["note"]) else 0
-    out.append([x["date"], x["event"], key_of[x["a"]], key_of[x["b"]], x["outcome"], cat, x["method"],
-                x["round"], x["time"], title, x["note"], 1 if x["rizin"] else 0, 1 if x["main"] else 0])
 
-js = ("/* 自動生成: python3 tools/build_fights.py （data-src から作成。直接編集しない） */\n"
-      "window.FIGHT_COLS=" + json.dumps(cols) + ";\n"
-      "window.PEOPLE=" + json.dumps(people, ensure_ascii=False, separators=(",", ":")) + ";\n"
-      "window.FIGHTS=[\n" + ",\n".join(json.dumps(r, ensure_ascii=False, separators=(",", ":")) for r in out) + "\n];\n")
-open(os.path.join(ROOT, "data", "fights.js"), "w", encoding="utf-8").write(js)
-riz = [x for x in out if x[11]]
-print(len(out), "bouts total,", len(riz), "RIZIN bouts,", len({x[1] for x in riz}), "RIZIN events,",
-      len({p for x in riz for p in (x[2], x[3])}), "RIZIN fighters")
+if __name__ == "__main__":
+    build()

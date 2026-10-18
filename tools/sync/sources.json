@@ -1,0 +1,72 @@
+{
+  "_comment": "週次データ更新の取得元と設定。auto=自動取得、detect=新着URLの検知のみ、manual=手動確認、none=使用しない",
+  "years": "current+previous",
+  "rizinRecentDays": 8,
+  "wikidataPins": {},
+  "sources": [
+    {
+      "id": "wikipedia",
+      "name": "Wikipedia（英語版）年別ページ「YYYY in Rizin Fighting Federation」",
+      "url": "https://en.wikipedia.org/wiki/2026_in_Rizin_Fighting_Federation",
+      "mode": "auto",
+      "use": "試合結果（新規大会・訂正候補・補完候補）",
+      "access": "MediaWiki 公式API（action=parse）。User-Agent を明示し maxlag を付けて週1回だけ取得",
+      "terms": "API利用はWikimediaのAPI利用ガイドラインで許可。本文は CC BY-SA 4.0（事実データの照合に使用）",
+      "checked": "2026-10-18"
+    },
+    {
+      "id": "wikidata",
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/",
+      "mode": "auto",
+      "use": "プロフィール・SNSの参考候補（自動反映はしない）",
+      "access": "Wikibase 公式API（wbsearchentities / wbgetentities）",
+      "terms": "データは CC0。誰でも編集できるため本人確認・公式確認が必要",
+      "checked": "2026-10-18"
+    },
+    {
+      "id": "rizin",
+      "name": "RIZIN公式サイト",
+      "url": "https://jp.rizinff.com/",
+      "mode": "detect",
+      "use": "新着・更新記事のURL検知（試合結果・カード発表の確認用リスト）",
+      "access": "robots.txt は全ページ許可、公開サイトマップ（sitemap-index.xml）の URL と更新日時のみ取得。記事本文は取得しない",
+      "terms": "利用規約ページが見当たらず、コンテンツ再利用の許諾は確認できない（© ドリームファクトリーワールドワイド）。本文の自動取り込みは行わない。確認した結果は inbox/events.txt で取り込む",
+      "checked": "2026-10-18"
+    },
+    {
+      "id": "sherdog",
+      "name": "Sherdog",
+      "url": "https://www.sherdog.com/",
+      "mode": "none",
+      "use": "-",
+      "access": "-",
+      "terms": "利用規約（2021-01-10）でロボット・スパイダー等の自動化システムと、コンテンツの集約・他所での利用を禁止",
+      "checked": "2026-10-18"
+    },
+    {
+      "id": "tapology",
+      "name": "Tapology",
+      "url": "https://www.tapology.com/",
+      "mode": "none",
+      "use": "-",
+      "access": "-",
+      "terms": "機械収集の許諾・公開APIを確認できない（robots.txt の取得も不可）。無許可の自動取得は行わない",
+      "checked": "2026-10-18"
+    },
+    {
+      "id": "official-sns",
+      "name": "選手・所属ジム・大会主催者の公式SNS",
+      "url": "",
+      "mode": "manual",
+      "use": "プロフィール・SNSの本人確認",
+      "access": "X API は有料、Instagram API は本人アカウントの許可が必要なため自動取得しない",
+      "terms": "管理者が目視で確認し inbox/sns.json に根拠付きで記入",
+      "checked": "2026-10-18"
+    }
+  ],
+  "watchUrls": [
+    {"url": "https://jp.rizinff.com/_tags/RIZIN%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9", "note": "RIZIN公式ニュース一覧", "lastManualCheck": ""},
+    {"url": "https://en.wikipedia.org/wiki/Rizin_Fighting_Federation", "note": "王者一覧・大会予定", "lastManualCheck": ""}
+  ]
+}

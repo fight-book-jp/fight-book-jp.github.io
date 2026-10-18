@@ -1,0 +1,4 @@
+# 承認済みの試合結果をここに1行ずつ書くと、週次バッチが data-src/events/<年>.txt に取り込みます。
+# 形式: 大会名|YYYY-MM-DD|階級|国コード 勝者|国コード 敗者|W(またはD/NC)|決着方法|R|時間|メモ
+# 例（実在しない例なので取り込まれません。# で始まる行は無視されます）:
+# Rizin 99|2099-01-01|Featherweight|JPN Taro Example|JPN Jiro Example|W|Decision (unanimous)|3|5:00|

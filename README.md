@@ -52,3 +52,32 @@
 
 - `CATCHPHRASE`：選手キー → キャッチコピー（参考：data-mma.com/nickname）。選手詳細ヘッダーの背景に表示。
 - `SNS_EXTRA`：選手キー → SNSリンク。名簿外の選手にも使え、`youtube` を入れると SOCIAL UPDATES の自動取得対象になります（本人の公式チャンネルのみ登録）。
+
+## 週次データ更新（毎週月曜 5:00・日本時間）
+
+`.github/workflows/weekly-update.yml` が外部データを確認し、変更があれば **Pull Request** を作ります。マージすると GitHub Pages に反映されます。
+手動で実行するときは Actions → Weekly data update → Run workflow。
+
+| 取得元 | 方法 | 使い道 |
+|---|---|---|
+| Wikipedia「YYYY in Rizin Fighting Federation」（今年・前年） | MediaWiki 公式API | 試合結果。既存に無い大会で曖昧な点が無いものだけ自動追加 |
+| Wikidata | 公式API | プロフィール・SNS の**参考候補**（自動反映しない） |
+| RIZIN公式 | 公開サイトマップの URL のみ（本文は取得しない） | 新着記事の手動確認リスト |
+| Sherdog・Tapology・選手SNS | 使わない（利用規約・有料API） | — |
+
+取得元ごとの利用条件は `tools/sync/sources.json` に記録しています。
+
+- **自動で入るもの**：既存に無い大会の結果（選手名の照合がすべて確実なとき）→ `data-src/events/<年>.txt` に追記し、`tools/build_fights.py` で `data/fights.js` を再生成。
+- **要確認リスト** `data-src/sync/review.json`：既存試合の訂正候補・空欄の補完候補・未登録の試合・選手名の照合が曖昧なもの・プロフィール/SNS候補。自動では反映しません。対応不要なものは ID を `data-src/sync/ignore.json` に追加。
+- **承認済みデータの取り込み**
+  - `data-src/sync/inbox/events.txt`：RIZIN公式などで確認した結果を大会ファイルと同じ形式で書くと、次回のバッチで重複チェックして取り込み。
+  - `data-src/sync/inbox/sns.json`：本人確認済みの SNS を `verified: true` と根拠 `evidence` 付きで書くと `data/profiles.js` に反映。
+- **変更履歴**：`data-src/sync/profile-sources.json`（Wikidata の値・情報源・初回確認日、変更履歴）。
+- **安全策**：変更前後に `tools/sync/validate.py` で検証（二重登録・存在しない選手キー・日付形式・勝敗と決着方法の矛盾など）。失敗したら変更をすべて取り消し、PR は作りません。変更が無ければ PR を作らず、同じ内容の PR も重複して作りません。
+- **レポート**：Actions の実行サマリー、PR 本文、artifact（`weekly-report-*`）。
+- **Wikidata の照合**：同姓同名を避けるため、説明文が格闘家の候補が1件だけのときだけ採用。特定できない選手は `sources.json` の `wikidataPins` に `"key": "Q番号"` を書くと固定。
+
+`.github/workflows/data-check.yml` は data-src を変更したときに検証・テストし、main では `data/fights.js` を再生成します。
+
+テスト：`python3 -m unittest discover -s tools/sync/tests -v`（外部にはアクセスしません）
+初回設定：Settings → Actions → General → Workflow permissions で「Allow GitHub Actions to create and approve pull requests」にチェック。
