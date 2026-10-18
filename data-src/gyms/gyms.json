@@ -1,68 +1,399 @@
 {
  "_comment": "ジムの台帳（手で管理）。aliases に表記ゆれ・英語名・旧名を書くと同じジムとしてまとめる。確認できた項目だけ書き、出典を sources に残す。書いていない項目は画面で「未確認」になる",
  "gyms": [
-  {"id": "american-top-team", "name": "アメリカン・トップチーム", "name_en": "American Top Team",
-   "aliases": ["American Top Team", "アメリカン・トップチーム", "ATT"],
-   "country": "アメリカ", "prefecture": "フロリダ州", "city": "ココナッツクリーク", "established_year": 2001,
-   "representative": "Dan Lambert（創設者）", "official_website": "https://www.americantopteam.com/",
-   "sources": ["https://en.wikipedia.org/wiki/American_Top_Team"], "verified_at": "2026-10-18"},
-  {"id": "japan-top-team", "name": "JAPAN TOP TEAM", "name_en": "JAPAN TOP TEAM",
-   "aliases": ["JAPAN TOP TEAM", "JAPAN TOP TEAM （トライフォース赤坂）", "Japan Top Team", "JTT", "トライフォース赤坂", "Tri-Force Akasaka"],
-   "country": "日本", "prefecture": "東京都", "city": "港区", "address": "東京都港区赤坂", "established_year": 2013,
-   "representative": "伊藤俊亮", "official_website": "https://japan-tt.com/",
+  {
+   "id": "american-top-team",
+   "name": "アメリカン・トップチーム",
+   "name_en": "American Top Team",
+   "aliases": [
+    "American Top Team",
+    "アメリカン・トップチーム",
+    "ATT"
+   ],
+   "country": "アメリカ",
+   "prefecture": "フロリダ州",
+   "city": "ココナッツクリーク",
+   "established_year": 2001,
+   "representative": "Dan Lambert（創設者）",
+   "official_website": "https://www.americantopteam.com/",
+   "sources": [
+    "https://en.wikipedia.org/wiki/American_Top_Team"
+   ],
+   "verified_at": "2026-10-18",
+   "abbr": "ATT"
+  },
+  {
+   "id": "japan-top-team",
+   "name": "JAPAN TOP TEAM",
+   "name_en": "JAPAN TOP TEAM",
+   "aliases": [
+    "JAPAN TOP TEAM",
+    "JAPAN TOP TEAM （トライフォース赤坂）",
+    "Japan Top Team",
+    "JTT",
+    "トライフォース赤坂",
+    "Tri-Force Akasaka"
+   ],
+   "country": "日本",
+   "prefecture": "東京都",
+   "city": "港区",
+   "address": "東京都港区赤坂",
+   "established_year": 2013,
+   "representative": "伊藤俊亮",
+   "official_website": "https://japan-tt.com/",
    "note": "2013年に「トライフォース六本木」として設立（Wikipedia）",
-   "sources": ["https://ja.wikipedia.org/wiki/JAPAN_TOP_TEAM"], "verified_at": "2026-10-18"},
-  {"id": "krazy-bee", "name": "KRAZY BEE", "name_en": "KRAZY BEE",
-   "aliases": ["KRAZY BEE", "Krazy Bee", "KILLER BEE", "クレイジービー"],
-   "country": "日本", "prefecture": "東京都", "city": "大田区", "address": "東京都大田区中馬込（YAMAMOTO SPORTS ACADEMY内）",
-   "official_website": "https://krazybee.jp/", "note": "2008年にKILLER BEEから改称（Wikipedia）",
-   "sources": ["https://ja.wikipedia.org/wiki/KRAZY_BEE"], "verified_at": "2026-10-18"},
-  {"id": "the-blackbelt-japan", "name": "THE BLACKBELT JAPAN", "name_en": "THE BLACKBELT JAPAN",
-   "aliases": ["THE BLACKBELT JAPAN", "The Blackbelt Japan", "パラエストラ柏", "Paraestra Kashiwa"],
-   "country": "日本", "prefecture": "千葉県", "city": "柏市", "representative": "鶴屋浩",
+   "sources": [
+    "https://ja.wikipedia.org/wiki/JAPAN_TOP_TEAM"
+   ],
+   "verified_at": "2026-10-18",
+   "abbr": "JTT"
+  },
+  {
+   "id": "krazy-bee",
+   "name": "KRAZY BEE",
+   "name_en": "KRAZY BEE",
+   "aliases": [
+    "KRAZY BEE",
+    "Krazy Bee",
+    "KILLER BEE",
+    "クレイジービー"
+   ],
+   "country": "日本",
+   "prefecture": "東京都",
+   "city": "大田区",
+   "address": "東京都大田区中馬込（YAMAMOTO SPORTS ACADEMY内）",
+   "official_website": "https://krazybee.jp/",
+   "note": "2008年にKILLER BEEから改称（Wikipedia）",
+   "sources": [
+    "https://ja.wikipedia.org/wiki/KRAZY_BEE"
+   ],
+   "verified_at": "2026-10-18"
+  },
+  {
+   "id": "the-blackbelt-japan",
+   "name": "THE BLACKBELT JAPAN",
+   "name_en": "THE BLACKBELT JAPAN",
+   "aliases": [
+    "THE BLACKBELT JAPAN",
+    "The Blackbelt Japan",
+    "パラエストラ柏",
+    "Paraestra Kashiwa"
+   ],
+   "country": "日本",
+   "prefecture": "千葉県",
+   "city": "柏市",
+   "representative": "鶴屋浩",
    "note": "2024年3月にパラエストラ千葉ネットワーク・Theパラエストラ沖縄がパラエストラネットワークから独立して結成。本部は柏市、那覇市に支部（Wikipedia）",
-   "sources": ["https://ja.wikipedia.org/wiki/THE_BLACKBELT_JAPAN"], "verified_at": "2026-10-18"},
-  {"id": "brave", "name": "BRAVE", "name_en": "BRAVE GYM", "aliases": ["BRAVE", "BRAVE GYM", "Brave Gym"],
-   "country": "日本", "prefecture": "東京都", "city": "足立区（北千住）", "representative": "宮田和幸",
-   "official_website": "https://brave-gym.tokyo/", "note": "北千住で開設。三郷・草加・世田谷・麻布十番に支部（Wikipedia）",
-   "sources": ["https://ja.wikipedia.org/wiki/BRAVE_(格闘技ジム)"], "verified_at": "2026-10-18"},
-  {"id": "bonsai-jiujitsu", "name": "ボンサイ柔術", "name_en": "Bonsai Jiu-Jitsu", "aliases": ["ボンサイ柔術", "Bonsai Jiu-Jitsu", "Bonsai Jiu Jitsu", "Bonsai BJJ"],
-   "country": "日本", "prefecture": "静岡県", "city": "磐田市", "established_year": 1993, "representative": "アジウソン・ソウザ（創設者）",
+   "sources": [
+    "https://ja.wikipedia.org/wiki/THE_BLACKBELT_JAPAN"
+   ],
+   "verified_at": "2026-10-18"
+  },
+  {
+   "id": "brave",
+   "name": "BRAVE",
+   "name_en": "BRAVE GYM",
+   "aliases": [
+    "BRAVE",
+    "BRAVE GYM",
+    "Brave Gym"
+   ],
+   "country": "日本",
+   "prefecture": "東京都",
+   "city": "足立区（北千住）",
+   "representative": "宮田和幸",
+   "official_website": "https://brave-gym.tokyo/",
+   "note": "北千住で開設。三郷・草加・世田谷・麻布十番に支部（Wikipedia）",
+   "sources": [
+    "https://ja.wikipedia.org/wiki/BRAVE_(格闘技ジム)"
+   ],
+   "verified_at": "2026-10-18"
+  },
+  {
+   "id": "bonsai-jiujitsu",
+   "name": "ボンサイ柔術",
+   "name_en": "Bonsai Jiu-Jitsu",
+   "aliases": [
+    "ボンサイ柔術",
+    "Bonsai Jiu-Jitsu",
+    "Bonsai Jiu Jitsu",
+    "Bonsai BJJ"
+   ],
+   "country": "日本",
+   "prefecture": "静岡県",
+   "city": "磐田市",
+   "established_year": 1993,
+   "representative": "アジウソン・ソウザ（創設者）",
    "note": "1993年にブラジル・サンパウロで創立。日本の本部道場は静岡県磐田市、浜松・静岡に支部（Wikipedia）",
-   "sources": ["https://ja.wikipedia.org/wiki/ボンサイ柔術"], "verified_at": "2026-10-18"},
-  {"id": "kill-cliff-fc", "name": "キルクリフFC", "name_en": "Kill Cliff FC", "aliases": ["キルクリフFC", "Kill Cliff FC", "Kill Cliff"],
-   "country": "アメリカ", "prefecture": "フロリダ州", "city": "ディアフィールドビーチ", "established_year": 2017,
+   "sources": [
+    "https://ja.wikipedia.org/wiki/ボンサイ柔術"
+   ],
+   "verified_at": "2026-10-18"
+  },
+  {
+   "id": "kill-cliff-fc",
+   "name": "キルクリフFC",
+   "name_en": "Kill Cliff FC",
+   "aliases": [
+    "キルクリフFC",
+    "Kill Cliff FC",
+    "Kill Cliff"
+   ],
+   "country": "アメリカ",
+   "prefecture": "フロリダ州",
+   "city": "ディアフィールドビーチ",
+   "established_year": 2017,
    "representative": "Henri Hooft・Greg Jones（創設者）",
-   "sources": ["https://en.wikipedia.org/wiki/Kill_Cliff_FC"], "verified_at": "2026-10-18"},
-  {"id": "paraestra-hachioji", "name": "パラエストラ八王子", "name_en": "Paraestra Hachioji", "aliases": ["パラエストラ八王子", "Paraestra Hachioji"],
-   "country": "日本", "prefecture": "東京都", "city": "八王子市", "address": "東京都八王子市明神町1-25-10 伊橋ビル1F",
-   "sources": ["https://ja.wikipedia.org/wiki/パラエストラ"], "verified_at": "2026-10-18"},
-  {"id": "paraestra-ehime", "name": "パラエストラ愛媛", "name_en": "Paraestra Ehime", "aliases": ["パラエストラ愛媛", "Paraestra Ehime"],
-   "country": "日本", "prefecture": "愛媛県", "city": "松山市", "address": "愛媛県松山市市坪西町625-1 松山中央公園内 坊ちゃんスタジアムスポーツフロア1",
-   "sources": ["https://ja.wikipedia.org/wiki/パラエストラ"], "verified_at": "2026-10-18"},
-  {"id": "american-kickboxing-academy", "name": "アメリカン・キックボクシング・アカデミー", "name_en": "American Kickboxing Academy",
-   "aliases": ["アメリカン・キックボクシング・アカデミー", "American Kickboxing Academy", "AKA", "AKA (MMA)"]},
-  {"id": "jackson-wink-mma", "name": "ジャクソンズMMA", "name_en": "Jackson Wink MMA",
-   "aliases": ["ジャクソンズMMA", "Jackson's MMA", "Jackson's Mixed Martial Arts", "Jackson Wink MMA", "Jackson-Wink MMA", "Jackson's Submission Fighting"]},
-  {"id": "xtreme-couture", "name": "エクストリーム・クートゥア", "name_en": "Xtreme Couture", "aliases": ["エクストリーム・クートゥア", "Xtreme Couture"]},
-  {"id": "tiger-muay-thai", "name": "タイガームエタイ", "name_en": "Tiger Muay Thai", "aliases": ["タイガームエタイ", "Tiger Muay Thai"]},
-  {"id": "roufusport", "name": "ルーファスポーツ", "name_en": "Roufusport", "aliases": ["ルーファスポーツ", "Roufusport"]},
-  {"id": "pancrase-ism", "name": "パンクラスism", "name_en": "Pancrase ism", "aliases": ["パンクラスism", "Pancraseism", "Pancrase ism"]},
-  {"id": "fedor-team", "name": "チーム・ヒョードル", "name_en": "Fedor Team", "aliases": ["チーム・ヒョードル", "FedorTeam", "Fedor Team"]},
-  {"id": "cro-cop-team", "name": "チーム・クロコップ", "name_en": "Cro Cop Team", "aliases": ["チーム・クロコップ", "Cro Cop Team", "Cro Cop Squad Gym"]},
-  {"id": "gutsman-shooto-dojo", "name": "GUTSMAN・修斗道場", "name_en": "Gutsman Shooto Dojo", "aliases": ["GUTSMAN・修斗道場", "Gutsman Shooto Dojo"]},
-  {"id": "chakuriki", "name": "ドージョー・チャクリキ", "name_en": "Chakuriki Gym", "aliases": ["ドージョー・チャクリキ", "Chakuriki Gym", "Dojo Chakuriki"]},
-  {"id": "wajutsu-keishukai-gods", "name": "和術慧舟會GODS", "name_en": "Wajutsu Keishukai GODS", "aliases": ["和術慧舟會GODS", "Wajutsu Keishukai GODS"]},
-  {"id": "wajutsu-keishukai-hearts", "name": "和術慧舟會HEARTS", "name_en": "Wajutsu Keishukai HEARTS", "aliases": ["和術慧舟會HEARTS", "Wajutsu Keishukai HEARTS"]},
-  {"id": "cobra-kai-dojo", "name": "総合格闘技道場コブラ会", "name_en": "Cobra Kai MMA Dojo", "aliases": ["総合格闘技道場コブラ会", "Cobra Kai MMA Dojo"]},
-  {"id": "kiguchi-dojo", "name": "総合格闘技木口道場", "name_en": "Kiguchi Dojo", "aliases": ["総合格闘技木口道場", "Kiguchi Dojo"]},
-  {"id": "mach-dojo", "name": "マッハ道場", "name_en": "Mach Dojo", "aliases": ["マッハ道場", "Mach Dojo"]},
-  {"id": "k1-gym-pegasus", "name": "K-1ジム総本部チームペガサス", "name_en": "K-1 Gym Team Pegasus", "aliases": ["K-1ジム総本部チームペガサス", "K-1 Gym Team Pegasus"]},
-  {"id": "team-nogueira", "name": "チーム・ノゲイラ", "name_en": "Team Nogueira", "aliases": ["チーム・ノゲイラ", "Team Nogueira"]},
-  {"id": "team-bodyshop", "name": "ボディショップ・フィットネス", "name_en": "Team Bodyshop", "aliases": ["ボディショップ・フィットネス", "Team Bodyshop"]},
-  {"id": "sonic-squad", "name": "SONIC SQUAD", "name_en": "Sonic Squad", "aliases": ["SONIC SQUAD", "Sonic Squad", "SonicSquad"]},
-  {"id": "fighters-flow", "name": "FIGHTER'S FLOW", "name_en": "FIGHTER'S FLOW", "aliases": ["FIGHTER'S FLOW", "FIGHTER’S FLOW"]},
-  {"id": "alliance", "name": "ALLIANCE", "name_en": "Alliance", "aliases": ["ALLIANCE", "Alliance", "TEAM ALLIANCE"]},
-  {"id": "tribe-tokyo-mma", "name": "TRIBE TOKYO MMA", "name_en": "TRIBE TOKYO MMA", "aliases": ["TRIBE TOKYO MMA", "Tribe Tokyo MMA", "Tribe Tokyo M.M.A"]}
+   "sources": [
+    "https://en.wikipedia.org/wiki/Kill_Cliff_FC"
+   ],
+   "verified_at": "2026-10-18"
+  },
+  {
+   "id": "paraestra-hachioji",
+   "name": "パラエストラ八王子",
+   "name_en": "Paraestra Hachioji",
+   "aliases": [
+    "パラエストラ八王子",
+    "Paraestra Hachioji"
+   ],
+   "country": "日本",
+   "prefecture": "東京都",
+   "city": "八王子市",
+   "address": "東京都八王子市明神町1-25-10 伊橋ビル1F",
+   "sources": [
+    "https://ja.wikipedia.org/wiki/パラエストラ"
+   ],
+   "verified_at": "2026-10-18"
+  },
+  {
+   "id": "paraestra-ehime",
+   "name": "パラエストラ愛媛",
+   "name_en": "Paraestra Ehime",
+   "aliases": [
+    "パラエストラ愛媛",
+    "Paraestra Ehime"
+   ],
+   "country": "日本",
+   "prefecture": "愛媛県",
+   "city": "松山市",
+   "address": "愛媛県松山市市坪西町625-1 松山中央公園内 坊ちゃんスタジアムスポーツフロア1",
+   "sources": [
+    "https://ja.wikipedia.org/wiki/パラエストラ"
+   ],
+   "verified_at": "2026-10-18"
+  },
+  {
+   "id": "american-kickboxing-academy",
+   "name": "アメリカン・キックボクシング・アカデミー",
+   "name_en": "American Kickboxing Academy",
+   "aliases": [
+    "アメリカン・キックボクシング・アカデミー",
+    "American Kickboxing Academy",
+    "AKA",
+    "AKA (MMA)"
+   ],
+   "abbr": "AKA"
+  },
+  {
+   "id": "jackson-wink-mma",
+   "name": "ジャクソンズMMA",
+   "name_en": "Jackson Wink MMA",
+   "aliases": [
+    "ジャクソンズMMA",
+    "Jackson's MMA",
+    "Jackson's Mixed Martial Arts",
+    "Jackson Wink MMA",
+    "Jackson-Wink MMA",
+    "Jackson's Submission Fighting"
+   ]
+  },
+  {
+   "id": "xtreme-couture",
+   "name": "エクストリーム・クートゥア",
+   "name_en": "Xtreme Couture",
+   "aliases": [
+    "エクストリーム・クートゥア",
+    "Xtreme Couture"
+   ]
+  },
+  {
+   "id": "tiger-muay-thai",
+   "name": "タイガームエタイ",
+   "name_en": "Tiger Muay Thai",
+   "aliases": [
+    "タイガームエタイ",
+    "Tiger Muay Thai"
+   ]
+  },
+  {
+   "id": "roufusport",
+   "name": "ルーファスポーツ",
+   "name_en": "Roufusport",
+   "aliases": [
+    "ルーファスポーツ",
+    "Roufusport"
+   ]
+  },
+  {
+   "id": "pancrase-ism",
+   "name": "パンクラスism",
+   "name_en": "Pancrase ism",
+   "aliases": [
+    "パンクラスism",
+    "Pancraseism",
+    "Pancrase ism"
+   ]
+  },
+  {
+   "id": "fedor-team",
+   "name": "チーム・ヒョードル",
+   "name_en": "Fedor Team",
+   "aliases": [
+    "チーム・ヒョードル",
+    "FedorTeam",
+    "Fedor Team"
+   ]
+  },
+  {
+   "id": "cro-cop-team",
+   "name": "チーム・クロコップ",
+   "name_en": "Cro Cop Team",
+   "aliases": [
+    "チーム・クロコップ",
+    "Cro Cop Team",
+    "Cro Cop Squad Gym"
+   ]
+  },
+  {
+   "id": "gutsman-shooto-dojo",
+   "name": "GUTSMAN・修斗道場",
+   "name_en": "Gutsman Shooto Dojo",
+   "aliases": [
+    "GUTSMAN・修斗道場",
+    "Gutsman Shooto Dojo"
+   ]
+  },
+  {
+   "id": "chakuriki",
+   "name": "ドージョー・チャクリキ",
+   "name_en": "Chakuriki Gym",
+   "aliases": [
+    "ドージョー・チャクリキ",
+    "Chakuriki Gym",
+    "Dojo Chakuriki"
+   ]
+  },
+  {
+   "id": "wajutsu-keishukai-gods",
+   "name": "和術慧舟會GODS",
+   "name_en": "Wajutsu Keishukai GODS",
+   "aliases": [
+    "和術慧舟會GODS",
+    "Wajutsu Keishukai GODS"
+   ]
+  },
+  {
+   "id": "wajutsu-keishukai-hearts",
+   "name": "和術慧舟會HEARTS",
+   "name_en": "Wajutsu Keishukai HEARTS",
+   "aliases": [
+    "和術慧舟會HEARTS",
+    "Wajutsu Keishukai HEARTS"
+   ]
+  },
+  {
+   "id": "cobra-kai-dojo",
+   "name": "総合格闘技道場コブラ会",
+   "name_en": "Cobra Kai MMA Dojo",
+   "aliases": [
+    "総合格闘技道場コブラ会",
+    "Cobra Kai MMA Dojo"
+   ]
+  },
+  {
+   "id": "kiguchi-dojo",
+   "name": "総合格闘技木口道場",
+   "name_en": "Kiguchi Dojo",
+   "aliases": [
+    "総合格闘技木口道場",
+    "Kiguchi Dojo"
+   ]
+  },
+  {
+   "id": "mach-dojo",
+   "name": "マッハ道場",
+   "name_en": "Mach Dojo",
+   "aliases": [
+    "マッハ道場",
+    "Mach Dojo"
+   ]
+  },
+  {
+   "id": "k1-gym-pegasus",
+   "name": "K-1ジム総本部チームペガサス",
+   "name_en": "K-1 Gym Team Pegasus",
+   "aliases": [
+    "K-1ジム総本部チームペガサス",
+    "K-1 Gym Team Pegasus"
+   ]
+  },
+  {
+   "id": "team-nogueira",
+   "name": "チーム・ノゲイラ",
+   "name_en": "Team Nogueira",
+   "aliases": [
+    "チーム・ノゲイラ",
+    "Team Nogueira"
+   ]
+  },
+  {
+   "id": "team-bodyshop",
+   "name": "ボディショップ・フィットネス",
+   "name_en": "Team Bodyshop",
+   "aliases": [
+    "ボディショップ・フィットネス",
+    "Team Bodyshop"
+   ]
+  },
+  {
+   "id": "sonic-squad",
+   "name": "SONIC SQUAD",
+   "name_en": "Sonic Squad",
+   "aliases": [
+    "SONIC SQUAD",
+    "Sonic Squad",
+    "SonicSquad"
+   ]
+  },
+  {
+   "id": "fighters-flow",
+   "name": "FIGHTER'S FLOW",
+   "name_en": "FIGHTER'S FLOW",
+   "aliases": [
+    "FIGHTER'S FLOW",
+    "FIGHTER’S FLOW"
+   ]
+  },
+  {
+   "id": "alliance",
+   "name": "ALLIANCE",
+   "name_en": "Alliance",
+   "aliases": [
+    "ALLIANCE",
+    "Alliance",
+    "TEAM ALLIANCE"
+   ]
+  },
+  {
+   "id": "tribe-tokyo-mma",
+   "name": "TRIBE TOKYO MMA",
+   "name_en": "TRIBE TOKYO MMA",
+   "aliases": [
+    "TRIBE TOKYO MMA",
+    "Tribe Tokyo MMA",
+    "Tribe Tokyo M.M.A"
+   ]
+  }
  ]
 }

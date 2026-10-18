@@ -974,6 +974,7 @@
   const gymName = id => (GYMS[id] ? GYMS[id].name : id);
   const gymPlace = g => [g.country && g.country !== "日本" ? g.country : "", g.prefecture, g.city].filter(Boolean).join(" ") || g.location_text || "";
   const gymInitials = g => {
+    if (g.abbr) return g.abbr;   // 台帳で決めた略称（例：JAPAN TOP TEAM → JTT）
     const en = (g.name_en || (/^[\x00-\x7f]+$/.test(g.name) ? g.name : "")).replace(/[^A-Za-z0-9 ]/g, " ").trim();
     if (en) { const w = en.split(/\s+/).filter(x => !/^(the|of|and|mma|gym|team|fc)$/i.test(x)); return (w.length > 1 ? w.slice(0, 3).map(x => x[0]) .join("") : (w[0] || en).slice(0, 3)).toUpperCase(); }
     return [...g.name.replace(/[・\s]/g, "")].slice(0, 2).join("");
