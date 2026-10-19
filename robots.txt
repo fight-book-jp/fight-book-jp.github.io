@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fight-book-jp.github.io/sitemap.xml

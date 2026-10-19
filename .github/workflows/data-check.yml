@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - "data-src/**"
+      - "!data-src/community/**"
       - "tools/build_fights.py"
       - "tools/sync/**"
       - "tools/gyms/**"

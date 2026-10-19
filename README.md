@@ -95,3 +95,10 @@
 - 戦績：既存の試合データから集計。「現所属選手のRIZIN通算（参考値）」と「所属期間（年）が確認できた試合のみ」を区別して表示。
 - Googleの評価・口コミ：Places API は有料で、取得結果の保存も規約上制限があるため取得せず、Googleマップへのリンクのみ表示。
 - テスト：`python3 -m unittest discover -s tools/gyms -p 'test_*.py'`
+
+## ファン参加機能（見たい対戦カード：`#/cards`・`#/c/{id}`・`#/create`・`#/me`）
+- ファンが対戦カードを作り、「見たい！」「面白い」・コメント（返信1階層）・保存・通報で参加する機能。ログインはメールアドレス＋パスワード。
+- データは Supabase（無料プラン）。設定手順・運営の作業・指標の見方は `supabase/README.md`。
+- `js/community-config.js` が未設定のあいだは機能が表示されない（架空のカードや票は出さない）。
+- 共有ページ `/matchups/{id}/`（Open Graph・X カード・共有画像）とサイトマップは、`.github/workflows/community-pages.yml` が約10分ごとに生成。
+- 画面のコード：`js/community.js`。データベース：`supabase/schema.sql`（テスト：`supabase/tests/`）。

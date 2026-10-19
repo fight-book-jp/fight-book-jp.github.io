@@ -1,0 +1,28 @@
+# ファン参加機能のデータベース（supabase/schema.sql）を本物の PostgreSQL で検証
+name: Community check
+on:
+  push:
+    branches: [main]
+    paths: ["supabase/**", "tools/community/**", ".github/workflows/community-check.yml"]
+  pull_request:
+    paths: ["supabase/**", "tools/community/**"]
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: pw
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q psycopg2-binary
+      - name: schema.sql のテスト
+        env:
+          PGDSN: postgresql://postgres:pw@localhost/postgres
+        run: python3 supabase/tests/test_schema.py

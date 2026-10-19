@@ -1,0 +1,46 @@
+# ファンの対戦カードごとの共有ページ（/matchups/{id}/）・共有画像・サイトマップを作る
+# 公開キーで公開データだけを読み、変化があったカードだけを作り直してコミットする。
+name: Community pages
+on:
+  schedule:
+    - cron: "*/10 * * * *"       # 約10分ごと（GitHub の混雑で遅れることがあります）
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["index.html", "tools/community/**", "js/community-config.js"]
+permissions:
+  contents: write
+concurrency:
+  group: community-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: 取得
+        id: fetch
+        run: |
+          set +e
+          python3 tools/community/fetch_cards.py /tmp/cards.json
+          code=$?
+          if [ $code -eq 3 ]; then echo "skip=1" >> "$GITHUB_OUTPUT"; exit 0; fi
+          exit $code
+      - name: 日本語フォントと画像ライブラリ
+        if: steps.fetch.outputs.skip != '1'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk >/dev/null
+          pip install -q pillow
+      - name: ページを作る
+        if: steps.fetch.outputs.skip != '1'
+        run: |
+          node tools/community/dump_names.js > /tmp/names.json
+          python3 tools/community/build_pages.py --cards /tmp/cards.json --names /tmp/names.json
+      - name: コミット
+        if: steps.fetch.outputs.skip != '1'
+        run: |
+          git add -A matchups 404.html sitemap.xml robots.txt data-src/community || true
+          if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "共有ページを更新"
+          git pull -q --rebase origin main && git push -q origin HEAD:main

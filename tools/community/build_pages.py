@@ -1,0 +1,202 @@
+"""ファンの対戦カードごとの共有ページ（/matchups/{id}/）と共有画像・サイトマップを作る
+
+GitHub Pages は静的配信なので、X などが JavaScript を動かさずに読む
+タイトル・説明・画像（Open Graph / X カード）を、カードごとの HTML に書き込んでおく。
+
+  python3 tools/community/build_pages.py --cards cards.json --names names.json
+
+  cards.json : Supabase の export_cards() の結果（公開キーで読める範囲だけ）
+  names.json : tools/community/dump_names.js の出力
+
+* 共有画像には投票数を載せない（X のキャッシュで古い数字が残るため）。
+* 選手の写真は使わない（権利を確認できないため）。文字だけで構成する。
+* 非公開になったカードは noindex の「非公開」ページに置き換え、サイトマップから外す。
+* 変化のないカードは作り直さない（manifest でハッシュを比較）。
+"""
+import argparse
+import hashlib
+import html
+import json
+import os
+import re
+import sys
+from datetime import datetime, timezone
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+SITE = "https://fight-book-jp.github.io"
+OUT_DIR = os.path.join(ROOT, "matchups")
+MANIFEST = os.path.join(ROOT, "data-src", "community", "pages.json")
+RULES = {"mma": "MMA", "kickboxing": "キックボクシング", "grappling": "グラップリング", "boxing": "ボクシング"}
+CONDS = {"standard": "", "title": "タイトル戦", "catchweight": "契約体重", "openweight": "無差別級"}
+FONT_CANDIDATES = [
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc",
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc",
+]
+ID_RE = re.compile(r"^[A-Za-z0-9]{6,20}$")
+VERSION = "1"   # 画像やページの作りを変えたら上げる（全カードを作り直す）
+
+
+def rule_label(c):
+    r = RULES.get(c["rule"], c["rule"])
+    k = CONDS.get(c.get("cond") or "standard", "")
+    return f"{r}・{k}" if k else r
+
+
+def esc(s):
+    return html.escape(str(s or ""), quote=True)
+
+
+def page_html(template, c, names, hidden):
+    url = f"{SITE}/matchups/{c['id']}/"
+    a, b = names[c["fa"]], names[c["fb"]]
+    origin = "編集部提案" if c.get("origin") == "editorial" else "ファン提案"
+    if hidden:
+        title = "非公開のカード｜FIGHT BOOK"
+        desc = "このカードは非公開になりました。"
+        head = (f'<meta name="robots" content="noindex">\n<meta property="og:title" content="{esc(title)}">\n'
+                f'<meta property="og:description" content="{esc(desc)}">\n<meta name="twitter:card" content="summary">\n')
+        body = '<div class="wrap"><p>このカードは非公開になりました。</p><p><a href="/#/cards">ファンの見たい対戦へ</a></p></div>'
+    else:
+        title = f"{a['name']} vs {b['name']}（{rule_label(c)}）この対戦、見たい？｜FIGHT BOOK"
+        reason = (c.get("reason") or "").strip()
+        desc = (f"{origin}・未決定。{a['name']}（{a['division'] or '階級不明'}）と{b['name']}（{b['division'] or '階級不明'}）の"
+                f"{rule_label(c)}を見たいかどうか、ファンが「見たい！」とコメントで語り合うページです。")
+        if reason:
+            desc = f"「{reason[:80]}」— {desc}"
+        img = f"{url}og.png?v={c['_hash'][:8]}"
+        head = (f'<link rel="canonical" href="{url}">\n'
+                f'<meta property="og:type" content="article">\n<meta property="og:site_name" content="FIGHT BOOK">\n'
+                f'<meta property="og:url" content="{url}">\n<meta property="og:title" content="{esc(title)}">\n'
+                f'<meta property="og:description" content="{esc(desc)}">\n<meta property="og:image" content="{img}">\n'
+                f'<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n'
+                f'<meta property="og:image:alt" content="{esc(a["name"])} vs {esc(b["name"])}（{esc(rule_label(c))}）この対戦、見たい？ ファン提案・未決定">\n'
+                f'<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:title" content="{esc(title)}">\n'
+                f'<meta name="twitter:description" content="{esc(desc)}">\n<meta name="twitter:image" content="{img}">\n')
+        # JavaScript が動く前・動かない環境でも読める本文（読み込み後はアプリが置き換える）
+        body = (f'<div class="wrap"><p class="note">{origin}・未決定（実際の対戦を決めるものではありません）</p>'
+                f'<h1>{esc(a["name"])}（{esc(a["en"])}） vs {esc(b["name"])}（{esc(b["en"])}）</h1>'
+                f'<p>ルール：{esc(rule_label(c))}</p>'
+                + (f'<blockquote>{esc(reason)}</blockquote>' if reason else "")
+                + f'<p><a href="/#/fighter/{esc(c["fa"])}">{esc(a["name"])}の選手ページ</a> ・ <a href="/#/fighter/{esc(c["fb"])}">{esc(b["name"])}の選手ページ</a> ・ <a href="/#/cards">ほかのカード</a></p></div>')
+    out = template
+    out = out.replace("<head>", '<head>\n<base href="/">', 1)
+    out = re.sub(r"<title>.*?</title>", f"<title>{esc(title)}</title>", out, count=1, flags=re.S)
+    out = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc(desc)}">\n{head}', out, count=1)
+    out = out.replace('<main id="view"></main>', f'<main id="view">{body}</main>', 1)
+    return out
+
+
+def not_found_html(template):
+    out = template.replace("<head>", '<head>\n<base href="/">\n<meta name="robots" content="noindex">', 1)
+    return out
+
+
+def font(size):
+    from PIL import ImageFont
+    for f in FONT_CANDIDATES:
+        if os.path.exists(f):
+            for idx in (0, 1, 2, 3):      # .ttc の中から日本語（JP）を探す
+                try:
+                    ft = ImageFont.truetype(f, size, index=idx)
+                    if "JP" in " ".join(ft.getname()):
+                        return ft
+                except OSError:
+                    break
+            return ImageFont.truetype(f, size)
+    raise SystemExit("日本語フォントが見つかりません（fonts-noto-cjk を入れてください）")
+
+
+def fit(draw, text, max_w, size, min_size=40):
+    while size > min_size:
+        f = font(size)
+        if draw.textlength(text, font=f) <= max_w:
+            return f
+        size -= 4
+    return font(min_size)
+
+
+def og_image(c, names, path):
+    from PIL import Image, ImageDraw
+    W, Hh = 1200, 630
+    BG, INK, MUTED, ACC, RED, BLUE, GOLD = "#2E3A1F", "#F7F6F0", "#C3C8B1", "#B5C783", "#D06A52", "#6F95C4", "#E3CF8F"
+    im = Image.new("RGB", (W, Hh), BG)
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, Hh - 14, W, Hh], fill=ACC)
+    a, b = names[c["fa"]]["name"], names[c["fb"]]["name"]
+    f_small, f_mid = font(30), font(40)
+    d.text((64, 52), "この対戦、見たい？", font=font(46), fill=GOLD)
+    tag = "編集部提案・未決定" if c.get("origin") == "editorial" else "ファン提案・未決定"
+    tw = d.textlength(tag, font=f_small)
+    d.rounded_rectangle([W - 64 - tw - 32, 50, W - 64, 104], radius=27, outline=MUTED, width=2)
+    d.text((W - 64 - tw - 16, 59), tag, font=f_small, fill=MUTED)
+    # 2人の名前（長い名前は文字を小さく）
+    fa, fb = fit(d, a, 1060, 96), fit(d, b, 1060, 96)
+    d.rectangle([64, 160, 76, 268], fill=RED)
+    d.text((100, 160), a, font=fa, fill=INK)
+    d.text((100, 290), "VS", font=font(52), fill=MUTED)
+    d.rectangle([64, 372, 76, 480], fill=BLUE)
+    d.text((100, 372), b, font=fb, fill=INK)
+    d.text((64, 528), rule_label(c), font=f_mid, fill=ACC)
+    site = "FIGHT BOOK"
+    d.text((W - 64 - d.textlength(site, font=f_mid), 528), site, font=f_mid, fill=INK)
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    im.save(path, "PNG", optimize=True)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--cards", required=True)
+    ap.add_argument("--names", required=True)
+    ap.add_argument("--no-images", action="store_true", help="画像を作らない（テスト用）")
+    args = ap.parse_args()
+    cards = json.load(open(args.cards, encoding="utf-8"))
+    names = json.load(open(args.names, encoding="utf-8"))
+    template = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
+    tpl_hash = hashlib.sha1((template + VERSION).encode()).hexdigest()
+    manifest = json.load(open(MANIFEST, encoding="utf-8")) if os.path.exists(MANIFEST) else {}
+    new_manifest, sitemap, changed, skipped = {}, [], 0, 0
+
+    open(os.path.join(ROOT, "404.html"), "w", encoding="utf-8").write(not_found_html(template))
+
+    for c in cards:
+        if not ID_RE.match(str(c.get("id", ""))):
+            continue
+        if c.get("fa") not in names or c.get("fb") not in names:
+            skipped += 1                      # 選手データに無いキーのカードは作らない（推測で名前を出さない）
+            continue
+        hidden = c.get("status") != "public"
+        key = json.dumps([c["fa"], c["fb"], c["rule"], c.get("cond"), c.get("origin"), c.get("status"), c.get("reason"),
+                          names[c["fa"]], names[c["fb"]], tpl_hash], ensure_ascii=False)
+        h = hashlib.sha1(key.encode()).hexdigest()
+        c["_hash"] = h
+        new_manifest[c["id"]] = h
+        d = os.path.join(OUT_DIR, c["id"])
+        if not hidden:
+            sitemap.append((f"{SITE}/matchups/{c['id']}/", c.get("created_at", "")[:10]))
+        if manifest.get(c["id"]) == h and os.path.exists(os.path.join(d, "index.html")):
+            continue
+        os.makedirs(d, exist_ok=True)
+        open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(page_html(template, c, names, hidden))
+        png = os.path.join(d, "og.png")
+        if hidden:
+            if os.path.exists(png):
+                os.remove(png)
+        elif not args.no_images:
+            og_image(c, names, png)
+        changed += 1
+
+    # サイトマップ（トップと公開中のカードだけ）
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    urls = [(f"{SITE}/", today)] + sorted(sitemap)
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
+        f"  <url><loc>{u}</loc>{f'<lastmod>{m}</lastmod>' if m else ''}</url>\n" for u, m in urls) + "</urlset>\n"
+    open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write(xml)
+    open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
+    os.makedirs(os.path.dirname(MANIFEST), exist_ok=True)
+    json.dump(new_manifest, open(MANIFEST, "w", encoding="utf-8"), ensure_ascii=False, indent=0, sort_keys=True)
+    print(f"カード {len(cards)}・作り直し {changed}・選手データ不明でスキップ {skipped}・サイトマップ {len(urls)}件")
+
+
+if __name__ == "__main__":
+    main()

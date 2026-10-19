@@ -110,8 +110,8 @@
     const fighters = Object.values(S.profiles).filter(p => p.riz.total > 0).length;
     const bouts = riz.reduce((n, e) => n + e.bouts.length, 0);
     const latest = riz[0];
-    return `
-    <section class="hero"><div class="hero-in">
+    return `${FBC ? FBC.homeTop() : ""}
+    <section class="hero${FBC ? " hero-db" : ""}"><div class="hero-in">
       <div class="kicker">RIZIN FIGHTER DATABASE</div>
       <h1>Fight Book</h1>
       <p class="hero-lead">格闘技の素晴らしさを、もっと多くの人へ。</p>
@@ -425,6 +425,7 @@
         <div><b>${t.d}</b><small>分</small></div><div><b>${t.nc}</b><small>無効</small></div>
       </div>
       <p class="note" style="margin-top:8px">上の数字はRIZINでのMMA戦績です。${f && !f.partial ? `プロ通算は ${rec(p.pro)}${p.pro.nc ? `（無効${p.pro.nc}）` : ""}。` : ""}${f && f.partial ? "この選手はRIZIN外の戦績を集めきれていません。" : ""}</p>
+      ${FBC ? FBC.fighterPanel(key) : ""}
       ${socialSection(key)}
       <div class="f-cols">
         <div>
@@ -758,7 +759,7 @@
     const saved = getMU(), isSaved = saved.some(m => muId(m.a, m.b) === muId(a, b));
     const met = meetings(a, b);
     const sameDiv = P(a).division && P(a).division === P(b).division;
-    return pageHero("Dream Match", "見たい対戦カードを作ろう。レーティングから勝率を予想します。") + `
+    return pageHero("Matchup", "2人の選手をデータで比べる。勝率はレーティングから計算した目安です。") + `
     <div class="wrap">
       <section class="mu-board">
         ${cornerHtml(a, "red")}
@@ -768,7 +769,8 @@
             <div class="pcts"><b class="r">${Math.round(pa * 100)}%</b><small>勝率予想</small><b class="b">${Math.round((1 - pa) * 100)}%</b></div></div>
           <div class="mu-note">${sameDiv ? `${esc(P(a).division)}の一戦` : "階級が異なるカードです"}${met.length ? `・過去${met.length}戦` : "・初対戦"}</div>
           <div class="mu-actions">
-            <button class="btn-want ${isSaved ? "on" : ""}" id="muWant" aria-pressed="${isSaved}">${isSaved ? "♥ 見たいリストに追加済み" : "♡ この対戦を見たい！"}</button>
+            ${FBC && FBC.enabled ? `<a class="btn-want" href="#/create/${encodeURIComponent(a)}/${encodeURIComponent(b)}">＋ この対戦をみんなに聞く</a>`
+              : `<button class="btn-want ${isSaved ? "on" : ""}" id="muWant" aria-pressed="${isSaved}">${isSaved ? "♥ 見たいリストに追加済み" : "♡ この対戦を見たい！"}</button>`}
             <div class="mu-sub"><button class="ghost" id="muSwap" aria-label="コーナーを入れ替える">⇄ 入れ替え</button><button class="ghost" id="muShare">🔗 リンクをコピー</button></div>
           </div>
         </div>
@@ -786,11 +788,11 @@
           : `<p class="note">まだ対戦したことのない、まさに「夢のカード」です。</p>`}
       </section>
 
-      <section class="section">
+      ${FBC && FBC.enabled ? "" : `<section class="section">
         <div class="sec-head"><h2>My List<small>あなたの見たいカード（${saved.length}）</small></h2></div>
         ${saved.length ? `<div class="mu-grid">${saved.slice().reverse().filter(m => P(m.a) && P(m.b)).map(m => miniCard(m.a, m.b)).join("")}</div>`
           : `<p class="note">「この対戦を見たい！」を押したカードがここに並びます（このブラウザに保存されます）。</p>`}
-      </section>
+      </section>`}
 
       <section class="section">
         <div class="sec-head"><h2>Dream Cards<small>実現したら熱いカード</small></h2></div>
@@ -1298,10 +1300,17 @@
     return false;
   }
 
+  /* ---------- ファン参加機能（js/community.js） ---------- */
+  const FBC = window.FBC_INIT ? window.FBC_INIT({ S, P, esc, av, link, linkTxt, subName, statusBadge, pageHero, tabs, meetings, compareRows,
+    rec, r1, fmtDate, METHOD_JA, SEARCH_ICON, DIVS, rerender: () => route(true) }) : null;
+
   /* ---------- ルーター ---------- */
-  function route() {
-    const h = location.hash.replace(/^#\/?/, "");
-    const [page, arg] = h.split("/");
+  function route(keepScroll) {
+    // 共有用の正規URL /matchups/{id}/ で開かれたときは、そのカードを表示
+    const pm = location.pathname.match(/\/matchups\/([A-Za-z0-9]{6,20})\/?$/);
+    const h = location.hash ? location.hash.replace(/^#\/?/, "") : pm ? `c/${pm[1]}` : "";
+    const parts = h.split("?")[0].split("/");
+    const [page, arg] = parts;
     const key = decodeURIComponent(arg || "");
     let html;
     switch (page) {
@@ -1314,21 +1323,26 @@
       case "matchups": html = viewMatchups(arg); break;
       case "gyms": html = arg === "compare" ? viewGymCompare() : viewGyms(); break;
       case "gym": html = viewGym(key); break;
+      case "cards": case "c": case "create": case "me": case "admin": case "login": case "reset":
+        html = FBC ? FBC.view(page, parts.map(x => decodeURIComponent(x || ""))) : viewHome(); break;
       default: html = viewHome();
     }
+    const y = window.scrollY;
     $view.innerHTML = html;
-    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters") || (page === "gym" && a.dataset.r === "gyms")));
+    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters") || (page === "gym" && a.dataset.r === "gyms") || (["c", "create"].includes(page) && a.dataset.r === "cards")));
     document.getElementById("nav").classList.remove("open");
     document.getElementById("menuBtn").setAttribute("aria-expanded", "false");
     const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計", matchups: "見たい対戦カード", gyms: arg === "compare" ? "ジム比較" : "ジム一覧" };
-    document.title = (page === "fighter" && P(key) ? S.nameOf(key) : page === "gym" && GYMS[key] ? GYMS[key].name : titles[page] || "RIZIN選手データベース") + "｜FIGHT BOOK";
-    window.scrollTo(0, 0);
+    document.title = (page === "fighter" && P(key) ? S.nameOf(key) : page === "gym" && GYMS[key] ? GYMS[key].name : titles[page] || (FBC && FBC.title(page)) || "RIZIN選手データベース") + "｜FIGHT BOOK";
+    window.scrollTo(0, keepScroll === true ? y : 0);
+    if (FBC) FBC.after(page || "", parts.map(x => decodeURIComponent(x || "")));
     loadInstagram();
     if (page === "fighter" && P(key)) { initWalkout(key); fillSocial(key); } else stopWalkout();
   }
 
   /* ---------- 画面内の操作 ---------- */
   $view.addEventListener("click", e => {
+    if (FBC && FBC.click(e)) return;
     if (muEvents(e)) return;
     if (gymEvents(e)) return;
     const c = e.target.closest("#catTabs .cat");
@@ -1355,11 +1369,13 @@
     else if (t.closest("#yearTabs")) { evState.year = t.dataset.y; $view.innerHTML = viewEvents(); }
   });
   $view.addEventListener("input", e => {
+    if (FBC && FBC.input(e)) return;
     if (e.target.id === "q") { rosterState.q = e.target.value; refreshGrid(); }
     if (e.target.id === "qa") { allState.q = e.target.value; allState.page = 1; refreshAll(); }
     if (e.target.id === "gq") { gymState.q = e.target.value; refreshGyms("grid"); }
   });
   $view.addEventListener("change", e => {
+    if (FBC && FBC.change(e)) return;
     if (e.target.id === "champ") { rosterState.champ = e.target.checked; refreshGrid(); }
     if (e.target.id === "allSort") { allState.sort = e.target.value; allState.page = 1; refreshAll(); }
     if (e.target.id === "activeOnly") { rankState.active = e.target.checked; $view.innerHTML = viewRankings(); }
@@ -1376,6 +1392,6 @@
     document.getElementById("menuBtn").setAttribute("aria-expanded", n.classList.contains("open"));
   });
 
-  window.addEventListener("hashchange", route);
+  window.addEventListener("hashchange", () => route());
   route();
 })();
