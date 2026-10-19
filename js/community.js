@@ -13,7 +13,16 @@
 window.FBC_INIT = function (H) {
   const { S, P, esc, av } = H;
   const CFG = window.FB_COMMUNITY || {};
-  const ENABLED = !!(CFG.url && CFG.anonKey);
+  // public:false のあいだは、?preview=1 で開いた端末だけで表示（公開前の確認用。?preview=0 で解除）
+  const PREVIEW = (() => {
+    try {
+      const q = new URLSearchParams(location.search).get("preview");
+      if (q === "1") localStorage.setItem("fb_preview", "1");
+      if (q === "0") localStorage.removeItem("fb_preview");
+      return localStorage.getItem("fb_preview") === "1";
+    } catch (e) { return false; }
+  })();
+  const ENABLED = !!(CFG.url && CFG.anonKey && (CFG.public !== false || PREVIEW || CFG.testAuth));
   const SITE = (CFG.siteUrl || "https://fight-book-jp.github.io").replace(/\/$/, "");
   const RULES = { mma: "MMA", kickboxing: "キックボクシング", grappling: "グラップリング", boxing: "ボクシング" };
   const CONDS = { standard: "通常", title: "タイトル戦", catchweight: "契約体重", openweight: "無差別級" };
