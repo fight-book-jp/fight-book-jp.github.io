@@ -1,5 +1,7 @@
 /* =====================================================================
-   ファン参加機能（見たい対戦カード・投票・コメント・ログイン・計測）
+   ファン参加機能（見たい対戦カード・投票・コメント・計測）
+   一般の参加者はログイン不要（ニックネームのみ）。ブラウザごとに Supabase の匿名ユーザーを自動で発行し、
+   1人1票・自分の投稿だけ編集できる仕組みに使う。管理者だけメールアドレス＋パスワードでログインする（#/admin）。
    データは Supabase（js/community-config.js で接続先を指定）。
    接続先が未設定のときは「準備中」と表示し、架空のカードや票は出さない。
 
@@ -33,10 +35,10 @@ window.FBC_INIT = function (H) {
   const WHY = { same_fighter: "同じ選手の対戦案", same_class: "同じ階級で見たい数が多い", fresh: "まだ反応が少ない新着", editorial: "編集部の提案" };
   const TABS = [{ id: "trending", t: "急上昇" }, { id: "weekly", t: "週間" }, { id: "new", t: "新着" }, { id: "total", t: "累計" }];
   const ERR = {
-    LOGIN_REQUIRED: "ログインが必要です。", BANNED: "このアカウントでは投稿できません。", NOT_FOUND: "カードが見つからないか、非公開になりました。",
+    LOGIN_REQUIRED: "参加の準備ができていません。ページを再読み込みしてもう一度お試しください。", BANNED: "このアカウントでは投稿できません。", NOT_FOUND: "カードが見つからないか、非公開になりました。",
     TOO_FAST: "続けて投稿するときは15秒ほど待ってください。", RATE_LIMIT: "今日の投稿数の上限に達しました。明日また参加してください。",
     TOO_LONG: "文字数が多すぎます。", EMPTY: "本文を入力してください。", SAME_FIGHTER: "同じ選手どうしは選べません。",
-    FORBIDDEN: "この操作の権限がありません。", BAD_LENGTH: "文字数を確認してください。", BAD_NAME: "表示名にメールアドレスやURLは使えません。", PROFILE_MISSING: "ログイン情報を確認できませんでした。もう一度ログインしてください。",
+    FORBIDDEN: "この操作の権限がありません。", BAD_LENGTH: "文字数を確認してください。", BAD_NAME: "ニックネームにメールアドレスやURLは使えません。", PROFILE_MISSING: "参加情報を確認できませんでした。ページを再読み込みしてください。",
   };
   const ls = {
     get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -113,6 +115,37 @@ window.FBC_INIT = function (H) {
     return j;
   }
   const loggedIn = () => !!who;
+  const isAdmin = () => !!(who && who.admin);
+
+  /* ---------- ログインなしの参加（ニックネーム＋匿名ユーザー） ---------- */
+  const NICK = "fb_nick";
+  const nickOf = () => (who && who.name && who.name !== "ファン" ? who.name : "") || ls.get(NICK, "") || "";
+  const nickErr = n => !n ? "ニックネームを入力してください。" : n.length > 30 ? "ニックネームは30字までです。" : /@|https?:\/\//i.test(n) ? ERR.BAD_NAME : "";
+  let joining = null;
+  // 初めて参加する操作（見たい・コメント・作成など）のときに、このブラウザ用の匿名ユーザーを作る
+  async function ensureUser(name) {
+    name = (name || "").trim();
+    if (name) ls.set(NICK, name);
+    if (loggedIn()) {
+      if (name && name !== who.name) { await rpc("set_display_name", { name }); who.name = name; }
+      return who;
+    }
+    if (!joining) joining = (async () => {
+      await ready();
+      const nmv = (name || ls.get(NICK, "") || "ファン").slice(0, 30);
+      if (CFG.testAuth) await CFG.testAuth.anon(nmv);
+      else {
+        const { error } = await sb.auth.signInAnonymously({ options: { data: { name: nmv } } });
+        if (error) throw Object.assign(new Error(error.status === 429 ? "アクセスが集中しています。少し時間をおいてお試しください。" : "参加の準備ができませんでした。時間をおいてお試しください。"), { code: "ANON" });
+      }
+      who = await rpc("whoami");
+      if (!who) throw Object.assign(new Error(ERR.PROFILE_MISSING), { code: "PROFILE_MISSING" });
+      track("join", null, {});
+      paintMe();
+      return who;
+    })().finally(() => { joining = null; });
+    return joining;
+  }
 
   // ログイン後に戻る画面と、続けたい操作を覚えておく（下書きは別に保存）
   function rememberReturn(pending) {
@@ -122,9 +155,8 @@ window.FBC_INIT = function (H) {
     if (/^#\/(login|reset)/.test(cur)) return;
     ls.set("fb_return", { hash: cur, pending: pending || null, t: Date.now() });
   }
-  function login(pending) {
+  function login(pending) {        // 管理者ログイン画面へ
     rememberReturn(pending);
-    track("login_start", pending && pending.card, { action: pending ? pending.type : "menu" });
     location.hash = "#/login";
   }
   async function logout() {
@@ -137,12 +169,12 @@ window.FBC_INIT = function (H) {
     if (!who) { toast(ERR.PROFILE_MISSING); return; }
     const back = ls.get("fb_return", null); ls.del("fb_return");
     paintMe();
-    toast(`ログインしました（${esc(who.name)}）`);
+    toast(who.admin ? `管理者としてログインしました（${esc(who.name)}）` : "ログインしました。この端末には管理者の権限がありません。");
     track("login_success", null, { action: back && back.pending ? back.pending.type : "menu", how });
     const p = back && back.pending;
     if (p && p.card && (p.type === "want" || p.type === "fun")) { try { const c = await rpc("set_reaction", { cid: p.card, kind: p.type, on: true }); cache[c.id] = c; track("vote", c.id, { kind: p.type, on: true, where: "after_login" }); } catch (e) {} }
     if (p && p.card && p.type === "save") { try { await rpc("set_save", { cid: p.card, on: true }); } catch (e) {} }
-    const to = back && back.hash && Date.now() - back.t < 86400000 ? back.hash : "#/me";
+    const to = back && back.hash && Date.now() - back.t < 86400000 ? back.hash : (who.admin ? "#/admin" : "#/");
     if (location.hash !== to) location.hash = to; else H.rerender();
   }
   // メール内のリンク（登録の確認・パスワード再設定）から戻ってきたとき
@@ -179,24 +211,18 @@ window.FBC_INIT = function (H) {
   const authErr = e => AUTH_ERR[e && e.code] || (/Invalid login/i.test(e && e.message) ? AUTH_ERR.invalid_credentials : /confirm/i.test(e && e.message) ? AUTH_ERR.email_not_confirmed : "うまく処理できませんでした。時間をおいてもう一度お試しください。");
   const auth = { mode: "login", busy: false };
   function viewLogin(mode) {
-    auth.mode = ["login", "signup", "forgot"].includes(mode) ? mode : "login";
-    if (!ENABLED) return H.pageHero("Login", "") + `<div class="wrap"><section class="section">${offBox()}</section></div>`;
+    auth.mode = mode === "forgot" ? "forgot" : "login";
+    if (!ENABLED) return H.pageHero("Admin", "") + `<div class="wrap"><section class="section">${offBox()}</section></div>`;
     const m = auth.mode;
-    const T = { login: "ログイン", signup: "新規登録", forgot: "パスワードを忘れたとき" };
-    return H.pageHero("Login", "カードの作成・「見たい！」・コメント・保存にはログインが必要です。閲覧はログインなしでできます。") + `<div class="wrap">
+    return H.pageHero("Admin", "管理者用のログインです。一般の方はログインなしで参加できます。") + `<div class="wrap">
       <div class="fb-auth">
-        ${m === "forgot" ? "" : `<div class="tabs" role="tablist"><a class="tab" href="#/login" role="tab" aria-pressed="${m === "login"}">ログイン</a><a class="tab" href="#/login/signup" role="tab" aria-pressed="${m === "signup"}">新規登録</a></div>`}
         <form id="fbAuth" data-mode="${m}" novalidate>
-          <h2>${T[m]}</h2>
-          ${m === "signup" ? `<label>表示名（公開されます・30字まで）<input id="fbName" name="name" maxlength="30" autocomplete="nickname" required placeholder="例：格闘技好きのこや"></label>
-            <p class="note">表示名はコメントやカードに表示されます。本名やメールアドレスは入れないでください。</p>` : ""}
+          <h2>${m === "login" ? "管理者ログイン" : "パスワードを忘れたとき"}</h2>
           <label>メールアドレス<input id="fbEmail" name="email" type="email" autocomplete="email" required inputmode="email"></label>
-          ${m === "forgot" ? "" : `<label>パスワード${m === "signup" ? "（8文字以上）" : ""}<span class="fb-pw"><input id="fbPass" name="password" type="password" minlength="8" autocomplete="${m === "signup" ? "new-password" : "current-password"}" required><button type="button" class="fblink" data-showpw aria-label="パスワードを表示">表示</button></span></label>`}
+          ${m === "forgot" ? "" : `<label>パスワード<span class="fb-pw"><input id="fbPass" name="password" type="password" minlength="8" autocomplete="current-password" required><button type="button" class="fblink" data-showpw aria-label="パスワードを表示">表示</button></span></label>`}
           <div id="fbAuthMsg" class="fb-auth-msg" role="alert" aria-live="assertive"></div>
-          <button class="btn primary big" type="submit">${m === "login" ? "ログイン" : m === "signup" ? "登録する" : "再設定メールを送る"}</button>
-          ${m === "login" ? `<p class="note"><a href="#/login/forgot">パスワードを忘れた場合</a></p>` : ""}
-          ${m === "signup" ? `<p class="note">登録すると確認メールが届きます。メール内のリンクを、<b>登録したのと同じ端末・ブラウザ</b>で開くと登録が完了します。メールアドレスは公開されず、ログインとお知らせ以外には使いません。</p>` : ""}
-          ${m === "forgot" ? `<p class="note">登録したメールアドレスに、パスワード再設定のリンクを送ります。<a href="#/login">ログインに戻る</a></p>` : ""}
+          <button class="btn primary big" type="submit">${m === "login" ? "ログイン" : "再設定メールを送る"}</button>
+          ${m === "login" ? `<p class="note"><a href="#/login/forgot">パスワードを忘れた場合</a> ・ <a href="#/">トップへ戻る</a></p>` : `<p class="note">登録したメールアドレスに、再設定のリンクを送ります。<a href="#/login">ログインに戻る</a></p>`}
         </form>
       </div></div>`;
   }
@@ -275,11 +301,11 @@ window.FBC_INIT = function (H) {
     const nav = $(".topbar-in");
     if (!b && nav) { b = document.createElement("a"); b.id = "meBtn"; b.className = "me-btn"; nav.insertBefore(b, $("#menuBtn")); }
     if (!b) return;
-    b.href = loggedIn() ? "#/me" : "#/login";
-    if (!ENABLED) { b.hidden = true; return; }
+    b.href = "#/me";
+    if (!ENABLED || !loggedIn()) { b.hidden = true; return; }   // まだ参加していない人には出さない
     b.hidden = false;
-    b.innerHTML = loggedIn() ? `${who.avatar ? `<img src="${esc(who.avatar)}" alt="" width="26" height="26" referrerpolicy="no-referrer">` : "👤"}<span class="me-name">マイページ</span><i class="me-dot" hidden></i>` : `<span>ログイン</span>`;
-    b.setAttribute("aria-label", loggedIn() ? "マイページ" : "ログイン");
+    b.innerHTML = loggedIn() ? `${who.avatar ? `<img src="${esc(who.avatar)}" alt="" width="26" height="26" referrerpolicy="no-referrer">` : "👤"}<span class="me-name">${isAdmin() ? "管理者" : "マイページ"}</span><i class="me-dot" hidden></i>` : "";
+    b.setAttribute("aria-label", "マイページ");
     if (loggedIn()) rpc("unread_count").then(n => { const d = b.querySelector(".me-dot"); if (d && n > 0) { d.hidden = false; d.textContent = n > 9 ? "9+" : n; b.setAttribute("aria-label", `マイページ（未読${n}件）`); } }).catch(() => {});
   }
   const ruleLbl = c => `${RULES[c.rule] || c.rule}${c.cond && c.cond !== "standard" ? "・" + (CONDS[c.cond] || c.cond) : ""}`;
@@ -482,7 +508,7 @@ window.FBC_INIT = function (H) {
       const c = await rpc("get_card", { cid: id });
       if (det.id !== id) return;
       if (!c) { box.innerHTML = `<div class="fb-empty"><b>カードが見つかりません</b><p>URLが間違っているか、削除された可能性があります。</p><a class="btn" href="#/cards">カード一覧へ</a></div>`; setMeta(null); return; }
-      if (c.status !== "public" && !(who && who.admin)) { box.innerHTML = `<div class="fb-empty"><b>このカードは非公開になりました</b><p>運営の判断により非公開になっています。</p><a class="btn" href="#/cards">カード一覧へ</a></div>`; setMeta(null, true); return; }
+      if (c.status !== "public" && !(who && who.admin)) { box.innerHTML = `<div class="fb-empty"><b>このカードは削除されました</b><p>管理者の判断により削除されました。</p><a class="btn" href="#/cards">カード一覧へ</a></div>`; setMeta(null, true); return; }
       if (!valid(c.fa) || !valid(c.fb)) { box.innerHTML = `<div class="fb-empty"><b>選手データを確認中のカードです</b></div>`; return; }
       det.card = c; cache[c.id] = c;
       box.innerHTML = detailHtml(c);
@@ -498,7 +524,7 @@ window.FBC_INIT = function (H) {
   }
   function detailHtml(c) {
     const a = c.fa, b = c.fb, met = H.meetings(a, b), me = c.me || {};
-    const hidden = c.status !== "public" ? `<div class="fb-warn">非公開中（管理者のみ表示）</div>` : "";
+    const hidden = c.status !== "public" ? `<div class="fb-warn">削除済み（管理者のみ表示）</div>` : "";
     return `${hidden}
     <nav class="crumb"><a href="#/cards">ファンの見たい対戦</a> › <span>${nm(a)} vs ${nm(b)}</span></nav>
     <section class="fb-board" data-card="${esc(c.id)}">
@@ -513,7 +539,7 @@ window.FBC_INIT = function (H) {
         <button class="btn small" id="fbShareBtn" aria-expanded="false" aria-controls="fbShareWrap">Xで共有</button>
         <button class="btn small" id="fbCopy" data-url="${esc(cardUrl(c.id))}">URLをコピー</button>
         <button class="btn small ghost" data-report="card" data-target="${esc(c.id)}">通報</button>
-        ${who && who.admin ? `<button class="btn small ghost" data-admin-hide="card" data-target="${esc(c.id)}" data-hidden="${c.status === "public"}">${c.status === "public" ? "非公開にする" : "公開に戻す"}</button>` : ""}
+        ${who && who.admin ? `<button class="btn small danger" data-admin-hide="card" data-target="${esc(c.id)}" data-hidden="${c.status === "public"}">${c.status === "public" ? "🗑 カードを削除（管理者）" : "削除を取り消す"}</button>` : ""}
       </div>
       <div id="fbShareWrap" hidden></div>
       <p class="fb-note">ファンによる提案で、実際の対戦が決まったものではありません。公開：${hhmm(c.created_at)}</p>
@@ -542,12 +568,13 @@ window.FBC_INIT = function (H) {
     const draft = ls.get(`fb_draft_cm_${det.id}_${id}`, "");
     return `<form class="fb-comp" data-parent="${parent || ""}" data-cid="${id}">
       ${parent ? "" : `<div class="fb-hints" role="group" aria-label="書き出しのヒント（任意）">${HINTS.map(h => `<button type="button" class="fbchip" data-hint="${h.k}" aria-pressed="false">${h.t}</button>`).join("")}</div>`}
+      <label class="fb-nick-l">ニックネーム（公開）<input class="fb-nick" maxlength="30" value="${esc(nickOf())}" placeholder="例：格闘技好き" autocomplete="nickname"></label>
       <label class="sr" for="cm_${id}">${parent ? "返信を書く" : "コメントを書く"}</label>
       <textarea id="cm_${id}" rows="${parent ? 2 : 3}" maxlength="300" placeholder="${parent ? "返信を書く（300字まで）" : "一言でもOK。あなたの意見を書いてください（300字まで）"}">${esc(draft)}</textarea>
       <div class="fb-comp-foot"><span class="fb-count" aria-live="polite">${draft.length}/300</span>
         ${parent ? `<button type="button" class="btn small ghost" data-cancel-reply>やめる</button>` : ""}
-        <button class="btn primary small" type="submit">${loggedIn() ? (parent ? "返信する" : "投稿する") : "ログインして投稿"}</button></div>
-      <p class="fb-rules">「見たくない」「この条件では難しい」などの反対意見も歓迎です。選手や他のファンへの侮辱・差別は削除します。</p>
+        <button class="btn primary small" type="submit">${parent ? "返信する" : "投稿する"}</button></div>
+      <p class="fb-rules">ログインは不要です。ニックネームは公開されます。このブラウザで投稿したコメントは、あとから編集・削除できます。「見たくない」「この条件では難しい」などの反対意見も歓迎です。選手や他のファンへの侮辱・差別は管理者が削除します。</p>
     </form>`;
   }
   async function loadComments() {
@@ -560,11 +587,11 @@ window.FBC_INIT = function (H) {
   }
   function commentHtml(m, isReply) {
     const dead = m.status !== "visible";
-    const body = dead ? `<p class="fb-dead">${m.status === "hidden" ? "このコメントは運営により非表示になりました" : "このコメントは削除されました"}</p>${who && who.admin && m.body ? `<p class="fb-admin-body">${esc(m.body)}</p>` : ""}`
+    const body = dead ? `<p class="fb-dead">${m.status === "hidden" ? "このコメントは管理者が削除しました" : "このコメントは削除されました"}</p>${who && who.admin && m.body ? `<p class="fb-admin-body">${esc(m.body)}</p>` : ""}`
       : `<p class="fb-body" id="body_${m.id}">${esc(m.body)}</p>`;
     const head = dead ? "" : `<div class="fb-cm-h">${m.user && m.user.avatar ? `<img src="${esc(m.user.avatar)}" alt="" width="24" height="24" referrerpolicy="no-referrer" loading="lazy">` : '<span class="fb-noav" aria-hidden="true"></span>'}<b>${esc(m.user ? m.user.name : "退会したユーザー")}</b>${m.reason ? '<span class="fbtag">提案理由</span>' : ""}${m.hint ? `<span class="fbtag soft">${esc(HINT_T[m.hint] || "")}</span>` : ""}<time datetime="${esc(m.created_at)}">${ago(m.created_at)}</time>${m.edited_at ? '<span class="edited">（編集済み）</span>' : ""}</div>`;
-    const tools = dead ? (who && who.admin && m.status === "hidden" ? `<div class="fb-cm-tools"><button class="fblink" data-admin-hide="comment" data-target="${m.id}" data-hidden="false">表示に戻す</button></div>` : "")
-      : `<div class="fb-cm-tools">${isReply ? "" : `<button class="fblink" data-reply="${m.id}">返信</button>`}${m.mine ? `<button class="fblink" data-edit="${m.id}">編集</button><button class="fblink" data-del="${m.id}">削除</button>` : `<button class="fblink" data-report="comment" data-target="${m.id}">通報</button>`}${who && who.admin ? `<button class="fblink" data-admin-hide="comment" data-target="${m.id}" data-hidden="true">非表示</button>` : ""}</div>`;
+    const tools = dead ? (who && who.admin && m.status === "hidden" ? `<div class="fb-cm-tools"><button class="fblink" data-admin-hide="comment" data-target="${m.id}" data-hidden="false">削除を取り消す</button></div>` : "")
+      : `<div class="fb-cm-tools">${isReply ? "" : `<button class="fblink" data-reply="${m.id}">返信</button>`}${m.mine ? `<button class="fblink" data-edit="${m.id}">編集</button><button class="fblink" data-del="${m.id}">削除</button>` : `<button class="fblink" data-report="comment" data-target="${m.id}">通報</button>`}${who && who.admin ? `<button class="fblink danger" data-admin-hide="comment" data-target="${m.id}" data-hidden="true">🗑 削除（管理者）</button>` : ""}</div>`;
     const reps = !isReply && m.replies && m.replies.length ? `<ol class="fb-reps">${m.replies.map(r => commentHtml(r, true)).join("")}</ol>` : "";
     return `<li class="fb-cm ${dead ? "dead" : ""}" id="cm${m.id}">${head}${body}${tools}<div class="fb-reply-slot"></div>${reps}</li>`;
   }
@@ -638,8 +665,9 @@ window.FBC_INIT = function (H) {
         <div id="fbDup" aria-live="polite"></div>
         <div class="fb-preview"><div class="fb-fresh-h">プレビュー</div><div id="fbPrev">${previewHtml()}</div></div>
         <div class="fb-publish">
-          <button class="btn primary big" type="submit" id="fbPublish" ${canPublish() ? "" : "disabled"}>${loggedIn() || !ENABLED ? "公開する" : "ログインして公開する"}</button>
-          <p class="note">公開すると誰でも見られます。ファンの提案であり、実際の対戦を決めるものではありません。入力内容はこの端末に下書きとして残ります。</p>
+          <label class="fb-nick-l">ニックネーム（公開・30字まで）<input id="fbNickC" class="fb-nick" maxlength="30" value="${esc(nickOf())}" placeholder="例：格闘技好き" autocomplete="nickname"></label>
+          <button class="btn primary big" type="submit" id="fbPublish" ${canPublish() ? "" : "disabled"}>公開する</button>
+          <p class="note">ログインは不要です。公開すると誰でも見られます。ファンの提案であり、実際の対戦を決めるものではありません。入力内容はこの端末に下書きとして残ります。</p>
         </div>
       </form>
     </div>
@@ -665,7 +693,7 @@ window.FBC_INIT = function (H) {
     }
     const p = $("#fbPrev"); if (p) p.innerHTML = previewHtml();
     const n = $("#fbReasonN"); if (n) n.textContent = `${cr.reason.length}/140`;
-    const b = $("#fbPublish"); if (b) { b.disabled = !canPublish(); b.textContent = cr.busy ? "公開中…" : (loggedIn() || !ENABLED ? "公開する" : "ログインして公開する"); }
+    const b = $("#fbPublish"); if (b) { b.disabled = !canPublish(); b.textContent = cr.busy ? "公開中…" : "公開する"; }
     if (part !== "text") checkDup();
   }
   let dupSeq = 0;
@@ -714,14 +742,16 @@ window.FBC_INIT = function (H) {
       <form id="fbReqForm" class="fb-reqf"><label>選手名<input id="fbReqName" maxlength="60" required></label>
       <label>補足（所属団体・階級など、任意）<input id="fbReqNote" maxlength="200"></label>
       <p class="note">運営が確認してから追加します。すぐには反映されません。</p>
-      <button class="btn primary" type="submit">${loggedIn() ? "送信する" : "ログインして送信"}</button></form>`;
+      <button class="btn primary" type="submit">送信する</button></form>`;
     dlg.showModal();
   }
   async function publish() {
     if (!canPublish()) return;
-    if (!loggedIn()) { saveDraft(); login({ type: "create" }); return; }
+    const nick = ($("#fbNickC") ? $("#fbNickC").value : nickOf()).trim(), ne = nickErr(nick);
+    if (ne) { toast(ne); const i = $("#fbNickC"); if (i) i.focus(); return; }
     cr.busy = true; refreshCreate("text");
     try {
+      await ensureUser(nick);
       const c = await rpc("create_card", { a: cr.a, b: cr.b, rule: cr.rule, cond: cr.cond, reason: cr.reason.trim() || null, hint: cr.reason.trim() ? cr.hint : null, editorial: false });
       cr.busy = false;
       track("card_publish", c.id, { existed: !!c.existed, with_reason: !!cr.reason.trim() });
@@ -730,7 +760,7 @@ window.FBC_INIT = function (H) {
       else { toast("公開しました！"); ss.set("fb_new", c.id); }
       navSrc = c.existed ? "dup" : "created";
       location.hash = `#/c/${encodeURIComponent(c.id)}`;
-    } catch (e) { cr.busy = false; refreshCreate("text"); toast(esc(e.message)); if (e.code === "LOGIN_REQUIRED") login({ type: "create" }); }
+    } catch (e) { cr.busy = false; refreshCreate("text"); toast(esc(e.message)); }
   }
 
   /* ---------- マイページ ---------- */
@@ -744,9 +774,9 @@ window.FBC_INIT = function (H) {
     const box = $("#fbMe"); if (!box) return;
     await ready(); paintMe();
     if (!loggedIn()) {
-      box.innerHTML = `<div class="fb-login"><b>ログインすると、作ったカードや返信を確認できます</b>
-        <p>閲覧はログインなしでできます。カードの作成・「見たい！」・コメント・保存のときにログインが必要です。</p>
-        <a class="btn primary big" href="#/login" data-login>ログイン</a> <a class="btn big" href="#/login/signup">新規登録</a></div>`;
+      box.innerHTML = `<div class="fb-login"><b>まだ参加していません</b>
+        <p>ログインは不要です。カードに「見たい！」を押したり、コメントやカードを作ったりすると、このブラウザでの参加の記録がここに表示されます。</p>
+        <a class="btn primary big" href="#/cards">カードを見る</a></div>`;
       return;
     }
     try {
@@ -756,10 +786,10 @@ window.FBC_INIT = function (H) {
       const T = [["notice", `お知らせ${unread ? `（${unread}）` : ""}`], ["created", `作った（${d.created.length}）`], ["joined", `参加した（${d.joined.length}）`], ["saved", `保存（${d.saved.length}）`]];
       const body = mp.tab === "notice" ? noticeHtml(n.items) : grid(d[mp.tab].map(c => c.status === "public" ? c : { ...c, _hidden: true }), c => ({ src: "me_" + mp.tab, label: c._hidden ? "非公開になりました" : "" })) || `<p class="note">${{ created: "まだカードを作っていません。", joined: "まだ参加したカードはありません。", saved: "保存したカードはありません。" }[mp.tab]}</p>`;
       box.innerHTML = `<div class="fb-me-head">${d.profile.avatar ? `<img src="${esc(d.profile.avatar)}" alt="" width="48" height="48" referrerpolicy="no-referrer">` : ""}<div><b>${esc(d.profile.name)}</b>${d.profile.username ? `<small>@${esc(d.profile.username)}</small>` : ""}</div>
-          <div class="fb-me-acts">${d.profile.admin ? '<a class="btn small" href="#/admin">通報の確認</a>' : ""}<button class="btn small ghost" data-logout>ログアウト</button></div></div>
+          <div class="fb-me-acts">${d.profile.admin ? '<a class="btn small" href="#/admin">通報の確認</a><button class="btn small ghost" data-logout>ログアウト</button>' : ""}</div></div>
         <details class="fb-def fb-acct"><summary>アカウント設定</summary>
-          <form id="fbNameForm" class="fb-name-form"><label>表示名（公開）<input id="fbNameIn" maxlength="30" value="${esc(d.profile.name)}" required></label><button class="btn small primary" type="submit">変更</button></form>
-          <p class="note"><a href="#/reset">パスワードを変更する</a>・メールアドレスは他の人には表示されません。</p></details>
+          <form id="fbNameForm" class="fb-name-form"><label>ニックネーム（公開）<input id="fbNameIn" maxlength="30" value="${esc(d.profile.name)}" required></label><button class="btn small primary" type="submit">変更</button></form>
+          <p class="note">${d.profile.admin ? '<a href="#/reset">パスワードを変更する</a>' : "参加の記録はこのブラウザに保存されています。ブラウザのデータを消したり、別の端末から開いたりすると、これまでの投稿を編集・削除できなくなります。"}</p></details>
         <div class="tabs" id="fbMeTabs">${T.map(([k, t]) => `<a class="tab" href="#/me/${k}" aria-pressed="${k === mp.tab}">${t}</a>`).join("")}</div>
         <div class="fb-me-body">${body}</div>`;
       if (mp.tab === "notice" && unread) { rpc("mark_notifications_seen").then(paintMe).catch(() => {}); track("notif_open", null, { unread }); }
@@ -782,14 +812,14 @@ window.FBC_INIT = function (H) {
   async function loadAdmin() {
     const box = $("#fbAdmin"); if (!box || !ENABLED) return;
     await ready(); paintMe();
-    if (!who || !who.admin) { box.innerHTML = `<p class="note">このページは管理者だけが使えます。</p>`; return; }
+    if (!who || !who.admin) { login(null); return; }
     try {
       const r = await rpc("admin_reports");
       const RS = { abuse: "侮辱・差別", spam: "宣伝・連投", wrong: "誤情報", other: "その他" };
       box.innerHTML = r.length ? `<table class="tbl"><thead><tr><th>対象</th><th>内容</th><th>理由</th><th>件数</th><th></th></tr></thead><tbody>${r.map(x => `<tr>
         <td>${x.target_type === "card" ? "カード" : "コメント"}</td><td><a href="#/c/${encodeURIComponent(x.card_id || "")}">${esc(x.preview || "（削除済み）")}</a></td>
         <td>${(x.reasons || []).map(k => RS[k] || k).join("・")}</td><td class="num">${x.n}</td>
-        <td><button class="btn small" data-admin-hide="${x.target_type}" data-target="${esc(x.target_id)}" data-hidden="true">非表示</button> <button class="btn small ghost" data-dismiss="${x.target_type}" data-target="${esc(x.target_id)}">対応不要</button></td></tr>`).join("")}</tbody></table>`
+        <td><button class="btn small danger" data-admin-hide="${x.target_type}" data-target="${esc(x.target_id)}" data-hidden="true">削除</button> <button class="btn small ghost" data-dismiss="${x.target_type}" data-target="${esc(x.target_id)}">対応不要</button></td></tr>`).join("")}</tbody></table>`
         : `<p class="note">未対応の通報はありません。</p>`;
     } catch (e) { box.innerHTML = failBox(e, "admin"); }
   }
@@ -821,8 +851,8 @@ window.FBC_INIT = function (H) {
   async function react(btn) {
     const id = btn.dataset.id, kind = btn.dataset.act, on = btn.getAttribute("aria-pressed") !== "true";
     if (!ENABLED) return;
-    if (!loggedIn()) { login({ type: kind, card: id }); return; }
     if (busy.has(id + kind)) return;
+    if (!loggedIn()) { try { await ensureUser(); } catch (e) { toast(esc(e.message)); return; } }
     busy.add(id + kind);
     // 先に見た目を変え、結果で上書きする
     const n = btn.querySelector("b"), before = +n.textContent;
@@ -841,9 +871,11 @@ window.FBC_INIT = function (H) {
     const ta = form.querySelector("textarea"), body = ta.value.trim(), parent = form.dataset.parent ? +form.dataset.parent : null;
     if (!body) { toast(ERR.EMPTY); ta.focus(); return; }
     const key = `fb_draft_cm_${det.id}_${form.dataset.cid}`;
-    if (!loggedIn()) { ls.set(key, ta.value); login({ type: "comment", card: det.id }); return; }
+    const ni = form.querySelector(".fb-nick"), nick = (ni ? ni.value : nickOf()).trim(), ne = nickErr(nick);
+    if (ne) { toast(ne); if (ni) ni.focus(); return; }
     const b = form.querySelector('[type="submit"]'); if (b.disabled) return;
     b.disabled = true; b.textContent = "送信中…";
+    try { await ensureUser(nick); } catch (e) { toast(esc(e.message)); b.disabled = false; b.textContent = parent ? "返信する" : "投稿する"; return; }
     const hint = form.dataset.hint || null;
     try {
       const r = await rpc("add_comment", { cid: det.id, body, parent, reason: false, hint });
@@ -859,7 +891,7 @@ window.FBC_INIT = function (H) {
     finally { if (form.isConnected) { b.disabled = false; b.textContent = parent ? "返信する" : "投稿する"; } }
   }
   async function doReport(type, target) {
-    if (!loggedIn()) { login({ type: "report", card: det.id }); return; }
+    if (!loggedIn()) { try { await ensureUser(); } catch (e) { toast(esc(e.message)); return; } }
     const reasons = { abuse: "侮辱・差別", spam: "宣伝・連投", wrong: "誤情報", other: "その他" };
     const pick = prompt(`通報の理由を番号で入力してください\n1：${reasons.abuse}\n2：${reasons.spam}\n3：${reasons.wrong}\n4：${reasons.other}`);
     const k = { 1: "abuse", 2: "spam", 3: "wrong", 4: "other" }[String(pick || "").trim()];
@@ -916,13 +948,13 @@ window.FBC_INIT = function (H) {
     if (dl) { if (confirm("このコメントを削除しますか？（返信はそのまま残ります）")) rpc("delete_comment", { mid: +dl.dataset.del }).then(() => { toast("削除しました"); loadComments(); return rpc("get_card", { cid: det.id }).then(paintCounts); }).catch(err => toast(esc(err.message))); return true; }
     const rpt = t.closest("[data-report]"); if (rpt) { doReport(rpt.dataset.report, rpt.dataset.target); return true; }
     const ah = t.closest("[data-admin-hide]");
-    if (ah) { rpc("admin_set_hidden", { target_type: ah.dataset.adminHide, target_id: String(ah.dataset.target), hidden: ah.dataset.hidden === "true" }).then(() => { toast("更新しました"); H.rerender(); }).catch(err => toast(esc(err.message))); return true; }
+    if (ah) { if (ah.dataset.hidden === "true" && !confirm(ah.dataset.adminHide === "card" ? "このカードを削除しますか？（一覧や共有ページから消えます。あとで取り消せます）" : "このコメントを削除しますか？（あとで取り消せます）")) return true;
+      rpc("admin_set_hidden", { target_type: ah.dataset.adminHide, target_id: String(ah.dataset.target), hidden: ah.dataset.hidden === "true" }).then(() => { toast(ah.dataset.hidden === "true" ? "削除しました" : "元に戻しました"); H.rerender(); }).catch(err => toast(esc(err.message))); return true; }
     const dm = t.closest("[data-dismiss]"); if (dm) { rpc("admin_dismiss", { target_type: dm.dataset.dismiss, target_id: String(dm.dataset.target) }).then(loadAdmin).catch(err => toast(esc(err.message))); return true; }
     const sv = t.closest("#fbSave");
     if (sv) {
       const id = sv.dataset.id, on = sv.getAttribute("aria-pressed") !== "true";
-      if (!loggedIn()) { login({ type: "save", card: id }); return true; }
-      rpc("set_save", { cid: id, on }).then(() => { sv.setAttribute("aria-pressed", on); sv.textContent = on ? "✓ 保存済み" : "保存"; toast(on ? "保存しました（マイページで見られます）" : "保存を外しました"); if (on) track("save", id, {}); }).catch(err => toast(esc(err.message)));
+      ensureUser().then(() => rpc("set_save", { cid: id, on })).then(() => { sv.setAttribute("aria-pressed", on); sv.textContent = on ? "✓ 保存済み" : "保存"; toast(on ? "保存しました（マイページで見られます）" : "保存を外しました"); if (on) track("save", id, {}); }).catch(err => toast(esc(err.message)));
       return true;
     }
     if (t.closest("#fbShareBtn")) {
@@ -971,9 +1003,8 @@ window.FBC_INIT = function (H) {
     }
     if (f.id === "fbReqForm") {
       e.preventDefault();
-      if (!loggedIn()) { saveDraft(); login({ type: "request" }); return true; }
-      rpc("request_fighter", { name: $("#fbReqName").value, note: $("#fbReqNote").value || null })
-        .then(() => { $("#fbReq").close(); toast("リクエストを受け付けました。運営が確認します。"); }).catch(err => toast(esc(err.message)));
+      ensureUser().then(() => rpc("request_fighter", { name: $("#fbReqName").value, note: $("#fbReqNote").value || null })
+        ).then(() => { $("#fbReq").close(); toast("リクエストを受け付けました。運営が確認します。"); }).catch(err => toast(esc(err.message)));
       return true;
     }
     return false;
@@ -1009,7 +1040,7 @@ window.FBC_INIT = function (H) {
     else if (page === "create") { ready().then(() => { paintMe(); refreshCreate(); }); }
     else if (page === "me") loadMe();
     else if (page === "admin") loadAdmin();
-    else if (page === "login") { ready().then(() => { paintMe(); if (loggedIn() && parts[1] !== "forgot") loadMe(); else { const i = $("#fbName") || $("#fbEmail"); if (i && matchMedia("(min-width:561px)").matches) i.focus(); } }); }
+    else if (page === "login") { ready().then(() => { paintMe(); if (isAdmin() && parts[1] !== "forgot") location.hash = "#/admin"; }); }
     else if (page === "reset") { ready().then(() => { paintMe(); if (loggedIn() && !$("#fbReset")) H.rerender(); }); }
     else if (page === "fighter") loadFighter(parts[1]);
     else ready().then(paintMe);
@@ -1036,10 +1067,10 @@ window.FBC_INIT = function (H) {
       if (page === "create") return viewCreate(parts[1], parts[2]);
       if (page === "me") return viewMe(parts[1]);
       if (page === "admin") return viewAdmin();
-      if (page === "login") return loggedIn() && parts[1] !== "forgot" ? viewMe() : viewLogin(parts[1]);
+      if (page === "login") return viewLogin(parts[1]);
       if (page === "reset") return viewReset();
       return null;
     },
-    title(page) { return { cards: "ファンの見たい対戦", create: "見たい対戦を作る", me: "マイページ", admin: "通報の確認", login: "ログイン", reset: "パスワードの再設定" }[page]; },
+    title(page) { return { cards: "ファンの見たい対戦", create: "見たい対戦を作る", me: "マイページ", admin: "管理", login: "管理者ログイン", reset: "パスワードの再設定" }[page]; },
   };
 };

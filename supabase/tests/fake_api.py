@@ -24,6 +24,10 @@ TEST_CONFIG = """window.FB_COMMUNITY = {
     user() { try { return localStorage.getItem("fb_test_user"); } catch (e) { return null; } },
     login() { localStorage.setItem("fb_test_user", localStorage.getItem("fb_test_login_as") || ""); },
     logout() { localStorage.removeItem("fb_test_user"); },
+    async anon(name) {
+      const r = await fetch("/test/anon", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
+      localStorage.setItem("fb_test_user", (await r.json()).id);
+    },
   },
 };
 """
@@ -61,6 +65,15 @@ class H(http.server.SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
+        if self.path == "/test/anon":            # 匿名ユーザーの作成（Supabase の signInAnonymously の代わり）
+            n = int(self.headers.get("Content-Length") or 0)
+            name = json.loads(self.rfile.read(n) or b"{}").get("name") or "ファン"
+            import uuid
+            uid = str(uuid.uuid4())
+            c = psycopg2.connect(DSN); c.autocommit = True
+            c.cursor().execute("insert into auth.users values (%s, %s)", (uid, json.dumps({"name": name})))
+            c.close()
+            return self.send_json(200, {"id": uid})
         m = re.match(r"^/rest/v1/rpc/([a-z_]+)$", self.path)
         if not m:
             return self.send_json(404, {"message": "not found"})

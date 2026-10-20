@@ -1040,3 +1040,8 @@ a.pl:hover span{text-decoration:underline}
 .fb-tools .fb-sel{margin-left:auto}
 .fb-tools .fb-sel select{border-radius:999px;padding:8px 14px}
 .fb-tools .btn{border-radius:999px}
+.fb-nick-l{display:grid;gap:4px;font-size:12px;font-weight:800;max-width:320px}
+.fb-nick-l input{font:inherit;font-size:15px;padding:9px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;min-height:42px}
+.fb-publish .fb-nick-l{width:100%}
+.btn.danger,.wrap .btn.danger{border-color:var(--loss);color:var(--loss);background:transparent}
+.fblink.danger,.fb-cm-tools .fblink.danger{color:var(--loss)}

@@ -21,54 +21,19 @@
 2. このフォルダの `schema.sql` の中身をすべて貼り付け、**Run**
 3. 「Success. No rows returned」と出れば完了です（何度実行しても壊れません）
 
-### 3. ログイン（メールアドレス＋パスワード）の設定
-左メニュー **Authentication** を開いて、次のように設定します。
+### 3. 参加の設定（ログイン不要）
+一般の参加者はメールアドレスもパスワードも不要で、ニックネームだけで投票・コメント・カード作成ができます。
+ブラウザごとに見えない「匿名ユーザー」を自動で作り、1人1票や「自分の投稿だけ編集・削除できる」仕組みに使います。
 
-- **Sign In / Providers → Email**
-  - Enable Email provider：ON
-  - Confirm email：ON（推奨）
-  - Minimum password length：`8`
-- **URL Configuration**
-  - Site URL：`https://fight-book-jp.github.io`
-  - Redirect URLs：`https://fight-book-jp.github.io/**` を追加
-- **Attack Protection**：「Prevent use of leaked passwords」が選べれば ON
+左メニュー **Authentication → Sign In / Providers** で次をONにします。
+- **Allow new users to sign up**：ON
+- **Allow anonymous sign-ins**：ON
 
-### 4. メール送信（確認メール・パスワード再設定）
-Supabase の標準のメール送信は、**プロジェクトのメンバー宛てにしか届かず、1時間に2通まで**です。一般のファンに確認メールを届けるには、外部の無料メール送信サービスの接続が必要です。
+管理者だけは、メールアドレス＋パスワードでログインします（`https://fight-book-jp.github.io/#/admin`）。
+そのため **Email** プロバイダーもONのままにしておきます。管理者アカウントは作成済みなので、メール送信（SMTP）の設定は不要です。
 
-おすすめは **Brevo（無料：1日300通まで）** です。
-1. https://www.brevo.com で無料登録
-2. 送信者（Senders）に、送信元にするメールアドレスを登録して確認する
-3. 「SMTP & API」で SMTP キーを作成する
-4. Supabase の **Authentication → Emails → SMTP Settings** で Enable Custom SMTP を ON にし、次を入力する
-   - Host：`smtp-relay.brevo.com`
-   - Port：`587`
-   - Username：Brevo の SMTP 画面に表示されるログイン名
-   - Password：作成した SMTP キー
-   - Sender email：手順2で確認したアドレス
-   - Sender name：`FIGHT BOOK`
-
-> メール送信を設定しない場合、選択肢は「Confirm email を OFF にする（確認なしで登録できる。ただし実在しないアドレスでも登録でき、パスワード再設定のメールも届かない）」だけになります。
-
-**メール文面（日本語）**：Authentication → Emails → Templates で次のように変更します。
-
-- Confirm signup（件名：`【FIGHT BOOK】メールアドレスの確認`）
-
-  ```html
-  <p>FIGHT BOOK にご登録ありがとうございます。</p>
-  <p>下のリンクを、登録したのと同じ端末・ブラウザで開くと登録が完了します。</p>
-  <p><a href="{{ .ConfirmationURL }}">メールアドレスを確認する</a></p>
-  <p>心当たりがない場合は、このメールを破棄してください。</p>
-  ```
-
-- Reset Password（件名：`【FIGHT BOOK】パスワードの再設定`）
-
-  ```html
-  <p>パスワード再設定のリクエストを受け付けました。</p>
-  <p>下のリンクを、再設定を申し込んだのと同じ端末・ブラウザで開いてください。</p>
-  <p><a href="{{ .ConfirmationURL }}">新しいパスワードを設定する</a></p>
-  <p>心当たりがない場合は、このメールを破棄してください。</p>
-  ```
+> 匿名ユーザーは、ブラウザのデータを消したり別の端末を使ったりすると別人扱いになります（以前の投稿は編集できなくなる）。
+> いたずらの大量投稿は、1人あたりの投稿数制限と、Supabase の同じ IP からの作成数制限（初期値：1時間30件）で抑えます。目立つ場合は Authentication → Attack Protection で CAPTCHA（Cloudflare Turnstile・無料）を追加できます。
 
 ### 5. 接続先を教えてください
 **Project Settings → API Keys**（または Data API）で、次の2つをチャットに貼ってください。私が `js/community-config.js` に設定して公開します。
@@ -77,13 +42,13 @@ Supabase の標準のメール送信は、**プロジェクトのメンバー宛
 
 > **service_role / secret キーは絶対に貼らないでください。** これは管理者用の鍵で、公開すると誰でも全データを書き換えられます。
 
-### 6. 自分を管理者にする（公開後）
-サイトで普通に新規登録したあと、SQL Editor で次を実行します（メールアドレスは自分のものに変更）。
+### 6. 自分を管理者にする
+管理者アカウント（メールアドレス＋パスワードで作成済みのもの）について、SQL Editor で次を実行します。
 ```sql
 update public.profiles set is_admin = true
  where id = (select id from auth.users where email = 'あなたのメールアドレス');
 ```
-管理者になると、カードやコメントに「非公開にする」ボタンが出て、マイページから通報の一覧を確認できます。
+管理者になると、`#/admin` からログインして、カードやコメントを削除（あとで取り消し可能）でき、通報の一覧も確認できます。
 
 ---
 
