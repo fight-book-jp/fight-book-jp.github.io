@@ -7,5 +7,5 @@
 window.FB_COMMUNITY = {
   url: "https://wcdiofpkgjrupcjzytmf.supabase.co",
   anonKey: "sb_publishable_k0XNIAvsiGU3pECWBRtTYQ_mgyYyKfY",
-  public: false,      // メール送信（Brevo）の設定と動作確認が終わったら true にして公開
+  public: true,       // false にすると一般の訪問者には表示されなくなる（?preview=1 の端末だけ表示）
 };
