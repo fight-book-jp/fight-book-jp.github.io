@@ -293,20 +293,16 @@ window.FBC_INIT = function (H) {
   // カード（一覧・ホーム・選手ページで共通）
   function cardHtml(c, o = {}) {
     if (!valid(c.fa) || !valid(c.fb)) return "";
-    const me = c.me || {}, href = `#/c/${encodeURIComponent(c.id)}`;
+    const href = `#/c/${encodeURIComponent(c.id)}`;
     const reason = c.reason && c.reason.body;
-    const label = o.label ? `<div class="fc-label">${esc(o.label)}</div>` : "";
-    return `<article class="fc ${o.big ? "fc-big" : ""}" data-card="${esc(c.id)}">
-      ${label}
-      <a class="fc-link" href="${href}" data-src="${esc(o.src || "list")}"${o.why ? ` data-why="${esc(o.why)}"` : ""}>
-        <div class="fc-meta"><span class="fc-rule">${esc(ruleLbl(c))}</span><span class="fc-status">${statusLbl(c)}</span>${isRematch(c) ? '<span class="fc-re">再戦希望</span>' : ""}</div>
-        <div class="fc-vs">
-          <div class="fc-side red">${av(c.fa, o.big ? "l" : "m")}<b>${nm(c.fa)}</b><small>${esc(div(c.fa))}</small></div>
-          <span class="fc-x" aria-hidden="true">VS</span>
-          <div class="fc-side blue">${av(c.fb, o.big ? "l" : "m")}<b>${nm(c.fb)}</b><small>${esc(div(c.fb))}</small></div>
-        </div>
-        ${reason ? `<p class="fc-reason">${esc(reason)}<small>— ${esc(c.creator ? c.creator.name : "退会したユーザー")}</small></p>` : ""}
-        ${o.period ? `<div class="fc-period">${esc(o.period)}</div>` : ""}
+    const side = (k, cls) => `<div class="fc-side ${cls}"><span class="fc-av">${av(k, "l")}</span><b>${nm(k)}</b><small>${esc(div(k) || "階級不明")}</small></div>`;
+    return `<article class="fc ${o.big ? "fc-big" : ""} ${o.preview ? "fc-preview" : ""}" data-card="${esc(c.id)}">
+      ${o.label ? `<div class="fc-label">${esc(o.label)}</div>` : ""}
+      <a class="fc-link" href="${href}" data-src="${esc(o.src || "list")}"${o.why ? ` data-why="${esc(o.why)}"` : ""} aria-label="${nm(c.fa)} 対 ${nm(c.fb)}（${esc(ruleLbl(c))}）のカードを見る">
+        <div class="fc-meta"><span class="fc-rule">${esc(ruleLbl(c))}</span>${isRematch(c) ? '<span class="fc-re">再戦希望</span>' : ""}<span class="fc-status">${statusLbl(c)}</span></div>
+        <div class="fc-vs">${side(c.fa, "red")}<span class="fc-x" aria-hidden="true">VS</span>${side(c.fb, "blue")}</div>
+        ${reason ? `<p class="fc-reason"><span class="q" aria-hidden="true">“</span>${esc(reason)}<small>${esc(c.creator ? c.creator.name : "退会したユーザー")}</small></p>` : ""}
+        ${o.period ? `<div class="fc-period">🔥 ${esc(o.period)}</div>` : ""}
       </a>
       ${o.preview ? "" : actions(c)}
       <div class="fc-next" hidden></div>
@@ -315,9 +311,9 @@ window.FBC_INIT = function (H) {
   function actions(c) {
     const me = c.me || {};
     return `<div class="fc-acts">
-      <button class="fb-want" data-act="want" data-id="${esc(c.id)}" aria-pressed="${!!me.want}" aria-label="この対戦を見たい（現在${c.want}人）"><span class="ic" aria-hidden="true">${me.want ? "★" : "☆"}</span>見たい！<b>${c.want}</b></button>
-      <button class="fb-fun" data-act="fun" data-id="${esc(c.id)}" aria-pressed="${!!me.fun}" aria-label="組み合わせが面白い（現在${c.fun}人）">面白い<b>${c.fun}</b></button>
-      <a class="fb-cmlink" href="#/c/${encodeURIComponent(c.id)}/comments" data-src="comment_link" aria-label="コメント${c.comments}件">💬<b>${c.comments}</b></a>
+      <button class="fb-want" data-act="want" data-id="${esc(c.id)}" aria-pressed="${!!me.want}" aria-label="この対戦を見たい（現在${c.want}人）"><span class="ic" aria-hidden="true">${me.want ? "★" : "☆"}</span><span class="t">見たい！</span><b>${c.want}</b></button>
+      <button class="fb-fun" data-act="fun" data-id="${esc(c.id)}" aria-pressed="${!!me.fun}" aria-label="組み合わせが面白い（現在${c.fun}人）"><span class="t">面白い</span><b>${c.fun}</b></button>
+      <a class="fb-cmlink" href="#/c/${encodeURIComponent(c.id)}/comments" data-src="comment_link" aria-label="コメント${c.comments}件"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg><b>${c.comments}</b></a>
     </div>`;
   }
   // 反応の結果を、同じカードが表示されているすべての場所に反映
@@ -359,21 +355,28 @@ window.FBC_INIT = function (H) {
   const home = { tab: null, rule: "" };
   function homeTop() {
     if (!ENABLED) return "";     // 接続前は、これまでのホームのまま（空の参加画面は出さない）
-    return `<section class="fan-hero"><div class="in">
-      <div class="kicker">FAN MATCHMAKING</div>
-      <h1>次に見たい一戦を、<br class="sp">ファンで語ろう。</h1>
-      <p>あなたの「見たい！」が、みんなの声になる。<small>※ファンによる提案です。実際の対戦を決めるものではありません。</small></p>
-      <div class="cta"><a class="btn primary big" href="#/create" data-src="home_cta">＋ 見たい対戦を作る</a><a class="btn ghost-light" href="#/cards">みんなのカードを見る</a></div>
-    </div></section>
-    <div class="wrap fan-home">
-      <section class="section" id="fbFeatured" aria-live="polite">${ENABLED ? loading() : offBox()}</section>
-      ${ENABLED ? `<section class="section">
-        <div class="sec-head"><h2>Fan Cards<small>ファンの見たい対戦</small></h2><a href="#/cards">すべて見る ›</a></div>
-        <div class="fb-tools">${tabBar("fbHomeTab", home.tab || "trending")}${ruleSelect("fbHomeRule", home.rule)}</div>
+    return `<section class="fz" aria-labelledby="fzTitle"><div class="fz-in">
+      <div class="fz-top">
+        <div class="fz-copy">
+          <div class="fz-kicker"><span class="dot r"></span><span class="dot b"></span>FAN MATCHMAKING</div>
+          <h2 id="fzTitle">次に見たい一戦を、<br>ファンで語ろう。</h2>
+          <p class="fz-lead">選手を2人選ぶだけ。あなたの「見たい！」と一言が、ファンの声になる。</p>
+          <ol class="fz-steps">
+            <li><b>1</b><span>選手を<br>2人選ぶ</span></li>
+            <li><b>2</b><span>見たい理由を<br>ひと言</span></li>
+            <li><b>3</b><span>ファンが<br>投票・コメント</span></li>
+          </ol>
+          <div class="fz-cta"><a class="fz-btn" href="#/create" data-src="home_cta"><span aria-hidden="true">＋</span>見たい対戦を作る</a><a class="fz-link" href="#/cards">みんなのカードを見る →</a></div>
+          <p class="fz-note">※ファンによる提案です。実際の対戦を決めるものではありません。</p>
+        </div>
+        <div class="fz-feature" id="fbFeatured" aria-live="polite">${loading()}</div>
+      </div>
+      <div class="fz-list">
+        <div class="fz-list-head"><h3>ファンの見たい対戦</h3>${tabBar("fbHomeTab", home.tab || "trending")}${ruleSelect("fbHomeRule", home.rule)}</div>
         <div id="fbHomeList">${loading()}</div>
-      </section>
-      <section class="section" id="fbTheme" hidden></section>` : ""}
-    </div>`;
+      </div>
+      <div id="fbTheme" class="fz-theme" hidden></div>
+    </div></section>`;
   }
   const tabBar = (id, cur) => `<div class="tabs" id="${id}" role="tablist">${TABS.map(t => `<button class="tab" role="tab" aria-selected="${t.id === cur}" aria-pressed="${t.id === cur}" data-tab="${t.id}">${t.t}</button>`).join("")}</div>`;
   const ruleSelect = (id, cur) => `<label class="fb-sel"><span class="sr">ルールで絞り込み</span><select id="${id}"><option value="">すべてのルール</option>${Object.entries(RULES).map(([k, v]) => `<option value="${k}" ${k === cur ? "selected" : ""}>${v}</option>`).join("")}</select></label>`;
@@ -398,12 +401,12 @@ window.FBC_INIT = function (H) {
       else if (wk.cards[0]) { feat = wk.cards[0]; label = "今週もっとも「見たい！」が集まったカード"; }
       else if (nw.cards[0]) { feat = nw.cards[0]; label = "新着カード"; }
       const box = $("#fbFeatured");
-      if (box) box.innerHTML = feat ? `<div class="sec-head"><h2>Pick Up<small>いま参加してほしいカード</small></h2></div>${cardHtml(feat, { big: true, label, src: "home_featured" })}`
-        : `<div class="fb-empty"><b>まだカードがありません</b><p>最初のカードを作ってみませんか？ 選手を2人選ぶだけで作れます。</p><a class="btn primary" href="#/create">＋ 見たい対戦を作る</a>${exampleCard()}</div>`;
+      if (box) box.innerHTML = feat ? cardHtml(feat, { big: true, label: "PICK UP｜" + label, src: "home_featured" })
+        : `<div class="fz-empty"><b>最初の1枚を、あなたが。</b><p>まだカードがありません。選手を2人選ぶだけで作れます。</p>${exampleCard()}</div>`;
       if (!home.tab) home.tab = tr.cards.length ? "trending" : "new";
       $$("#fbHomeTab .tab").forEach(b => { const on = b.dataset.tab === home.tab; b.setAttribute("aria-selected", on); b.setAttribute("aria-pressed", on); });
       const th = $("#fbTheme");
-      if (th && theme) { th.hidden = false; th.innerHTML = `<div class="sec-head"><h2>Weekly Theme<small>今週のお題（編集部）</small></h2></div><div class="fb-theme"><b>${esc(theme.title)}</b>${theme.body ? `<p>${esc(theme.body)}</p>` : ""}<small>${hhmm(theme.starts_at)} 〜 ${hhmm(theme.ends_at)}</small><a class="btn small" href="#/create" data-src="theme">このお題でカードを作る</a></div>${grid(theme.cards.slice(1, 4), { src: "theme" })}`; }
+      if (th && theme) { th.hidden = false; th.innerHTML = `<div class="fz-list-head"><h3>今週のお題（編集部）</h3></div><div class="fb-theme"><b>${esc(theme.title)}</b>${theme.body ? `<p>${esc(theme.body)}</p>` : ""}<small>${hhmm(theme.starts_at)} 〜 ${hhmm(theme.ends_at)}</small><a class="btn small" href="#/create" data-src="theme">このお題でカードを作る</a></div>${grid(theme.cards.slice(1, 4), { src: "theme" })}`; }
       await loadHomeList();
     } catch (e) { const box = $("#fbFeatured"); if (box) box.innerHTML = failBox(e, "home"); }
   }
@@ -413,15 +416,16 @@ window.FBC_INIT = function (H) {
     try {
       const r = await rpc("list_cards", { tab: home.tab || "new", rule_f: home.rule || null, lim: 6 });
       remember(r.cards);
-      let html = grid(r.cards, c => ({ src: "home_" + r.tab, period: periodText(r.tab, c) }));
+      let html = r.cards.map(c => cardHtml(c, { src: "home_" + r.tab, period: periodText(r.tab, c) })).join("");
       if (!html) html = `<p class="note">${EMPTY_TAB[r.tab]}</p>`;
       // 人気だけで埋もれないよう、反応がまだ少ない新着を1枚添える
       if (r.tab !== "new") {
         const f = await rpc("list_cards", { tab: "new", rule_f: home.rule || null, lim: 8 });
         const shown = new Set(r.cards.map(c => c.id)), fresh = f.cards.find(c => !shown.has(c.id) && c.want < 3);
-        if (fresh) { remember([fresh]); html += `<div class="fb-fresh"><div class="fb-fresh-h">まだ反応が少ない新着</div>${cardHtml(fresh, { src: "home_fresh" })}</div>`; }
+        if (fresh) { remember([fresh]); html += cardHtml(fresh, { src: "home_fresh", label: "まだ反応が少ない新着" }); }
       }
-      box.innerHTML = html + `<p class="fb-asof">${TABS.find(t => t.id === r.tab).t}・${hhmm(r.as_of)} 時点</p>`;
+      box.innerHTML = (html.includes("<article") ? `<div class="fz-rail">${html}<a class="fz-more" href="#/cards"><b>＋</b>すべてのカードを見る</a></div>` : html)
+        + `<p class="fb-asof">${TABS.find(t => t.id === r.tab).t}・${hhmm(r.as_of)} 時点の集計</p>`;
     } catch (e) { box.innerHTML = failBox(e, "homelist"); }
   }
   // カードが1枚も無いときの作成例（投票できない見本であることを明示）

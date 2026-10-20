@@ -110,8 +110,8 @@
     const fighters = Object.values(S.profiles).filter(p => p.riz.total > 0).length;
     const bouts = riz.reduce((n, e) => n + e.bouts.length, 0);
     const latest = riz[0];
-    return `${FBC ? FBC.homeTop() : ""}
-    <section class="hero${FBC ? " hero-db" : ""}"><div class="hero-in">
+    return `
+    <section class="hero"><div class="hero-in">
       <div class="kicker">RIZIN FIGHTER DATABASE</div>
       <h1>Fight Book</h1>
       <p class="hero-lead">格闘技の素晴らしさを、もっと多くの人へ。</p>
@@ -123,6 +123,7 @@
         <div><b>${riz.length}</b><small>大会</small></div>
       </div>
     </div></section>
+    ${FBC ? FBC.homeTop() : ""}
     <div class="wrap">
       <section class="section">
         <div class="sec-head"><h2>Top 10<small>現役選手のレーティング順</small></h2><a href="#/rankings">すべて見る ›</a></div>
