@@ -1,187 +1,5 @@
 [
  {
-  "at": "2026-10-20T04:49:13.309Z",
-  "fighter": "yuta-kubo",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T04:49:13.309Z",
-  "fighter": "yutaka-saito",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "shinryu",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "ougikubo",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "inoue",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "motoya",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "goto",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "asakura",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "koike",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "akimoto",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "suzuki",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "hiramoto",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "satoshi",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "izawa",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "ayaka-hamasaki",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "daichi-tomizawa",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "erson-yamamoto",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "genji-umeno",
-  "source": "youtube",
-  "status": "unavailable",
-  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "hideki-sekine",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "hiroaki-suzuki",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "hiroya-kondo",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "hiroyuki-takaya",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "hyuma-yasui",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "juntaro-ushiku",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "kai-asakura",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
-  "at": "2026-10-20T05:48:00.254Z",
-  "fighter": "kanna-asakura",
-  "source": "youtube",
-  "status": "not_found",
-  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
- },
- {
   "at": "2026-10-20T05:48:00.254Z",
   "fighter": "kazushi-sakuraba",
   "source": "youtube",
@@ -348,5 +166,187 @@
   "source": "youtube",
   "status": "not_found",
   "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "shinryu",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "ougikubo",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "inoue",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "asakura",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "koike",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "akimoto",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "suzuki",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "hiramoto",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "daichi-tomizawa",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "erson-yamamoto",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "hiroaki-suzuki",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "juntaro-ushiku",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "kanna-asakura",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "kazushi-sakuraba",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "kenta-takizawa",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "koji-takeda",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "kyoji-horiguchi",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "masanori-kanehara",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "rikuto-shirakawa",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "ryusei-ashizawa",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "shinya-aoki",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "sho-patrick-usami",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "tenshin-nasukawa",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "yoshinori-horie",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "yusuke-yachi",
+  "source": "youtube",
+  "status": "not_found",
+  "message": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+ },
+ {
+  "at": "2026-10-21T01:02:20.778Z",
+  "fighter": "yuta-kubo",
+  "source": "youtube",
+  "status": "unavailable",
+  "message": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
  }
 ]
