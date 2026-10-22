@@ -1,14 +1,14 @@
 {
  "version": 1,
- "generatedAt": "2026-10-22T19:49:32.052Z",
+ "generatedAt": "2026-10-22T20:49:20.134Z",
  "intervalMinutes": 60,
  "fighters": {
   "shinryu": {
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCmfh-87a6MXbwpht28pyroA",
      "title": "神龍誠ちゃんねる"
@@ -54,8 +54,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC7vKmzcPgsVUJXtHWsGVq-A",
      "title": "扇久保博正 おぎちゃんねる。Ogichannel"
@@ -101,8 +101,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCuLHbp1vovgv2JUdXdot_DA",
      "title": "【井上直樹】なおきっきちゃんねる"
@@ -148,8 +148,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCglmYU7sr0Vo-R7Wty1bkZQ",
      "title": "元谷友貴"
@@ -195,8 +195,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC-n2WuHwVqEi338R-huj9cA",
      "title": "後藤丈治 JOJI GOTO"
@@ -242,8 +242,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCJZVj2iBrdvbNc416i0V-UA",
      "title": "朝倉未来 Mikuru Asakura"
@@ -289,8 +289,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC2yf1R3Z48xe7faHhvhaVQA",
      "title": "Kleber Koikeクレベル コイケ"
@@ -336,8 +336,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCd7FROEsP6LNEV3XT7TUFzg",
      "title": "秋元強真　Kyoma Akimoto"
@@ -383,8 +383,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCqGGEgRROwOFdagbsKsh5OA",
      "title": "鈴木 千裕 Chihiro Suzuki"
@@ -430,8 +430,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCmddHtZJvNrFdKJ9GBO401w",
      "title": "平本蓮  BLACKROSE"
@@ -477,8 +477,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC_y74TtJIX_ugYDBlYXxlxg",
      "title": "ホベルト サトシ ソウザ Roberto Satoshi Souza"
@@ -524,8 +524,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCDXe3wEy3AfZOyMbIwXW9rw",
      "title": "伊澤星花と風我の姉弟ch"
@@ -571,8 +571,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCX4TiOv-KFfWglvlvLw0gtw",
      "title": "浜崎朱加channel"
@@ -618,8 +618,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCbvMeXGcSb-v2m18LHkBigg",
      "title": "冨澤大智 Daichi Tomizawa"
@@ -665,8 +665,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC8X3NozweVH39FytLWvIBmA",
      "title": "山本アーセン【本人】"
@@ -712,8 +712,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCsFf0pNdtdFy7R76F0m3iOg",
      "title": "梅野源治 Genji Umeno"
@@ -759,8 +759,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCvG_RjzKKEwVzqPjDaWdkNA",
      "title": "シュレック関根 リングの魂"
@@ -806,8 +806,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCDEQcn0d5hTOuJz-kJ-jWWg",
      "title": "怪物くんチャンネル ''KAIBUTSUKUN\""
@@ -853,8 +853,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCfCeMNcY3OjomqBPcBQhR5g",
      "title": "近藤大耶　ヒロヤ"
@@ -900,8 +900,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCdseQUrKw20EliPDBEzV_LQ",
      "title": "髙谷裕之チャンネル"
@@ -947,8 +947,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCnHuySSxNFZXPfjXFUJlTQw",
      "title": "安井飛馬 チャンネル"
@@ -994,8 +994,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCcZM76gUfS5geagIHNES-eA",
      "title": "牛久絢太郎 Juntaro Ushiku"
@@ -1041,8 +1041,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCbqtn4vldMg5HjKims7MWfw",
      "title": "KAI Channel / 朝倉海"
@@ -1088,8 +1088,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC1Fgn2YxBxviecK8QP7vsdg",
      "title": "浅倉カンナ"
@@ -1135,8 +1135,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCT368AKr2fFG6KT2Xy1KFgQ",
      "title": "SAKU39 - Kazushi Sakuraba Official Channel"
@@ -1182,8 +1182,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCC7ka_zjdQQjgWoD7i0X-xw",
      "title": "瀧澤謙太"
@@ -1229,8 +1229,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCtSVXHc8d0OnmAs2j8tYCaQ",
      "title": "武田光司チャンネル"
@@ -1276,8 +1276,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC9rOWpS7IMMsSxWUwXOT63Q",
      "title": "Kyohei Hagiwara -萩原京平-"
@@ -1323,8 +1323,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC-GUnpgY8Er056ZUI_CdDOA",
      "title": "堀口恭司 Kyoji Horiguchi"
@@ -1370,8 +1370,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCtX7oQLlXYNoqb2gdJ3s-nw",
      "title": "金原正徳の金ちゃんTV"
@@ -1417,8 +1417,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCrIE5fgn6W7X9wPxlEtFD1A",
      "title": "山本美憂 MiyuuYamamoto"
@@ -1464,8 +1464,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCyshG1Tyc7WrKYvODgJVygA",
      "title": "Peter Aerts Channel / アーツチャンネル"
@@ -1511,8 +1511,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCW2I4DTIJBp4or4TOyhIIUw",
      "title": "りくちゅ〜ぶ 【白川 陸斗】"
@@ -1558,8 +1558,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCaAYPF-OGgKrKHb1_U4ui5A",
      "title": "芦澤竜誠"
@@ -1605,8 +1605,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCRw27HCS5dvwM52O5t_cHFg",
      "title": "北岡悟"
@@ -1652,8 +1652,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCgdRu6t75tTmESoDl_tEHag",
      "title": "太田忍Ota Shinobu"
@@ -1699,8 +1699,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCq4ivf-il6TuKib3I2WvjxA",
      "title": "青木真也  [ SHINYA AOKI ] チャンネル"
@@ -1746,8 +1746,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCHntD9saJbyPmrDvAAz7OOQ",
      "title": "宇佐美　正　パトリック"
@@ -1793,8 +1793,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCMbjPW4TQv01yJw_FxHlJhg",
      "title": "西谷大成のギャンブルちゃんねる"
@@ -1840,8 +1840,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCcnZDXUNhpMiFmdZrNkgIAg",
      "title": "征矢貴は穏やかに生きたい  Takaki Soya"
@@ -1887,8 +1887,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCQSQTofrIsryeE-adiAKbiA",
      "title": "川尻達也のじりラジオ"
@@ -1934,8 +1934,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC_Y6rtEtWxf-7xn15ik1Z2g",
      "title": "てすかわなんしんの部屋"
@@ -1981,8 +1981,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCVWaYVKObRJ6Nzi8xb7j7eQ",
      "title": "ときたまるーむ / 田丸辰"
@@ -2028,8 +2028,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCjTTrRFzE6DW1NA0QOFFciQ",
      "title": "翔んでやーまん"
@@ -2075,8 +2075,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCCpxmSVNPjgWSq5DTCby4aQ",
      "title": "堀江圭功 よっちゃんねる"
@@ -2122,8 +2122,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC1sCMCM2yQqS3dggBcTbNSg",
      "title": "矢地祐介 Yusuke Yachi"
@@ -2169,8 +2169,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UC4S7FmJAcEJ_JubmjarL8kw",
      "title": "久保優太ちゃんねる"
@@ -2216,8 +2216,8 @@
    "youtube": {
     "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-10-22T19:49:32.052Z",
-    "lastSuccessAt": "2026-10-22T19:49:32.052Z",
+    "fetchedAt": "2026-10-22T20:49:20.134Z",
+    "lastSuccessAt": "2026-10-22T20:49:20.134Z",
     "channel": {
      "id": "UCeK1fLPjfHJYZ-Ucr0VK4cw",
      "title": "斎藤裕"
