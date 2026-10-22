@@ -33,8 +33,8 @@
     const ph = photoOf(k), px = AV_PX[size] || 32;
     return `<span class="av av-${size}" aria-hidden="true">${SIL}${ph ? `<img src="${esc(ph.face)}" alt="" width="${px}" height="${px}" loading="lazy" decoding="async" onerror="this.remove()">` : ""}</span>`;
   };
-  const linkTxt = k => `<a href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>`;
-  const link = k => `<a class="pl" href="#/fighter/${encodeURIComponent(k)}">${av(k)}<span>${esc(S.nameOf(k))}</span></a>`;
+  const linkTxt = k => `<a href="/fighters/${encodeURIComponent(k)}/">${esc(S.nameOf(k))}</a>`;
+  const link = k => `<a class="pl" href="/fighters/${encodeURIComponent(k)}/">${av(k)}<span>${esc(S.nameOf(k))}</span></a>`;
   const deltaHtml = d => !d ? "" : `<span class="delta ${d > 0 ? "up" : "down"}">${d > 0 ? "▲" : "▼"}${Math.abs(r1(d))}</span>`;
   const statusBadge = k => { const f = S.roster[k]; if (!f) return "";
     return f.status === "champion" ? '<span class="mini-badge">王者</span>' : f.status === "former" ? '<span class="mini-badge former">元王者</span>' : ""; };
@@ -80,7 +80,7 @@
   function rankTable(list, opts = {}) {
     const rows = list.map((p, i) => `<tr>
         <td class="rank ${i < 3 && !opts.offset ? "top" : ""}">${opts.showGlobal ? p.rank : i + 1 + (opts.offset || 0)}</td>
-        <td><a class="who${opts.avRight ? " rev" : ""}" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
+        <td><a class="who${opts.avRight ? " rev" : ""}" href="/fighters/${encodeURIComponent(p.key)}/">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
         <td>${esc(p.division || "—")}</td>
         <td class="num">${rec(p.riz)}${p.riz.nc ? ` <span class="note">(${p.riz.nc}NC)</span>` : ""}</td>
         <td class="r"><span class="rate">${r1(p.rating)}</span>${deltaHtml(p.lastDelta)}</td>
@@ -96,7 +96,7 @@
         return `<div class="champ vacant"><div class="div">${t}</div><div class="nm">空位</div><div class="meta">${last ? `最後の王者：${esc(S.nameOf(last.winner))}` : ""}</div></div>`;
       }
       const p = P(c.key);
-      return `<a class="champ with-av" href="#/fighter/${c.key}">${av(c.key, "m")}<div class="div">${t}</div><div class="nm">${esc(c.name)}</div><div class="meta">RIZIN ${rec(p.riz)}・レート ${r1(p.rating)}</div></a>`;
+      return `<a class="champ with-av" href="/fighters/${c.key}/">${av(c.key, "m")}<div class="div">${t}</div><div class="nm">${esc(c.name)}</div><div class="meta">RIZIN ${rec(p.riz)}・レート ${r1(p.rating)}</div></a>`;
     }).join("")}</div>`;
   }
 
@@ -116,7 +116,7 @@
       <h1>Fight Book</h1>
       <p class="hero-lead">格闘技の素晴らしさを、もっと多くの人へ。</p>
       <p>2015年からのRIZIN全大会のMMA試合をもとに、全選手のレーティング・戦績・王座の歴史・統計を自動で算出。格闘技の魅力と選手たちの軌跡を、データで可視化する選手データベース<span class="nowrap">「FIGHT BOOK」</span>。</p>
-      <div class="cta"><a class="btn primary" href="#/rankings">ランキングを見る</a><a class="btn" href="#/fighters">選手一覧</a></div>
+      <div class="cta"><a class="btn primary" href="/rankings/">ランキングを見る</a><a class="btn" href="/fighters/">選手一覧</a></div>
       <div class="hero-stats">
         <div><b>${fighters}</b><small>出場選手</small></div>
         <div><b>${bouts}</b><small>MMA試合</small></div>
@@ -126,23 +126,23 @@
     ${FBC ? FBC.homeTop() : ""}
     <div class="wrap">
       <section class="section">
-        <div class="sec-head"><h2>Top 10<small>現役選手のレーティング順</small></h2><a href="#/rankings">すべて見る ›</a></div>
+        <div class="sec-head"><h2>Top 10<small>現役選手のレーティング順</small></h2><a href="/rankings/">すべて見る ›</a></div>
         ${rankTable(top, { avRight: true })}
       </section>
       <section class="section">
-        <div class="sec-head"><h2>Champions<small>現王者</small></h2><a href="#/champions">王座の歴史 ›</a></div>
+        <div class="sec-head"><h2>Champions<small>現王者</small></h2><a href="/champions/">王座の歴史 ›</a></div>
         ${champCards()}
       </section>
       <section class="section">
-        <div class="sec-head"><h2>Win Streak<small>RIZINで連勝中</small></h2><a href="#/stats">統計 ›</a></div>
+        <div class="sec-head"><h2>Win Streak<small>RIZINで連勝中</small></h2><a href="/stats/">統計 ›</a></div>
         <div class="tiles">${streaks.map(p => `<div class="tile with-av">${av(p.key, "m")}<div class="lbl">${esc(p.division)}</div><div class="big">${p.riz.streak}<small>連勝</small></div><div>${linkTxt(p.key)}</div><div class="sub">レート ${r1(p.rating)}・RIZIN ${rec(p.riz)}</div></div>`).join("")}</div>
       </section>
       ${latest ? `<section class="section">
-        <div class="sec-head"><h2>Latest<small>最新大会</small></h2><a href="#/events">大会一覧 ›</a></div>
+        <div class="sec-head"><h2>Latest<small>最新大会</small></h2><a href="/events/">大会一覧 ›</a></div>
         ${eventCard(latest, true)}
       </section>` : ""}
       <section class="section">
-        <div class="sec-head"><h2>Highlights<small>統計ハイライト</small></h2><a href="#/stats">もっと見る ›</a></div>
+        <div class="sec-head"><h2>Highlights<small>統計ハイライト</small></h2><a href="/stats/">もっと見る ›</a></div>
         ${highlightTiles()}
       </section>
     </div>`;
@@ -183,7 +183,7 @@
   function scoreTable(list, head, cell, opts = {}) {
     const rows = list.map((p, i) => `<tr>
         <td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td>
-        <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
+        <td><a class="who" href="/fighters/${encodeURIComponent(p.key)}/">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
         <td>${esc(p.division || "—")}</td>
         <td class="ev">${opts.detail ? opts.detail(p) : ""}</td>
         <td class="r"><span class="rate">${cell(p)}</span></td></tr>`).join("");
@@ -204,7 +204,7 @@
       .sort((a, b) => (likes[b.k] ? 1 : 0) - (likes[a.k] ? 1 : 0) || b.p.x.spotlight - a.p.x.spotlight);
     const rows = list.map((r, i) => `<tr>
         <td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td>
-        <td><a class="who" href="#/fighter/${encodeURIComponent(r.k)}">${av(r.k)}<span><b>${esc(S.nameOf(r.k))}</b><small>${esc(r.p.division || "")}</small></span></a></td>
+        <td><a class="who" href="/fighters/${encodeURIComponent(r.k)}/">${av(r.k)}<span><b>${esc(S.nameOf(r.k))}</b><small>${esc(r.p.division || "")}</small></span></a></td>
         <td><b>${esc(r.song.title)}</b><div class="ev">${esc(r.song.artist)}</div></td>
         <td class="r nowrap">
           <button class="icon-btn play-song" data-yt="${esc(r.song.yt)}" aria-label="${esc(r.song.title)}を試聴" title="試聴">▶</button>
@@ -264,14 +264,14 @@
     const initial = f.en ? f.en.trim().split(/\s+/).pop().charAt(0) : "";
     const ph = photoOf(f.key);
     // プロフィール画像があれば最優先で大きく表示。無ければ従来どおり Instagram 埋め込み → シルエット
-    const top = ph ? `<a class="photo has-img" href="#/fighter/${f.key}">${badge}${SIL}<img src="${esc(ph.src)}" alt="${esc(f.name)}" width="800" height="800" loading="lazy" decoding="async" style="object-position:${esc(ph.pos)}" onerror="this.remove()"></a>`
+    const top = ph ? `<a class="photo has-img" href="/fighters/${f.key}/">${badge}${SIL}<img src="${esc(ph.src)}" alt="${esc(f.name)}" width="800" height="800" loading="lazy" decoding="async" style="object-position:${esc(ph.pos)}" onerror="this.remove()"></a>`
       : ig ? `<div class="card-ig">${badge}${igEmbed(ig)}</div>`
-      : `<a class="photo" href="#/fighter/${f.key}">${badge}<span class="initial">${esc(initial)}</span>${SIL}</a>`;
+      : `<a class="photo" href="/fighters/${f.key}/">${badge}<span class="initial">${esc(initial)}</span>${SIL}</a>`;
     const sns = snsItems(f).map(([k, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(f.name)}の${SNS_LABEL[k]}" title="${SNS_LABEL[k]}">${ICONS[k]}</a>`).join("") || '<span class="none">SNS情報なし</span>';
     return `<article class="card${ig && !ph ? " has-ig" : ""}">${top}
       <div class="card-body">
         <div class="nick">${f.nick ? `"${esc(f.nick)}"` : ""}</div>
-        <h2 class="name"><a href="#/fighter/${f.key}">${esc(f.name)}</a></h2>
+        <h2 class="name"><a href="/fighters/${f.key}/">${esc(f.name)}</a></h2>
         <div class="en">${esc(f.en)}</div>
         <div class="meta"><strong>${esc(f.division)}</strong>　${esc(f.country)}</div>
         ${curGyms(f.key).length ? `<div class="card-gym">${gymChip(f.key)}</div>` : ""}
@@ -280,7 +280,7 @@
           <div><small>レート</small><b>${r1(p.rating)}</b></div>
           ${p.rank ? `<div><small>順位</small><b>#${p.rank}</b></div>` : ""}
         </div>
-        <div class="foot"><div class="sns">${sns}</div><a class="more" href="#/fighter/${f.key}">プロフィール ›</a></div>
+        <div class="foot"><div class="sns">${sns}</div><a class="more" href="/fighters/${f.key}/">プロフィール ›</a></div>
       </div></article>`;
   }
   function rosterGrid() {
@@ -312,7 +312,7 @@
     allState.page = Math.min(allState.page, pages);
     const slice = list.slice((allState.page - 1) * PAGE, allState.page * PAGE);
     const rows = slice.map(p => `<tr>
-      <td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key, "m")}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
+      <td><a class="who" href="/fighters/${encodeURIComponent(p.key)}/">${av(p.key, "m")}<span><b>${esc(S.nameOf(p.key))}</b>${statusBadge(p.key)}<small>${esc(subName(p.key))}</small></span></a></td>
       <td>${esc(p.country || "")}</td><td>${esc(p.division || "—")}</td>
       <td class="num">${rec(p.riz)}${p.riz.nc ? ` <span class="note">(${p.riz.nc}NC)</span>` : ""}</td>
       <td class="r"><span class="rate">${r1(p.rating)}</span>${p.rank ? ` <span class="note">#${p.rank}</span>` : ""}</td>
@@ -379,7 +379,7 @@
 
   function viewFighter(key) {
     const p = P(key);
-    if (!p) return pageHero("Not Found", "選手が見つかりません。") + `<div class="wrap"><a href="#/fighters">選手一覧へ戻る</a></div>`;
+    if (!p) return pageHero("Not Found", "選手が見つかりません。") + `<div class="wrap"><a href="/fighters/">選手一覧へ戻る</a></div>`;
     const f = S.roster[key];
     const t = p.riz;
     const ig = igPermalink(f);
@@ -510,7 +510,7 @@
   /* ---------- 統計 ---------- */
   function statTable(title, sub, fn, fmt, filter = () => true, n = 10) {
     const list = S.ranked.filter(filter).slice().sort((a, b) => fn(b) - fn(a) || b.rating - a.rating).slice(0, n);
-    const rows = list.map((p, i) => `<tr><td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td><td><a class="who" href="#/fighter/${encodeURIComponent(p.key)}">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b><small>${esc(p.division || "")}</small></span></a></td><td class="r"><span class="rate">${fmt(p)}</span></td></tr>`).join("");
+    const rows = list.map((p, i) => `<tr><td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td><td><a class="who" href="/fighters/${encodeURIComponent(p.key)}/">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b><small>${esc(p.division || "")}</small></span></a></td><td class="r"><span class="rate">${fmt(p)}</span></td></tr>`).join("");
     return `<section class="section"><div class="sec-head"><h2>${title}<small>${sub}</small></h2></div>
       <div class="tbl-wrap"><table class="tbl" style="min-width:0"><tbody>${rows}</tbody></table></div></section>`;
   }
@@ -702,8 +702,8 @@
     const p = P(k);
     return `<div class="mu-corner ${side}">
       <div class="mu-side">${side === "red" ? "RED CORNER" : "BLUE CORNER"}</div>
-      <a class="mu-av" href="#/fighter/${encodeURIComponent(k)}" tabindex="-1">${av(k, "l")}</a>
-      <a class="mu-name" href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>
+      <a class="mu-av" href="/fighters/${encodeURIComponent(k)}/" tabindex="-1">${av(k, "l")}</a>
+      <a class="mu-name" href="/fighters/${encodeURIComponent(k)}/">${esc(S.nameOf(k))}</a>
       <div class="mu-en">${esc(subName(k))}</div>
       <div class="mu-tags">${p.division ? `<span>${esc(p.division)}</span>` : ""}${statusBadge(k)}${p.active ? "" : "<span>直近2年試合なし</span>"}</div>
       <div class="mu-rate"><b>${r1(p.rating)}</b><small>レート${p.rank ? `・#${p.rank}` : ""}</small></div>
@@ -742,7 +742,7 @@
   }
   function miniCard(a, b, extra = "") {
     const pa = winProb(a, b);
-    return `<a class="mu-mini" href="#/matchups/${encodeURIComponent(a)}~${encodeURIComponent(b)}">
+    return `<a class="mu-mini" href="/compare/?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}">
       <div class="mm-div">${esc(P(a).division || "")}${extra}</div>
       <div class="mm-names"><b class="r">${av(a)}<span>${esc(S.nameOf(a))}</span></b><span>VS</span><b class="b"><span>${esc(S.nameOf(b))}</span>${av(b)}</b></div>
       <div class="mm-bar"><i style="width:${(pa * 100).toFixed(0)}%"></i></div>
@@ -770,7 +770,7 @@
             <div class="pcts"><b class="r">${Math.round(pa * 100)}%</b><small>勝率予想</small><b class="b">${Math.round((1 - pa) * 100)}%</b></div></div>
           <div class="mu-note">${sameDiv ? `${esc(P(a).division)}の一戦` : "階級が異なるカードです"}${met.length ? `・過去${met.length}戦` : "・初対戦"}</div>
           <div class="mu-actions">
-            ${FBC && FBC.enabled ? `<a class="btn-want" href="#/create/${encodeURIComponent(a)}/${encodeURIComponent(b)}">＋ この対戦をみんなに聞く</a>`
+            ${FBC && FBC.enabled ? `<a class="btn-want" href="/create/?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}">＋ この対戦をみんなに聞く</a>`
               : `<button class="btn-want ${isSaved ? "on" : ""}" id="muWant" aria-pressed="${isSaved}">${isSaved ? "♥ 見たいリストに追加済み" : "♡ この対戦を見たい！"}</button>`}
             <div class="mu-sub"><button class="ghost" id="muSwap" aria-label="コーナーを入れ替える">⇄ 入れ替え</button><button class="ghost" id="muShare">🔗 リンクをコピー</button></div>
           </div>
@@ -841,7 +841,7 @@
   function choose(key) {
     if (mu.pick.corner === "red") mu.red = key; else mu.blue = key;
     document.getElementById("picker").close();
-    location.hash = `#/matchups/${encodeURIComponent(mu.red)}~${encodeURIComponent(mu.blue)}`;
+    location.href = `/compare/?a=${encodeURIComponent(mu.red)}&b=${encodeURIComponent(mu.blue)}`;
   }
   function muEvents(e) {
     const ch = e.target.closest(".mu-change"); if (ch) { openPicker(ch.dataset.corner); return true; }
@@ -849,7 +849,7 @@
     if (e.target.closest("#pkClose")) { document.getElementById("picker").close(); return true; }
     if (e.target.id === "picker") { e.target.close(); return true; }   // 背景クリックで閉じる
     const pd = e.target.closest("#pkDiv .tab"); if (pd) { mu.pick.div = pd.dataset.d; document.querySelectorAll("#pkDiv .tab").forEach(b => b.setAttribute("aria-pressed", b === pd)); document.getElementById("pkList").innerHTML = pickerList(); return true; }
-    if (e.target.closest("#muSwap")) { location.hash = `#/matchups/${encodeURIComponent(mu.blue)}~${encodeURIComponent(mu.red)}`; return true; }
+    if (e.target.closest("#muSwap")) { location.href = `/compare/?a=${encodeURIComponent(mu.blue)}&b=${encodeURIComponent(mu.red)}`; return true; }
     if (e.target.closest("#muWant")) {
       const a = getMU(), id = muId(mu.red, mu.blue), i = a.findIndex(m => muId(m.a, m.b) === id);
       if (i >= 0) a.splice(i, 1); else a.push({ a: mu.red, b: mu.blue, t: Date.now() });
@@ -1056,10 +1056,10 @@
     const inCmp = cmpList().includes(id);
     const reps = m.cur.slice(0, 3);
     return `<article class="gym-card">
-      <a class="gym-visual" href="#/gym/${encodeURIComponent(id)}" style="--h:${gymHue(id)}"><span class="gv-ini">${esc(gymInitials(g))}</span>
+      <a class="gym-visual" href="/gyms/${encodeURIComponent(id)}/" style="--h:${gymHue(id)}"><span class="gv-ini">${esc(gymInitials(g))}</span>
         <span class="gv-faces">${reps.map(k => av(k, "l")).join("")}</span></a>
       <div class="gym-body">
-        <h3 class="gym-name"><a href="#/gym/${encodeURIComponent(id)}">${esc(g.name)}</a></h3>
+        <h3 class="gym-name"><a href="/gyms/${encodeURIComponent(id)}/">${esc(g.name)}</a></h3>
         ${g.name_en && g.name_en !== g.name ? `<div class="gym-en">${esc(g.name_en)}</div>` : ""}
         <div class="gym-loc">📍 ${gymPlace(g) ? esc(gymPlace(g)) : UNK}</div>
         <div class="gym-nums">
@@ -1067,9 +1067,9 @@
           <div><small>勝率</small><b>${pctOrDash(t.rate)}</b><em>${recTxt(t)}</em></div>
           <div><small>王者輩出</small><b>${t.champs}<i>名</i></b></div>
         </div>
-        <div class="gym-reps"><small>代表選手</small>${reps.map(k => `<a href="#/fighter/${encodeURIComponent(k)}">${esc(S.nameOf(k))}</a>`).join("・")}</div>
+        <div class="gym-reps"><small>代表選手</small>${reps.map(k => `<a href="/fighters/${encodeURIComponent(k)}/">${esc(S.nameOf(k))}</a>`).join("・")}</div>
         <div class="gym-tags">${style ? `<span title="試合データから算出">${esc(style)}</span>` : ""}<a class="gmap" href="${esc(mapsUrl(g))}" target="_blank" rel="noopener">Googleマップ</a></div>
-        <div class="gym-foot"><button class="cmp-btn ${inCmp ? "on" : ""}" data-cmp="${esc(id)}" aria-pressed="${inCmp}">${inCmp ? "✓ 比較に追加済み" : "＋ 比較"}</button><a class="more" href="#/gym/${encodeURIComponent(id)}">ジム詳細を見る ›</a></div>
+        <div class="gym-foot"><button class="cmp-btn ${inCmp ? "on" : ""}" data-cmp="${esc(id)}" aria-pressed="${inCmp}">${inCmp ? "✓ 比較に追加済み" : "＋ 比較"}</button><a class="more" href="/gyms/${encodeURIComponent(id)}/">ジム詳細を見る ›</a></div>
       </div></article>`;
   }
   function gymFiltered() {
@@ -1115,7 +1115,7 @@
       .sort((a, b) => cat.fn(gymStats(b, mode), b) - cat.fn(gymStats(a, mode), a) || gymStats(b, mode).w - gymStats(a, mode).w).slice(0, 20);
     const rows = ids.map((id, i) => { const t = gymStats(id, mode); return `<li class="gr-row ${i < 3 ? "top top" + (i + 1) : ""}">
         <span class="gr-rank">${i + 1}</span>${gymBadge(id, "s")}
-        <a class="gr-name" href="#/gym/${encodeURIComponent(id)}"><b>${esc(gymName(id))}</b><small>${esc(cat.sub(t, id) || "")}</small></a>
+        <a class="gr-name" href="/gyms/${encodeURIComponent(id)}/"><b>${esc(gymName(id))}</b><small>${esc(cat.sub(t, id) || "")}</small></a>
         <span class="gr-val">${cat.fmt(t, id)}</span></li>`; }).join("");
     return `<div class="gr-tools">
         <div class="tabs" id="gymRankTabs" role="tablist">${GYM_RANKS.map(c => `<button class="tab" role="tab" aria-pressed="${c.id === cat.id}" data-gr="${c.id}">${c.label}</button>`).join("")}</div>
@@ -1155,7 +1155,7 @@
     const c = cmpList();
     if (!c.length) return `<span class="note">ジムの「＋ 比較」を押すと、最大3ジムまで並べて比べられます。</span>`;
     return `<span class="cb-lbl">比較（${c.length}/3）</span>${c.map(id => `<span class="cb-chip">${gymBadge(id, "s")}${esc(gymName(id))}<button data-uncmp="${esc(id)}" aria-label="${esc(gymName(id))}を比較から外す">×</button></span>`).join("")}
-      <a class="btn primary cb-go ${c.length < 2 ? "disabled" : ""}" href="#/gyms/compare" ${c.length < 2 ? 'aria-disabled="true"' : ""}>比較する</a>`;
+      <a class="btn primary cb-go ${c.length < 2 ? "disabled" : ""}" href="/gyms/compare/" ${c.length < 2 ? 'aria-disabled="true"' : ""}>比較する</a>`;
   }
   function refreshGyms(what = "grid") {
     if (what === "bar") { const b0 = document.getElementById("cmpBar"); if (b0) { b0.innerHTML = cmpBarHtml(); b0.classList.toggle("empty", !cmpList().length); } return; }
@@ -1175,14 +1175,14 @@
   function fighterTile(k, gid) {
     const p = P(k), f = S.roster[k];
     const champ = S.titleFights.some(x => x.winner === k);
-    return `<a class="gf-card" href="#/fighter/${encodeURIComponent(k)}">${av(k, "l")}
+    return `<a class="gf-card" href="/fighters/${encodeURIComponent(k)}/">${av(k, "l")}
       <span class="gf-body"><b>${esc(S.nameOf(k))}</b><small>${esc(p.division || "—")}${champ ? ' <span class="mini-badge">王者経験</span>' : ""}</small>
       <span class="gf-nums"><span>${rec(p.riz)}</span><span>レート ${r1(p.rating)}</span>${p.rank ? `<span>#${p.rank}</span>` : ""}</span></span></a>`;
   }
   const infoRow = (lbl, v) => `<tr><th>${lbl}</th><td>${v || UNK}</td></tr>`;
   function viewGym(id) {
     const g = GYMS[id];
-    if (!g) return pageHero("Not Found", "ジムが見つかりません。") + `<div class="wrap"><a href="#/gyms">ジム一覧へ戻る</a></div>`;
+    if (!g) return pageHero("Not Found", "ジムが見つかりません。") + `<div class="wrap"><a href="/gyms/">ジム一覧へ戻る</a></div>`;
     const m = gymMembers(id), tc = gymStats(id, "cur"), tp = gymStats(id, "period"), style = gymStyle(id);
     const inCmp = cmpList().includes(id);
     const site = safeUrl(g.official_website) || (/^http:\/\//.test(g.official_website || "") ? g.official_website : "");
@@ -1198,7 +1198,7 @@
         <div class="gh-links">${site ? `<a href="${esc(site)}" target="_blank" rel="noopener">公式サイト ↗</a>` : ""}<a href="${esc(mapsUrl(g))}" target="_blank" rel="noopener">Googleマップ（評価・口コミ）↗</a>
           <button class="cmp-btn ${inCmp ? "on" : ""}" data-cmp="${esc(id)}" aria-pressed="${inCmp}">${inCmp ? "✓ 比較に追加済み" : "＋ 比較に追加"}</button></div>
       </div>
-      <div class="gh-faces">${m.cur.slice(0, 4).map(k => `<a href="#/fighter/${encodeURIComponent(k)}" title="${esc(S.nameOf(k))}">${av(k, "l")}</a>`).join("")}</div>
+      <div class="gh-faces">${m.cur.slice(0, 4).map(k => `<a href="/fighters/${encodeURIComponent(k)}/" title="${esc(S.nameOf(k))}">${av(k, "l")}</a>`).join("")}</div>
     </div></section>
     <div class="wrap">
       <section class="section">
@@ -1240,14 +1240,14 @@
 
   function viewGymCompare() {
     const ids = cmpList();
-    if (ids.length < 2) return pageHero("Gym Compare", "ジムを並べて比べる。") + `<div class="wrap"><p class="note">比較するジムを2つ以上選んでください（最大3つ）。</p><a class="btn primary" href="#/gyms">ジム一覧で選ぶ</a></div>`;
+    if (ids.length < 2) return pageHero("Gym Compare", "ジムを並べて比べる。") + `<div class="wrap"><p class="note">比較するジムを2つ以上選んでください（最大3つ）。</p><a class="btn primary" href="/gyms/">ジム一覧で選ぶ</a></div>`;
     const S2 = id => gymStats(id, "cur");
     const best = (fn, hi = true) => { const v = ids.map(id => fn(id)).filter(x => x != null); if (!v.length) return null; return hi ? Math.max(...v) : Math.min(...v); };
     const row = (lbl, fn, fmt, cmp = true) => { const b = cmp ? best(fn) : null; return `<tr><th>${lbl}</th>${ids.map(id => { const v = fn(id); return `<td class="${cmp && v != null && v === b && v > 0 ? "win" : ""}">${fmt(v, id)}</td>`; }).join("")}</tr>`; };
     return pageHero("Gym Compare", "最大3ジムを並べて、実績と特徴を比べる。") + `
     <div class="wrap">
       <div class="cmp-wrap"><table class="cmp-tbl">
-        <thead><tr><th></th>${ids.map(id => `<th><a href="#/gym/${encodeURIComponent(id)}" class="ch">${gymBadge(id, "l")}<b>${esc(gymName(id))}</b></a>
+        <thead><tr><th></th>${ids.map(id => `<th><a href="/gyms/${encodeURIComponent(id)}/" class="ch">${gymBadge(id, "l")}<b>${esc(gymName(id))}</b></a>
           <span class="ch-faces">${gymMembers(id).cur.slice(0, 3).map(k => av(k)).join("")}</span><button class="ghost" data-uncmp="${esc(id)}">外す</button></th>`).join("")}</tr></thead>
         <tbody>
           ${row("所在地", id => null, (v, id) => gymPlace(GYMS[id]) ? esc(gymPlace(GYMS[id])) : UNK, false)}
@@ -1262,7 +1262,7 @@
           ${row("Google評価", id => null, (v, id) => `<a href="${esc(mapsUrl(GYMS[id]))}" target="_blank" rel="noopener">Googleマップで見る</a>`, false)}
           ${row("一般入会", id => null, () => UNK, false)}
         </tbody></table></div>
-      <p class="note" style="margin-top:10px">太字は比較したジムの中で最も高い値です。戦績は現所属選手のRIZIN通算（参考値）です。<a href="#/gyms">ジム一覧に戻って変更する</a></p>
+      <p class="note" style="margin-top:10px">太字は比較したジムの中で最も高い値です。戦績は現所属選手のRIZIN通算（参考値）です。<a href="/gyms/">ジム一覧に戻って変更する</a></p>
     </div>`;
   }
 
@@ -1271,16 +1271,16 @@
     const rows = affilOf(k);
     const cur = rows.filter(r => r.cur === true), past = rows.filter(r => r.cur === false), unk = rows.filter(r => r.cur == null);
     const period = r => r.from ? `${r.from}年〜${r.to ? r.to + "年" : "現在"}` : "";
-    const card = r => { const g = GYMS[r.g]; return `<a class="fg-card" href="#/gym/${encodeURIComponent(r.g)}">${gymBadge(r.g, "m")}<span><b>${esc(g.name)}</b><small>${gymPlace(g) ? esc(gymPlace(g)) : "所在地 未確認"}${period(r) ? "・" + period(r) : ""}</small><em>ジム詳細を見る →</em></span></a>`; };
+    const card = r => { const g = GYMS[r.g]; return `<a class="fg-card" href="/gyms/${encodeURIComponent(r.g)}/">${gymBadge(r.g, "m")}<span><b>${esc(g.name)}</b><small>${gymPlace(g) ? esc(gymPlace(g)) : "所在地 未確認"}${period(r) ? "・" + period(r) : ""}</small><em>ジム詳細を見る →</em></span></a>`; };
     const src = rows.find(r => r.src);
     return `<div class="panel" style="margin-top:16px"><h3>所属ジム</h3>
       ${cur.length ? cur.map(card).join("") : unk.length ? "" : '<p class="note" style="margin:0">所属ジム未確認</p>'}
       ${unk.length ? `<div class="fg-sub">時期不明の所属</div>${unk.map(card).join("")}` : ""}
-      ${past.length ? `<div class="fg-sub">過去の所属</div><div class="fg-past">${past.map(r => `<a href="#/gym/${encodeURIComponent(r.g)}">${esc(gymName(r.g))}</a>${period(r) ? `<small>${period(r)}</small>` : ""}`).join("")}</div>` : ""}
+      ${past.length ? `<div class="fg-sub">過去の所属</div><div class="fg-past">${past.map(r => `<a href="/gyms/${encodeURIComponent(r.g)}/">${esc(gymName(r.g))}</a>${period(r) ? `<small>${period(r)}</small>` : ""}`).join("")}</div>` : ""}
       ${src ? `<p class="note" style="margin:10px 0 0">出典：<a href="${esc(src.src)}" target="_blank" rel="noopener">${esc(GYM_SRC[src.via] || "Wikipedia")}</a></p>` : rows.length ? `<p class="note" style="margin:10px 0 0">出典：${esc(GYM_SRC[rows[0].via] || "")}</p>` : ""}
     </div>`;
   }
-  const gymChip = k => { const c = curGyms(k); return c.length ? `<a class="gym-chip" href="#/gym/${encodeURIComponent(c[0])}">${gymBadge(c[0], "s")}${esc(gymName(c[0]))}${c.length > 1 ? ` ほか${c.length - 1}` : ""}</a>` : ""; };
+  const gymChip = k => { const c = curGyms(k); return c.length ? `<a class="gym-chip" href="/gyms/${encodeURIComponent(c[0])}/">${gymBadge(c[0], "s")}${esc(gymName(c[0]))}${c.length > 1 ? ` ほか${c.length - 1}` : ""}</a>` : ""; };
 
   function gymEvents(e) {
     const cb = e.target.closest("[data-cmp]");
@@ -1294,7 +1294,7 @@
       return true;
     }
     const un = e.target.closest("[data-uncmp]");
-    if (un) { setCmp(cmpList().filter(x => x !== un.dataset.uncmp)); if (location.hash.startsWith("#/gyms/compare")) $view.innerHTML = viewGymCompare(); else { refreshGyms("grid"); } return true; }
+    if (un) { setCmp(cmpList().filter(x => x !== un.dataset.uncmp)); if (location.pathname.startsWith("/gyms/compare/")) $view.innerHTML = viewGymCompare(); else { refreshGyms("grid"); } return true; }
     const go = e.target.closest(".cb-go.disabled"); if (go) { e.preventDefault(); return true; }
     if (e.target.closest("#gymReset")) { Object.assign(gymState, { q: "", region: "すべて", style: "すべて", min: 1 }); $view.innerHTML = viewGyms(); return true; }
     const gr = e.target.closest("#gymRankTabs .tab"); if (gr) { gymState.rankCat = gr.dataset.gr; refreshGyms("rank"); return true; }
@@ -1305,11 +1305,43 @@
   const FBC = window.FBC_INIT ? window.FBC_INIT({ S, P, esc, av, link, linkTxt, subName, statusBadge, pageHero, tabs, meetings, compareRows,
     rec, r1, fmtDate, METHOD_JA, SEARCH_ICON, DIVS, rerender: () => route(true) }) : null;
 
+  /* ---------- ルーター ----------
+     URL は検索エンジンが別ページとして扱える形（/fighters/asakura/ など）。
+     各URLには tools/pages/build.js が作る静的HTMLがあり、同じアプリが読み込まれて表示する。 */
+  function currentRoute() {
+    const p = location.pathname.replace(/index\.html$/, ""), q = new URLSearchParams(location.search), e = encodeURIComponent;
+    let m;
+    if ((m = p.match(/^\/matchups\/([A-Za-z0-9]{6,20})\/?$/))) return `c/${m[1]}${q.get("focus") ? "/" + q.get("focus") : ""}`;
+    if ((m = p.match(/^\/fighters\/([^/]+)\/?$/))) return `fighter/${m[1]}`;
+    if (/^\/gyms\/compare\/?$/.test(p)) return "gyms/compare";
+    if ((m = p.match(/^\/gyms\/([^/]+)\/?$/))) return `gym/${m[1]}`;
+    if (/^\/compare\/?$/.test(p)) return q.get("a") && q.get("b") ? `matchups/${e(q.get("a"))}~${e(q.get("b"))}` : "matchups";
+    if (/^\/create\/?$/.test(p)) return ["create", q.get("a") && e(q.get("a")), q.get("b") && e(q.get("b"))].filter(Boolean).join("/");
+    if (/^\/me\/?$/.test(p)) return q.get("tab") ? `me/${e(q.get("tab"))}` : "me";
+    if (/^\/login\/?$/.test(p)) return q.get("mode") ? `login/${e(q.get("mode"))}` : "login";
+    if ((m = p.match(/^\/(rankings|fighters|champions|events|stats|gyms|cards|admin|reset|about|privacy|contact)\/?$/))) return m[1];
+    return "";
+  }
+  function legacyUrl(hash) {
+    if (!hash || !hash.startsWith("#/")) return "";
+    const [page, a, b] = hash.slice(2).split("?")[0].split("/"), d = x => decodeURIComponent(x || ""), e = encodeURIComponent;
+    switch (page) {
+      case "": return "/";
+      case "fighter": return `/fighters/${e(d(a))}/`;
+      case "gym": return `/gyms/${e(d(a))}/`;
+      case "gyms": return a === "compare" ? "/gyms/compare/" : "/gyms/";
+      case "c": return `/matchups/${e(d(a))}/${b === "comments" ? "?focus=comments" : ""}`;
+      case "matchups": { if (!a) return "/compare/"; const [x, y] = a.split("~").map(d); return `/compare/?a=${e(x)}&b=${e(y)}`; }
+      case "create": return `/create/${a ? `?a=${e(d(a))}${b ? `&b=${e(d(b))}` : ""}` : ""}`;
+      case "me": return `/me/${a ? `?tab=${e(d(a))}` : ""}`;
+      case "login": return `/login/${a ? `?mode=${e(d(a))}` : ""}`;
+      default: return /^[a-z]+$/.test(page) ? `/${page}/` : "/";
+    }
+  }
+
   /* ---------- ルーター ---------- */
   function route(keepScroll) {
-    // 共有用の正規URL /matchups/{id}/ で開かれたときは、そのカードを表示
-    const pm = location.pathname.match(/\/matchups\/([A-Za-z0-9]{6,20})\/?$/);
-    const h = location.hash ? location.hash.replace(/^#\/?/, "") : pm ? `c/${pm[1]}` : "";
+    const h = currentRoute();
     const parts = h.split("?")[0].split("/");
     const [page, arg] = parts;
     const key = decodeURIComponent(arg || "");
@@ -1324,7 +1356,7 @@
       case "matchups": html = viewMatchups(arg); break;
       case "gyms": html = arg === "compare" ? viewGymCompare() : viewGyms(); break;
       case "gym": html = viewGym(key); break;
-      case "cards": case "c": case "create": case "me": case "admin": case "login": case "reset":
+      case "cards": case "c": case "create": case "me": case "admin": case "login": case "reset": case "about": case "privacy": case "contact":
         html = FBC ? FBC.view(page, parts.map(x => decodeURIComponent(x || ""))) : viewHome(); break;
       default: html = viewHome();
     }
@@ -1393,6 +1425,7 @@
     document.getElementById("menuBtn").setAttribute("aria-expanded", n.classList.contains("open"));
   });
 
-  window.addEventListener("hashchange", () => route());
-  route();
+  // 以前の「#/〜」形式のURL（共有済みのリンク）は、新しいURLへ置き換えてから表示
+  const legacy = legacyUrl(location.hash);
+  if (legacy) location.replace(legacy); else route();
 })();

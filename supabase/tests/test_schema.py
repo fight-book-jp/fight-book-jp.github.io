@@ -53,7 +53,7 @@ class Base(unittest.TestCase):
 
     def setUp(self):
         self.su.cursor().execute("truncate public.cards, public.reactions, public.want_first, public.comments, public.saves, "
-                                 "public.reports, public.events, public.themes, public.fighter_requests, public.profiles, auth.users cascade")
+                                 "public.reports, public.events, public.themes, public.fighter_requests, public.contacts, public.profiles, auth.users cascade")
 
     # --- ヘルパー ---
     def user(self, name="ファン", admin=False):
@@ -299,6 +299,19 @@ class Misc(Base):
         v = str(uuid.uuid4())
         self.su.cursor().execute("insert into auth.users values (%s, %s)", (v, json.dumps({"name": "x@example.com"})))
         self.assertEqual(self.call(v, "whoami")["name"], "ファン")
+
+
+class Contact(Base):
+    def test_contact(self):
+        self.call(None, "submit_contact", "delete", "このコメントを消してください", "こや", "a@example.com", "https://x/")
+        self.assertIn("TOO_SHORT", self.err(None, "submit_contact", "other", "短い", None, None, None))
+        self.assertIn("check", self.err(None, "submit_contact", "other", "メールが不正なとき", None, "not-an-email", None).lower())
+        self.assertIn("FORBIDDEN", self.err(self.user(), "admin_contacts"))
+        adm = self.user(admin=True)
+        lst = self.call(adm, "admin_contacts")
+        self.assertEqual(len(lst), 1); self.assertEqual(lst[0]["email"], "a@example.com")
+        self.call(adm, "admin_contact_done", lst[0]["id"])
+        self.assertEqual(self.call(adm, "admin_contacts"), [])
 
 
 class Events(Base):

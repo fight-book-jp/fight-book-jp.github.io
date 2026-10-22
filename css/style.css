@@ -1045,3 +1045,12 @@ a.pl:hover span{text-decoration:underline}
 .fb-publish .fb-nick-l{width:100%}
 .btn.danger,.wrap .btn.danger{border-color:var(--loss);color:var(--loss);background:transparent}
 .fblink.danger,.fb-cm-tools .fblink.danger{color:var(--loss)}
+.fb-doc{max-width:760px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px 28px;line-height:1.85;font-size:15px}
+.fb-doc h2{font-size:18px;font-weight:900;margin:26px 0 8px}.fb-doc h2:first-child{margin-top:0}
+.fb-doc a{color:var(--accent-strong)}
+.fb-contact{display:grid;gap:14px;margin-top:16px}
+.fb-contact label{display:grid;gap:6px;font-size:13px;font-weight:800}
+.fb-contact input,.fb-contact select,.fb-contact textarea{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px}
+.prerender{line-height:1.8}
+@media (max-width:560px){.fb-doc{padding:18px 16px}}
+.me-btn[hidden]+.menu-btn{margin-left:auto}

@@ -1,0 +1,30 @@
+# 検索エンジン向けの静的ページ（/fighters/{key}/ など）とサイトマップを作り直す
+name: Site pages
+on:
+  push:
+    branches: [main]
+    paths: ["index.html", "data/**", "tools/pages/**", "data-src/site.json"]
+  schedule:
+    - cron: "17 21 * * *"        # 毎日 6:17（日本時間）。自動更新で変わったデータも反映
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: site-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: node tools/pages/build.js
+      - name: コミット
+        run: |
+          git add -A index.html 404.html sitemap-pages.xml sitemap.xml robots.txt fighters gyms rankings champions events stats cards about privacy contact compare create me admin login reset
+          if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "検索向けページを更新"
+          git pull -q --rebase origin main && git push -q origin HEAD:main

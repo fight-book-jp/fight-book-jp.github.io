@@ -23,7 +23,7 @@ import sys
 from datetime import datetime, timezone
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SITE = "https://fight-book-jp.github.io"
+SITE = json.load(open(os.path.join(ROOT, "data-src", "site.json"), encoding="utf-8"))["url"].rstrip("/")
 OUT_DIR = os.path.join(ROOT, "matchups")
 MANIFEST = os.path.join(ROOT, "data-src", "community", "pages.json")
 RULES = {"mma": "MMA", "kickboxing": "キックボクシング", "grappling": "グラップリング", "boxing": "ボクシング"}
@@ -79,16 +79,10 @@ def page_html(template, c, names, hidden):
                 f'<p>ルール：{esc(rule_label(c))}</p>'
                 + (f'<blockquote>{esc(reason)}</blockquote>' if reason else "")
                 + f'<p><a href="/#/fighter/{esc(c["fa"])}">{esc(a["name"])}の選手ページ</a> ・ <a href="/#/fighter/{esc(c["fb"])}">{esc(b["name"])}の選手ページ</a> ・ <a href="/#/cards">ほかのカード</a></p></div>')
-    out = template
-    out = out.replace("<head>", '<head>\n<base href="/">', 1)
-    out = re.sub(r"<title>.*?</title>", f"<title>{esc(title)}</title>", out, count=1, flags=re.S)
-    out = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc(desc)}">\n{head}', out, count=1)
+    # index.html の <!--meta--> ブロックを、このカード用のタイトル・説明・OGP に置き換える
+    block = f"<!--meta-->\n<title>{esc(title)}</title>\n<meta name=\"description\" content=\"{esc(desc)}\">\n{head}<!--/meta-->"
+    out = re.sub(r"<!--meta-->.*?<!--/meta-->", lambda m: block, template, count=1, flags=re.S)
     out = out.replace('<main id="view"></main>', f'<main id="view">{body}</main>', 1)
-    return out
-
-
-def not_found_html(template):
-    out = template.replace("<head>", '<head>\n<base href="/">\n<meta name="robots" content="noindex">', 1)
     return out
 
 
@@ -157,7 +151,6 @@ def main():
     manifest = json.load(open(MANIFEST, encoding="utf-8")) if os.path.exists(MANIFEST) else {}
     new_manifest, sitemap, changed, skipped = {}, [], 0, 0
 
-    open(os.path.join(ROOT, "404.html"), "w", encoding="utf-8").write(not_found_html(template))
 
     for c in cards:
         if not ID_RE.match(str(c.get("id", ""))):
@@ -188,11 +181,10 @@ def main():
 
     # サイトマップ（トップと公開中のカードだけ）
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    urls = [(f"{SITE}/", today)] + sorted(sitemap)
+    urls = sorted(sitemap)
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
         f"  <url><loc>{u}</loc>{f'<lastmod>{m}</lastmod>' if m else ''}</url>\n" for u, m in urls) + "</urlset>\n"
-    open(os.path.join(ROOT, "sitemap.xml"), "w", encoding="utf-8").write(xml)
-    open(os.path.join(ROOT, "robots.txt"), "w", encoding="utf-8").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
+    open(os.path.join(ROOT, "sitemap-cards.xml"), "w", encoding="utf-8").write(xml)   # 索引 sitemap.xml は tools/pages/build.js が作る
     os.makedirs(os.path.dirname(MANIFEST), exist_ok=True)
     json.dump(new_manifest, open(MANIFEST, "w", encoding="utf-8"), ensure_ascii=False, indent=0, sort_keys=True)
     print(f"カード {len(cards)}・作り直し {changed}・選手データ不明でスキップ {skipped}・サイトマップ {len(urls)}件")

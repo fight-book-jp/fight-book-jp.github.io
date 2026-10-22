@@ -102,3 +102,8 @@
 - `js/community-config.js` が未設定のあいだは機能が表示されない（架空のカードや票は出さない）。
 - 共有ページ `/matchups/{id}/`（Open Graph・X カード・共有画像）とサイトマップは、`.github/workflows/community-pages.yml` が約10分ごとに生成。
 - 画面のコード：`js/community.js`。データベース：`supabase/schema.sql`（テスト：`supabase/tests/`）。
+
+## 検索向けのURLと静的ページ
+- 画面のURLは `/fighters/{key}/`・`/gyms/{id}/`・`/rankings/`・`/matchups/{id}/`（ファンのカード）など。以前の `#/〜` 形式のURLは自動で新しいURLへ転送する。
+- 各URLの HTML は `node tools/pages/build.js` が `index.html` をひな形に作る（タイトル・説明・正規URL・本文の要約入り）。`.github/workflows/site-pages.yml` がデータ更新時と毎日実行する。
+- サイトのURL（独自ドメインに変えるとき）は `data-src/site.json` の1か所で変更する。

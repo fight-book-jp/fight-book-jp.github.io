@@ -132,6 +132,19 @@ create table if not exists public.fighter_requests (
   created_at timestamptz not null default now()
 );
 
+-- ---------- お問い合わせ（管理者だけが読める） ----------
+create table if not exists public.contacts (
+  id         bigint generated always as identity primary key,
+  kind       text not null check (kind in ('opinion','delete','correct','other')),
+  name       text check (name is null or char_length(name) <= 50),
+  email      text check (email is null or (char_length(email) <= 200 and email ~ '^[^@\s]+@[^@\s]+\.[^@\s]+$')),
+  url        text check (url is null or char_length(url) <= 300),
+  body       text not null check (char_length(body) between 5 and 2000),
+  user_id    uuid,
+  status     text not null default 'open' check (status in ('open','done')),
+  created_at timestamptz not null default now()
+);
+
 -- ---------- 週替わりのお題（運営が SQL Editor で登録） ----------
 create table if not exists public.themes (
   id        bigint generated always as identity primary key,
@@ -166,9 +179,10 @@ alter table public.saves      enable row level security;
 alter table public.reports    enable row level security;
 alter table public.themes     enable row level security;
 alter table public.fighter_requests enable row level security;
+alter table public.contacts enable row level security;
 alter table public.events     enable row level security;
 revoke all on public.profiles, public.cards, public.reactions, public.want_first, public.comments,
-              public.saves, public.reports, public.themes, public.events, public.fighter_requests from anon, authenticated;
+              public.saves, public.reports, public.themes, public.events, public.fighter_requests, public.contacts from anon, authenticated;
 
 -- =====================================================================
 -- 件数の整合（同じトランザクション内で増減するので、ずれない）
@@ -667,6 +681,37 @@ begin
   return true;
 end $$;
 
+-- お問い合わせ：ログインなしで送れる。いたずら対策として全体で10分に30件まで
+create or replace function public.submit_contact(kind text, body text, name text default null, email text default null, url text default null) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  body := btrim(coalesce(body, ''));
+  if char_length(body) < 5 then raise exception 'TOO_SHORT' using errcode = 'P0001'; end if;
+  if char_length(body) > 2000 then raise exception 'TOO_LONG' using errcode = 'P0001'; end if;
+  if (select count(*) from contacts where created_at > now() - interval '10 minutes') >= 30 then
+    raise exception 'RATE_LIMIT' using errcode = 'P0001';
+  end if;
+  insert into contacts (kind, body, name, email, url, user_id)
+  values (case when kind in ('opinion','delete','correct','other') then kind else 'other' end, body,
+          nullif(left(btrim(coalesce(name, '')), 50), ''), nullif(btrim(coalesce(email, '')), ''), nullif(left(btrim(coalesce(url, '')), 300), ''), auth.uid());
+  return true;
+end $$;
+
+create or replace function public.admin_contacts() returns jsonb
+language plpgsql stable security definer set search_path = public as $$
+begin
+  if not public._is_admin() then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  return (select coalesce(jsonb_agg(to_jsonb(c) order by c.created_at desc), '[]') from (select * from contacts where status = 'open' order by created_at desc limit 100) c);
+end $$;
+
+create or replace function public.admin_contact_done(cid bigint) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public._is_admin() then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  update contacts set status = 'done' where id = cid;
+  return true;
+end $$;
+
 -- =====================================================================
 -- 計測（未ログインでも記録。dedupe_key で二重記録を防ぐ。1 端末 1 日 500 件まで）
 -- =====================================================================
@@ -688,10 +733,12 @@ end $$;
 revoke all on all functions in schema public from public, anon, authenticated;
 grant execute on function public.list_cards(text, text, text, int, int), public.get_card(text), public.find_cards(text, text),
   public.list_comments(text, text), public.related_cards(text, text[]), public.current_theme(), public.export_cards(timestamptz),
-  public.unread_count(), public.whoami(), public.log_event(text, text, text, jsonb, text)
+  public.unread_count(), public.whoami(), public.log_event(text, text, text, jsonb, text),
+  public.submit_contact(text, text, text, text, text)
   to anon, authenticated;
 grant execute on function public.create_card(text, text, text, text, text, text, boolean), public.set_reaction(text, text, boolean),
   public.set_save(text, boolean), public.add_comment(text, text, bigint, boolean, text), public.edit_comment(bigint, text),
   public.delete_comment(bigint), public.report(text, text, text, text), public.my_page(), public.my_notifications(int),
-  public.mark_notifications_seen(), public.request_fighter(text, text), public.set_display_name(text), public.admin_reports(), public.admin_set_hidden(text, text, boolean), public.admin_dismiss(text, text)
+  public.mark_notifications_seen(), public.request_fighter(text, text), public.set_display_name(text), public.admin_reports(), public.admin_set_hidden(text, text, boolean), public.admin_dismiss(text, text),
+  public.admin_contacts(), public.admin_contact_done(bigint)
   to authenticated;

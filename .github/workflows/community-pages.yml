@@ -40,7 +40,7 @@ jobs:
       - name: コミット
         if: steps.fetch.outputs.skip != '1'
         run: |
-          git add -A matchups 404.html sitemap.xml robots.txt data-src/community || true
+          git add -A matchups sitemap-cards.xml data-src/community || true
           if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "共有ページを更新"
           git pull -q --rebase origin main && git push -q origin HEAD:main
