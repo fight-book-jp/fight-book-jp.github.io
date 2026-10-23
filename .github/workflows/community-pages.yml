@@ -42,5 +42,17 @@ jobs:
         run: |
           git add -A matchups predict sitemap-cards.xml data-src/community || true
           if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
-          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "共有ページを更新"
-          git pull -q --rebase origin main && git push -q origin HEAD:main
+          # 同じ時間に別の自動処理（検索向けページの更新など）がコミットすると push がぶつかることがある。
+          # ぶつかったら最新の main に合わせてページを作り直し、最大3回までやり直す
+          for i in 1 2 3; do
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "共有ページを更新" || true
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then echo "push 完了"; exit 0; fi
+            echo "push がぶつかったので作り直します（${i}回目）"
+            git rebase --abort 2>/dev/null || true
+            git fetch -q origin main && git reset -q --hard origin/main
+            python3 tools/community/build_pages.py --cards /tmp/cards.json --names /tmp/names.json --events /tmp/events.json
+            git add -A matchups predict sitemap-cards.xml data-src/community || true
+            if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
+            sleep $((i * 5))
+          done
+          exit 1
