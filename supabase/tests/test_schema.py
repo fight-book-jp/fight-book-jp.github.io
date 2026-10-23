@@ -393,6 +393,35 @@ class Predict(Base):
         exp = self.call(None, "export_fight_events")
         self.assertEqual(exp[0]["bouts"][0]["fa_name"], "朝倉 未来")
 
+    def test_replies_and_likes(self):
+        adm, b1, b2 = self.setup_event()
+        u, v, w = self.user("U"), self.user("V"), self.user("W")
+        age = lambda: self.su.cursor().execute("update public.event_comments set created_at = created_at - interval '1 minute'")
+        root = self.call(u, "add_bout_comment", b1, "朝倉が勝つ", None)["id"]; age()
+        r1 = self.call(v, "add_bout_comment", b1, "いや鈴木", root)["id"]; age()
+        r2 = self.call(w, "add_bout_comment", b1, "@V 同意", r1)["id"]; age()   # 返信への返信も同じスレッドに入る
+        lst = {c["id"]: c for c in self.call(None, "list_event_comments", "rizin-test", 0)}   # 未ログインでも見える
+        self.assertEqual((lst[r1]["parent"], lst[r1]["reply_name"]), (root, "U"))
+        self.assertEqual((lst[r2]["parent"], lst[r2]["reply_to"], lst[r2]["reply_name"]), (root, r1, "V"))
+        self.assertIn("REPLY_GONE", self.err(v, "add_bout_comment", b2, "別の試合へ返信", root))
+        # いいね（1人1回・取り消し可）
+        self.assertEqual(self.call(v, "like_event_comment", root, True)["likes"], 1)
+        self.assertEqual(self.call(v, "like_event_comment", root, True)["likes"], 1)
+        self.assertEqual(self.call(w, "like_event_comment", root, True)["likes"], 2)
+        self.assertEqual(self.call(w, "like_event_comment", root, False)["likes"], 1)
+        self.assertIn("permission denied", self.err(None, "like_event_comment", root, True))
+        lk = self.call(v, "event_comment_likes", "rizin-test")
+        self.assertEqual(lk[str(root)], [1, True])
+        mine = {c["id"]: c for c in self.call(v, "list_event_comments", "rizin-test", 0)}
+        self.assertEqual((mine[root]["likes"], mine[root]["liked"]), (1, True))
+        # 先頭のコメントを消しても、返信があれば「削除されました」として残る
+        self.call(u, "delete_event_comment", root)
+        lst = {c["id"]: c for c in self.call(None, "list_event_comments", "rizin-test", 0)}
+        self.assertTrue(lst[root]["deleted"]); self.assertEqual((lst[root]["body"], lst[root]["name"]), ("", ""))
+        self.assertIn("REPLY_GONE", self.err(w, "add_bout_comment", b1, "消えたコメントへ", root))
+        self.call(v, "delete_event_comment", r1); self.call(w, "delete_event_comment", r2)
+        self.assertEqual(self.call(None, "list_event_comments", "rizin-test", 0), [])
+
 
 class Events(Base):
     def test_dedupe(self):

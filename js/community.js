@@ -37,7 +37,7 @@ window.FBC_INIT = function (H) {
   const ERR = {
     LOGIN_REQUIRED: "参加の準備ができていません。ページを再読み込みしてもう一度お試しください。", BANNED: "このアカウントでは投稿できません。", NOT_FOUND: "カードが見つからないか、非公開になりました。",
     TOO_FAST: "続けて投稿するときは15秒ほど待ってください。", RATE_LIMIT: "今日の投稿数の上限に達しました。明日また参加してください。",
-    TOO_LONG: "文字数が多すぎます。", EMPTY: "本文を入力してください。", SAME_FIGHTER: "同じ選手どうしは選べません。",
+    TOO_LONG: "文字数が多すぎます。", REPLY_GONE: "返信先のコメントは削除されました。", EMPTY: "本文を入力してください。", SAME_FIGHTER: "同じ選手どうしは選べません。",
     FORBIDDEN: "この操作の権限がありません。", BAD_LENGTH: "文字数を確認してください。", BAD_NAME: "ニックネームにメールアドレスやURLは使えません。", PROFILE_MISSING: "参加情報を確認できませんでした。ページを再読み込みしてください。",
   };
   const ls = {
@@ -1023,7 +1023,7 @@ window.FBC_INIT = function (H) {
   }
 
   function viewPredict(id) {
-    pv.ev = null; pv.id = id; pv.chatLast = 0; pv.cm = {}; pv.open = new Set();
+    pv.ev = null; pv.id = id; pv.chatLast = 0; pv.cm = {}; pv.open = new Set(); pv.th = new Set(); pv.reply = null; pv.permaDone = false;
     return `<div class="wrap pv" id="pvBox">${ENABLED ? loading("大会を読み込み中…") : offBox()}</div>`;
   }
   async function loadPredict() {
@@ -1046,7 +1046,7 @@ window.FBC_INIT = function (H) {
       pv.chatTimer = setInterval(() => {
         if (!$("#pvBox")) return clearInterval(pv.chatTimer);
         if (document.visibilityState !== "visible") return;
-        loadBoutComments(false);
+        loadBoutComments(false); refreshLikes();
         if (pv.ev && pv.ev.locked && ++pv.chatN % 3 === 0) refreshEvent(false);   // 締め切り後は1分ごとに試合の状態・結果を確認
       }, 20000);
     } catch (e) { box.innerHTML = failBox(e, "predict"); }
@@ -1231,14 +1231,16 @@ window.FBC_INIT = function (H) {
         + `<p class="note">勝者が的中で1点、決着方法（KO・一本・判定）も的中でさらに1点。結果が入った ${r.decided}試合で計算しています。</p>`;
     } catch (e) {}
   }
-  /* ---------- 試合ごとのコメント ----------
-     ・カードの下に最新5件を常に表示（新しい順）。6件以上は「すべて見る」で全件を開く
-     ・書いた人がその試合でどちらを予想しているかを色付きのタグで表示（会話の文脈が分かる）
-     ・入力欄の案内文は、自分の予想に合わせて「〇〇が勝つ理由は？」に変える */
-  const PREVIEW_N = 5;
+  /* ---------- 試合ごとのコメント（Xと同じ形：誰でも読める・返信・いいね・リンク共有） ----------
+     ・カードの下に最新5スレッドを常に表示（新しい順）。6件以上は「すべて見る」で全件
+     ・返信はスレッドの先頭コメントの下にまとめる（返信への返信も同じスレッド）。「返信先：@名前」を表示
+     ・返信は最新2件を表示し、それより前は「返信をさらに表示」
+     ・書いた人がその試合でどちらを予想しているかを色付きのタグで表示
+     ・各コメントには固有のリンク（/predict/大会/?c=ID）があり、開くとそのコメントへ移動する */
+  const PREVIEW_N = 5, REPLY_N = 2;
   function bcHtml(b) {
     return `<div class="bc" data-bc="${b.id}">
-      <div class="bc-body" aria-live="polite">${bcBody(b)}</div>
+      <div class="bc-body">${bcBody(b)}</div>
       <form class="bc-form" data-bid="${b.id}">
         <label class="sr" for="bci${b.id}">${esc(fname(b, "a"))} 対 ${esc(fname(b, "b"))} にコメント</label>
         <input class="bc-in" id="bci${b.id}" maxlength="200" autocomplete="off" placeholder="${esc(bcPlaceholder(b))}">
@@ -1247,56 +1249,164 @@ window.FBC_INIT = function (H) {
     </div>`;
   }
   const bcPlaceholder = b => b.me && b.me.pick ? `${fname(b, b.me.pick)}が勝つと思う理由は？` : "この試合、どう見る？（200字まで）";
-  function bcBody(b) {
-    const list = (pv.cm[b.id] || []).slice().reverse(), n = list.length, open = pv.open.has(b.id);
-    const shown = open ? list : list.slice(0, PREVIEW_N);
-    return `<div class="bc-head"><b>💬 コメント</b><span class="bc-n">${n}件</span></div>
-      ${n ? `<ul class="bc-list ${open ? "open" : ""}">${shown.map(c => bcItem(b, c)).join("")}</ul>` : `<p class="bc-empty">まだコメントはありません。最初のひとことをどうぞ。</p>`}
-      ${n > PREVIEW_N ? `<button class="bc-more" data-bcmore="${b.id}" aria-expanded="${open}">${open ? "閉じる ▲" : `すべてのコメントを見る（${n}件） ▼`}</button>` : ""}`;
+  function threadsOf(bid) {
+    const all = pv.cm[bid] || [], roots = [], reps = {};
+    for (const c of all) { if (c.parent) (reps[c.parent] = reps[c.parent] || []).push(c); else roots.push(c); }
+    return { roots: roots.reverse(), reps, total: all.filter(c => !c.deleted).length };
   }
-  function bcItem(b, c) {
+  function bcBody(b) {
+    const { roots, reps, total } = threadsOf(b.id), open = pv.open.has(b.id);
+    const shown = open ? roots : roots.slice(0, PREVIEW_N);
+    return `<div class="bc-head"><b>💬 コメント</b><span class="bc-n">${total}件</span><small class="bc-pub">誰でも読めます</small></div>
+      ${roots.length ? `<ul class="bc-list ${open ? "open" : ""}">${shown.map(c => bcThread(b, c, reps[c.id] || [])).join("")}</ul>` : `<p class="bc-empty">まだコメントはありません。最初のひとことをどうぞ。</p>`}
+      ${roots.length > PREVIEW_N ? `<button class="bc-more" data-bcmore="${b.id}" aria-expanded="${open}">${open ? "閉じる ▲" : `すべてのコメントを見る（${roots.length}スレッド） ▼`}</button>` : ""}`;
+  }
+  function bcThread(b, c, reps) {
+    const live = reps.filter(r => !r.deleted), all = pv.th.has(c.id), hidden = all ? 0 : Math.max(0, reps.length - REPLY_N);
+    const shown = all ? reps : reps.slice(-REPLY_N);
+    const rf = pv.reply && pv.reply.root === c.id ? replyForm(b) : "";
+    return `<li class="bc-th">${bcItem(b, c, live.length)}
+      ${reps.length ? `<ul class="bc-reps">
+        ${hidden ? `<li><button class="bc-thmore" data-bcthread="${c.id}" data-bid="${b.id}">返信をさらに表示（${hidden}件）</button></li>` : ""}
+        ${shown.map(r => `<li>${bcItem(b, r, 0)}</li>`).join("")}</ul>` : ""}
+      ${rf}</li>`;
+  }
+  function bcItem(b, c, nrep) {
+    if (c.deleted) return `<article class="bc-c del" id="ec${c.id}"><p>このコメントは削除されました</p></article>`;
     const tag = c.pick ? `<span class="bc-pick ${c.pick === "a" ? "red" : "blue"}">${esc(fname(b, c.pick))}予想</span>` : "";
+    const av = `<span class="bc-av ${c.pick === "a" ? "red" : c.pick === "b" ? "blue" : ""}" aria-hidden="true">${esc([...(c.name || "?")][0])}</span>`;
     const tools = c.mine ? `<button class="fblink" data-ecdel="${c.id}" data-bid="${b.id}">削除</button>`
       : `<button class="fblink" data-report="event_comment" data-target="${c.id}">通報</button>`;
-    return `<li class="bc-c ${c.mine ? "mine" : ""} ${c._new ? "bc-new" : ""}" id="ec${c.id}">
-      <div class="bc-meta">${tag}<b>${esc(c.name)}</b><time datetime="${esc(c.created_at)}">${ago(c.created_at)}</time>
+    return `<article class="bc-c ${c.mine ? "mine" : ""} ${c._new ? "bc-new" : ""} ${c.parent ? "rep" : ""}" id="ec${c.id}">
+      ${av}<div class="bc-main">
+      <div class="bc-meta"><b>${esc(c.name)}</b>${tag}<a class="bc-time" href="${esc(commentUrl(c.id))}" data-bcperma="${c.id}"><time datetime="${esc(c.created_at)}">${ago(c.created_at)}</time></a>
         <span class="bc-tools">${tools}${isAdmin() ? ` <button class="fblink danger" data-admin-hide="event_comment" data-target="${c.id}" data-hidden="true">🗑 削除</button>` : ""}</span></div>
-      <p>${esc(c.body)}</p></li>`;
+      ${c.parent && c.reply_name ? `<p class="bc-to">返信先：<b>@${esc(c.reply_name)}</b></p>` : ""}
+      <p class="bc-text">${esc(c.body)}</p>
+      <div class="bc-acts">
+        <button class="bc-act" data-bcreply="${c.id}" data-bid="${b.id}" aria-label="${esc(c.name)}さんに返信${nrep ? `（返信${nrep}件）` : ""}"><span aria-hidden="true">💬</span>${nrep ? `<b>${nrep}</b>` : ""}<span class="bc-act-t">返信</span></button>
+        <button class="bc-act bc-like ${c.liked ? "on" : ""}" data-bclike="${c.id}" data-bid="${b.id}" aria-pressed="${!!c.liked}" aria-label="いいね（${c.likes || 0}）"><span class="ic" aria-hidden="true">${c.liked ? "♥" : "♡"}</span><b>${c.likes || ""}</b></button>
+        <button class="bc-act" data-bcshare="${c.id}" aria-label="このコメントのリンクを共有"><span aria-hidden="true">↗</span><span class="bc-act-t">共有</span></button>
+      </div></div></article>`;
   }
+  function replyForm(b) {
+    const r = pv.reply;
+    return `<form class="bc-rform" data-bid="${b.id}">
+      <p class="bc-to">返信先：<b>@${esc(r.name)}</b><button type="button" class="fblink" data-bcrcancel>キャンセル</button></p>
+      <div class="bc-rrow"><label class="sr" for="bcr${b.id}">@${esc(r.name)}さんへの返信</label>
+        <input class="bc-rin" id="bcr${b.id}" maxlength="200" autocomplete="off" placeholder="返信をポスト（200字まで）" value="${esc(r.text || "")}">
+        <button class="bc-send" type="submit">返信</button></div>
+    </form>`;
+  }
+  const commentUrl = id => `${location.origin}/predict/${pv.ev ? pv.ev.id : pv.id}/?c=${id}`;
+  // コメント欄だけを描き直す。開いている返信フォームの入力内容とフォーカスは保つ
   function paintBc(bid) {
     const b = pv.ev && pv.ev.bouts.find(x => x.id === bid), el = $(`.bc[data-bc="${bid}"] .bc-body`);
-    if (b && el) el.innerHTML = bcBody(b);
+    if (!b || !el) return;
+    const ri = el.querySelector(".bc-rin"), focused = ri && document.activeElement === ri, sel = ri ? ri.selectionStart : 0;
+    el.innerHTML = bcBody(b);
+    const ni = el.querySelector(".bc-rin");
+    if (ni && focused) { ni.focus({ preventScroll: true }); try { ni.setSelectionRange(sel, sel); } catch (e) {} }
   }
+  const findComment = id => { for (const k in pv.cm) { const c = pv.cm[k].find(x => x.id === id); if (c) return c; } return null; };
   async function loadBoutComments(first) {
     if (!pv.ev) return;
     try {
       const list = await rpc("list_event_comments", { eid: pv.ev.id, after_id: first ? 0 : pv.chatLast });
-      if (!list.length) return;
+      if (first) { pv.cm = {}; }
       const touched = new Set();
       for (const c of list) {
         if (!c.bout) continue;
-        if (!first) c._new = true;
+        if (!first) { if (findComment(c.id)) continue; c._new = true; }
         (pv.cm[c.bout] = pv.cm[c.bout] || []).push(c); touched.add(c.bout);
       }
-      pv.chatLast = list[list.length - 1].id;
+      if (list.length) pv.chatLast = Math.max(pv.chatLast || 0, list[list.length - 1].id);
+      if (first) pv.ev.bouts.forEach(b => touched.add(b.id));
       touched.forEach(paintBc);
-      if (!first) setTimeout(() => { Object.values(pv.cm).flat().forEach(c => { c._new = false; }); $$(".bc-new").forEach(el => el.classList.remove("bc-new")); }, 2500);
+      if (first) focusPermalink();
+      else if (list.length) setTimeout(() => { Object.values(pv.cm).flat().forEach(c => { c._new = false; }); $$(".bc-new").forEach(el => el.classList.remove("bc-new")); }, 2500);
     } catch (e) {}
   }
+  // いいね数の変化を反映（描き直さずに数字だけ更新）
+  async function refreshLikes() {
+    if (!pv.ev) return;
+    try {
+      const m = await rpc("event_comment_likes", { eid: pv.ev.id });
+      for (const k in pv.cm) for (const c of pv.cm[k]) {
+        const v = m[c.id] || [0, false];
+        if (pv.liking && pv.liking.has(c.id)) continue;
+        if ((c.likes || 0) !== v[0] || !!c.liked !== !!v[1]) { c.likes = v[0]; c.liked = !!v[1]; paintLike(c); }
+      }
+    } catch (e) {}
+  }
+  function paintLike(c) {
+    const btn = $(`[data-bclike="${c.id}"]`); if (!btn) return;
+    btn.classList.toggle("on", !!c.liked); btn.setAttribute("aria-pressed", !!c.liked); btn.setAttribute("aria-label", `いいね（${c.likes || 0}）`);
+    btn.querySelector(".ic").textContent = c.liked ? "♥" : "♡"; btn.querySelector("b").textContent = c.likes || "";
+  }
+  async function likeComment(id) {
+    const c = findComment(id); if (!c || c.deleted) return;
+    pv.liking = pv.liking || new Set(); if (pv.liking.has(id)) return; pv.liking.add(id);
+    const on = !c.liked; c.liked = on; c.likes = (c.likes || 0) + (on ? 1 : -1); paintLike(c);   // 押した瞬間に反映
+    try {
+      await ensureUser(($("#pvNick") || {}).value || "");
+      const r = await rpc("like_event_comment", { mid: id, on_: on });
+      c.likes = r.likes; c.liked = r.liked; paintLike(c);
+      if (on) track("comment_like", null, { event: pv.ev.id, comment: id });
+    } catch (e) { c.liked = !on; c.likes = (c.likes || 0) + (on ? -1 : 1); paintLike(c); toast(esc(e.message)); }
+    finally { pv.liking.delete(id); }
+  }
+  function startReply(id, bid) {
+    const c = findComment(id); if (!c) return;
+    const root = c.parent || c.id;
+    pv.reply = { bid, to: id, root, name: c.name, text: pv.reply && pv.reply.to === id ? pv.reply.text : "" };
+    pv.th.add(root);
+    paintBc(bid);
+    const ri = $(`.bc[data-bc="${bid}"] .bc-rin`);
+    if (ri) { ri.focus({ preventScroll: true }); ri.scrollIntoView({ block: "nearest" }); }
+  }
+  async function shareComment(id, btn) {
+    const c = findComment(id), url = commentUrl(id);
+    track("comment_share", null, { event: pv.ev.id, comment: id });
+    if (navigator.share && matchMedia("(pointer:coarse)").matches) {
+      try { await navigator.share({ title: `${pv.ev.name}｜FIGHT BOOK`, text: c && c.body ? `「${c.body.slice(0, 60)}」` : "", url }); return; } catch (e) { if (e.name === "AbortError") return; }
+    }
+    try { await navigator.clipboard.writeText(url); toast("コメントのリンクをコピーしました"); } catch (e) { prompt("このURLをコピーしてください", url); }
+  }
+  // ?c=ID で開いたとき：そのコメントのある試合・スレッドを開いて移動し、少しの間ハイライトする
+  function focusPermalink() {
+    const id = +new URLSearchParams(location.search).get("c"); if (!id || pv.permaDone) return;
+    pv.permaDone = true;
+    const c = findComment(id);
+    if (!c) { toast("このコメントは削除されたか、見つかりませんでした。"); return; }
+    const { roots } = threadsOf(c.bout), root = c.parent || c.id;
+    if (roots.findIndex(r => r.id === root) >= PREVIEW_N) pv.open.add(c.bout);
+    if (c.parent) pv.th.add(root);
+    paintBc(c.bout);
+    const el = $(`#ec${id}`); if (!el) return;
+    el.classList.add("bc-focus");
+    requestAnimationFrame(() => el.scrollIntoView({ block: "center" }));
+    setTimeout(() => el.classList.remove("bc-focus"), 4000);
+  }
   async function sendBoutComment(f) {
-    const bid = +f.dataset.bid, inp = f.querySelector(".bc-in"), body = inp.value.trim();
+    const reply = f.classList.contains("bc-rform");
+    const bid = +f.dataset.bid, inp = f.querySelector(reply ? ".bc-rin" : ".bc-in"), body = inp.value.trim();
     const ni = $("#pvNick"), nick = (ni ? ni.value : nickOf()).trim(), ne = nickErr(nick);
     if (ne) { toast(ne); if (ni) { ni.focus(); ni.scrollIntoView({ block: "center" }); } return; }
     if (!body) { inp.focus(); return; }
-    const btn = f.querySelector("button"); if (btn.disabled) return; btn.disabled = true; btn.textContent = "送信中";
+    const btn = f.querySelector(".bc-send"); if (btn.disabled) return; const label = btn.textContent; btn.disabled = true; btn.textContent = "送信中";
     try {
       await ensureUser(nick);
-      const r = await rpc("add_bout_comment", { bid, body });
-      inp.value = "";
-      if (!r.duplicate) track("bout_comment", null, { event: pv.ev.id, bout: bid });
+      const r = await rpc("add_bout_comment", reply ? { bid, body, reply_to: pv.reply.to } : { bid, body });
+      if (reply) { pv.th.add(pv.reply.root); pv.reply = null; } else inp.value = "";
+      if (!r.duplicate) track(reply ? "bout_reply" : "bout_comment", null, { event: pv.ev.id, bout: bid });
       await loadBoutComments(false);
-    } catch (e) { toast(esc(e.message)); }
-    finally { btn.disabled = false; btn.textContent = "送信"; }
+      paintBc(bid);
+    } catch (e) {
+      toast(esc(e.message));
+      if (e.code === "REPLY_GONE") { pv.reply = null; loadBoutComments(true); }
+    }
+    finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = label; } }
   }
 
   /* ---------- 「私の予想」画像（端末内で作る。サーバーには送らない） ---------- */
@@ -1410,9 +1520,16 @@ window.FBC_INIT = function (H) {
     if (dl) {
       if (!confirm("このコメントを削除しますか？")) return true;
       const id = +dl.dataset.ecdel, bid = +dl.dataset.bid;
-      rpc("delete_event_comment", { mid: id }).then(() => { if (pv.cm[bid]) pv.cm[bid] = pv.cm[bid].filter(c => c.id !== id); paintBc(bid); }).catch(err => toast(esc(err.message)));
+      rpc("delete_event_comment", { mid: id }).then(() => { if (pv.reply && pv.reply.to === id) pv.reply = null; loadBoutComments(true); toast("コメントを削除しました"); }).catch(err => toast(esc(err.message)));
       return true;
     }
+    const lk = t.closest("[data-bclike]"); if (lk) { likeComment(+lk.dataset.bclike); return true; }
+    const rp = t.closest("[data-bcreply]"); if (rp) { startReply(+rp.dataset.bcreply, +rp.dataset.bid); return true; }
+    const sh = t.closest("[data-bcshare]"); if (sh) { shareComment(+sh.dataset.bcshare, sh); return true; }
+    if (t.closest("[data-bcrcancel]")) { const bid = pv.reply && pv.reply.bid; pv.reply = null; if (bid) paintBc(bid); return true; }
+    const tm = t.closest("[data-bcthread]"); if (tm) { pv.th.add(+tm.dataset.bcthread); paintBc(+tm.dataset.bid); return true; }
+    const pm = t.closest("[data-bcperma]");
+    if (pm && !e.metaKey && !e.ctrlKey) { e.preventDefault(); history.replaceState(history.state, "", pm.getAttribute("href")); pv.permaDone = false; focusPermalink(); return true; }
     const mo = t.closest("[data-bcmore]");
     if (mo) {
       const bid = +mo.dataset.bcmore, opening = !pv.open.has(bid);
@@ -1433,7 +1550,7 @@ window.FBC_INIT = function (H) {
   }
   function predictSubmit(e) {
     const f = e.target;   // 注意：フォーム内に name="id" の入力欄を置くと f.id が上書きされる
-    if (f.classList.contains("bc-form")) { e.preventDefault(); sendBoutComment(f); return true; }
+    if (f.classList.contains("bc-form") || f.classList.contains("bc-rform")) { e.preventDefault(); sendBoutComment(f); return true; }
     if (f.id === "admEvForm") {
       e.preventDefault();
       const v = n => f.elements[n].value;
@@ -1561,6 +1678,7 @@ window.FBC_INIT = function (H) {
   }
   function input(e) {
     const t = e.target;
+    if (t.classList && t.classList.contains("bc-rin")) { if (pv.reply) pv.reply.text = t.value; return true; }
     if (t.id === "pvNick") { const v = t.value.trim(); if (!nickErr(v)) ls.set(NICK, v); return true; }
     if (t.id === "fbReason") { cr.reason = t.value; refreshCreate("text"); return true; }
     if (t.id === "fbPkQ") { pk.q = t.value; $("#fbPkList").innerHTML = pickList(); return true; }

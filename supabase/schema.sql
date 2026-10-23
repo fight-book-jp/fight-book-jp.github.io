@@ -794,6 +794,19 @@ create index if not exists event_comments_event on public.event_comments(event_i
 -- 試合ごとのコメント（bout_id が空なら大会全体の雑談）
 alter table public.event_comments add column if not exists bout_id bigint references public.fight_bouts(id) on delete cascade;
 create index if not exists event_comments_bout on public.event_comments(bout_id, id);
+-- 返信（Xと同じ）：parent_id はスレッドの先頭のコメント、reply_to は直接返信したコメント
+alter table public.event_comments add column if not exists parent_id bigint references public.event_comments(id) on delete cascade;
+alter table public.event_comments add column if not exists reply_to bigint references public.event_comments(id) on delete set null;
+create index if not exists event_comments_parent on public.event_comments(parent_id);
+-- コメントへのいいね（1人1回）
+create table if not exists public.event_comment_likes (
+  comment_id bigint not null references public.event_comments(id) on delete cascade,
+  user_id    uuid not null references public.profiles(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (comment_id, user_id)
+);
+alter table public.event_comment_likes enable row level security;
+revoke all on public.event_comment_likes from anon, authenticated;
 alter table public.fight_events   enable row level security;
 alter table public.fight_bouts    enable row level security;
 alter table public.predictions    enable row level security;
@@ -915,37 +928,72 @@ begin
   return jsonb_build_object('id', nid, 'duplicate', false);
 end $$;
 
--- after_id より新しいものを古い順に（自動更新用）。after_id = 0 なら全件（最新500件まで）
--- 書いた人がその試合でどちらを予想しているか（pick）も返す
+-- after_id より新しいものを古い順に（自動更新用）。after_id = 0 なら全件（最新1000件まで）。ログインしていない人も読める
+-- 書いた人がその試合でどちらを予想しているか（pick）、返信先、いいね数も返す
+-- 削除されたコメントでも、表示中の返信が付いていれば「削除されました」として残す（会話が途切れないように）
 create or replace function public.list_event_comments(eid text, after_id bigint default 0) returns jsonb
 language sql stable security definer set search_path = public as $$
-  select coalesce(jsonb_agg(jsonb_build_object('id', c.id, 'bout', c.bout_id, 'body', c.body, 'created_at', c.created_at,
-           'name', coalesce(p.display_name, '退会したユーザー'), 'mine', c.user_id = auth.uid(),
-           'pick', (select pr.pick from predictions pr where pr.bout_id = c.bout_id and pr.user_id = c.user_id)) order by c.id), '[]')
+  select coalesce(jsonb_agg(jsonb_build_object('id', c.id, 'bout', c.bout_id, 'parent', c.parent_id,
+           'deleted', c.status <> 'visible',
+           'body', case when c.status = 'visible' then c.body else '' end, 'created_at', c.created_at,
+           'name', case when c.status = 'visible' then coalesce(p.display_name, '退会したユーザー') else '' end,
+           'mine', c.status = 'visible' and c.user_id = auth.uid(),
+           'reply_to', c.reply_to,
+           'reply_name', (select coalesce(rp.display_name, '退会したユーザー') from event_comments r left join profiles rp on rp.id = r.user_id where r.id = c.reply_to),
+           'likes', (select count(*) from event_comment_likes l where l.comment_id = c.id),
+           'liked', exists(select 1 from event_comment_likes l where l.comment_id = c.id and l.user_id = auth.uid()),
+           'pick', case when c.status = 'visible' then (select pr.pick from predictions pr where pr.bout_id = c.bout_id and pr.user_id = c.user_id) end) order by c.id), '[]')
     from (select * from event_comments c
-           where c.event_id = eid and c.status = 'visible' and c.id > coalesce(after_id, 0)
+           where c.event_id = eid and c.id > coalesce(after_id, 0)
+             and (c.status = 'visible' or (c.parent_id is null and exists(select 1 from event_comments k where k.parent_id = c.id and k.status = 'visible')))
              and exists(select 1 from fight_events e where e.id = eid and (e.status = 'public' or public._is_admin()))
-           order by c.id desc limit 500) c
+           order by c.id desc limit 1000) c
     left join profiles p on p.id = c.user_id
 $$;
 
--- 試合ごとのコメント（雑談と同じ制限：10秒に1回・1日100件まで）
-create or replace function public.add_bout_comment(bid bigint, body text) returns jsonb
+-- 自動更新用：いいね数の変化だけをまとめて返す（{"コメントID": [数, 自分が押したか]}）
+create or replace function public.event_comment_likes(eid text) returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_object_agg(x.comment_id::text, jsonb_build_array(x.n, x.mine)), '{}')
+    from (select l.comment_id, count(*) n, bool_or(l.user_id = auth.uid()) mine
+            from event_comment_likes l join event_comments c on c.id = l.comment_id
+           where c.event_id = eid and c.status = 'visible' group by l.comment_id) x
+$$;
+
+create or replace function public.like_event_comment(mid bigint, on_ boolean) returns jsonb
 language plpgsql security definer set search_path = public as $$
-declare u uuid := public._me(); eid text; last_at timestamptz; n int; nid bigint;
+declare u uuid := public._me();
+begin
+  if not exists(select 1 from event_comments c join fight_events e on e.id = c.event_id where c.id = mid and c.status = 'visible' and e.status = 'public') then
+    raise exception 'NOT_FOUND' using errcode = 'P0001'; end if;
+  if on_ then insert into event_comment_likes (comment_id, user_id) values (mid, u) on conflict do nothing;
+  else delete from event_comment_likes where comment_id = mid and user_id = u; end if;
+  return jsonb_build_object('likes', (select count(*) from event_comment_likes where comment_id = mid), 'liked', on_);
+end $$;
+
+-- 試合ごとのコメント（雑談と同じ制限：10秒に1回・1日100件まで）。reply_to を付けると返信になる
+drop function if exists public.add_bout_comment(bigint, text);
+create or replace function public.add_bout_comment(bid bigint, body text, reply_to bigint default null) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare u uuid := public._me(); eid text; last_at timestamptz; n int; nid bigint; root bigint; tgt event_comments;
 begin
   body := btrim(coalesce(body, ''));
   if char_length(body) < 1 then raise exception 'EMPTY' using errcode = 'P0001'; end if;
   if char_length(body) > 200 then raise exception 'TOO_LONG' using errcode = 'P0001'; end if;
   select b.event_id into eid from fight_bouts b join fight_events e on e.id = b.event_id where b.id = bid and e.status = 'public';
   if eid is null then raise exception 'NOT_FOUND' using errcode = 'P0001'; end if;
+  if add_bout_comment.reply_to is not null then
+    select * into tgt from event_comments c where c.id = add_bout_comment.reply_to;
+    if tgt.id is null or tgt.status <> 'visible' or tgt.bout_id is distinct from bid then raise exception 'REPLY_GONE' using errcode = 'P0001'; end if;
+    root := coalesce(tgt.parent_id, tgt.id);
+  end if;
   select id into nid from event_comments c where c.user_id = u and c.bout_id = bid and c.body = add_bout_comment.body
      and c.created_at > now() - interval '2 minutes' and c.status = 'visible' limit 1;
   if nid is not null then return jsonb_build_object('id', nid, 'duplicate', true); end if;
   select max(created_at), count(*) filter (where created_at > now() - interval '1 day') into last_at, n from event_comments where user_id = u;
   if last_at > now() - interval '10 seconds' then raise exception 'TOO_FAST' using errcode = 'P0001'; end if;
   if n >= 100 then raise exception 'RATE_LIMIT' using errcode = 'P0001'; end if;
-  insert into event_comments (event_id, bout_id, user_id, body) values (eid, bid, u, body) returning id into nid;
+  insert into event_comments (event_id, bout_id, user_id, body, parent_id, reply_to) values (eid, bid, u, body, root, add_bout_comment.reply_to) returning id into nid;
   return jsonb_build_object('id', nid, 'duplicate', false);
 end $$;
 
@@ -1024,7 +1072,7 @@ grant execute on function public.list_cards(text, text, text, int, int), public.
   public.list_comments(text, text), public.related_cards(text, text[]), public.current_theme(), public.export_cards(timestamptz),
   public.unread_count(), public.whoami(), public.log_event(text, text, text, jsonb, text),
   public.submit_contact(text, text, text, text, text),
-  public.list_fight_events(), public.get_fight_event(text), public.event_ranking(text), public.list_event_comments(text, bigint),
+  public.list_fight_events(), public.get_fight_event(text), public.event_ranking(text), public.list_event_comments(text, bigint), public.event_comment_likes(text),
   public.export_fight_events()
   to anon, authenticated;
 grant execute on function public.create_card(text, text, text, text, text, text, boolean), public.set_reaction(text, text, boolean),
@@ -1032,7 +1080,7 @@ grant execute on function public.create_card(text, text, text, text, text, text,
   public.delete_comment(bigint), public.report(text, text, text, text), public.my_page(), public.my_notifications(int),
   public.mark_notifications_seen(), public.request_fighter(text, text), public.set_display_name(text), public.admin_reports(), public.admin_set_hidden(text, text, boolean), public.admin_dismiss(text, text),
   public.admin_contacts(), public.admin_contact_done(bigint),
-  public.set_prediction(bigint, text, text), public.clear_prediction(bigint), public.add_event_comment(text, text), public.add_bout_comment(bigint, text), public.delete_event_comment(bigint),
+  public.set_prediction(bigint, text, text), public.clear_prediction(bigint), public.add_event_comment(text, text), public.add_bout_comment(bigint, text, bigint), public.like_event_comment(bigint, boolean), public.delete_event_comment(bigint),
   public.admin_upsert_event(text, text, timestamptz, text, text, text), public.admin_add_bout(text, text, text, text, text, text, text, boolean, int),
   public.admin_delete_bout(bigint), public.admin_set_result(bigint, text, text), public.admin_set_phase(text, text)
   to authenticated;
