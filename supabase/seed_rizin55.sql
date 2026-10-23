@@ -19,7 +19,7 @@ select 'rizin-55', ord, fa, fb, fa_name, fb_name, 'mma', weight, title
     (7,  'kim-kyung-pyo',      'nurkhan-zhumagazy', 'キム・ギョンピョ',             'ヌルハン・ズマガジー',     '71.0kg', false),
     (8,  'juntaro-ushiku',     'li-kaiwen',         '牛久絢太郎',                   'リー・カイウェン',         '66.0kg', false),
     (9,  'hiroaki-suzuki',     null,                '鈴木博昭',                     '千春',                    '66.0kg', false),
-    (10, null,                 null,                'アバイジャ・カレオ・メヘウラ', '相本宗輝',                '66.0kg', false),
+    (10, 'abijah-kaleo-meheula', null,             'アバイジャ・カレオ・メヘウラ', '相本宗輝',                '66.0kg', false),
     (11, 'jinnosuke-kashimura','shinobu-ota',       '鹿志村仁之介',                 '太田忍',                  '61.0kg', false),
     (12, 'ryuya-fukuda',       'soo-chul-kim',      '福田龍彌',                     'キム・スーチョル',         '61.0kg', false),
     (13, 'inoue',              'yrysbek-tilenov',   '井上直樹',                     'イリスベク・ティレノフ',   '61.0kg', false),

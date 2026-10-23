@@ -56,4 +56,6 @@ window.NAMES_JA = {
   "Makoto Takahashi":"神龍 誠", "Hiromasa Ougikubo":"扇久保 博正", "Seika Izawa":"伊澤 星花",
   "Kyoma Akimoto":"秋元 強真",
   "Yrysbek Tilenov":"イリスベク・ティレノフ",
+  "Li Kaiwen":"リー・カイウェン", "Nurkhan Zhumagazy":"ヌルハン・ズマガジー", "Kim Kyung-pyo":"キム・ギョンピョ",
+  "Abijah Kaleo Meheula":"アバイジャ・カレオ・メヘウラ",
 };
