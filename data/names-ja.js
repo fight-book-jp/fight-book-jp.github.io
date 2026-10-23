@@ -55,4 +55,5 @@ window.NAMES_JA = {
   "Chihiro Suzuki":"鈴木 千裕", "Ren Hiramoto":"平本 蓮", "Mikuru Asakura":"朝倉 未来",
   "Makoto Takahashi":"神龍 誠", "Hiromasa Ougikubo":"扇久保 博正", "Seika Izawa":"伊澤 星花",
   "Kyoma Akimoto":"秋元 強真",
+  "Yrysbek Tilenov":"イリスベク・ティレノフ",
 };
