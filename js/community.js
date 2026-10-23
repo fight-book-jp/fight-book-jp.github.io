@@ -863,7 +863,7 @@ window.FBC_INIT = function (H) {
         <li>文字の表示に Google Fonts、動画・投稿の表示に YouTube・Instagram の埋め込み機能を利用しています。これらのサービスが独自に情報を取得する場合があります。</li>
         <li>X（旧Twitter）への共有ボタンは、押したときだけ X の投稿画面を開きます。当サイトから自動で投稿することはありません。</li></ul>
       <h2>4. 広告について</h2>
-      <p>当サイトでは、第三者配信の広告サービス（Google AdSense）を利用します（導入準備中）。Google などの第三者配信事業者は、Cookie を使用して、利用者が当サイトや他のウェブサイトに過去にアクセスした際の情報にもとづいて広告を配信します。</p>
+      <p>当サイトでは、第三者配信の広告サービス（Google AdSense）を利用しています。Google などの第三者配信事業者は、Cookie を使用して、利用者が当サイトや他のウェブサイトに過去にアクセスした際の情報にもとづいて広告を配信します。</p>
       <p>Google が広告 Cookie を使用することにより、利用者が当サイトや他のサイトにアクセスした際の情報にもとづいて、Google やそのパートナーが適切な広告を表示できます。利用者は <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google の広告設定</a> でパーソナライズ広告を無効にできます。また、<a href="https://www.aboutads.info/" target="_blank" rel="noopener">www.aboutads.info</a> にアクセスすると、第三者配信事業者の Cookie を無効にできます。詳しくは <a href="https://policies.google.com/technologies/ads?hl=ja" target="_blank" rel="noopener">Google の広告に関するポリシー</a> をご覧ください。</p>
       <h2>5. Cookie・ブラウザの保存領域</h2>
       <p>当サイトは、参加のための識別ID、下書き、表示の設定などをブラウザの保存領域（ローカルストレージ等）に保存します。ブラウザの設定で削除できますが、削除するとそれまでの投稿を編集・削除できなくなります。</p>
