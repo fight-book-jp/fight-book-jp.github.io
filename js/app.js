@@ -362,6 +362,29 @@
     </svg>`;
   }
 
+  /* ---------- 国旗：選手データに登録された国（名簿の国籍 → 試合データの国コード）だけから決める。出身地からは推測しない ---------- */
+  const FLAG_CODE = { JPN: "jp", USA: "us", RUS: "ru", BRA: "br", BUL: "bg", BGR: "bg", ESP: "es", SPA: "es", IRN: "ir", UKR: "ua", NED: "nl",
+    PUR: "pr", PRI: "pr", CRO: "hr", KAZ: "kz", UZB: "uz", MGL: "mn", CHN: "cn", EST: "ee", SUI: "ch", SWI: "ch", GHA: "gh", NGA: "ng",
+    RSA: "za", ZAF: "za", ENG: "gb-eng", GBR: "gb", THA: "th", KOR: "kr", BEL: "be", FRA: "fr", AUS: "au", MEX: "mx", COD: "cd", DRC: "cd",
+    NZL: "nz", NZ: "nz", HUN: "hu", POR: "pt", KGZ: "kg", TUR: "tr", POL: "pl", LVA: "lv", LAT: "lv", SUR: "sr", IRL: "ie", ROU: "ro", ROM: "ro",
+    CMR: "cm", GER: "de", CZE: "cz", ITA: "it", SWE: "se", GUM: "gu", TGA: "to", ARG: "ar", AZE: "az", PHI: "ph", LBN: "lb", CAN: "ca",
+    GEO: "ge", IND: "in", LIT: "lt", LTU: "lt", SEN: "sn", ANG: "ao", EGY: "eg", BOL: "bo" };
+  const FLAG_JA = { 日本: "jp", アメリカ: "us", ロシア: "ru", ブラジル: "br", ブルガリア: "bg", スペイン: "es", イラン: "ir", ウクライナ: "ua", オランダ: "nl",
+    プエルトリコ: "pr", クロアチア: "hr", カザフスタン: "kz", ウズベキスタン: "uz", モンゴル: "mn", 中国: "cn", エストニア: "ee", スイス: "ch", ガーナ: "gh",
+    ナイジェリア: "ng", 南アフリカ: "za", イングランド: "gb-eng", イギリス: "gb", タイ: "th", 韓国: "kr", ベルギー: "be", フランス: "fr", オーストラリア: "au",
+    メキシコ: "mx", コンゴ: "cd", ニュージーランド: "nz", ハンガリー: "hu", ポルトガル: "pt", キルギス: "kg", トルコ: "tr", ポーランド: "pl", ラトビア: "lv",
+    スリナム: "sr", アイルランド: "ie", ルーマニア: "ro", カメルーン: "cm", ドイツ: "de", チェコ: "cz", イタリア: "it", スウェーデン: "se", グアム: "gu",
+    トンガ: "to", アルゼンチン: "ar", アゼルバイジャン: "az", フィリピン: "ph", レバノン: "lb", カナダ: "ca", ジョージア: "ge", インド: "in", リトアニア: "lt",
+    セネガル: "sn", アンゴラ: "ao", エジプト: "eg", ボリビア: "bo" };
+  function originOf(key) {
+    const f = S.roster[key], code = (window.PEOPLE && window.PEOPLE[key] || [])[1] || "";
+    // 名簿の国籍（例：「日本（ブラジル出身）」は括弧の前が国籍）。無ければ試合データの国コード
+    const label = f && f.country ? f.country : S.countryOf(key) || "";
+    const main = (f && f.country ? f.country.split(/[（(]/)[0].trim() : "");
+    const iso = main ? FLAG_JA[main] || null : FLAG_CODE[code] || null;
+    return { label, iso, kind: f && f.country ? "国籍" : "国", hometown: (f && f.hometown) || "" };
+  }
+
   function viewFighter(key) {
     const p = P(key);
     if (!p) return pageHero("Not Found", "選手が見つかりません。") + `<div class="wrap"><a href="/fighters/">選手一覧へ戻る</a></div>`;
@@ -391,14 +414,22 @@
     const ring = (window.CATCHPHRASE || {})[key] || (f && f.ringName) || en || name;
     // 全角は1、半角は0.55として幅を見積もり、画面幅に収まる文字サイズをCSSで計算する
     const ringW = Math.max(4, [...ring].reduce((w, ch) => w + (/[\u0000-\u00ff]/.test(ch) ? 0.55 : 1), 0)).toFixed(2);
+    const og = originOf(key);
+    const flagImg = og.iso ? `img/flags/${og.iso}.svg` : "";
     return `
-    <section class="f-hero"><div class="f-bgname" style="--w:${ringW}" aria-hidden="true">${esc(ring)}</div><div class="in has-photo">
+    <section class="f-hero${flagImg ? " has-flag" : ""}">
+      ${flagImg ? `<div class="f-flagbg" aria-hidden="true"><img src="${flagImg}" alt="" decoding="async"></div>` : ""}
+      <div class="f-bgname" style="--w:${ringW}" aria-hidden="true">${esc(ring)}</div><div class="in has-photo">
       <div class="f-photo${ph ? "" : " none"}">${SIL}${ph ? `<img src="${esc(ph.src)}" alt="${esc(name)}" width="800" height="800" decoding="async" fetchpriority="high" style="object-position:${esc(ph.pos)}" onerror="this.remove()">` : ""}</div>
       <div class="f-main">
         <div class="nick">${f && f.status === "champion" ? "現王者　" : f && f.status === "former" ? "元王者　" : ""}${f && f.nick ? `"${esc(f.nick)}"` : ""}</div>
         <h1>${esc(name)}</h1>
         ${name !== en ? `<div class="en">${esc(en)}</div>` : ""}
-        <div class="tags">${p.division ? `<span>${esc(p.division)}</span>` : ""}${p.country ? `<span>${esc(p.country)}</span>` : ""}${t.streak >= 2 ? `<span>RIZIN ${t.streak}連勝中</span>` : ""}${p.active ? "" : "<span>直近2年試合なし</span>"}</div>
+        ${og.label || og.hometown ? `<div class="f-origin">
+          ${og.label ? `<span class="f-og">${flagImg ? `<img class="f-flag" src="${flagImg}" alt="${esc(og.label.split(/[（(]/)[0])}の国旗" height="20" decoding="async">` : ""}<span><small>${og.kind}</small>${esc(og.label)}</span></span>` : ""}
+          ${og.hometown ? `<span class="f-og"><span><small>出身地</small>${esc(og.hometown)}</span></span>` : ""}
+        </div>` : ""}
+        <div class="tags">${p.division ? `<span>${esc(p.division)}</span>` : ""}${t.streak >= 2 ? `<span>RIZIN ${t.streak}連勝中</span>` : ""}${p.active ? "" : "<span>直近2年試合なし</span>"}</div>
         ${gymChip(key) ? `<div class="f-gym">所属 ${gymChip(key)}</div>` : ""}
         ${sns ? `<div class="f-sns" role="list" aria-label="SNS">${sns}</div>` : ""}
       </div>

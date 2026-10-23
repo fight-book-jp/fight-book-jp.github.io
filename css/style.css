@@ -1376,3 +1376,34 @@ body{overflow-x:clip}
   .hpb.big>:not(.hpb-meta):not(.hpb-vs){grid-column:2}
 }
 .hpb-vs{align-items:start}.hpb-x{align-self:center}
+
+/* =====================================================================
+   選手詳細ヘッダー：国旗を背景のアクセントに、出身地は補足情報として
+   重なり順：背景グラデーション → 国旗（控えめ・左へ溶けるようにぼかす） → リングネームの透かし → 写真・名前
+   国旗は縦横比を保ったまま（object-fit:contain）、切り取りも変形もしない
+   ===================================================================== */
+.f-flagbg{position:absolute;top:0;right:0;bottom:0;width:min(58%,780px);z-index:0;pointer-events:none;display:flex;justify-content:flex-end}
+.f-flagbg img{display:block;height:100%;width:auto;max-width:100%;object-fit:contain;object-position:right center;opacity:.32;
+  -webkit-mask-image:linear-gradient(to left,#000 0%,rgba(0,0,0,.8) 35%,transparent 100%);mask-image:linear-gradient(to left,#000 0%,rgba(0,0,0,.8) 35%,transparent 100%)}
+.f-hero.has-flag .f-bgname{z-index:0;-webkit-text-stroke-color:rgba(181,199,131,.30)}
+.f-hero.has-flag .f-photo{background:linear-gradient(180deg,#3B4731,#252D1B)}
+.f-hero h1{text-shadow:0 2px 18px rgba(0,0,0,.55)}
+.f-hero .en{text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.f-origin{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin-top:12px}
+.f-og{display:inline-flex;align-items:center;gap:10px;min-width:0;font-size:14px;font-weight:700;color:var(--hero-ink);line-height:1.35}
+.f-og>span{min-width:0;word-break:break-word}
+.f-og small{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--hero-muted)}
+.f-flag{display:block;height:20px;width:auto;flex:none;box-shadow:0 0 0 1px rgba(247,246,240,.35),0 2px 6px rgba(0,0,0,.35)}
+.f-og+.f-og{padding-left:20px;border-left:1px solid var(--hero-line)}
+.f-hero.has-flag .f-rating{padding:10px 14px;border-radius:8px;background:rgba(14,18,10,.55);backdrop-filter:blur(2px)}
+@media (max-width:900px){ .f-flagbg{width:72%} }
+@media (max-width:560px){
+  .f-flagbg{left:auto;width:100%;bottom:auto;height:min(64vw,270px)}
+  .f-flagbg img{object-position:right top;
+    -webkit-mask-image:linear-gradient(to bottom,#000 35%,transparent 100%),linear-gradient(to left,#000 0%,rgba(0,0,0,.7) 40%,transparent 100%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to bottom,#000 35%,transparent 100%),linear-gradient(to left,#000 0%,rgba(0,0,0,.7) 40%,transparent 100%);mask-composite:intersect}
+  .f-hero .in.has-photo{padding-bottom:64px}
+  .f-og{font-size:13px}
+  .f-og+.f-og{padding-left:14px}
+  .f-hero.has-flag .f-rating{justify-self:start}
+}
