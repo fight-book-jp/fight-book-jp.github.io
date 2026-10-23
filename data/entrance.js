@@ -2,7 +2,8 @@
    入場曲データ（選手key -> 曲のリスト）
    yt : YouTube動画のID（https://www.youtube.com/watch?v=XXXX の XXXX 部分）
    先頭の曲が選手ページで自動再生されます。
-   出典：RAG Music「RIZINの入場曲まとめ」(https://www.ragnet.co.jp/rizin-entrance-songs)
+   出典：RAG Music「RIZINの入場曲まとめ」(https://www.ragnet.co.jp/rizin-entrance-songs)、
+         YouTube「格闘家入場曲集」(https://www.youtube.com/@kakutoukamusic)
    ===================================================================== */
 window.ENTRANCE = {
   "asakura":            [{ title:"Battle Scars ft. Lupe Fiasco", artist:"Guy Sebastian", yt:"4ka1Lgd3SAI" }],
@@ -34,4 +35,51 @@ window.ENTRANCE = {
   "rena-kubota":        [{ title:"絶対負けない！", artist:"エイジア エンジニア", yt:"xghqVYZxbc8" }],
   "hideo-tokoro":       [{ title:"逆境ファイター", artist:"所ジョージ", yt:"-FWqcOSybPs" }],
   "kenta-takizawa":     [{ title:"Hero's Come Back!!", artist:"nobodyknows+", yt:"ipBCtl0j4O8" }],
+  // ---- 以下：YouTube「格闘家入場曲集」(https://www.youtube.com/@kakutoukamusic) の動画から追加（2026/10/23） ----
+  "yoshinori-horie"     : [{ title:"蝉", artist:"", yt:"ujNd7Pe4OLQ" }],
+  "karamov"             : [{ title:"Bayati Shiraz", artist:"", yt:"0t0FziCL0Io" }],
+  "shinya-aoki"         : [{ title:"バカサバイバー", artist:"", yt:"hGxiAMTPYEk" }],
+  "dautbek"             : [{ title:"Men Kazakpın", artist:"", yt:"TXULl1KiLEI" }, { title:"ÜLKENDER", artist:"", yt:"VmFClcqZxvU" }],
+  "a-j-mckee"           : [{ title:"Nothin' But a 'G' Thang", artist:"", yt:"yJoofdh8pts" }, { title:"Last Memory", artist:"", yt:"4P-a3x5SGZg" }],
+  "akimoto"             : [{ title:"交差点〜Big Shit Trouble", artist:"", yt:"3zWcCwP6uYU" }, { title:"交差点 feat. EXPRESS", artist:"", yt:"2dccGsQws9A" }],
+  "genji-umeno"         : [{ title:"Salamander", artist:"", yt:"EdhxqefAiic" }],
+  "yrysbek-tilenov"     : [{ title:"Кыргызмын мен", artist:"", yt:"aajdbDCUJhE" }],
+  "daichi-tomizawa"     : [{ title:"栄光の未来へ", artist:"", yt:"XQDXQKuZK4c" }, { title:"My HERO", artist:"", yt:"jGKrwN8ScLw" }],
+  "sho-patrick-usami"   : [{ title:"Warrior", artist:"", yt:"_KZTOkLCFTY" }],
+  "gustavo"             : [{ title:"Sandstorm", artist:"", yt:"-dGd-spuY28" }],
+  "tony-laramie"        : [{ title:"Trap Queen", artist:"", yt:"ptcUJaAdblc" }],
+  "patchy-mix"          : [{ title:"Rent Due", artist:"", yt:"Bx9JZNVWN8I" }],
+  "yuta-kubo"           : [{ title:"Right Above It", artist:"", yt:"XZKAMHRF4LY" }],
+  "tatsuki-shinotsuka"  : [{ title:"MASTER BRIDGE", artist:"", yt:"8iAEFGX6R7U" }, { title:"Muhammad〜Drift〜Chakka〜JAPS", artist:"", yt:"mAXTGiBFvRE" }],
+  "nozimov"             : [{ title:"Lux Aeterna", artist:"", yt:"KbGceVJD-Tc" }],
+  "shaydullaev"         : [{ title:"Кыргызмын мен", artist:"", yt:"dnPxCi7PylU" }],
+  "suguru-nii"          : [{ title:"Thunder", artist:"", yt:"6iALfKluars" }],
+  "goto"                : [{ title:"ONCE UPON A LAIF IN SAPPORO", artist:"", yt:"5r3uQKR7PPo" }],
+  "hyuma-yasui"         : [{ title:"NOW OR NEVER", artist:"", yt:"QjZMVcVhVZA" }],
+  "kazumasa-majima"     : [{ title:"Walk This Way", artist:"", yt:"jtb6kKyPEOc" }],
+  "jinnosuke-kashimura" : [{ title:"Not Like Us", artist:"", yt:"8pgJPx4p4nI" }],
+  "izawa"               : [{ title:"夢", artist:"", yt:"Vck0qeA5JP0" }],
+  "juntaro-ushiku"      : [{ title:"Next Stage", artist:"", yt:"f_uC9GIss5w" }],
+  "satoshi"             : [{ title:"A Vida É Tipo Roda Gigante", artist:"", yt:"86r-PTkoMBI" }],
+  "sabatello"           : [{ title:"Smalltown Boy", artist:"", yt:"w63XgCE6zcM" }],
+  "viktor-kolesnik"     : [{ title:"Хулиган", artist:"", yt:"bLifktdu4Fc" }],
+  "ryuya-fukuda"        : [{ title:"Smokin' Love", artist:"", yt:"pgnKIlrevIM" }],
+  "ryusei-ashizawa"     : [{ title:"しゃぼん玉", artist:"", yt:"8L2jvWqAr50" }],
+  "taisei-sakuraba"     : [{ title:"Speed TK Remix", artist:"", yt:"B4JI9nxufcA" }],
+  "yuki-ito"            : [{ title:"Beautiful World", artist:"", yt:"zSLUfuJsVG8" }],
+  "shunta-nomura"       : [{ title:"The Greatest Show", artist:"", yt:"l7CY6qVtMfY" }],
+  "ya-man"              : [{ title:"SHOWDOWN", artist:"", yt:"7rBx3Sq3WoM" }],
+  "suzuki"              : [{ title:"Stronger", artist:"", yt:"33usea6QVsM" }],
+  "koike"               : [{ title:"Já Posso Suportar", artist:"", yt:"00W23JATyvo" }],
+  "alibek-gadzhammatov" : [{ title:"Dagestan Super Lezginka Song", artist:"", yt:"j9BKVmP146Y" }, { title:"Dreams", artist:"", yt:"kScoo4XD66g" }],
+  "issa-hosokawa"       : [{ title:"Centuries", artist:"", yt:"RWVOMLrVOPM" }],
+  "kenshin-kodama"      : [{ title:"Heaven Is A Place On Earth", artist:"", yt:"wH98markl7o" }],
+  "hinotori"            : [{ title:"ジャンボリミッキー〜エレクトリカルパレード", artist:"", yt:"htBnCMMsLrE" }],
+  "john-sweeney"        : [{ title:"Famous", artist:"", yt:"w7V1dEvkVpQ" }],
+  "rikuto-shirakawa"    : [{ title:"Japanese Mafia", artist:"", yt:"xRDKEzYgI64" }],
+  "tatsuya-ando"        : [{ title:"ゲゲゲの鬼太郎", artist:"", yt:"HBnTcLStk-w" }, { title:"Love Theme from the Godfather Dub", artist:"", yt:"vnDRR-4bb_g" }],
+  "takahiro-okuyama"    : [{ title:"Techno Syndrome (Mortal Kombat)", artist:"", yt:"BWJQdatEs8E" }],
+  "arata-mizuno"        : [{ title:"翼をください", artist:"", yt:"KA1TRZJig0g" }],
+  "thiatou-bambilor"    : [{ title:"Big In Japan", artist:"", yt:"bl4_42T8yzw" }],
+  "kisa-miyake"         : [{ title:"This Is Love", artist:"", yt:"ot5f1-CXx4w" }],
 };
