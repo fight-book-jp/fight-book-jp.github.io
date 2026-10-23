@@ -9,11 +9,12 @@
    ===================================================================== */
 window.PHOTOS = {
   "shinryu": { src:"img/fighters/shinryu.webp?v=2", face:"img/fighters/shinryu-face.webp?v=2" },
-  "inoue": { src:"img/fighters/inoue.webp", face:"img/fighters/inoue-face.webp" },
+  "inoue": { src:"img/fighters/inoue.webp?v=2", face:"img/fighters/inoue-face.webp?v=2" },
   "yrysbek-tilenov": { src:"img/fighters/yrysbek-tilenov.webp", face:"img/fighters/yrysbek-tilenov-face.webp" },
   "ryuya-fukuda": { src:"img/fighters/ryuya-fukuda.webp", face:"img/fighters/ryuya-fukuda-face.webp" },
   "soo-chul-kim": { src:"img/fighters/soo-chul-kim.webp", face:"img/fighters/soo-chul-kim-face.webp" },
   "jinnosuke-kashimura": { src:"img/fighters/jinnosuke-kashimura.webp", face:"img/fighters/jinnosuke-kashimura-face.webp" },
   "shinobu-ota": { src:"img/fighters/shinobu-ota.webp", face:"img/fighters/shinobu-ota-face.webp" },
   "tony-laramie": { src:"img/fighters/tony-laramie.webp", face:"img/fighters/tony-laramie-face.webp" },
+  "asakura": { src:"img/fighters/asakura.webp", face:"img/fighters/asakura-face.webp" },
 };
