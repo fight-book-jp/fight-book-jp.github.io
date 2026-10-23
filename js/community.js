@@ -399,14 +399,13 @@ window.FBC_INIT = function (H) {
     if (!ENABLED) return "";
     return `<section class="hp" aria-labelledby="hpT"><div class="wrap">
         <div class="hp-head"><h2 id="hpT">次の一戦、あなたはどっち？</h2>
-          <p>発表済みの対戦カードの勝者を予想しよう。登録不要・締め切りまで何度でも変更できます。</p></div>
+          <p>勝つと思う選手に投票。登録不要・締切まで変更OK</p></div>
         <div id="hpBox" aria-live="polite">${loading("対戦カードを読み込み中…")}</div>
       </div></section>
       <section class="hf" aria-labelledby="hfT"><div class="wrap">
         <div class="hf-head">
-          <div><span class="hf-tag">ファン提案・開催未定</span><h2 id="hfT">次に見たい一戦を、ファンで語ろう</h2>
-            <p>実際に決まった試合ではなく、ファンが「この試合が見たい」と提案した対戦です。</p></div>
-          <a class="fz-btn hf-post" href="/create/" data-src="home_fan_post"><span aria-hidden="true">＋</span>見たい一戦を投稿する</a>
+          <div><span class="hf-tag">ファン提案・開催未定</span><h2 id="hfT">次に見たい一戦を、ファンで語ろう</h2></div>
+          <a class="fz-btn hf-post" href="/create/" data-src="home_fan_post"><span aria-hidden="true">＋</span>投稿する</a>
         </div>
         <div id="hfList">${loading()}</div>
       </div></section>`;
@@ -440,50 +439,48 @@ window.FBC_INIT = function (H) {
     const box = $("#hpBox"); if (!box) return;
     const ev = home.ev;
     const liveStrip = home.live && (!ev || home.live.id !== ev.id || home.mode !== "past")
-      ? `<a class="hp-live" href="/predict/${encodeURIComponent(home.live.id)}/" data-src="home_live"><i aria-hidden="true"></i><b>試合中</b>${esc(home.live.name)}｜コメントで盛り上がろう<span aria-hidden="true">→</span></a>` : "";
+      ? `<a class="hp-live" href="/predict/${encodeURIComponent(home.live.id)}/" data-src="home_live"><i aria-hidden="true"></i><b>LIVE</b>${esc(home.live.name)}<span aria-hidden="true">コメント →</span></a>` : "";
     if (!ev) {
-      box.innerHTML = liveStrip + `<div class="hp-empty"><b>いま受付中の試合はありません</b><p>次の大会の対戦カードが発表されたら、ここで勝敗を予想できます。それまでは、ファンが提案する「見たい一戦」で語りましょう。</p><a class="btn small" href="#hfT">見たい一戦を見る ↓</a></div>`;
+      box.innerHTML = liveStrip + `<div class="hp-empty"><b>いま受付中の試合はありません</b><p>次の対戦カードが発表されたら、ここで投票できます。</p><a class="btn small" href="#hfT">見たい一戦を見る ↓</a></div>`;
       return;
     }
     const st = stateOf(ev), bouts = homeBouts(ev), shown = bouts.slice(0, HOME_BOUTS);
-    const BADGE = { open: "勝敗予想 受付中", closed: "勝敗予想の受付は終了", live: "● 試合中", finished: "試合終了" };
+    const BADGE = { open: "受付中", closed: "受付終了", live: "● LIVE", finished: "試合終了" };
     const picked = ev.bouts.filter(b => b.me).length;
     box.innerHTML = liveStrip
-      + (home.mode === "past" ? `<p class="hp-note">いま受付中の試合はありません。直近の大会の試合について、コメントで語りましょう。</p>` : "")
+      + (home.mode === "past" ? `<p class="hp-note">受付中の試合はありません。直近の大会で語ろう</p>` : "")
       + `<div class="hp-ev"><span class="pv-badge st-${st}">${BADGE[st]}</span>
           <a class="hp-ev-name" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_event">${esc(ev.name)}</a>
-          <small>${fmtWhen(ev.starts_at)}${ev.venue ? `・${esc(ev.venue)}` : ""}・${ev.predictors ? `${ev.predictors}人が予想に参加` : "まだ予想した人はいません"}${picked ? `・あなたは${picked}/${ev.bouts.length}試合を予想済み` : ""}</small></div>
+          <small>${fmtShort(ev.starts_at)}${ev.venue ? `・${esc(ev.venue.replace(/（.*?）/g, ""))}` : ""}${ev.predictors ? `・${ev.predictors}人参加` : ""}${picked ? `・<b>投票 ${picked}/${ev.bouts.length}</b>` : ""}</small></div>
         <div class="hp-grid">${shown.map((b, i) => hpBout(b, i === 0)).join("")}</div>
-        <div class="hp-foot"><a class="hp-all" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_all_bouts">${st === "open" ? `受付中の試合をすべて見る（全${ev.bouts.length}試合）` : `全${ev.bouts.length}試合の${st === "finished" ? "結果と" : ""}コメントを見る`}<span aria-hidden="true">→</span></a></div>
-        ${home.others.length ? `<p class="hp-others">ほかに受付中の大会：${home.others.map(o => `<a href="/predict/${encodeURIComponent(o.id)}/" data-src="home_other_event">${esc(o.name)}</a>`).join("、")}</p>` : ""}`;
+        <div class="hp-foot"><a class="hp-all" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_all_bouts">${st === "open" ? `全${ev.bouts.length}試合に投票する` : `全${ev.bouts.length}試合を見る`}<span aria-hidden="true">→</span></a></div>
+        ${home.others.length ? `<p class="hp-others">ほかの大会：${home.others.map(o => `<a href="/predict/${encodeURIComponent(o.id)}/" data-src="home_other_event">${esc(o.name)}</a>`).join("、")}</p>` : ""}`;
     startHomeCountdown();
   }
   function hpBout(b, featured) {
     const ev = home.ev, open = !ev.locked && !b.winner, me = b.me || {}, c = b.counts, tot = c ? c.a + c.b : 0;
     const pa = tot ? Math.round(c.a / tot * 100) : 0, decided = b.winner === "a" || b.winner === "b";
-    const corner = s => vsPanel(b, s, { featured, src: "home_fighter" });
-    const pickBtn = s => `<button class="hpb-pick ${s === "a" ? "red" : "blue"}" data-hpick="${s}" data-bid="${b.id}" aria-pressed="${me.pick === s}">${me.pick === s ? "✓ " : ""}${esc(fname(b, s))}が勝つ</button>`;
+    // 投票ボタンは各選手の写真の真下に置き、文字は「投票」だけにする（誰に投票するかは写真と名前で分かる）
+    const voteBtn = s => open ? `<button class="fp-vote ${s === "a" ? "red" : "blue"}" data-hpick="${s}" data-bid="${b.id}" aria-pressed="${me.pick === s}" aria-label="${esc(fname(b, s))}の勝ちに投票">${voteLabel(me, s)}</button>` : "";
+    const corner = s => vsPanel(b, s, { featured, src: "home_fighter", vote: voteBtn(s) });
     const bar = c ? `<div class="pv-bar" aria-label="${esc(fname(b, "a"))} ${pa}%・${esc(fname(b, "b"))} ${100 - pa}%"><i style="width:${pa}%"></i></div>
-        <div class="pv-pct"><span>${pa}%</span><small>${tot}人が予想</small><span>${tot ? 100 - pa : 0}%</span></div>` : "";
-    const cmLink = (t) => `<a class="hpb-cm" href="/predict/${encodeURIComponent(ev.id)}/?bout=${b.id}" data-src="home_to_comment" data-bid="${b.id}">💬 ${t}${b.ncm ? `（${b.ncm}件）` : ""}</a>`;
+        <div class="pv-pct"><span>${pa}%</span><small>${tot}人が投票</small><span>${tot ? 100 - pa : 0}%</span></div>` : "";
+    const cmLink = t => `<a class="hpb-cm" href="/predict/${encodeURIComponent(ev.id)}/?bout=${b.id}" data-src="home_to_comment" data-bid="${b.id}">💬 ${t}${b.ncm ? ` <b>${b.ncm}</b>` : ""}</a>`;
     let body;
     if (open && !me.pick) {
-      body = `<div class="hpb-picks" role="group" aria-label="勝者を予想">${pickBtn("a")}${pickBtn("b")}</div>
-        <p class="hpb-hint">${b.n ? `${b.n}人が予想済み。` : "まだ予想はありません。最初の予想をどうぞ。"}予想すると、みんなの予想の割合が見られます。</p>
-        ${b.ncm ? `<div class="hpb-next">${cmLink("コメントを読む")}</div>` : ""}`;
+      body = `<p class="hpb-hint">${b.n ? `${b.n}人が投票・` : ""}投票すると結果が見られます</p>`;
     } else if (open) {
-      body = `<div class="hpb-picks" role="group" aria-label="勝者を予想（変更できます）">${pickBtn("a")}${pickBtn("b")}</div>
-        <div class="hpb-res" role="status"><p class="hpb-done">✓ <b>${esc(fname(b, me.pick))}</b>の勝ちと予想しました<small>締め切りまで変更できます</small></p>${bar}</div>
-        <div class="hpb-next">${cmLink(b.ncm ? "みんなの理由を読んで、コメントしよう" : "そう思った理由をコメントしよう")}<button class="hpb-go" data-hpnext="${b.id}">次の試合を予想<span aria-hidden="true"> ↓</span></button></div>`;
+      body = `<div class="hpb-res" role="status">${bar}</div>
+        <div class="hpb-next">${cmLink("コメント")}<button class="hpb-go" data-hpnext="${b.id}">次の試合<span aria-hidden="true"> ↓</span></button></div>`;
     } else {
       const hit = decided && me.pick ? me.pick === b.winner : null;
-      body = `${me.pick ? `<p class="hpb-done">あなたの予想：<b>${esc(fname(b, me.pick))}</b>${hit === true ? '<span class="pv-hit">的中！</span>' : hit === false ? '<span class="pv-miss">はずれ</span>' : ""}</p>` : ""}${bar}
-        <div class="hpb-next">${cmLink(stateOf(ev) === "finished" || b.winner ? "感想をコメントしよう" : "この試合について語ろう")}</div>`;
+      body = `${hit === true ? '<p class="hpb-done"><span class="pv-hit">的中！</span></p>' : hit === false ? '<p class="hpb-done"><span class="pv-miss">はずれ</span></p>' : ""}${bar}
+        <div class="hpb-next">${cmLink(stateOf(ev) === "finished" || b.winner ? "感想を書く" : "コメント")}</div>`;
     }
     return `<article class="hpb ${featured ? "big" : ""} ${me.pick ? "done" : ""}" data-hpb="${b.id}">
       <div class="hpb-meta">${featured ? '<span class="hpb-main">メインイベント</span>' : ""}${b.title ? '<span class="pv-title">タイトルマッチ</span>' : ""}${b.weight ? `<span>${esc(b.weight)}</span>` : ""}</div>
       <div class="hpb-vs fp-vs">${corner("a")}<span class="fp-x" aria-hidden="true">VS</span>${corner("b")}</div>
-      ${featured && open ? `<div class="hp-cd" id="hpCd" role="timer" aria-live="off"><span class="hp-cd-l">勝敗予想の締め切りまで</span><span class="hp-cd-t" id="hpCdT"></span><small>締め切り：${fmtWhen(ev.starts_at)}</small></div>` : ""}
+      ${featured && open ? `<div class="hp-cd" id="hpCd" role="timer" aria-live="off"><span class="hp-cd-l">予想締切まで</span><span class="hp-cd-t" id="hpCdT"></span><small>締切 ${fmtShort(ev.starts_at)}</small></div>` : ""}
       ${body}
     </article>`;
   }
@@ -494,13 +491,15 @@ window.FBC_INIT = function (H) {
     const me = b.me || {}, win = b.winner === s, lose = (b.winner === "a" || b.winner === "b") && !win;
     const inner = `${ph ? `<img src="${esc(ph.src)}" alt="" loading="${o.featured ? "eager" : "lazy"}" decoding="async" style="object-position:${esc(ph.pos)}" onerror="this.remove()">` : ""}<span class="fp-sil" aria-hidden="true">${SIL}</span>
       <span class="fp-shade" aria-hidden="true"></span>
-      ${me.pick === s ? '<span class="fp-mine">✓ あなたの予想</span>' : ""}
+      ${me.pick === s && !o.vote ? '<span class="fp-mine">✓ あなたの予想</span>' : ""}
       ${win ? `<span class="fp-win">WIN${b.method ? "・" + esc(METH[b.method] || "") : ""}</span>` : ""}
       <b class="fp-name">${esc(name)}</b>`;
     return `<div class="fp ${s === "a" ? "red" : "blue"} ${o.featured ? "big" : ""} ${me.pick === s ? "on" : ""} ${win ? "win" : ""} ${lose ? "lose" : ""}">
       ${link ? `<a class="fp-ph" href="/fighters/${encodeURIComponent(x.key)}/" data-src="${o.src || "fighter"}" aria-label="${esc(name)}の選手ページ">${inner}</a>` : `<div class="fp-ph">${inner}</div>`}
+      ${o.vote || ""}
     </div>`;
   }
+  const voteLabel = (me, s) => me.pick === s ? "✓ 投票済み" : me.pick ? "こちらに変更" : "投票";
   // 1秒ごとに、締め切りまでの文字だけを書き換える
   function startHomeCountdown() {
     clearInterval(home.timer);
@@ -547,7 +546,7 @@ window.FBC_INIT = function (H) {
     track("home_next_bout", null, { event: home.ev.id, from: bid, to: next ? "home" : "event" });
     if (!next) { location.href = `/predict/${encodeURIComponent(home.ev.id)}/`; return; }
     next.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    const b = next.querySelector(".hpb-pick"); if (b) setTimeout(() => b.focus({ preventScroll: true }), 350);
+    const b = next.querySelector(".fp-vote"); if (b) setTimeout(() => b.focus({ preventScroll: true }), 350);
   }
   // 見たい一戦：「見たい！」が多い順に3件（足りなければ新着で埋める）
   async function loadHomeFans() {
@@ -1142,6 +1141,8 @@ window.FBC_INIT = function (H) {
   const RES = { a: null, b: null, draw: "引き分け", nc: "無効試合" };
   const pv = { ev: null, timer: null, chatLast: 0, chatTimer: null };
   const fmtWhen = t => { const d = new Date(t); return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日（${"日月火水木金土"[d.getDay()]}）${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+  // 短い日時（同じ年なら年を省く）：11/8（日）13:00
+  const fmtShort = t => { const d = new Date(t), y = d.getFullYear() !== new Date().getFullYear() ? `${d.getFullYear()}/` : ""; return `${y}${d.getMonth() + 1}/${d.getDate()}（${"日月火水木金土"[d.getDay()]}）${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
   const side = (bt, s) => ({ key: bt["f" + s], name: bt["f" + s + "_name"] });
   const fname = (bt, s) => side(bt, s).name;   // 表記は登録した名前（公式発表の表記）を使う
   const evUrl = id => `/predict/${encodeURIComponent(id)}/`;
@@ -1198,9 +1199,9 @@ window.FBC_INIT = function (H) {
       <section class="pv-head" id="pvHead">${headHtml(ev)}</section>
       <section class="section"><div class="sec-head"><h2>対戦カード（${ev.bouts.length}試合）<small>Fight Card</small></h2></div>
         <div id="pvStatus">${statusHtml(ev)}</div>
-        ${ev.bouts.length ? `<div class="bc-nickbar"><span class="bc-nb-t">💬 各試合の下で、ファン同士コメントできます</span>
+        ${ev.bouts.length ? `<div class="bc-nickbar">
           <label>ニックネーム<input class="fb-nick" id="pvNick" maxlength="30" value="${esc(nickOf())}" placeholder="例：格闘技好き" autocomplete="nickname"></label>
-          <small>ログイン不要・ニックネームは公開されます</small></div>` : ""}
+          <small>コメントに表示されます</small></div>` : ""}
         ${ev.bouts.length ? `<ol class="pv-bouts">${ev.bouts.slice().reverse().map(b => boutHtml(b, ev.locked)).join("")}</ol>` : `<p class="note">対戦カードはまだ発表されていません。</p>`}
       </section>
       <section class="section" id="pvRankWrap" hidden><div class="sec-head"><h2>的中ランキング<small>Ranking</small></h2></div><div id="pvRank"></div></section>
@@ -1208,43 +1209,41 @@ window.FBC_INIT = function (H) {
   }
   /* ---------- 状態：予想の受付（締め切り時刻）と、試合の進行（管理者が設定）は別に扱う ---------- */
   const stateOf = ev => !ev.locked ? "open" : ev.phase === "live" ? "live" : ev.phase === "finished" ? "finished" : "closed";
-  const deadlineText = ev => `締め切り：${fmtWhen(ev.starts_at)}`;
+  const deadlineText = ev => `締切 ${fmtShort(ev.starts_at)}`;
   function headHtml(ev) {
     const st = stateOf(ev), picked = ev.bouts.filter(b => b.me).length;
-    const BADGE = { open: "勝敗予想 受付中", closed: "勝敗予想の受付は終了", live: "● LIVE 試合中", finished: "試合終了" };
+    const BADGE = { open: "受付中", closed: "受付終了", live: "● LIVE", finished: "試合終了" };
     return `<div class="pv-badge st-${st}">${BADGE[st]}</div>
       <h1>${esc(ev.name)}</h1>
-      <p class="pv-when">${fmtWhen(ev.starts_at)}${ev.venue ? `・${esc(ev.venue)}` : ""}</p>
-      <p class="pv-sum"><b id="pvPicked">${picked}</b> / ${ev.bouts.length}試合を予想${st === "open" ? "済み" : ""}・${ev.predictors}人が参加</p>
+      <p class="pv-when">${fmtShort(ev.starts_at)}${ev.venue ? `・${esc(ev.venue)}` : ""}</p>
+      <p class="pv-sum">投票 <b id="pvPicked">${picked}</b> / ${ev.bouts.length}・${ev.predictors}人参加</p>
       <div class="pv-acts">${st === "open"
-        ? `<button class="fz-btn pv-share" id="pvShare" ${picked ? "" : "disabled"}>📣 私の予想を共有</button>`
-        : `<button class="fz-btn" data-gocomment>💬 コメントする</button>${picked ? `<button class="fz-link pv-share-link" id="pvShare">私の予想を共有</button>` : ""}`}
-        ${ev.source_url ? `<a class="fz-link" href="${esc(ev.source_url)}" target="_blank" rel="noopener">公式の発表を見る ↗</a>` : ""}</div>
-      <p class="note">対戦カードは公式発表をもとに掲載しています。${st === "open" ? "予想は締め切りまで何度でも変えられます。みんなの予想の割合は、自分が予想した試合から見られます。" : "コメントは試合中・試合後も各試合の下から投稿できます。"}</p>`;
+        ? `<button class="fz-btn pv-share" id="pvShare" ${picked ? "" : "disabled"}>📣 予想を共有</button>`
+        : `<button class="fz-btn" data-gocomment>💬 コメント</button>${picked ? `<button class="fz-link pv-share-link" id="pvShare">予想を共有</button>` : ""}`}
+        ${ev.source_url ? `<a class="fz-link" href="${esc(ev.source_url)}" target="_blank" rel="noopener">公式 ↗</a>` : ""}</div>`;
   }
   function statusHtml(ev) {
     const st = stateOf(ev);
     if (st === "open") return `<div class="cd" id="pvCd" data-level="normal" role="timer" aria-live="off" aria-labelledby="pvCdSr">
-        <div class="cd-top"><span class="cd-label">⏱ 勝敗予想の締め切りまで</span><span class="cd-flag" id="pvCdFlag" hidden></span></div>
+        <div class="cd-top"><span class="cd-label">⏱ 勝敗予想の締切まで</span><span class="cd-flag" id="pvCdFlag" hidden></span></div>
         <div class="cd-digits" aria-hidden="true">
           <span class="cd-g" data-g="d"><b data-k="d">0</b><small>日</small></span>
           <span class="cd-g"><b data-k="h">00</b><small>時間</small></span>
           <span class="cd-g"><b data-k="m">00</b><small>分</small></span>
           <span class="cd-g"><b data-k="s">00</b><small>秒</small></span>
         </div>
-        <p class="cd-sub">${esc(deadlineText(ev))}<span>・締め切りまで何度でも予想を変えられます</span></p>
+        <p class="cd-sub">${esc(deadlineText(ev))}・変更OK</p>
         <span class="sr" id="pvCdSr">勝敗予想の${esc(deadlineText(ev))}</span>
       </div>`;
     const T = {
-      closed: ["勝敗予想の受付は終了しました", "コメントは引き続き投稿できます。みんなの予想の割合も見られます。"],
-      live: ["試合中｜コメントで盛り上がろう", "勝敗予想の受付は終了しました。各試合の下から、いつでもコメントできます。"],
-      finished: ["試合終了｜感想を投稿しよう", "結果と的中ランキングをチェック。感想は各試合の下から投稿できます。"],
+      closed: ["勝敗予想の受付は終了しました", "コメントは引き続き投稿できます"],
+      live: ["試合中｜コメントで盛り上がろう", "コメントはいつでも投稿できます"],
+      finished: ["試合終了｜感想を投稿しよう", "結果と的中ランキングをチェック"],
     }[st];
     return `<div class="cd cd-end" data-phase="${st}" role="status">
         <div class="cd-top"><span class="cd-label">${st === "live" ? '<i class="cd-live" aria-hidden="true"></i>' : ""}${T[0]}</span></div>
         <p class="cd-msg">${T[1]}</p>
-        <button class="cd-cta" data-gocomment>💬 コメントする</button>
-        <p class="cd-sub">${esc(deadlineText(ev))}（受付終了）</p>
+        <button class="cd-cta" data-gocomment>💬 コメント</button>
       </div>`;
   }
   // 1秒ごとに数字だけを書き換える（ページやコメント欄は描き直さない）
@@ -1322,18 +1321,18 @@ window.FBC_INIT = function (H) {
     const corner = s => {
       const x = side(b, s), name = fname(b, s), on = me.pick === s, win = b.winner === s;
       return `<div class="pv-side ${s === "a" ? "red" : "blue"} ${on ? "on" : ""} ${win ? "win" : ""}">
-        ${vsPanel(b, s, { src: "predict_fighter" })}
-        <button class="pv-pick" data-pick="${s}" data-bid="${b.id}" aria-pressed="${on}" ${locked || b.winner ? "disabled" : ""}>${on ? "✓ 勝つと予想中" : "この選手が勝つ"}</button>
+        ${vsPanel(b, s, { src: "predict_fighter", vote: locked || b.winner ? "" : " " })}
+        ${locked || b.winner ? "" : `<button class="pv-pick" data-pick="${s}" data-bid="${b.id}" aria-pressed="${on}" aria-label="${esc(name)}の勝ちに投票">${voteLabel(me, s)}</button>`}
       </div>`;
     };
     return `<li class="pv-bout ${hit === true ? "hit" : hit === false ? "miss" : ""}" data-bid="${b.id}">
       <div class="pv-bmeta">${b.title ? '<span class="pv-title">タイトルマッチ</span>' : ""}${b.weight ? `<span>${esc(b.weight)}</span>` : ""}<span>${esc(RULES[b.rule] || "その他")}</span>
         ${b.winner && !decided ? `<span class="pv-res">${RES[b.winner]}</span>` : ""}${hit === true ? '<span class="pv-hit">的中！</span>' : hit === false ? '<span class="pv-miss">はずれ</span>' : ""}</div>
       <div class="pv-vs fp-vs">${corner("a")}<span class="fp-x" aria-hidden="true">VS</span>${corner("b")}</div>
-      ${me.pick && !locked && !b.winner ? `<div class="pv-meth" role="group" aria-label="決着の予想（任意）"><span>決着も予想（任意）：</span>${["ko", "sub", "dec"].map(m => `<button class="fbchip" data-meth="${m}" data-bid="${b.id}" aria-pressed="${me.method === m}">${METH[m]}</button>`).join("")}</div>` : ""}
+      ${me.pick && !locked && !b.winner ? `<div class="pv-meth" role="group" aria-label="決着の予想（任意）"><span>決着（任意）</span>${["ko", "sub", "dec"].map(m => `<button class="fbchip" data-meth="${m}" data-bid="${b.id}" aria-pressed="${me.method === m}">${METH[m]}</button>`).join("")}</div>` : ""}
       ${c ? `<div class="pv-bar" aria-label="${esc(fname(b, "a"))} ${pa}%・${esc(fname(b, "b"))} ${100 - pa}%"><i style="width:${pa}%"></i></div>
-        <div class="pv-pct"><span>${pa}%</span><small>${tot}人が予想${tot ? `・KO ${c.ko}／一本 ${c.sub}／判定 ${c.dec}` : ""}</small><span>${tot ? 100 - pa : 0}%</span></div>`
-        : (locked ? "" : `<p class="pv-hint">予想すると、みんなの予想の割合が見られます${b.n ? `（${b.n}人が予想済み）` : ""}</p>`)}
+        <div class="pv-pct"><span>${pa}%</span><small>${tot}人が投票${tot ? `・KO ${c.ko} / 一本 ${c.sub} / 判定 ${c.dec}` : ""}</small><span>${tot ? 100 - pa : 0}%</span></div>`
+        : (locked ? "" : `<p class="pv-hint">${b.n ? `${b.n}人が投票・` : ""}投票すると結果が見られます</p>`)}
       ${bcHtml(b)}
     </li>`;
   }
@@ -1387,7 +1386,7 @@ window.FBC_INIT = function (H) {
       </form>
     </div>`;
   }
-  const bcPlaceholder = b => b.me && b.me.pick ? `${fname(b, b.me.pick)}が勝つと思う理由は？` : "この試合、どう見る？（200字まで）";
+  const bcPlaceholder = b => b.me && b.me.pick ? `${fname(b, b.me.pick)}が勝つ理由は？` : "この試合、どう見る？";
   function threadsOf(bid) {
     const all = pv.cm[bid] || [], roots = [], reps = {};
     for (const c of all) { if (c.parent) (reps[c.parent] = reps[c.parent] || []).push(c); else roots.push(c); }
@@ -1396,8 +1395,8 @@ window.FBC_INIT = function (H) {
   function bcBody(b) {
     const { roots, reps, total } = threadsOf(b.id), open = pv.open.has(b.id);
     const shown = open ? roots : roots.slice(0, PREVIEW_N);
-    return `<div class="bc-head"><b>💬 コメント</b><span class="bc-n">${total}件</span><small class="bc-pub">誰でも読めます</small></div>
-      ${roots.length ? `<ul class="bc-list ${open ? "open" : ""}">${shown.map(c => bcThread(b, c, reps[c.id] || [])).join("")}</ul>` : `<p class="bc-empty">まだコメントはありません。最初のひとことをどうぞ。</p>`}
+    return `<div class="bc-head"><b>💬 コメント</b><span class="bc-n">${total}件</span></div>
+      ${roots.length ? `<ul class="bc-list ${open ? "open" : ""}">${shown.map(c => bcThread(b, c, reps[c.id] || [])).join("")}</ul>` : `<p class="bc-empty">最初のコメントをどうぞ</p>`}
       ${roots.length > PREVIEW_N ? `<button class="bc-more" data-bcmore="${b.id}" aria-expanded="${open}">${open ? "閉じる ▲" : `すべてのコメントを見る（${roots.length}スレッド） ▼`}</button>` : ""}`;
   }
   function bcThread(b, c, reps) {

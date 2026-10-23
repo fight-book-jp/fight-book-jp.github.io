@@ -129,13 +129,12 @@
     <section class="hero hero-s"><div class="hero-in">
       <div class="kicker">RIZIN ファンの予想とトーク</div>
       <h1 class="hero-h">勝敗を予想する。<br>次に見たい一戦を語る。</h1>
-      <p class="hero-sub">RIZINの対戦カードを予想して、ファン同士で語れる非公式ファンサイト。登録不要で参加できます。</p>
+      <p class="hero-sub">RIZINの非公式ファンサイト・登録不要</p>
     </div></section>
     ${FBC && FBC.enabled ? FBC.homeTop() : ""}
     <div class="wrap">
       <section class="section hd" aria-labelledby="hdT">
         <div class="sec-head"><h2 id="hdT">選手データで深掘り<small>Data</small></h2></div>
-        <p class="hd-lead">予想の参考に。2015年からのRIZIN全${bouts}試合をもとに、選手の戦績やレーティングを自動で計算しています。</p>
         <div class="hd-grid">${DATA.map(([h, t, d]) => `<a class="hd-link" href="${h}"><b>${t}</b><small>${d}</small><span aria-hidden="true">›</span></a>`).join("")}</div>
       </section>
     </div>`;

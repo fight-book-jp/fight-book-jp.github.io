@@ -1475,3 +1475,20 @@ body{overflow-x:clip}
 .sec-head h2 small{display:block;margin:0;font-size:12px;letter-spacing:.14em;color:var(--accent)}
 .sec-head{align-items:flex-end}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 24px}.stat-grid>.section,.stat-grid>.section:first-child{margin-top:32px}
+
+/* 投票ボタン：写真の真下に「投票」だけ（v42） */
+.fp{display:flex;flex-direction:column;gap:8px}
+.fp-vote{min-height:46px;border-radius:10px;border:2px solid var(--corner-red);background:transparent;color:var(--corner-red);font:inherit;font-size:15px;font-weight:900;letter-spacing:.06em;cursor:pointer}
+.fp.blue .fp-vote{border-color:var(--corner-blue);color:var(--corner-blue)}
+.fp-vote:hover{background:var(--corner-red-tint)}.fp.blue .fp-vote:hover{background:var(--corner-blue-tint)}
+.fp-vote[aria-pressed="true"]{background:var(--corner-red);color:#fff}
+.fp.blue .fp-vote[aria-pressed="true"]{background:var(--corner-blue);color:#fff}
+.fp-vote:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.hpb .fp-x{top:calc(50% - 27px)}
+.hpb-hint{text-align:center}
+.hpb-cm b{margin-left:4px;padding:0 7px;border-radius:999px;background:rgba(0,0,0,.18);font-size:12px}
+.pv-pick{min-height:46px;border-radius:10px;font-size:15px;letter-spacing:.06em}
+.hp-ev small b{color:var(--ink)}
+.bc-nickbar{padding:10px 14px}
+@media (max-width:620px){ .fp-vote{min-height:44px;font-size:14px} }
+.fp.big .fp-ph{aspect-ratio:1/1}
