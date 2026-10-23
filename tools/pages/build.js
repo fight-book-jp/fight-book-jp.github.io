@@ -28,7 +28,8 @@ const enc = encodeURIComponent;
 const nm = k => S.nameOf(k), en = k => S.enOf(k);
 const fmt = d => (d || "").replace(/-/g, ".");
 const METHOD = { KO: "KO/TKO", SUB: "一本", DEC: "判定", DQ: "反則", OTHER: "その他", D: "引き分け", NC: "無効試合" };
-const OG_DEFAULT = `${SITE}/img/og-default.png`;
+// 画像を差し替えたとき X などのキャッシュが古い画像を使い続けないよう、中身のハッシュを付ける
+const OG_DEFAULT = `${SITE}/img/og-default.png?v=${require("crypto").createHash("sha1").update(fs.readFileSync(path.join(ROOT, "img", "og-default.png"))).digest("hex").slice(0, 8)}`;
 
 function meta({ title, desc, url, noindex, type = "website" }) {
   return `<!--meta-->
