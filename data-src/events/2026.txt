@@ -19,11 +19,11 @@ Rizin Landmark 13|2026-04-12|Flyweight|JPN Makoto Takahashi|RSA Nkazimulo Zulu|W
 Rizin Landmark 13|2026-04-12|Female Strawweight|RUS Natalia Kuziutina|JPN Ayaka Hamasaki|W|Submission (armbar)|1|4:54|
 Rizin Landmark 13|2026-04-12|Featherweight|JPN Kazumasa Majima|IRL James Gallagher|W|Technical Submission (arm-triangle choke)|3|2:34|
 Rizin Landmark 13|2026-04-12|Lightweight|KAZ Nurkhan Zhumagazy|JPN Tenya|W|Decision (unanimous)|3|5:00|
-Rizin Landmark 13|2026-04-12|Heavyweight|JPN Hinotori|JPN Ryosuke Honda|W|TKO (soccer kick and hammerfists)|1|4:59|
+Rizin Landmark 13|2026-04-12|Flyweight|JPN Hinotori|JPN Ryosuke Honda|W|TKO (soccer kick and hammerfists)|1|4:59|
 Rizin Landmark 13|2026-04-12|Featherweight|JPN Hyuga Miyagawa|JPN Seiya Inoue|W|Decision (unanimous)|3|5:00|
 Rizin 53|2026-05-10|Lightweight|BRA Luiz Gustavo|UZB Ilkhom Nozimov|W|KO (punches)|1|2:08|Won the Rizin Lightweight Championship.
 Rizin 53|2026-05-10|Featherweight|JPN Ryo Takagi|CHN Li Kaiwen|W|KO (punches)|1|1:38|
-Rizin 53|2026-05-10|Heavyweight|JPN Shinobu Ota|JPN Kintaro|W|Submission (arm-triangle choke)|2|4:25|
+Rizin 53|2026-05-10|Bantamweight|JPN Shinobu Ota|JPN Kintaro|W|Submission (arm-triangle choke)|2|4:25|
 Rizin 53|2026-05-10|Female Strawweight|USA Kate Lotus|USA Katie Perez|W|Decision (unanimous)|3|5:00|
 Rizin 53|2026-05-10|Featherweight|JPN Sho Patrick Usami|JPN Tatsuya Saika|W|TKO (punch and soccer kick)|1|1:38|
 Rizin 53|2026-05-10|Lightweight|USA Ryan Cafaro|JPN Koyomi Matsushima|W|Submission (guillotine choke)|3|2:23|
@@ -43,7 +43,7 @@ Rizin Landmark 14|2026-06-06|Bantamweight|JPN Hayato Kikuchi|JPN Taylan Yuasa|W|
 Rizin Landmark 14|2026-06-06|Bantamweight|JPN Yusuke Iwaki|JPN Sho Nakaizumi|W|KO|3|0:47|
 Rizin Landmark 15|2026-07-18|Bantamweight|USA Danny Sabatello|JPN Jinnosuke Kashimura|W|KO (punch)|3|0:40|Defended the Rizin Bantamweight Championship.
 Rizin Landmark 15|2026-07-18|Featherweight|KAZ Karshyga Dautbek|JPN Kyohei Hagiwara|W|KO (punches)|1|4:08|
-Rizin Landmark 15|2026-07-18|Heavyweight|KGZ Yrysbek Tilenov|JPN Shinobu Ota|W|TKO (punches and knees)|2|3:04|
+Rizin Landmark 15|2026-07-18|Bantamweight|KGZ Yrysbek Tilenov|JPN Shinobu Ota|W|TKO (punches and knees)|2|3:04|
 Rizin Landmark 15|2026-07-18|Flyweight|JPN Erson Yamamoto|JPN Hiroya Kondo|W|Decision (unanimous)|3|5:00|
 Rizin Landmark 15|2026-07-18|Lightweight|USA Johnny Case|JPN Tenya Yoshimura|W|KO (punches)|1|3:14|
 Rizin Landmark 15|2026-07-18|Female Super Atomweight|JPN Saori Oshima|KOR Lee Ye-ji|W|Submission (kneebar)|1|1:40|
