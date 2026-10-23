@@ -14,6 +14,7 @@
    ===================================================================== */
 window.FBC_INIT = function (H) {
   const { S, P, esc, av } = H;
+  const photoOf = H.photoOf || (() => null), SIL = H.SIL || "";
   const CFG = window.FB_COMMUNITY || {};
   // public:false のあいだは、?preview=1 で開いた端末だけで表示（公開前の確認用。?preview=0 で解除）
   const PREVIEW = (() => {
@@ -460,13 +461,7 @@ window.FBC_INIT = function (H) {
   function hpBout(b, featured) {
     const ev = home.ev, open = !ev.locked && !b.winner, me = b.me || {}, c = b.counts, tot = c ? c.a + c.b : 0;
     const pa = tot ? Math.round(c.a / tot * 100) : 0, decided = b.winner === "a" || b.winner === "b";
-    const corner = s => {
-      const x = side(b, s), name = fname(b, s), win = b.winner === s, link = x.key && valid(x.key);
-      return `<div class="hpb-side ${s === "a" ? "red" : "blue"} ${me.pick === s ? "on" : ""} ${win ? "win" : ""}">
-        <span class="hpb-av">${av(link ? x.key : "", featured ? "l" : "m")}</span>
-        <b>${link ? `<a href="/fighters/${encodeURIComponent(x.key)}/" data-src="home_fighter">${esc(name)}</a>` : esc(name)}</b>
-        ${win ? `<span class="pv-win">WIN${b.method ? "・" + esc(METH[b.method] || "") : ""}</span>` : ""}</div>`;
-    };
+    const corner = s => vsPanel(b, s, { featured, src: "home_fighter" });
     const pickBtn = s => `<button class="hpb-pick ${s === "a" ? "red" : "blue"}" data-hpick="${s}" data-bid="${b.id}" aria-pressed="${me.pick === s}">${me.pick === s ? "✓ " : ""}${esc(fname(b, s))}が勝つ</button>`;
     const bar = c ? `<div class="pv-bar" aria-label="${esc(fname(b, "a"))} ${pa}%・${esc(fname(b, "b"))} ${100 - pa}%"><i style="width:${pa}%"></i></div>
         <div class="pv-pct"><span>${pa}%</span><small>${tot}人が予想</small><span>${tot ? 100 - pa : 0}%</span></div>` : "";
@@ -487,10 +482,24 @@ window.FBC_INIT = function (H) {
     }
     return `<article class="hpb ${featured ? "big" : ""} ${me.pick ? "done" : ""}" data-hpb="${b.id}">
       <div class="hpb-meta">${featured ? '<span class="hpb-main">メインイベント</span>' : ""}${b.title ? '<span class="pv-title">タイトルマッチ</span>' : ""}${b.weight ? `<span>${esc(b.weight)}</span>` : ""}</div>
-      <div class="hpb-vs">${corner("a")}<span class="hpb-x" aria-hidden="true">VS</span>${corner("b")}</div>
+      <div class="hpb-vs fp-vs">${corner("a")}<span class="fp-x" aria-hidden="true">VS</span>${corner("b")}</div>
       ${featured && open ? `<div class="hp-cd" id="hpCd" role="timer" aria-live="off"><span class="hp-cd-l">勝敗予想の締め切りまで</span><span class="hp-cd-t" id="hpCdT"></span><small>締め切り：${fmtWhen(ev.starts_at)}</small></div>` : ""}
       ${body}
     </article>`;
+  }
+  /* 選手パネル：ポスターのように写真を大きく見せ、名前を写真の下部に重ねる（赤コーナー／青コーナーの色帯つき）
+     写真が無い選手は同じ枠にシルエット。自分が予想した側には「あなたの予想」、勝者には WIN を重ねる */
+  function vsPanel(b, s, o = {}) {
+    const x = side(b, s), name = fname(b, s), link = x.key && valid(x.key), ph = link ? photoOf(x.key) : null;
+    const me = b.me || {}, win = b.winner === s, lose = (b.winner === "a" || b.winner === "b") && !win;
+    const inner = `${ph ? `<img src="${esc(ph.src)}" alt="" loading="${o.featured ? "eager" : "lazy"}" decoding="async" style="object-position:${esc(ph.pos)}" onerror="this.remove()">` : ""}<span class="fp-sil" aria-hidden="true">${SIL}</span>
+      <span class="fp-shade" aria-hidden="true"></span>
+      ${me.pick === s ? '<span class="fp-mine">✓ あなたの予想</span>' : ""}
+      ${win ? `<span class="fp-win">WIN${b.method ? "・" + esc(METH[b.method] || "") : ""}</span>` : ""}
+      <b class="fp-name">${esc(name)}</b>`;
+    return `<div class="fp ${s === "a" ? "red" : "blue"} ${o.featured ? "big" : ""} ${me.pick === s ? "on" : ""} ${win ? "win" : ""} ${lose ? "lose" : ""}">
+      ${link ? `<a class="fp-ph" href="/fighters/${encodeURIComponent(x.key)}/" data-src="${o.src || "fighter"}" aria-label="${esc(name)}の選手ページ">${inner}</a>` : `<div class="fp-ph">${inner}</div>`}
+    </div>`;
   }
   // 1秒ごとに、締め切りまでの文字だけを書き換える
   function startHomeCountdown() {
@@ -1313,16 +1322,14 @@ window.FBC_INIT = function (H) {
     const corner = s => {
       const x = side(b, s), name = fname(b, s), on = me.pick === s, win = b.winner === s;
       return `<div class="pv-side ${s === "a" ? "red" : "blue"} ${on ? "on" : ""} ${win ? "win" : ""}">
-        ${x.key && valid(x.key) ? `<a href="/fighters/${encodeURIComponent(x.key)}/" class="pv-av" tabindex="-1">${av(x.key, "m")}</a>` : `<span class="pv-av">${av("", "m")}</span>`}
-        <b>${x.key && valid(x.key) ? `<a href="/fighters/${encodeURIComponent(x.key)}/">${esc(name)}</a>` : esc(name)}</b>
-        ${win ? `<span class="pv-win">WIN${b.method ? "・" + esc(METH[b.method] || "") : ""}</span>` : ""}
+        ${vsPanel(b, s, { src: "predict_fighter" })}
         <button class="pv-pick" data-pick="${s}" data-bid="${b.id}" aria-pressed="${on}" ${locked || b.winner ? "disabled" : ""}>${on ? "✓ 勝つと予想中" : "この選手が勝つ"}</button>
       </div>`;
     };
     return `<li class="pv-bout ${hit === true ? "hit" : hit === false ? "miss" : ""}" data-bid="${b.id}">
       <div class="pv-bmeta">${b.title ? '<span class="pv-title">タイトルマッチ</span>' : ""}${b.weight ? `<span>${esc(b.weight)}</span>` : ""}<span>${esc(RULES[b.rule] || "その他")}</span>
         ${b.winner && !decided ? `<span class="pv-res">${RES[b.winner]}</span>` : ""}${hit === true ? '<span class="pv-hit">的中！</span>' : hit === false ? '<span class="pv-miss">はずれ</span>' : ""}</div>
-      <div class="pv-vs">${corner("a")}<span class="pv-x">VS</span>${corner("b")}</div>
+      <div class="pv-vs fp-vs">${corner("a")}<span class="fp-x" aria-hidden="true">VS</span>${corner("b")}</div>
       ${me.pick && !locked && !b.winner ? `<div class="pv-meth" role="group" aria-label="決着の予想（任意）"><span>決着も予想（任意）：</span>${["ko", "sub", "dec"].map(m => `<button class="fbchip" data-meth="${m}" data-bid="${b.id}" aria-pressed="${me.method === m}">${METH[m]}</button>`).join("")}</div>` : ""}
       ${c ? `<div class="pv-bar" aria-label="${esc(fname(b, "a"))} ${pa}%・${esc(fname(b, "b"))} ${100 - pa}%"><i style="width:${pa}%"></i></div>
         <div class="pv-pct"><span>${pa}%</span><small>${tot}人が予想${tot ? `・KO ${c.ko}／一本 ${c.sub}／判定 ${c.dec}` : ""}</small><span>${tot ? 100 - pa : 0}%</span></div>`

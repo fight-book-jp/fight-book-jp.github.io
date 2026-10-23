@@ -1318,7 +1318,7 @@
   }
 
   /* ---------- ファン参加機能（js/community.js） ---------- */
-  const FBC = window.FBC_INIT ? window.FBC_INIT({ S, P, esc, av, link, linkTxt, subName, statusBadge, pageHero, tabs, meetings, compareRows,
+  const FBC = window.FBC_INIT ? window.FBC_INIT({ S, P, esc, av, photoOf, SIL, link, linkTxt, subName, statusBadge, pageHero, tabs, meetings, compareRows,
     rec, r1, fmtDate, METHOD_JA, SEARCH_ICON, DIVS, rerender: () => route(true) }) : null;
 
   /* ---------- ルーター ----------
