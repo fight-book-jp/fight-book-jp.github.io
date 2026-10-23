@@ -670,19 +670,19 @@ window.FBC_INIT = function (H) {
     </section>
 
     <section class="section" id="comments">
-      <div class="sec-head"><h2>Comments<small>みんなの意見（${c.comments}）</small></h2></div>
+      <div class="sec-head"><h2>みんなの意見（${c.comments}）<small>Comments</small></h2></div>
       ${composer(null)}
       <div class="tabs fb-sort" id="fbSort" aria-label="並び順"><button class="tab" data-sort="new" aria-pressed="${det.sort === "new"}">新しい順</button><button class="tab" data-sort="old" aria-pressed="${det.sort === "old"}">古い順</button></div>
       <div id="fbComments">${loading()}</div>
     </section>
 
     <section class="section" id="related">
-      <div class="sec-head"><h2>Next<small>次に見るカード</small></h2></div>
+      <div class="sec-head"><h2>次に見るカード<small>Next</small></h2></div>
       <div id="fbRelated">${loading()}</div>
     </section>
 
     <section class="section">
-      <div class="sec-head"><h2>Tale of the Tape<small>データ比較（RIZIN・確認済みの記録）</small></h2><a href="/compare/?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}">詳しい比較 ›</a></div>
+      <div class="sec-head"><h2>データ比較（RIZIN・確認済みの記録）<small>Tale of the Tape</small></h2><a href="/compare/?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}">詳しい比較 ›</a></div>
       <div class="cmp">${H.compareRows(a, b)}</div>
       ${met.length ? `<h3 class="fb-h3">実際の対戦記録</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>日付</th><th>勝者</th><th>決着</th><th>大会</th></tr></thead><tbody>${met.map(f => `<tr><td class="num">${H.fmtDate(f.date)}</td><td class="opp">${f.outcome === "W" ? H.link(f.winner) : (f.outcome === "D" ? "引き分け" : "無効試合")}</td><td>${esc(H.METHOD_JA[f.cat] || "")}${f.round ? `<span class="ev">　${esc(f.round)}R ${esc(f.time)}</span>` : ""}</td><td class="ev">${esc(f.event)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="note">RIZINでの対戦記録はありません。</p>`}
     </section>`;
@@ -1057,7 +1057,7 @@ window.FBC_INIT = function (H) {
   function fighterPanel(k) {
     if (!ENABLED) return "";
     return `<section class="section fb-fighter" id="fbFighter" data-key="${esc(k)}">
-      <div class="sec-head"><h2>Next Opponent<small>${nm(k)}の次に見たい相手（ファンの声）</small></h2><a class="btn primary small" href="/create/?a=${encodeURIComponent(k)}" data-src="fighter_cta">＋ 次の相手を提案する</a></div>
+      <div class="sec-head"><h2>${nm(k)}の次に見たい相手（ファンの声）<small>Next Opponent</small></h2><a class="btn primary small" href="/create/?a=${encodeURIComponent(k)}" data-src="fighter_cta">＋ 次の相手を提案する</a></div>
       <div id="fbFighterList">${ENABLED ? loading() : `<p class="note">ファン投票は準備中です。</p>`}</div>
     </section>`;
   }
@@ -1196,14 +1196,14 @@ window.FBC_INIT = function (H) {
     const picked = ev.bouts.filter(b => b.me).length;
     return `<nav class="crumb"><a href="/predict/">大会予想</a> › <span>${esc(ev.name)}</span></nav>
       <section class="pv-head" id="pvHead">${headHtml(ev)}</section>
-      <section class="section"><div class="sec-head"><h2>Fight Card<small>対戦カード（${ev.bouts.length}試合）</small></h2></div>
+      <section class="section"><div class="sec-head"><h2>対戦カード（${ev.bouts.length}試合）<small>Fight Card</small></h2></div>
         <div id="pvStatus">${statusHtml(ev)}</div>
         ${ev.bouts.length ? `<div class="bc-nickbar"><span class="bc-nb-t">💬 各試合の下で、ファン同士コメントできます</span>
           <label>ニックネーム<input class="fb-nick" id="pvNick" maxlength="30" value="${esc(nickOf())}" placeholder="例：格闘技好き" autocomplete="nickname"></label>
           <small>ログイン不要・ニックネームは公開されます</small></div>` : ""}
         ${ev.bouts.length ? `<ol class="pv-bouts">${ev.bouts.slice().reverse().map(b => boutHtml(b, ev.locked)).join("")}</ol>` : `<p class="note">対戦カードはまだ発表されていません。</p>`}
       </section>
-      <section class="section" id="pvRankWrap" hidden><div class="sec-head"><h2>Ranking<small>的中ランキング</small></h2></div><div id="pvRank"></div></section>
+      <section class="section" id="pvRankWrap" hidden><div class="sec-head"><h2>的中ランキング<small>Ranking</small></h2></div><div id="pvRank"></div></section>
       <p class="fb-rules">コメントは20秒ごとに自動で新しいものを表示します。選手や他のファンへの侮辱・差別は管理者が削除します。</p>`;
   }
   /* ---------- 状態：予想の受付（締め切り時刻）と、試合の進行（管理者が設定）は別に扱う ---------- */

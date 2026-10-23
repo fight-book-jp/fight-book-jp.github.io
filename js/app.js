@@ -73,7 +73,15 @@
     document.body.appendChild(s);
   }
 
-  const pageHero = (title, sub) => `<section class="page-hero"><div class="in"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div></section>`;
+  // ページ見出し：日本語を主に、英語は小さな添え字に
+  const HERO_JA = { "Admin": "管理", "Champions": "王者", "Events": "大会一覧", "Fan Cards": "見たい一戦", "Fighters": "選手一覧",
+    "Gym Compare": "ジム比較", "Gym Database": "ジム一覧", "Make a Card": "見たい一戦を作る", "Matchup": "対戦データ比較", "My Page": "マイページ",
+    "Not Found": "ページが見つかりません", "Password": "パスワード", "Predict": "勝敗予想", "Rankings": "ランキング", "Stats": "統計",
+    "About": "FIGHT BOOKについて", "Privacy": "プライバシーポリシー", "Contact": "お問い合わせ" };
+  const pageHero = (title, sub) => {
+    const ja = HERO_JA[title];
+    return `<section class="page-hero"><div class="in">${ja ? `<div class="ph-en">${esc(title)}</div><h1>${ja}</h1>` : `<h1>${title}</h1>`}${sub && sub !== ja ? `<p>${sub}</p>` : ""}</div></section>`;
+  };
   const tabs = (id, list, cur, attr = "d") => `<div class="tabs" id="${id}">${list.map(d => `<button class="tab" aria-pressed="${d === cur}" data-${attr}="${esc(d)}">${esc(d)}</button>`).join("")}</div>`;
 
   /* ---------- 共通部品 ---------- */
@@ -126,7 +134,7 @@
     ${FBC && FBC.enabled ? FBC.homeTop() : ""}
     <div class="wrap">
       <section class="section hd" aria-labelledby="hdT">
-        <div class="sec-head"><h2 id="hdT">Data<small>選手データで深掘り</small></h2></div>
+        <div class="sec-head"><h2 id="hdT">選手データで深掘り<small>Data</small></h2></div>
         <p class="hd-lead">予想の参考に。2015年からのRIZIN全${bouts}試合をもとに、選手の戦績やレーティングを自動で計算しています。</p>
         <div class="hd-grid">${DATA.map(([h, t, d]) => `<a class="hd-link" href="${h}"><b>${t}</b><small>${d}</small><span aria-hidden="true">›</span></a>`).join("")}</div>
       </section>
@@ -217,7 +225,7 @@
       body = scoreTable(sortBy(p => p.x.grit), "挑戦者魂", p => p.x.grit, { detail: p => `格上と${p.x.challenge}戦・うち${p.x.challengeWin}勝` });
     } else if (cat.id === "upset") {
       body = scoreTable(sortBy(p => Math.round(p.x.upsetGap)), "番狂わせ度", p => Math.round(p.x.upsetGap), { detail: p => `格上撃破 ${p.x.upsets}回` }) +
-        `<div class="section"><div class="sec-head"><h2>Biggest Upsets<small>番狂わせ 試合ベスト10</small></h2></div>${boutTable(S.upsets.slice(0, 10), "レート差", f => "+" + Math.round(f.gap))}</div>`;
+        `<div class="section"><div class="sec-head"><h2>番狂わせ 試合ベスト10<small>Biggest Upsets</small></h2></div>${boutTable(S.upsets.slice(0, 10), "レート差", f => "+" + Math.round(f.gap))}</div>`;
     } else if (cat.id === "quick") {
       body = boutTable(S.quickest.slice(0, 30), "決着", f => f.time);
     } else if (cat.id === "nye") {
@@ -310,7 +318,7 @@
     return pageHero("Fighters", "RIZINに出場したすべての選手。上はプロフィールやSNSを詳しく載せた注目選手、下は全選手の一覧です。") + `
     <div class="wrap">
       <section class="section">
-        <div class="sec-head"><h2>Featured<small>注目選手</small></h2></div>
+        <div class="sec-head"><h2>注目選手<small>Featured</small></h2></div>
         <div class="filters">
           <div class="search">${SEARCH_ICON}<input id="q" type="search" placeholder="注目選手を検索" value="${esc(rosterState.q)}" aria-label="注目選手を検索"></div>
           ${tabs("divTabs", ["すべて", "フライ級", "バンタム級", "フェザー級", "ライト級", "女子"], rosterState.div)}
@@ -319,7 +327,7 @@
         <div class="grid" id="grid">${rosterGrid()}</div>
       </section>
       <section class="section" id="all">
-        <div class="sec-head"><h2>All Fighters<small>RIZIN出場選手 全員</small></h2></div>
+        <div class="sec-head"><h2>RIZIN出場選手 全員<small>All Fighters</small></h2></div>
         <div class="filters">
           <div class="search">${SEARCH_ICON}<input id="qa" type="search" placeholder="名前（日本語・英語）・国名で検索" value="${esc(allState.q)}" aria-label="全選手を検索"></div>
           ${tabs("allDiv", ["すべて", ...DIVS], allState.div)}
@@ -448,7 +456,7 @@
         <div>
           <div class="panel chart"><h3>レーティングの推移（RIZIN）</h3>${ratingChart(p.history)}</div>
           <div class="section">
-            <div class="sec-head"><h2>Fight History<small>${f ? `全${p.fights.length}試合（うちRIZIN ${p.rizinFights.length}）` : `RIZIN ${p.rizinFights.length}試合`}</small></h2></div>
+            <div class="sec-head"><h2>試合履歴<small>${f ? `全${p.fights.length}試合（うちRIZIN ${p.rizinFights.length}）` : `RIZIN ${p.rizinFights.length}試合`}</small></h2></div>
             <div class="tbl-wrap"><table class="tbl"><thead><tr><th class="c">結果</th><th>対戦相手</th><th>決着</th><th>大会</th><th class="c">R</th><th class="r">レート</th></tr></thead><tbody>${rows}</tbody></table></div>
           </div>
         </div>
@@ -486,7 +494,7 @@
     }).join("");
     return pageHero("Champions", "各階級の現王者と、RIZINタイトル戦の全記録。") + `
     <div class="wrap">
-      <section class="section"><div class="sec-head"><h2>Current<small>現王者</small></h2></div>${champCards()}</section>
+      <section class="section"><div class="sec-head"><h2>現王者<small>Current</small></h2></div>${champCards()}</section>
       ${byDiv}
     </div>`;
   }
@@ -527,14 +535,14 @@
   function statTable(title, sub, fn, fmt, filter = () => true, n = 10) {
     const list = S.ranked.filter(filter).slice().sort((a, b) => fn(b) - fn(a) || b.rating - a.rating).slice(0, n);
     const rows = list.map((p, i) => `<tr><td class="rank ${i < 3 ? "top" : ""}">${i + 1}</td><td><a class="who" href="/fighters/${encodeURIComponent(p.key)}/">${av(p.key)}<span><b>${esc(S.nameOf(p.key))}</b><small>${esc(p.division || "")}</small></span></a></td><td class="r"><span class="rate">${fmt(p)}</span></td></tr>`).join("");
-    return `<section class="section"><div class="sec-head"><h2>${title}<small>${sub}</small></h2></div>
+    return `<section class="section"><div class="sec-head"><h2>${sub}<small>${title}</small></h2></div>
       <div class="tbl-wrap"><table class="tbl" style="min-width:0"><tbody>${rows}</tbody></table></div></section>`;
   }
   function viewStats() {
     return pageHero("Stats", `RIZINのMMA戦績から計算した各種ランキング（RIZINで${S.MIN_RANK_FIGHTS}試合以上の選手）。`) + `
     <div class="wrap">
       ${highlightTiles()}
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 24px">
+      <div class="stat-grid">
         ${statTable("KO Rate", "KO率（5勝以上）", p => p.riz.koRate, p => pct(p.riz.koRate), p => p.riz.w >= 5)}
         ${statTable("Finish Rate", "フィニッシュ率（5勝以上）", p => p.riz.finishRate, p => pct(p.riz.finishRate), p => p.riz.w >= 5)}
         ${statTable("Wins", "RIZINでの勝利数", p => p.riz.w, p => p.riz.w)}
@@ -795,24 +803,24 @@
       </section>
 
       <section class="section">
-        <div class="sec-head"><h2>Tale of the Tape<small>データ比較（RIZIN）</small></h2></div>
+        <div class="sec-head"><h2>データ比較（RIZIN）<small>Tale of the Tape</small></h2></div>
         <div class="cmp">${compareRows(a, b)}</div>
       </section>
 
       <section class="section">
-        <div class="sec-head"><h2>Head to Head<small>過去の対戦</small></h2></div>
+        <div class="sec-head"><h2>過去の対戦<small>Head to Head</small></h2></div>
         ${met.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>日付</th><th>勝者</th><th>決着</th><th>大会</th></tr></thead><tbody>${met.map(f => `<tr><td class="num">${fmtDate(f.date)}</td><td class="opp">${f.outcome === "W" ? link(f.winner) : (f.outcome === "D" ? "引き分け" : "無効試合")}</td><td>${esc(METHOD_JA[f.cat] || "")}${f.round ? `<span class="ev">　${esc(f.round)}R ${esc(f.time)}</span>` : ""}</td><td class="ev">${esc(f.event)}</td></tr>`).join("")}</tbody></table></div>`
           : `<p class="note">まだ対戦したことのない、まさに「夢のカード」です。</p>`}
       </section>
 
       ${FBC && FBC.enabled ? "" : `<section class="section">
-        <div class="sec-head"><h2>My List<small>あなたの見たいカード（${saved.length}）</small></h2></div>
+        <div class="sec-head"><h2>あなたの見たいカード（${saved.length}）<small>My List</small></h2></div>
         ${saved.length ? `<div class="mu-grid">${saved.slice().reverse().filter(m => P(m.a) && P(m.b)).map(m => miniCard(m.a, m.b)).join("")}</div>`
           : `<p class="note">「この対戦を見たい！」を押したカードがここに並びます（このブラウザに保存されます）。</p>`}
       </section>`}
 
       <section class="section">
-        <div class="sec-head"><h2>Dream Cards<small>実現したら熱いカード</small></h2></div>
+        <div class="sec-head"><h2>実現したら熱いカード<small>Dream Cards</small></h2></div>
         <div class="filters">${tabs("muDiv", ["すべて", "フライ級", "バンタム級", "フェザー級", "ライト級", "女子"], muDiv.v)}</div>
         <div class="mu-grid">${dreamCards(muDiv.v).map(c => miniCard(c.a, c.b, c.met ? `・再戦（過去${c.met}戦）` : "・初対戦")).join("") || '<p class="note">該当するカードがありません</p>'}</div>
         <p class="note" style="margin-top:10px">各階級の現役上位選手どうしで、実力が近く、まだ対戦が少ない組み合わせを自動で選んでいます。</p>
@@ -914,7 +922,7 @@
     const x = false, y = hasYT(f);   // Xの投稿取得は有料APIのため行わない（Xはヘッダーのリンクのみ）
     if (!y) return "";              // YouTube未登録の選手はセクションごと出さない
     return `<section class="section social" id="social" data-key="${esc(key)}" aria-labelledby="socialTitle">
-      <div class="sec-head"><h2 id="socialTitle">Social Updates<small>YouTubeの最新動画</small></h2><span class="note" id="socialUpdated" aria-live="polite"></span></div>
+      <div class="sec-head"><h2 id="socialTitle">YouTubeの最新動画<small>Social Updates</small></h2><span class="note" id="socialUpdated" aria-live="polite"></span></div>
       ${x ? `<div class="sc-block" id="scX"><div class="sc-label">${X_LOGO}<b>X</b><span>最新の投稿</span></div><div class="sc-grid" aria-busy="true">${skeleton(3)}</div></div>` : ""}
       ${y ? `<div class="sc-block" id="scYT"><div class="sc-label">${YT_LOGO}<b>YouTube</b><span>最新の動画</span></div><div class="sc-grid" aria-busy="true">${skeleton(3)}</div></div>` : ""}
     </section>`;
@@ -1162,7 +1170,7 @@
         <p class="note" style="margin-top:12px">勝率・戦績は現在の所属選手のRIZINでの通算です（引き分け・無効試合は勝率の計算から除外）。所属情報はWikipediaの選手記事などの出典に基づき、確認できない選手は含めていません。「傾向」は勝ち方の内訳から算出したもので、ジムの指導方針ではありません。</p>
       </section>
       <section class="section" id="gymRank">
-        <div class="sec-head"><h2>Gym Ranking<small>ジムランキング</small></h2></div>
+        <div class="sec-head"><h2>ジムランキング<small>Gym Ranking</small></h2></div>
         <div id="gymRankBody">${gymRanking()}</div>
       </section>
     </div>`;
@@ -1218,13 +1226,13 @@
     </div></section>
     <div class="wrap">
       <section class="section">
-        <div class="sec-head"><h2>Fighters<small>所属RIZIN選手（${m.cur.length}名）</small></h2></div>
+        <div class="sec-head"><h2>所属RIZIN選手（${m.cur.length}名）<small>Fighters</small></h2></div>
         ${m.cur.length ? `<div class="gf-grid">${m.cur.map(k => fighterTile(k, id)).join("")}</div>` : '<p class="note">現在所属が確認できているRIZIN選手はいません。</p>'}
         ${m.past.length ? `<h3 class="sub-h">過去に所属していた選手</h3><div class="gf-list">${m.past.map(k => link(k)).join("")}</div>` : ""}
         ${m.unknown.length ? `<h3 class="sub-h">所属の時期が確認できていない選手</h3><div class="gf-list">${m.unknown.map(k => link(k)).join("")}</div>` : ""}
       </section>
       <section class="section">
-        <div class="sec-head"><h2>RIZIN Record<small>ジムのRIZIN実績</small></h2></div>
+        <div class="sec-head"><h2>ジムのRIZIN実績<small>RIZIN Record</small></h2></div>
         <div class="gs-cols">
           ${statBox(tc, "現所属選手のRIZIN通算", "参考値（移籍前の試合も含む）")}
           ${statBox(tp, "所属期間中の試合", "所属期間（年）が確認できた試合のみ")}
@@ -1232,7 +1240,7 @@
         <p class="note" style="margin-top:8px">勝率＝勝利数÷（勝利数＋敗北数）。引き分け・無効試合は分母に含めません。RIZIN以外の団体の試合は含めていません。</p>
       </section>
       <section class="section">
-        <div class="sec-head"><h2>Strengths<small>ジムの強み（試合データから算出）</small></h2></div>
+        <div class="sec-head"><h2>ジムの強み（試合データから算出）<small>Strengths</small></h2></div>
         ${tc.w ? `<div class="panel st-panel">
           ${bar("KO/TKO勝利率", tc.koR, "var(--accent)")}${bar("一本勝利率", tc.subR, "var(--gold)")}${bar("判定勝利率", tc.decR, "var(--draw)")}${bar("RIZIN勝率", tc.rate || 0, "var(--win)")}
           <div class="st-facts"><div><small>王者輩出</small><b>${tc.champs}名</b>${tc.champList.length ? `<em>${tc.champList.map(k => esc(S.nameOf(k))).join("・")}</em>` : ""}</div><div><small>所属選手の平均レーティング</small><b>${tc.avg ? r1(tc.avg) : "—"}</b></div></div>

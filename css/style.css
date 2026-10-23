@@ -1464,3 +1464,14 @@ body{overflow-x:clip}
 .pv-side .fp-ph{aspect-ratio:4/3}
 @media (max-width:620px){ .pv-side .fp-ph{aspect-ratio:1/1} }
 .pv-side{text-align:left}
+
+/* 見出し：日本語を主に、英語は小さな添え字（v39） */
+.sec-head h2{font-family:"Noto Sans JP",sans-serif;font-size:clamp(19px,2.4vw,23px);font-weight:900;letter-spacing:.01em;text-transform:none;line-height:1.35}
+.sec-head h2 small{font-family:"Barlow Condensed","Noto Sans JP",sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-left:10px;white-space:nowrap}
+.page-hero .ph-en{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-hi);margin-bottom:6px}
+.page-hero h1{font-family:"Noto Sans JP",sans-serif;font-weight:900;font-size:clamp(28px,4.6vw,44px);line-height:1.2;text-transform:none;letter-spacing:.01em}
+@media (max-width:560px){ .sec-head h2 small{display:block;margin:2px 0 0} }
+.sec-head h2{display:flex;flex-direction:column-reverse;gap:1px}
+.sec-head h2 small{display:block;margin:0;font-size:12px;letter-spacing:.14em;color:var(--accent)}
+.sec-head{align-items:flex-end}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 24px}.stat-grid>.section,.stat-grid>.section:first-child{margin-top:32px}
