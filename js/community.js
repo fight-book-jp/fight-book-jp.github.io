@@ -394,7 +394,7 @@ window.FBC_INIT = function (H) {
      ・予想前は割合を見せない（多数派に引っ張られないように）。予想後に割合と「理由をコメント」「次の試合」を出す
      ・数字はすべて実際の集計。0件のときは0件と分かる表示にする */
   const home = { tab: null, rule: "", ev: null, others: [], mode: null, live: null };
-  const HOME_BOUTS = 4;
+  const HOME_BOUTS = 10;   // メイン1＋3列×3段
   function homeTop() {
     if (!ENABLED) return "";
     return `<section class="hp" aria-labelledby="hpT"><div class="wrap">
