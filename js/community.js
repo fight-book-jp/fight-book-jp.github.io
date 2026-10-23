@@ -364,9 +364,9 @@ window.FBC_INIT = function (H) {
   /* ---------- X共有 ---------- */
   function shareText(c, withReason) {
     const r = withReason && c.reason && c.reason.body ? `\n「${c.reason.body.slice(0, 60)}」` : "";
-    return `自分はこの一戦が見たい。${S.nameOf(c.fa)} vs ${S.nameOf(c.fb)}（${ruleLbl(c)}）、みんなはどう思う？${r}\n#FIGHTBOOK`;
+    return `自分はこの一戦が見たい。${S.nameOf(c.fa)} vs ${S.nameOf(c.fb)}（${ruleLbl(c)}）、みんなはどう思う？${r}\n#RIZIN #FIGHTBOOK`;
   }
-  const xIntent = (c, text) => `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(cardUrl(c.id) + "?ref=x_share")}`;
+  const xIntent = (c, text) => `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(cardUrl(c.id) + "?ref=x_share")}&via=fightbookjp`;
   function sharePanel(c) {
     const hasR = !!(c.reason && c.reason.body);
     return `<div class="fb-share" id="fbShare" data-id="${esc(c.id)}">
