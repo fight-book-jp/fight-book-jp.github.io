@@ -28,6 +28,9 @@ window.PHOTOS = {
   "abijah-kaleo-meheula": { src:"img/fighters/abijah-kaleo-meheula.webp", face:"img/fighters/abijah-kaleo-meheula-face.webp" },
   "goto": { src:"img/fighters/goto.webp", face:"img/fighters/goto-face.webp" },
   "kim-kyung-pyo": { src:"img/fighters/kim-kyung-pyo.webp", face:"img/fighters/kim-kyung-pyo-face.webp" },
+  "sho-sekihara": { src:"img/fighters/sho-sekihara.webp", face:"img/fighters/sho-sekihara-face.webp" },
+  "daigo-kuramoto": { src:"img/fighters/daigo-kuramoto.webp", face:"img/fighters/daigo-kuramoto-face.webp" },
+  "taichi-nakajima": { src:"img/fighters/taichi-nakajima.webp", face:"img/fighters/taichi-nakajima-face.webp" },
 };
 
 /* 選手データ（RIZINの試合記録）がまだない選手の画像。大会予想の対戦カードで、登録名が一致したときに使う */
@@ -35,5 +38,8 @@ window.PHOTOS_BY_NAME = {
   "千春": { src:"img/fighters/n-chiharu.webp", face:"img/fighters/n-chiharu-face.webp" },
   "相本宗輝": { src:"img/fighters/n-aimoto.webp", face:"img/fighters/n-aimoto-face.webp" },
   "溝口司": { src:"img/fighters/n-mizoguchi.webp", face:"img/fighters/n-mizoguchi-face.webp" },
+  "力也": { src:"img/fighters/n-rikiya.webp", face:"img/fighters/n-rikiya-face.webp" },
+  "木村琉音": { src:"img/fighters/n-kimura-rune.webp", face:"img/fighters/n-kimura-rune-face.webp" },
+  "松本尚大": { src:"img/fighters/n-matsumoto-naohiro.webp", face:"img/fighters/n-matsumoto-naohiro-face.webp" },
   "アバイジャ・カレオ・メヘウラ": { src:"img/fighters/abijah-kaleo-meheula.webp", face:"img/fighters/abijah-kaleo-meheula-face.webp" },
 };

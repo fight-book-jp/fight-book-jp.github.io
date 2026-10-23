@@ -58,4 +58,6 @@ window.NAMES_JA = {
   "Yrysbek Tilenov":"イリスベク・ティレノフ",
   "Li Kaiwen":"リー・カイウェン", "Nurkhan Zhumagazy":"ヌルハン・ズマガジー", "Kim Kyung-pyo":"キム・ギョンピョ",
   "Abijah Kaleo Meheula":"アバイジャ・カレオ・メヘウラ",
+  "Daigo Kuramoto":"倉本 大悟",
+  "Sho Sekihara":"関原 翔",
 };
