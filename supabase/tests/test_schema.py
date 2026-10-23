@@ -414,6 +414,18 @@ class Predict(Base):
         self.assertEqual(lk[str(root)], [1, True])
         mine = {c["id"]: c for c in self.call(v, "list_event_comments", "rizin-test", 0)}
         self.assertEqual((mine[root]["likes"], mine[root]["liked"]), (1, True))
+        # 通知：自分への返信といいね（自分の操作は数えない）
+        self.su.cursor().execute("update public.profiles set notif_seen_at = now() - interval '1 hour'")
+        n = self.call(u, "my_notifications", 30)["items"]
+        kinds = {i["type"]: i for i in n}
+        self.assertEqual((kinds["ec_reply"]["who"], kinds["ec_reply"]["comment_id"], kinds["ec_reply"]["event_id"]), ("V", r1, "rizin-test"))
+        self.assertEqual((kinds["ec_likes"]["n"], kinds["ec_likes"]["comment_id"]), (1, root))
+        self.assertEqual(self.call(u, "unread_count"), 2)
+        self.assertEqual([i["type"] for i in self.call(v, "my_notifications", 30)["items"]], ["ec_reply"])   # W→V の返信
+        self.assertTrue(lst[r2]["to_me"] is False)   # 未ログインで見たときは誰宛てでもない
+        self.assertTrue({c["id"]: c for c in self.call(v, "list_event_comments", "rizin-test", 0)}[r2]["to_me"])
+        self.call(u, "mark_notifications_seen")
+        self.assertEqual(self.call(u, "unread_count"), 0)
         # 先頭のコメントを消しても、返信があれば「削除されました」として残る
         self.call(u, "delete_event_comment", root)
         lst = {c["id"]: c for c in self.call(None, "list_event_comments", "rizin-test", 0)}

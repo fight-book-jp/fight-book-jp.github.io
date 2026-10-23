@@ -308,7 +308,15 @@ window.FBC_INIT = function (H) {
     b.hidden = false;
     b.innerHTML = loggedIn() ? `${who.avatar ? `<img src="${esc(who.avatar)}" alt="" width="26" height="26" referrerpolicy="no-referrer">` : "👤"}<span class="me-name">${isAdmin() ? "管理者" : "マイページ"}</span><i class="me-dot" hidden></i>` : "";
     b.setAttribute("aria-label", "マイページ");
-    if (loggedIn()) rpc("unread_count").then(n => { const d = b.querySelector(".me-dot"); if (d && n > 0) { d.hidden = false; d.textContent = n > 9 ? "9+" : n; b.setAttribute("aria-label", `マイページ（未読${n}件）`); } }).catch(() => {});
+    if (loggedIn()) refreshUnread();
+  }
+  function refreshUnread() {
+    const b = $("#meBtn"); if (!b || !loggedIn()) return;
+    rpc("unread_count").then(n => {
+      const d = b.querySelector(".me-dot"); if (!d) return;
+      d.hidden = !(n > 0); d.textContent = n > 9 ? "9+" : n;
+      b.setAttribute("aria-label", n > 0 ? `マイページ（未読${n}件）` : "マイページ");
+    }).catch(() => {});
   }
   const ruleLbl = c => `${RULES[c.rule] || c.rule}${c.cond && c.cond !== "standard" ? "・" + (CONDS[c.cond] || c.cond) : ""}`;
   const statusLbl = c => c.origin === "editorial" ? "編集部提案・未決定" : "ファン提案・未決定";
@@ -808,8 +816,13 @@ window.FBC_INIT = function (H) {
     } catch (e) { box.innerHTML = failBox(e, "me"); }
   }
   function noticeHtml(items) {
-    if (!items.length) return `<p class="note">まだお知らせはありません。あなたのコメントへの返信や、作ったカードへの反応がここに届きます。</p>`;
+    if (!items.length) return `<p class="note">まだお知らせはありません。あなたのコメントへの返信・いいねや、作ったカードへの反応がここに届きます。</p>`;
     const line = i => {
+      if (i.type === "ec_reply" || i.type === "ec_likes") {   // 大会予想のコメント
+        const txt = i.type === "ec_reply" ? `<b>${esc(i.who || "退会したユーザー")}</b> さんがあなたのコメントに返信しました：「${esc(i.body)}」`
+          : `あなたのコメント「${esc(i.mine_body || "")}」に <b>${i.n}人</b> がいいねしました`;
+        return `<li class="${i.unread ? "unread" : ""}"><a href="/predict/${encodeURIComponent(i.event_id)}/?c=${i.comment_id}" data-src="notice">${i.unread ? '<span class="fbtag">未読</span>' : ""}${i.type === "ec_reply" ? "💬 " : "♥ "}${txt}<small>${esc(i.event_name || "")}${i.bout ? `・${esc(i.bout)}` : ""}・${ago(i.at)}</small></a></li>`;
+      }
       const c = cache[i.card_id]; const pair = c && valid(c.fa) ? `${nm(c.fa)} vs ${nm(c.fb)}` : "カード";
       const txt = i.type === "reply" ? `<b>${esc(i.who || "退会したユーザー")}</b> さんがあなたのコメントに返信しました：「${esc(i.body)}」`
         : i.type === "comment_on_my_card" ? `<b>${esc(i.who || "退会したユーザー")}</b> さんがあなたのカードにコメントしました：「${esc(i.body)}」`
@@ -1047,7 +1060,8 @@ window.FBC_INIT = function (H) {
         if (!$("#pvBox")) return clearInterval(pv.chatTimer);
         if (document.visibilityState !== "visible") return;
         loadBoutComments(false); refreshLikes();
-        if (pv.ev && pv.ev.locked && ++pv.chatN % 3 === 0) refreshEvent(false);   // 締め切り後は1分ごとに試合の状態・結果を確認
+        if (++pv.chatN % 3 === 0) refreshUnread();
+        if (pv.ev && pv.ev.locked && pv.chatN % 3 === 0) refreshEvent(false);   // 締め切り後は1分ごとに試合の状態・結果を確認
       }, 20000);
     } catch (e) { box.innerHTML = failBox(e, "predict"); }
   }
@@ -1281,7 +1295,7 @@ window.FBC_INIT = function (H) {
       ${av}<div class="bc-main">
       <div class="bc-meta"><b>${esc(c.name)}</b>${tag}<a class="bc-time" href="${esc(commentUrl(c.id))}" data-bcperma="${c.id}"><time datetime="${esc(c.created_at)}">${ago(c.created_at)}</time></a>
         <span class="bc-tools">${tools}${isAdmin() ? ` <button class="fblink danger" data-admin-hide="event_comment" data-target="${c.id}" data-hidden="true">🗑 削除</button>` : ""}</span></div>
-      ${c.parent && c.reply_name ? `<p class="bc-to">返信先：<b>@${esc(c.reply_name)}</b></p>` : ""}
+      ${c.parent && c.reply_name ? `<p class="bc-to">返信先：<b>@${esc(c.reply_name)}</b>${c.to_me ? '<span class="bc-tome">あなたへの返信</span>' : ""}</p>` : ""}
       <p class="bc-text">${esc(c.body)}</p>
       <div class="bc-acts">
         <button class="bc-act" data-bcreply="${c.id}" data-bid="${b.id}" aria-label="${esc(c.name)}さんに返信${nrep ? `（返信${nrep}件）` : ""}"><span aria-hidden="true">💬</span>${nrep ? `<b>${nrep}</b>` : ""}<span class="bc-act-t">返信</span></button>
@@ -1317,7 +1331,10 @@ window.FBC_INIT = function (H) {
       const touched = new Set();
       for (const c of list) {
         if (!c.bout) continue;
-        if (!first) { if (findComment(c.id)) continue; c._new = true; }
+        if (!first) {
+          if (findComment(c.id)) continue; c._new = true;
+          if (c.to_me) toast(`💬 ${esc(c.name)}さんがあなたのコメントに返信しました`);
+        }
         (pv.cm[c.bout] = pv.cm[c.bout] || []).push(c); touched.add(c.bout);
       }
       if (list.length) pv.chatLast = Math.max(pv.chatLast || 0, list[list.length - 1].id);

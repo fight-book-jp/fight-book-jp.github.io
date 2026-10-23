@@ -573,6 +573,7 @@ begin
 end $$;
 
 -- 自分に関係のある事実だけ：自分のコメントへの返信／自分のカードへのコメント／自分のカードへの「見たい」
+-- 大会予想：自分のコメントへの返信（ec_reply）／自分のコメントへのいいね（ec_likes：コメントごとに30日分をまとめる）
 create or replace function public.my_notifications(lim int default 30) returns jsonb
 language plpgsql stable security definer set search_path = public as $$
 declare u uuid := public._me(); seen timestamptz;
@@ -599,6 +600,22 @@ begin
           join reactions r on r.card_id = f.card_id and r.user_id = f.user_id and r.kind = 'want'
          where c.creator = u and f.user_id <> u and f.first_at > now() - interval '30 days'
          group by c.id
+        union all
+        select m.created_at, jsonb_build_object('type', 'ec_reply', 'event_id', m.event_id, 'event_name', e.name, 'comment_id', m.id,
+                 'bout', b.fa_name || ' vs ' || b.fb_name, 'who', p.display_name, 'body', left(m.body, 80), 'mine_body', left(t.body, 40),
+                 'at', m.created_at, 'unread', m.created_at > seen)
+          from event_comments m join event_comments t on t.id = m.reply_to and t.user_id = u
+          join fight_events e on e.id = m.event_id left join fight_bouts b on b.id = m.bout_id
+          left join profiles p on p.id = m.user_id
+         where m.user_id is distinct from u and m.status = 'visible' and e.status = 'public'
+        union all
+        select max(l.created_at), jsonb_build_object('type', 'ec_likes', 'event_id', t.event_id, 'event_name', max(e.name), 'comment_id', t.id,
+                 'bout', max(b.fa_name || ' vs ' || b.fb_name), 'n', count(*), 'mine_body', left(max(t.body), 40),
+                 'at', max(l.created_at), 'unread', max(l.created_at) > seen)
+          from event_comments t join event_comment_likes l on l.comment_id = t.id
+          join fight_events e on e.id = t.event_id left join fight_bouts b on b.id = t.bout_id
+         where t.user_id = u and l.user_id <> u and t.status = 'visible' and e.status = 'public' and l.created_at > now() - interval '30 days'
+         group by t.id, t.event_id
       ) all_ order by at desc limit lim) q));
 end $$;
 
@@ -630,6 +647,10 @@ begin
    where m.status = 'visible' and m.user_id is distinct from u and m.created_at > seen
      and (exists(select 1 from comments mine where mine.id = m.parent_id and mine.user_id = u)
           or (m.parent_id is null and exists(select 1 from cards c where c.id = m.card_id and c.creator = u)));
+  n := n + (select count(*) from event_comments m join event_comments t on t.id = m.reply_to and t.user_id = u
+             where m.status = 'visible' and m.user_id is distinct from u and m.created_at > seen)
+         + (select count(distinct t.id) from event_comments t join event_comment_likes l on l.comment_id = t.id
+             where t.user_id = u and t.status = 'visible' and l.user_id <> u and l.created_at > seen);
   return n;
 end $$;
 
@@ -939,6 +960,7 @@ language sql stable security definer set search_path = public as $$
            'name', case when c.status = 'visible' then coalesce(p.display_name, '退会したユーザー') else '' end,
            'mine', c.status = 'visible' and c.user_id = auth.uid(),
            'reply_to', c.reply_to,
+           'to_me', c.status = 'visible' and c.user_id is distinct from auth.uid() and exists(select 1 from event_comments r where r.id = c.reply_to and r.user_id = auth.uid()),
            'reply_name', (select coalesce(rp.display_name, '退会したユーザー') from event_comments r left join profiles rp on rp.id = r.user_id where r.id = c.reply_to),
            'likes', (select count(*) from event_comment_likes l where l.comment_id = c.id),
            'liked', exists(select 1 from event_comment_likes l where l.comment_id = c.id and l.user_id = auth.uid()),

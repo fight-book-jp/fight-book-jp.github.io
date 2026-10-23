@@ -1240,3 +1240,5 @@ button.fz-btn{border:none;font-family:inherit;cursor:pointer}
 .bc-rin:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-tint)}
 .bc-focus{box-shadow:0 0 0 2px var(--gold);background:rgba(184,155,76,.14)!important;transition:background 1s}
 @media (max-width:420px){.bc-c{grid-template-columns:28px 1fr;gap:8px}.bc-av{width:28px;height:28px;font-size:12px}.bc-reps{margin-left:12px;padding-left:12px}.bc-rform{margin-left:0}.bc-act-t{display:none}}
+.bc-tome{margin-left:8px;font-size:10px;font-weight:900;padding:1px 7px;border-radius:999px;background:var(--gold);color:#16190F}
+.bc-c:has(.bc-tome){box-shadow:inset 3px 0 0 var(--gold)}
