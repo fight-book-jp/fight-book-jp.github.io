@@ -3,7 +3,7 @@ name: Site pages
 on:
   push:
     branches: [main]
-    paths: ["index.html", "data/**", "tools/pages/**", "data-src/site.json"]
+    paths: ["index.html", "data/**", "tools/pages/**", "data-src/site.json", "img/og-default.png"]
   schedule:
     - cron: "17 21 * * *"        # 毎日 6:17（日本時間）。自動更新で変わったデータも反映
   workflow_dispatch:
