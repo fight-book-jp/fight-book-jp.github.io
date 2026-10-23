@@ -1314,6 +1314,8 @@
     if ((m = p.match(/^\/matchups\/([A-Za-z0-9]{6,20})\/?$/))) return `c/${m[1]}${q.get("focus") ? "/" + q.get("focus") : ""}`;
     if ((m = p.match(/^\/fighters\/([^/]+)\/?$/))) return `fighter/${m[1]}`;
     if (/^\/gyms\/compare\/?$/.test(p)) return "gyms/compare";
+    if ((m = p.match(/^\/predict\/([a-z0-9-]+)\/?$/))) return `pevent/${m[1]}`;
+    if (/^\/predict\/?$/.test(p)) return "predict";
     if ((m = p.match(/^\/gyms\/([^/]+)\/?$/))) return `gym/${m[1]}`;
     if (/^\/compare\/?$/.test(p)) return q.get("a") && q.get("b") ? `matchups/${e(q.get("a"))}~${e(q.get("b"))}` : "matchups";
     if (/^\/create\/?$/.test(p)) return ["create", q.get("a") && e(q.get("a")), q.get("b") && e(q.get("b"))].filter(Boolean).join("/");
@@ -1356,13 +1358,13 @@
       case "matchups": html = viewMatchups(arg); break;
       case "gyms": html = arg === "compare" ? viewGymCompare() : viewGyms(); break;
       case "gym": html = viewGym(key); break;
-      case "cards": case "c": case "create": case "me": case "admin": case "login": case "reset": case "about": case "privacy": case "contact":
+      case "cards": case "c": case "create": case "me": case "admin": case "login": case "reset": case "about": case "privacy": case "contact": case "predict": case "pevent":
         html = FBC ? FBC.view(page, parts.map(x => decodeURIComponent(x || ""))) : viewHome(); break;
       default: html = viewHome();
     }
     const y = window.scrollY;
     $view.innerHTML = html;
-    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters") || (page === "gym" && a.dataset.r === "gyms") || (["c", "create"].includes(page) && a.dataset.r === "cards")));
+    document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters") || (page === "gym" && a.dataset.r === "gyms") || (["c", "create"].includes(page) && a.dataset.r === "cards") || (page === "pevent" && a.dataset.r === "predict")));
     document.getElementById("nav").classList.remove("open");
     document.getElementById("menuBtn").setAttribute("aria-expanded", "false");
     const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計", matchups: "見たい対戦カード", gyms: arg === "compare" ? "ジム比較" : "ジム一覧" };

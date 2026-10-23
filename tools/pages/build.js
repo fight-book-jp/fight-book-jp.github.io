@@ -127,6 +127,8 @@ pages.push(page("/gyms/", { title: "格闘技ジム一覧（RIZIN出場選手の
   `<h1>ジム一覧</h1><ul>${Object.values(GYMS).map(g => [g, membersOf(g.id).length]).filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).map(([g, n]) => `<li><a href="/gyms/${enc(g.id)}/">${esc(g.name)}</a>（${n}人）</li>`).join("")}</ul>`));
 pages.push(page("/cards/", { title: "ファンが見たい対戦カード（急上昇・週間・新着）｜FIGHT BOOK", desc: "格闘技ファンが「次に見たい一戦」を提案し、投票・コメントで語り合うページ。ファンの提案であり、実際の対戦を決めるものではありません。" },
   `<h1>ファンが見たい対戦カード</h1><p>格闘技ファンが「次に見たい一戦」を提案し、「見たい！」とコメントで語り合います。</p>`));
+pages.push(page("/predict/", { title: "大会の勝敗予想（RIZIN）｜FIGHT BOOK", desc: "RIZINの大会の対戦カードの勝敗を予想して、ファン同士で語り合うページ。みんなの予想の割合や、的中ランキングも見られます。" },
+  `<h1>大会の勝敗予想</h1><p>大会の対戦カードの勝敗を予想して、ファン同士で語り合えます。</p>`));
 pages.push(page("/about/", { title: "FIGHT BOOKについて｜FIGHT BOOK", desc: "FIGHT BOOKは、RIZINの全選手データと、ファン同士で見たい対戦を語り合う場を提供する非公式ファンサイトです。" }, `<h1>FIGHT BOOKについて</h1>`));
 pages.push(page("/privacy/", { title: "プライバシーポリシー｜FIGHT BOOK", desc: "FIGHT BOOKのプライバシーポリシー（取得する情報・利用目的・広告・Cookie・お問い合わせ）。" }, `<h1>プライバシーポリシー</h1>`));
 pages.push(page("/contact/", { title: "お問い合わせ｜FIGHT BOOK", desc: "FIGHT BOOKへのお問い合わせ・投稿の削除依頼・掲載内容の訂正依頼はこちら。" }, `<h1>お問い合わせ</h1>`));

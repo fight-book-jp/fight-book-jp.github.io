@@ -20,7 +20,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SITE = json.load(open(os.path.join(ROOT, "data-src", "site.json"), encoding="utf-8"))["url"].rstrip("/")
@@ -138,10 +138,72 @@ def og_image(c, names, path):
     im.save(path, "PNG", optimize=True)
 
 
+EV_RE = re.compile(r"^[a-z0-9][a-z0-9-]{2,39}$")
+
+
+def ev_when(t):
+    d = datetime.fromisoformat(t.replace("Z", "+00:00")).astimezone(timezone(timedelta(hours=9)))
+    return f"{d.year}年{d.month}月{d.day}日 {d.hour:02d}:{d.minute:02d}"
+
+
+def bout_names(b, names):
+    nm = lambda k, n: names[k]["name"] if k and k in names else n
+    return nm(b.get("fa"), b["fa_name"]), nm(b.get("fb"), b["fb_name"])
+
+
+def event_html(template, e, names, hidden):
+    url = f"{SITE}/predict/{e['id']}/"
+    if hidden:
+        title, desc = "非公開の大会｜FIGHT BOOK", "この大会は非公開です。"
+        head = '<meta name="robots" content="noindex">\n'
+        body = '<div class="wrap"><p>この大会は非公開です。</p></div>'
+    else:
+        main = bout_names(e["bouts"][-1], names) if e["bouts"] else None
+        title = f"{e['name']} 勝敗予想・みんなの予想｜FIGHT BOOK"
+        desc = (f"{e['name']}（{ev_when(e['starts_at'])}）の対戦カード{len(e['bouts'])}試合の勝敗を予想しよう。"
+                + (f"メインは{main[0]} vs {main[1]}。" if main else "") + "みんなの予想の割合と、大会の雑談スレッドも。")
+        img = f"{url}og.png?v={e['_hash'][:8]}"
+        head = (f'<link rel="canonical" href="{url}">\n<meta property="og:type" content="article">\n<meta property="og:site_name" content="FIGHT BOOK">\n'
+                f'<meta property="og:url" content="{url}">\n<meta property="og:title" content="{esc(title)}">\n<meta property="og:description" content="{esc(desc)}">\n'
+                f'<meta property="og:image" content="{img}">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n'
+                f'<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:title" content="{esc(title)}">\n'
+                f'<meta name="twitter:description" content="{esc(desc)}">\n<meta name="twitter:image" content="{img}">\n')
+        rows = "".join(f"<li>{esc(a)} vs {esc(b)}</li>" for a, b in (bout_names(x, names) for x in reversed(e["bouts"])))
+        body = (f'<div class="wrap"><h1>{esc(e["name"])} 勝敗予想</h1><p>{esc(ev_when(e["starts_at"]))}{"・" + esc(e["venue"]) if e.get("venue") else ""}</p>'
+                f'<h2>対戦カード</h2><ol>{rows}</ol><p><a href="/predict/">大会予想の一覧</a></p></div>')
+    block = f"<!--meta-->\n<title>{esc(title)}</title>\n<meta name=\"description\" content=\"{esc(desc)}\">\n{head}<!--/meta-->"
+    out = re.sub(r"<!--meta-->.*?<!--/meta-->", lambda m: block, template, count=1, flags=re.S)
+    return out.replace('<main id="view"></main>', f'<main id="view">{body}</main>', 1)
+
+
+def event_image(e, names, path):
+    from PIL import Image, ImageDraw
+    W, H = 1200, 630
+    im = Image.new("RGB", (W, H), "#1F2715"); d = ImageDraw.Draw(im)
+    for x in range(-H, W, 56):
+        d.line([(x, 0), (x + H, H)], fill="#26301B", width=2); d.line([(x + H, 0), (x, H)], fill="#26301B", width=2)
+    d.rectangle([0, H - 14, W, H], fill="#8FA35E")
+    d.rounded_rectangle([64, 56, 64 + 300, 112], radius=28, fill="#D06A52")
+    d.text((92, 64), "勝敗予想 受付中", font=font(32), fill="#FFFFFF")
+    d.text((64, 140), e["name"], font=fit(d, e["name"], W - 128, 76), fill="#F7F6F0")
+    d.text((64, 250), ev_when(e["starts_at"]), font=font(34), fill="#C3C8B1")
+    if e["bouts"]:
+        a, b = bout_names(e["bouts"][-1], names)
+        t = f"{a}  vs  {b}"
+        d.text((64, 340), "MAIN EVENT", font=font(28), fill="#E3CF8F")
+        d.text((64, 380), t, font=fit(d, t, W - 128, 64), fill="#F7F6F0")
+    d.text((64, 528), "あなたの予想は？", font=font(40), fill="#B5C783")
+    site = "FIGHT BOOK"
+    d.text((W - 64 - d.textlength(site, font=font(40)), 528), site, font=font(40), fill="#F7F6F0")
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    im.save(path, "PNG", optimize=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cards", required=True)
     ap.add_argument("--names", required=True)
+    ap.add_argument("--events", help="export_fight_events() の結果（任意）")
     ap.add_argument("--no-images", action="store_true", help="画像を作らない（テスト用）")
     args = ap.parse_args()
     cards = json.load(open(args.cards, encoding="utf-8"))
@@ -177,6 +239,29 @@ def main():
                 os.remove(png)
         elif not args.no_images:
             og_image(c, names, png)
+        changed += 1
+
+    # 大会予想のページ（/predict/{id}/）
+    events = json.load(open(args.events, encoding="utf-8")) if args.events and os.path.exists(args.events) else []
+    for e in events:
+        if not EV_RE.match(str(e.get("id", ""))):
+            continue
+        hidden = e.get("status") != "public"
+        h = hashlib.sha1(json.dumps([e, tpl_hash, [bout_names(b, names) for b in e["bouts"]]], ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+        e["_hash"] = h
+        new_manifest["ev:" + e["id"]] = h
+        d = os.path.join(ROOT, "predict", e["id"])
+        if not hidden:
+            sitemap.append((f"{SITE}/predict/{e['id']}/", e["starts_at"][:10]))
+        if manifest.get("ev:" + e["id"]) == h and os.path.exists(os.path.join(d, "index.html")):
+            continue
+        os.makedirs(d, exist_ok=True)
+        open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(event_html(template, e, names, hidden))
+        png = os.path.join(d, "og.png")
+        if hidden:
+            if os.path.exists(png): os.remove(png)
+        elif not args.no_images:
+            event_image(e, names, png)
         changed += 1
 
     # サイトマップ（トップと公開中のカードだけ）

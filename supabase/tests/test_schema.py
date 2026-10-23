@@ -53,7 +53,7 @@ class Base(unittest.TestCase):
 
     def setUp(self):
         self.su.cursor().execute("truncate public.cards, public.reactions, public.want_first, public.comments, public.saves, "
-                                 "public.reports, public.events, public.themes, public.fighter_requests, public.contacts, public.profiles, auth.users cascade")
+                                 "public.reports, public.events, public.themes, public.fighter_requests, public.contacts, public.fight_events, public.profiles, auth.users cascade")
 
     # --- ヘルパー ---
     def user(self, name="ファン", admin=False):
@@ -312,6 +312,66 @@ class Contact(Base):
         self.assertEqual(len(lst), 1); self.assertEqual(lst[0]["email"], "a@example.com")
         self.call(adm, "admin_contact_done", lst[0]["id"])
         self.assertEqual(self.call(adm, "admin_contacts"), [])
+
+
+class Predict(Base):
+    def setup_event(self, hours_ahead=24):
+        adm = self.user("管理", admin=True)
+        self.call(adm, "admin_upsert_event", "rizin-test", "RIZIN テスト大会", f"{'2099-01-01' if hours_ahead > 0 else '2000-01-01'}T18:00:00+09:00", "さいたま", "https://example.com/", "public")
+        b1 = self.call(adm, "admin_add_bout", "rizin-test", "朝倉 未来", "鈴木 千裕", "asakura", "suzuki", "mma", "フェザー級", True, None)
+        b2 = self.call(adm, "admin_add_bout", "rizin-test", "新人A", "新人B", None, None, "mma", None, False, None)
+        return adm, b1, b2
+
+    def test_predict_flow(self):
+        adm, b1, b2 = self.setup_event()
+        u, v = self.user("U"), self.user("V")
+        self.assertIn("FORBIDDEN", self.err(u, "admin_add_bout", "rizin-test", "x", "y", None, None, "mma", None, False, None))
+        ev = self.call(None, "get_fight_event", "rizin-test")
+        self.assertEqual(len(ev["bouts"]), 2); self.assertFalse(ev["locked"])
+        self.assertIsNone(ev["bouts"][0]["counts"])                    # 予想前は割合を見せない
+        self.call(u, "set_prediction", b1, "a", "ko")
+        for _ in range(3): self.call(v, "set_prediction", b1, "b", None)   # 再送しても1票
+        r = self.call(u, "set_prediction", b1, "b", "dec")                # 変更できる
+        self.assertEqual(r["counts"]["b"], 2); self.assertEqual(r["counts"]["a"], 0); self.assertEqual(r["me"]["pick"], "b")
+        self.assertIsNone(self.call(None, "get_fight_event", "rizin-test")["bouts"][0]["counts"])
+        self.assertIn("BAD_PICK", self.err(u, "set_prediction", b1, "c", None))
+        lst = self.call(None, "list_fight_events")
+        self.assertEqual(lst[0]["predictors"], 2); self.assertTrue(lst[0]["upcoming"])
+        # 結果入力 → その試合は締め切り、ランキング
+        self.call(adm, "admin_set_result", b1, "b", "dec")
+        self.assertIn("LOCKED", self.err(v, "set_prediction", b1, "a", None))
+        rk = self.call(u, "event_ranking", "rizin-test")
+        self.assertEqual(rk["top"][0]["pts"], 2); self.assertTrue(rk["top"][0]["mine"]); self.assertEqual(rk["me"]["rank"], 1)
+        self.assertEqual(rk["top"][1]["pts"], 1)
+
+    def test_lock_and_hidden(self):
+        adm, b1, b2 = self.setup_event(hours_ahead=-1)                     # 開始済みの大会
+        u = self.user()
+        self.assertIn("LOCKED", self.err(u, "set_prediction", b1, "a", None))
+        ev = self.call(None, "get_fight_event", "rizin-test")
+        self.assertTrue(ev["locked"]); self.assertIsNotNone(ev["bouts"][0]["counts"])   # 締め切り後は公開
+        self.call(adm, "admin_upsert_event", "rizin-test", "RIZIN テスト大会", "2000-01-01T18:00:00+09:00", None, None, "hidden")
+        self.assertIsNone(self.call(None, "get_fight_event", "rizin-test"))
+        self.assertEqual(self.call(None, "list_fight_events"), [])
+
+    def test_event_chat(self):
+        adm, b1, b2 = self.setup_event()
+        u, v = self.user("U"), self.user("V")
+        m1 = self.call(u, "add_event_comment", "rizin-test", "楽しみ！")["id"]
+        self.assertTrue(self.call(u, "add_event_comment", "rizin-test", "楽しみ！")["duplicate"])
+        self.assertIn("TOO_FAST", self.err(u, "add_event_comment", "rizin-test", "別の話"))
+        m2 = self.call(v, "add_event_comment", "rizin-test", "朝倉勝つ")["id"]
+        all_ = self.call(None, "list_event_comments", "rizin-test", 0)
+        self.assertEqual([c["id"] for c in all_], [m1, m2])
+        self.assertEqual([c["id"] for c in self.call(None, "list_event_comments", "rizin-test", m1)], [m2])
+        self.assertIn("FORBIDDEN", self.err(v, "delete_event_comment", m1))
+        self.call(v, "report", "event_comment", str(m1), "spam", None)
+        self.assertEqual(self.call(adm, "admin_reports")[0]["event_id"], "rizin-test")
+        self.call(adm, "admin_set_hidden", "event_comment", str(m1), True)
+        self.assertEqual([c["id"] for c in self.call(None, "list_event_comments", "rizin-test", 0)], [m2])
+        self.assertIn("TOO_LONG", self.err(v, "add_event_comment", "rizin-test", "あ" * 201))
+        exp = self.call(None, "export_fight_events")
+        self.assertEqual(exp[0]["bouts"][0]["fa_name"], "朝倉 未来")
 
 
 class Events(Base):

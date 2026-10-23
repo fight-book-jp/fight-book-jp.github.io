@@ -24,7 +24,7 @@ jobs:
       - run: node tools/pages/build.js
       - name: コミット
         run: |
-          git add -A index.html 404.html sitemap-pages.xml sitemap.xml robots.txt fighters gyms rankings champions events stats cards about privacy contact compare create me admin login reset
+          git add -A index.html 404.html sitemap-pages.xml sitemap.xml robots.txt fighters gyms rankings champions events stats cards about privacy contact compare create me admin login reset predict/index.html
           if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "検索向けページを更新"
           git pull -q --rebase origin main && git push -q origin HEAD:main

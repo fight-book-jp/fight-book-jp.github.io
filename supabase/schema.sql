@@ -220,6 +220,7 @@ create or replace function public.trg_profile_deleted() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
   update comments set status = 'deleted', body = '' where user_id = old.id and status = 'visible';
+  update event_comments set status = 'deleted', body = '' where user_id = old.id and status = 'visible';
   return old;
 end $$;
 drop trigger if exists profile_deleted on public.profiles;
@@ -650,8 +651,11 @@ begin
   return (select coalesce(jsonb_agg(jsonb_build_object('target_type', target_type, 'target_id', target_id, 'n', n,
             'reasons', reasons, 'first_at', first_at,
             'preview', case when target_type = 'comment' then (select left(body, 120) from comments where id::text = target_id)
+                            when target_type = 'event_comment' then (select left(body, 120) from event_comments where id::text = target_id)
                             else (select fa || ' vs ' || fb from cards where id = target_id) end,
-            'card_id', case when target_type = 'comment' then (select card_id from comments where id::text = target_id) else target_id end)
+            'card_id', case when target_type = 'comment' then (select card_id from comments where id::text = target_id)
+                            when target_type = 'event_comment' then null else target_id end,
+            'event_id', case when target_type = 'event_comment' then (select event_id from event_comments where id::text = target_id) end)
           order by n desc, first_at), '[]')
     from (select target_type, target_id, count(*) n, array_agg(distinct reason) reasons, min(created_at) first_at
             from reports where status = 'open' group by 1, 2) t);
@@ -665,6 +669,9 @@ begin
     update cards set status = case when hidden then 'hidden' else 'public' end where id = target_id;
   elsif target_type = 'comment' then
     update comments set status = case when hidden then 'hidden' else 'visible' end
+     where id = target_id::bigint and status <> 'deleted';
+  elsif target_type = 'event_comment' then
+    update event_comments set status = case when hidden then 'hidden' else 'visible' end
      where id = target_id::bigint and status <> 'deleted';
   else raise exception 'BAD_TARGET' using errcode = 'P0001'; end if;
   update reports r set status = 'done', handled_at = now()
@@ -729,16 +736,263 @@ begin
   return true;
 end $$;
 
+
+-- =====================================================================
+-- 大会の勝敗予想と、大会ごとの雑談スレッド
+--  * 大会と対戦カードは、公式発表をもとに管理者が登録する（架空のカードは作らない）
+--  * 予想は大会の開始時刻（starts_at）で締め切り。それまでは何度でも変えられる
+--  * みんなの予想の割合は、自分が予想した試合か、締め切り後にだけ見せる（先に見ると予想が偏るため）
+--  * 得点：勝者が的中で1点、決着方法（KO・一本・判定）も的中でさらに1点
+-- =====================================================================
+create table if not exists public.fight_events (
+  id         text primary key check (id ~ '^[a-z0-9][a-z0-9-]{2,39}$'),
+  name       text not null check (char_length(name) between 1 and 80),
+  starts_at  timestamptz not null,
+  venue      text check (venue is null or char_length(venue) <= 80),
+  source_url text check (source_url is null or source_url ~ '^https://'),
+  status     text not null default 'public' check (status in ('public','hidden')),
+  created_at timestamptz not null default now()
+);
+create table if not exists public.fight_bouts (
+  id         bigint generated always as identity primary key,
+  event_id   text not null references public.fight_events(id) on delete cascade,
+  ord        int not null default 0,
+  fa         text check (fa is null or fa ~ '^[a-z0-9][a-z0-9-]{0,63}$'),
+  fb         text check (fb is null or fb ~ '^[a-z0-9][a-z0-9-]{0,63}$'),
+  fa_name    text not null check (char_length(fa_name) between 1 and 60),
+  fb_name    text not null check (char_length(fb_name) between 1 and 60),
+  rule       text not null default 'mma' check (rule in ('mma','kickboxing','grappling','boxing','other')),
+  weight     text check (weight is null or char_length(weight) <= 40),
+  title      boolean not null default false,
+  winner     text check (winner is null or winner in ('a','b','draw','nc')),
+  method     text check (method is null or method in ('ko','sub','dec','other')),
+  created_at timestamptz not null default now()
+);
+create index if not exists fight_bouts_event on public.fight_bouts(event_id, ord);
+create table if not exists public.predictions (
+  bout_id    bigint not null references public.fight_bouts(id) on delete cascade,
+  user_id    uuid not null references public.profiles(id) on delete cascade,
+  pick       text not null check (pick in ('a','b')),
+  method     text check (method is null or method in ('ko','sub','dec')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  primary key (bout_id, user_id)
+);
+create index if not exists predictions_user on public.predictions(user_id);
+create table if not exists public.event_comments (
+  id         bigint generated always as identity primary key,
+  event_id   text not null references public.fight_events(id) on delete cascade,
+  user_id    uuid references public.profiles(id) on delete set null,
+  body       text not null,
+  status     text not null default 'visible' check (status in ('visible','deleted','hidden')),
+  created_at timestamptz not null default now(),
+  constraint event_comments_body check (status <> 'visible' or char_length(body) between 1 and 200)
+);
+create index if not exists event_comments_event on public.event_comments(event_id, id);
+alter table public.fight_events   enable row level security;
+alter table public.fight_bouts    enable row level security;
+alter table public.predictions    enable row level security;
+alter table public.event_comments enable row level security;
+revoke all on public.fight_events, public.fight_bouts, public.predictions, public.event_comments from anon, authenticated;
+-- 通報の対象に「大会の雑談」を追加
+alter table public.reports drop constraint if exists reports_target_type_check;
+alter table public.reports add constraint reports_target_type_check check (target_type in ('card','comment','event_comment'));
+
+create or replace function public._bout_json(bt public.fight_bouts, locked boolean) returns jsonb
+language sql stable security definer set search_path = public as $$
+  with c as (select count(*) filter (where p.pick = 'a') ca, count(*) filter (where p.pick = 'b') cb,
+                    count(*) filter (where p.method = 'ko') cko, count(*) filter (where p.method = 'sub') csub,
+                    count(*) filter (where p.method = 'dec') cdec, count(*) cn
+               from predictions p where p.bout_id = bt.id),
+       m as (select p.pick, p.method from predictions p where p.bout_id = bt.id and p.user_id = auth.uid())
+  select jsonb_build_object('id', bt.id, 'ord', bt.ord, 'fa', bt.fa, 'fb', bt.fb, 'fa_name', bt.fa_name, 'fb_name', bt.fb_name,
+           'rule', bt.rule, 'weight', bt.weight, 'title', bt.title, 'winner', bt.winner, 'method', bt.method,
+           'n', (select cn from c),
+           'counts', case when locked or exists(select 1 from m) or public._is_admin()
+                          then (select jsonb_build_object('a', ca, 'b', cb, 'ko', cko, 'sub', csub, 'dec', cdec) from c) end,
+           'me', (select jsonb_build_object('pick', m.pick, 'method', m.method) from m))
+$$;
+
+create or replace function public.list_fight_events() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_agg(x order by (x->>'upcoming')::boolean desc,
+           case when (x->>'upcoming')::boolean then x->>'starts_at' end asc, x->>'starts_at' desc), '[]')
+    from (select jsonb_build_object('id', e.id, 'name', e.name, 'starts_at', e.starts_at, 'venue', e.venue,
+                   'locked', now() >= e.starts_at, 'upcoming', e.starts_at > now() - interval '1 day',
+                   'bouts', (select count(*) from fight_bouts b where b.event_id = e.id),
+                   'predictors', (select count(distinct p.user_id) from predictions p join fight_bouts b on b.id = p.bout_id where b.event_id = e.id),
+                   'comments', (select count(*) from event_comments c where c.event_id = e.id and c.status = 'visible')) x
+            from fight_events e where e.status = 'public' or public._is_admin()
+            order by e.starts_at desc limit 30) t
+$$;
+
+create or replace function public.get_fight_event(eid text) returns jsonb
+language plpgsql stable security definer set search_path = public as $$
+declare e fight_events; locked boolean;
+begin
+  select * into e from fight_events where id = eid;
+  if not found or (e.status <> 'public' and not public._is_admin()) then return null; end if;
+  locked := now() >= e.starts_at;
+  return jsonb_build_object('id', e.id, 'name', e.name, 'starts_at', e.starts_at, 'venue', e.venue, 'source_url', e.source_url,
+    'status', e.status, 'locked', locked, 'now', now(),
+    'bouts', coalesce((select jsonb_agg(public._bout_json(b, locked) order by b.ord, b.id) from fight_bouts b where b.event_id = e.id), '[]'),
+    'predictors', (select count(distinct p.user_id) from predictions p join fight_bouts b on b.id = p.bout_id where b.event_id = e.id));
+end $$;
+
+-- 予想する／変える（締め切り前だけ）。method は任意
+create or replace function public.set_prediction(bid bigint, pick text, method text default null) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare u uuid := public._me(); b fight_bouts; e fight_events;
+begin
+  if pick not in ('a','b') or (method is not null and method not in ('ko','sub','dec')) then raise exception 'BAD_PICK' using errcode = 'P0001'; end if;
+  select * into b from fight_bouts where id = bid;
+  if not found then raise exception 'NOT_FOUND' using errcode = 'P0001'; end if;
+  select * into e from fight_events where id = b.event_id;
+  if e.status <> 'public' then raise exception 'NOT_FOUND' using errcode = 'P0001'; end if;
+  if now() >= e.starts_at or b.winner is not null then raise exception 'LOCKED' using errcode = 'P0001'; end if;
+  insert into predictions (bout_id, user_id, pick, method) values (bid, u, set_prediction.pick, set_prediction.method)
+  on conflict (bout_id, user_id) do update set pick = excluded.pick, method = excluded.method, updated_at = now();
+  return public._bout_json(b, false);
+end $$;
+
+create or replace function public.clear_prediction(bid bigint) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare u uuid := public._me(); b fight_bouts; e fight_events;
+begin
+  select * into b from fight_bouts where id = bid;
+  if not found then raise exception 'NOT_FOUND' using errcode = 'P0001'; end if;
+  select * into e from fight_events where id = b.event_id;
+  if now() >= e.starts_at or b.winner is not null then raise exception 'LOCKED' using errcode = 'P0001'; end if;
+  delete from predictions where bout_id = bid and user_id = u;
+  return public._bout_json(b, false);
+end $$;
+
+-- 的中ランキング（結果が入った試合だけで計算）
+create or replace function public.event_ranking(eid text) returns jsonb
+language sql stable security definer set search_path = public as $$
+  with s as (
+    select p.user_id, count(*) filter (where p.pick = b.winner) hit,
+           count(*) filter (where p.pick = b.winner and p.method is not null and p.method = b.method) mhit,
+           count(*) decided
+      from predictions p join fight_bouts b on b.id = p.bout_id
+      join fight_events e on e.id = b.event_id
+     where b.event_id = eid and b.winner in ('a','b') and (e.status = 'public' or public._is_admin())
+     group by p.user_id),
+  r as (select s.*, hit + mhit pts, rank() over (order by hit + mhit desc, hit desc) rk from s)
+  select jsonb_build_object(
+    'decided', (select count(*) from fight_bouts where event_id = eid and winner in ('a','b')),
+    'top', coalesce((select jsonb_agg(jsonb_build_object('rank', r.rk, 'name', coalesce(pr.display_name, '退会したユーザー'),
+                       'pts', r.pts, 'hit', r.hit, 'mhit', r.mhit, 'decided', r.decided, 'mine', r.user_id = auth.uid()) order by r.rk, r.hit desc)
+                       from (select * from r order by rk limit 30) r left join profiles pr on pr.id = r.user_id), '[]'),
+    'me', (select jsonb_build_object('rank', rk, 'pts', pts, 'hit', hit, 'mhit', mhit, 'decided', decided, 'of', (select count(*) from r)) from r where user_id = auth.uid()))
+$$;
+
+-- 雑談スレッド（返信なしの1列。10秒に1回・1日100件まで）
+create or replace function public.add_event_comment(eid text, body text) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare u uuid := public._me(); last_at timestamptz; n int; nid bigint;
+begin
+  body := btrim(coalesce(body, ''));
+  if char_length(body) < 1 then raise exception 'EMPTY' using errcode = 'P0001'; end if;
+  if char_length(body) > 200 then raise exception 'TOO_LONG' using errcode = 'P0001'; end if;
+  if not exists(select 1 from fight_events where id = eid and status = 'public') then raise exception 'NOT_FOUND' using errcode = 'P0001'; end if;
+  select id into nid from event_comments c where c.user_id = u and c.event_id = eid and c.body = add_event_comment.body
+     and c.created_at > now() - interval '2 minutes' and c.status = 'visible' limit 1;
+  if nid is not null then return jsonb_build_object('id', nid, 'duplicate', true); end if;
+  select max(created_at), count(*) filter (where created_at > now() - interval '1 day') into last_at, n from event_comments where user_id = u;
+  if last_at > now() - interval '10 seconds' then raise exception 'TOO_FAST' using errcode = 'P0001'; end if;
+  if n >= 100 then raise exception 'RATE_LIMIT' using errcode = 'P0001'; end if;
+  insert into event_comments (event_id, user_id, body) values (eid, u, body) returning id into nid;
+  return jsonb_build_object('id', nid, 'duplicate', false);
+end $$;
+
+-- after_id より新しいものを古い順に（自動更新用）。after_id = 0 なら最新100件
+create or replace function public.list_event_comments(eid text, after_id bigint default 0) returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_agg(jsonb_build_object('id', c.id, 'body', c.body, 'created_at', c.created_at,
+           'name', coalesce(p.display_name, '退会したユーザー'), 'mine', c.user_id = auth.uid()) order by c.id), '[]')
+    from (select * from event_comments c
+           where c.event_id = eid and c.status = 'visible' and c.id > coalesce(after_id, 0)
+             and exists(select 1 from fight_events e where e.id = eid and (e.status = 'public' or public._is_admin()))
+           order by c.id desc limit 100) c
+    left join profiles p on p.id = c.user_id
+$$;
+
+create or replace function public.delete_event_comment(mid bigint) returns boolean
+language plpgsql security definer set search_path = public as $$
+declare u uuid := public._me();
+begin
+  update event_comments set status = 'deleted', body = '' where id = mid and user_id = u and status = 'visible';
+  if not found then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  return true;
+end $$;
+
+-- 管理者：大会と対戦カードの登録・結果の入力
+create or replace function public.admin_upsert_event(eid text, name text, starts_at timestamptz, venue text default null,
+                                                     source_url text default null, status text default 'public') returns jsonb
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public._is_admin() then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  insert into fight_events (id, name, starts_at, venue, source_url, status)
+  values (eid, btrim(name), starts_at, nullif(btrim(coalesce(venue, '')), ''), nullif(btrim(coalesce(source_url, '')), ''), coalesce(status, 'public'))
+  on conflict (id) do update set name = excluded.name, starts_at = excluded.starts_at, venue = excluded.venue,
+    source_url = excluded.source_url, status = excluded.status;
+  return public.get_fight_event(eid);
+end $$;
+
+create or replace function public.admin_add_bout(eid text, fa_name text, fb_name text, fa text default null, fb text default null,
+                                                 rule text default 'mma', weight text default null, title boolean default false, ord int default null) returns bigint
+language plpgsql security definer set search_path = public as $$
+declare nid bigint;
+begin
+  if not public._is_admin() then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  insert into fight_bouts (event_id, ord, fa, fb, fa_name, fb_name, rule, weight, title)
+  values (eid, coalesce(ord, (select coalesce(max(b.ord), 0) + 1 from fight_bouts b where b.event_id = eid)),
+          nullif(fa, ''), nullif(fb, ''), btrim(fa_name), btrim(fb_name), coalesce(rule, 'mma'), nullif(btrim(coalesce(weight, '')), ''), coalesce(title, false))
+  returning id into nid;
+  return nid;
+end $$;
+
+create or replace function public.admin_delete_bout(bid bigint) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public._is_admin() then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  delete from fight_bouts where id = bid;
+  return true;
+end $$;
+
+create or replace function public.admin_set_result(bid bigint, winner text, method text default null) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public._is_admin() then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  update fight_bouts b set winner = nullif(admin_set_result.winner, ''), method = nullif(admin_set_result.method, '') where b.id = bid;
+  return true;
+end $$;
+
+-- 共有ページ生成用（公開キーで読む）
+create or replace function public.export_fight_events() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_agg(jsonb_build_object('id', e.id, 'name', e.name, 'starts_at', e.starts_at, 'venue', e.venue, 'status', e.status,
+           'bouts', coalesce((select jsonb_agg(jsonb_build_object('fa', b.fa, 'fb', b.fb, 'fa_name', b.fa_name, 'fb_name', b.fb_name, 'title', b.title) order by b.ord, b.id)
+                              from fight_bouts b where b.event_id = e.id), '[]')) order by e.starts_at), '[]')
+    from fight_events e
+$$;
+
 -- ---------- 実行権限 ----------
 revoke all on all functions in schema public from public, anon, authenticated;
 grant execute on function public.list_cards(text, text, text, int, int), public.get_card(text), public.find_cards(text, text),
   public.list_comments(text, text), public.related_cards(text, text[]), public.current_theme(), public.export_cards(timestamptz),
   public.unread_count(), public.whoami(), public.log_event(text, text, text, jsonb, text),
-  public.submit_contact(text, text, text, text, text)
+  public.submit_contact(text, text, text, text, text),
+  public.list_fight_events(), public.get_fight_event(text), public.event_ranking(text), public.list_event_comments(text, bigint),
+  public.export_fight_events()
   to anon, authenticated;
 grant execute on function public.create_card(text, text, text, text, text, text, boolean), public.set_reaction(text, text, boolean),
   public.set_save(text, boolean), public.add_comment(text, text, bigint, boolean, text), public.edit_comment(bigint, text),
   public.delete_comment(bigint), public.report(text, text, text, text), public.my_page(), public.my_notifications(int),
   public.mark_notifications_seen(), public.request_fighter(text, text), public.set_display_name(text), public.admin_reports(), public.admin_set_hidden(text, text, boolean), public.admin_dismiss(text, text),
-  public.admin_contacts(), public.admin_contact_done(bigint)
+  public.admin_contacts(), public.admin_contact_done(bigint),
+  public.set_prediction(bigint, text, text), public.clear_prediction(bigint), public.add_event_comment(text, text), public.delete_event_comment(bigint),
+  public.admin_upsert_event(text, text, timestamptz, text, text, text), public.admin_add_bout(text, text, text, text, text, text, text, boolean, int),
+  public.admin_delete_bout(bigint), public.admin_set_result(bigint, text, text)
   to authenticated;

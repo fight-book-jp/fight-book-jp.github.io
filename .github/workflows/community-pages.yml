@@ -23,7 +23,7 @@ jobs:
         id: fetch
         run: |
           set +e
-          python3 tools/community/fetch_cards.py /tmp/cards.json
+          python3 tools/community/fetch_cards.py /tmp/cards.json /tmp/events.json
           code=$?
           if [ $code -eq 3 ]; then echo "skip=1" >> "$GITHUB_OUTPUT"; exit 0; fi
           exit $code
@@ -36,11 +36,11 @@ jobs:
         if: steps.fetch.outputs.skip != '1'
         run: |
           node tools/community/dump_names.js > /tmp/names.json
-          python3 tools/community/build_pages.py --cards /tmp/cards.json --names /tmp/names.json
+          python3 tools/community/build_pages.py --cards /tmp/cards.json --names /tmp/names.json --events /tmp/events.json
       - name: コミット
         if: steps.fetch.outputs.skip != '1'
         run: |
-          git add -A matchups sitemap-cards.xml data-src/community || true
+          git add -A matchups predict sitemap-cards.xml data-src/community || true
           if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "共有ページを更新"
           git pull -q --rebase origin main && git push -q origin HEAD:main

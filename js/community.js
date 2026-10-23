@@ -384,6 +384,7 @@ window.FBC_INIT = function (H) {
   function homeTop() {
     if (!ENABLED) return "";     // 接続前は、これまでのホームのまま（空の参加画面は出さない）
     return `<section class="fz" aria-labelledby="fzTitle"><div class="fz-in">
+      <a class="fz-predict" id="fzPredict" hidden></a>
       <div class="fz-top">
         <div class="fz-copy">
           <div class="fz-kicker"><span class="dot r"></span><span class="dot b"></span>FAN MATCHMAKING</div>
@@ -419,6 +420,13 @@ window.FBC_INIT = function (H) {
     if (!ENABLED) return;
     await ready();
     paintMe();
+    // 予想受付中の大会があれば、帯の一番上に案内
+    rpc("list_fight_events").then(list => {
+      const e = list.find(x => !x.locked && x.bouts > 0), el = $("#fzPredict"); if (!e || !el) return;
+      el.href = `/predict/${encodeURIComponent(e.id)}/`; el.dataset.src = "home_predict";
+      el.innerHTML = `<span class="pv-badge">勝敗予想 受付中</span><b>${esc(e.name)}</b><small>締切 ${fmtWhen(e.starts_at)}・${e.predictors}人が予想中</small><em>予想する →</em>`;
+      el.hidden = false;
+    }).catch(() => {});
     // 注目カード：お題 → 急上昇1位 → 週間1位 → 新着（どれも実際のデータ。無ければ作成への案内）
     try {
       const [theme, tr, wk, nw] = await Promise.all([rpc("current_theme"), rpc("list_cards", { tab: "trending", lim: 6 }), rpc("list_cards", { tab: "weekly", lim: 1 }), rpc("list_cards", { tab: "new", lim: 6 })]);
@@ -812,7 +820,7 @@ window.FBC_INIT = function (H) {
   }
 
   /* ---------- 管理（通報の確認） ---------- */
-  function viewAdmin() { return H.pageHero("Admin", "通報の確認（管理者のみ）") + `<div class="wrap" id="fbAdmin">${ENABLED ? loading() : offBox()}</div>`; }
+  function viewAdmin() { return H.pageHero("Admin", "通報・お問い合わせの確認と、大会予想の管理（管理者のみ）") + `<div class="wrap"><div id="fbAdmin">${ENABLED ? loading() : offBox()}</div><h2 class="fb-h3" style="margin-top:28px">大会予想の管理</h2><div id="admEvents"></div></div>`; }
   async function loadAdmin() {
     const box = $("#fbAdmin"); if (!box || !ENABLED) return;
     await ready(); paintMe();
@@ -821,13 +829,14 @@ window.FBC_INIT = function (H) {
       const [r, cts] = await Promise.all([rpc("admin_reports"), rpc("admin_contacts").catch(() => null)]);
       const RS = { abuse: "侮辱・差別", spam: "宣伝・連投", wrong: "誤情報", other: "その他" };
       box.innerHTML = r.length ? `<table class="tbl"><thead><tr><th>対象</th><th>内容</th><th>理由</th><th>件数</th><th></th></tr></thead><tbody>${r.map(x => `<tr>
-        <td>${x.target_type === "card" ? "カード" : "コメント"}</td><td><a href="/matchups/${encodeURIComponent(x.card_id || "")}/">${esc(x.preview || "（削除済み）")}</a></td>
+        <td>${x.target_type === "card" ? "カード" : x.target_type === "event_comment" ? "大会の雑談" : "コメント"}</td><td><a href="${x.event_id ? `/predict/${encodeURIComponent(x.event_id)}/` : `/matchups/${encodeURIComponent(x.card_id || "")}/`}">${esc(x.preview || "（削除済み）")}</a></td>
         <td>${(x.reasons || []).map(k => RS[k] || k).join("・")}</td><td class="num">${x.n}</td>
         <td><button class="btn small danger" data-admin-hide="${x.target_type}" data-target="${esc(x.target_id)}" data-hidden="true">削除</button> <button class="btn small ghost" data-dismiss="${x.target_type}" data-target="${esc(x.target_id)}">対応不要</button></td></tr>`).join("")}</tbody></table>`
         : `<p class="note">未対応の通報はありません。</p>`;
       const KIND = { opinion: "ご意見", delete: "削除依頼", correct: "訂正依頼", other: "その他" };
       box.innerHTML = `<h2 class="fb-h3">通報</h2>` + box.innerHTML + `<h2 class="fb-h3" style="margin-top:28px">お問い合わせ</h2>` + (cts === null ? `<p class="note">お問い合わせ機能のデータベース設定がまだです（schema.sql を実行し直してください）。</p>`
         : cts.length ? `<ul class="fb-notice">${cts.map(c => `<li><div style="padding:12px 14px"><span class="fbtag">${KIND[c.kind] || c.kind}</span> ${esc(c.name || "（名前なし）")} ${c.email ? `&lt;${esc(c.email)}&gt;` : ""}<small>${hhmm(c.created_at)}${c.url ? `・${esc(c.url)}` : ""}</small><p style="white-space:pre-wrap;margin:6px 0">${esc(c.body)}</p><button class="btn small" data-ctdone="${c.id}">対応済みにする</button></div></li>`).join("")}</ul>` : `<p class="note">未対応のお問い合わせはありません。</p>`);
+      loadAdminEvents();
     } catch (e) { box.innerHTML = failBox(e, "admin"); }
   }
 
@@ -985,7 +994,311 @@ window.FBC_INIT = function (H) {
     track("copy_url", det.id, {});
   }
 
+  /* =====================================================================
+     大会の勝敗予想（/predict/ ・ /predict/{id}/）と雑談スレッド
+     対戦カードは公式発表をもとに管理者が登録する。予想は開始時刻で締め切り。
+     ===================================================================== */
+  const METH = { ko: "KO/TKO", sub: "一本", dec: "判定", other: "その他" };
+  const RES = { a: null, b: null, draw: "引き分け", nc: "無効試合" };
+  const pv = { ev: null, timer: null, chatLast: 0, chatTimer: null };
+  const fmtWhen = t => { const d = new Date(t); return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日（${"日月火水木金土"[d.getDay()]}）${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
+  const side = (bt, s) => ({ key: bt["f" + s], name: bt["f" + s + "_name"] });
+  const fname = (bt, s) => { const x = side(bt, s); return x.key && valid(x.key) ? S.nameOf(x.key) : x.name; };
+  const evUrl = id => `/predict/${encodeURIComponent(id)}/`;
+
+  function viewPredictList() {
+    return H.pageHero("Predict", "大会の対戦カードの勝敗を予想して、ファン同士で語り合おう。") + `<div class="wrap" id="pvList">${ENABLED ? loading() : offBox()}</div>`;
+  }
+  async function loadPredictList() {
+    const box = $("#pvList"); if (!box || !ENABLED) return;
+    try {
+      await ready(); paintMe();
+      const list = await rpc("list_fight_events");
+      if (!list.length) { box.innerHTML = `<div class="fb-empty"><b>予想を受け付けている大会はまだありません</b><p>大会の対戦カードが発表されたら、ここで勝敗予想を受け付けます。</p></div>`; return; }
+      box.innerHTML = `<div class="pv-events">${list.map(e => `<a class="pv-ev ${e.locked ? "locked" : ""}" href="${evUrl(e.id)}" data-src="predict_list">
+        <span class="pv-badge">${e.locked ? (e.upcoming ? "締切・開催中" : "終了") : "予想受付中"}</span>
+        <b>${esc(e.name)}</b><small>${fmtWhen(e.starts_at)}${e.venue ? "・" + esc(e.venue) : ""}</small>
+        <span class="pv-meta">${e.bouts}試合・${e.predictors}人が予想・雑談${e.comments}件</span></a>`).join("")}</div>`;
+    } catch (e) { box.innerHTML = failBox(e, "plist"); }
+  }
+
+  function viewPredict(id) {
+    pv.ev = null; pv.id = id; pv.chatLast = 0;
+    return `<div class="wrap pv" id="pvBox">${ENABLED ? loading("大会を読み込み中…") : offBox()}</div>`;
+  }
+  async function loadPredict() {
+    const box = $("#pvBox"); if (!box || !ENABLED) return;
+    try {
+      await ready(); paintMe();
+      const ev = await rpc("get_fight_event", { eid: pv.id });
+      if (!ev) { box.innerHTML = `<div class="fb-empty"><b>大会が見つかりません</b><p><a href="/predict/">大会予想の一覧へ</a></p></div>`; return; }
+      pv.ev = ev;
+      document.title = `${ev.name} 勝敗予想｜FIGHT BOOK`;
+      box.innerHTML = predictHtml(ev);
+      tick();
+      track("predict_view", null, { event: ev.id, src: navSrc || ss.get("fb_navsrc") || "direct" }, `pv:${anon}:${ev.id}:${today()}`);
+      ss.set("fb_navsrc", "");
+      loadChat(true); loadRanking();
+      clearInterval(pv.chatTimer);
+      pv.chatTimer = setInterval(() => { if (document.visibilityState === "visible" && $("#pvChat")) loadChat(false); else if (!$("#pvChat")) clearInterval(pv.chatTimer); }, 15000);
+    } catch (e) { box.innerHTML = failBox(e, "predict"); }
+  }
+  function predictHtml(ev) {
+    const picked = ev.bouts.filter(b => b.me).length;
+    return `<nav class="crumb"><a href="/predict/">大会予想</a> › <span>${esc(ev.name)}</span></nav>
+      <section class="pv-head">
+        <div class="pv-badge ${ev.locked ? "locked" : ""}">${ev.locked ? "予想は締め切りました" : "勝敗予想 受付中"}</div>
+        <h1>${esc(ev.name)}</h1>
+        <p class="pv-when">${fmtWhen(ev.starts_at)}${ev.venue ? `・${esc(ev.venue)}` : ""}</p>
+        ${ev.locked ? "" : `<p class="pv-count" id="pvCount" data-at="${esc(ev.starts_at)}"></p>`}
+        <p class="pv-sum"><b id="pvPicked">${picked}</b> / ${ev.bouts.length}試合を予想済み・${ev.predictors}人が参加</p>
+        <div class="pv-acts"><button class="fz-btn pv-share" id="pvShare" ${picked ? "" : "disabled"}>📣 私の予想を共有</button>
+          ${ev.source_url ? `<a class="fz-link" href="${esc(ev.source_url)}" target="_blank" rel="noopener">公式の発表を見る ↗</a>` : ""}</div>
+        <p class="note">対戦カードは公式発表をもとに掲載しています。予想は開始時刻まで何度でも変えられます。みんなの予想の割合は、自分が予想した試合から見られます。</p>
+      </section>
+      <section class="section"><div class="sec-head"><h2>Fight Card<small>対戦カード（${ev.bouts.length}試合）</small></h2></div>
+        ${ev.bouts.length ? `<ol class="pv-bouts">${ev.bouts.slice().reverse().map(b => boutHtml(b, ev.locked)).join("")}</ol>` : `<p class="note">対戦カードはまだ発表されていません。</p>`}
+      </section>
+      <section class="section" id="pvRankWrap" hidden><div class="sec-head"><h2>Ranking<small>的中ランキング</small></h2></div><div id="pvRank"></div></section>
+      <section class="section" id="pvChatWrap"><div class="sec-head"><h2>Talk<small>この大会の雑談スレッド</small></h2></div>
+        <div class="pv-chat" id="pvChat" aria-live="polite">${loading()}</div>
+        <form class="pv-chat-form" id="pvChatForm">
+          <input class="fb-nick" id="pvNick" maxlength="30" value="${esc(nickOf())}" placeholder="ニックネーム" aria-label="ニックネーム" autocomplete="nickname">
+          <input id="pvMsg" maxlength="200" placeholder="ひとこと（200字まで）" aria-label="雑談に書き込む" autocomplete="off">
+          <button class="btn primary" type="submit">送信</button>
+        </form>
+        <p class="fb-rules">ログイン不要です。選手や他のファンへの侮辱・差別は管理者が削除します。15秒ごとに自動で新しい書き込みを表示します。</p>
+      </section>`;
+  }
+  function boutHtml(b, locked) {
+    const me = b.me || {}, c = b.counts, tot = c ? c.a + c.b : 0;
+    const pa = tot ? Math.round(c.a / tot * 100) : 0;
+    const decided = b.winner === "a" || b.winner === "b";
+    const hit = decided && me.pick ? me.pick === b.winner : null;
+    const corner = s => {
+      const x = side(b, s), name = fname(b, s), on = me.pick === s, win = b.winner === s;
+      return `<div class="pv-side ${s === "a" ? "red" : "blue"} ${on ? "on" : ""} ${win ? "win" : ""}">
+        ${x.key && valid(x.key) ? `<a href="/fighters/${encodeURIComponent(x.key)}/" class="pv-av" tabindex="-1">${av(x.key, "m")}</a>` : `<span class="pv-av">${av("", "m")}</span>`}
+        <b>${x.key && valid(x.key) ? `<a href="/fighters/${encodeURIComponent(x.key)}/">${esc(name)}</a>` : esc(name)}</b>
+        ${win ? `<span class="pv-win">WIN${b.method ? "・" + esc(METH[b.method] || "") : ""}</span>` : ""}
+        <button class="pv-pick" data-pick="${s}" data-bid="${b.id}" aria-pressed="${on}" ${locked || b.winner ? "disabled" : ""}>${on ? "✓ 勝つと予想中" : "この選手が勝つ"}</button>
+      </div>`;
+    };
+    return `<li class="pv-bout ${hit === true ? "hit" : hit === false ? "miss" : ""}" data-bid="${b.id}">
+      <div class="pv-bmeta">${b.title ? '<span class="pv-title">タイトルマッチ</span>' : ""}${b.weight ? `<span>${esc(b.weight)}</span>` : ""}<span>${esc(RULES[b.rule] || "その他")}</span>
+        ${b.winner && !decided ? `<span class="pv-res">${RES[b.winner]}</span>` : ""}${hit === true ? '<span class="pv-hit">的中！</span>' : hit === false ? '<span class="pv-miss">はずれ</span>' : ""}</div>
+      <div class="pv-vs">${corner("a")}<span class="pv-x">VS</span>${corner("b")}</div>
+      ${me.pick && !locked && !b.winner ? `<div class="pv-meth" role="group" aria-label="決着の予想（任意）"><span>決着も予想（任意）：</span>${["ko", "sub", "dec"].map(m => `<button class="fbchip" data-meth="${m}" data-bid="${b.id}" aria-pressed="${me.method === m}">${METH[m]}</button>`).join("")}</div>` : ""}
+      ${c ? `<div class="pv-bar" aria-label="${esc(fname(b, "a"))} ${pa}%・${esc(fname(b, "b"))} ${100 - pa}%"><i style="width:${pa}%"></i></div>
+        <div class="pv-pct"><span>${pa}%</span><small>${tot}人が予想${tot ? `・KO ${c.ko}／一本 ${c.sub}／判定 ${c.dec}` : ""}</small><span>${tot ? 100 - pa : 0}%</span></div>`
+        : (locked ? "" : `<p class="pv-hint">予想すると、みんなの予想の割合が見られます${b.n ? `（${b.n}人が予想済み）` : ""}</p>`)}
+    </li>`;
+  }
+  function tick() {
+    clearInterval(pv.timer);
+    const el = $("#pvCount"); if (!el) return;
+    const at = new Date(el.dataset.at).getTime();
+    const f = () => {
+      const s = Math.max(0, Math.floor((at - Date.now()) / 1000));
+      if (!$("#pvCount")) return clearInterval(pv.timer);
+      if (s === 0) { el.textContent = "まもなく締め切ります"; clearInterval(pv.timer); return; }
+      const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+      el.textContent = `締め切りまで ${d ? d + "日 " : ""}${h}時間 ${m}分`;
+    };
+    f(); pv.timer = setInterval(f, 30000);
+  }
+  async function pick(btn, method) {
+    const bid = +btn.dataset.bid, ev = pv.ev; if (!ev) return;
+    const b = ev.bouts.find(x => x.id === bid); if (!b) return;
+    if (busy.has("p" + bid)) return; busy.add("p" + bid);
+    try {
+      if (!loggedIn()) await ensureUser();
+      const p = method ? b.me.pick : btn.dataset.pick;
+      const m = method ? (b.me.method === method ? null : method) : (b.me && b.me.pick === p ? b.me.method : null);
+      const before = ev.bouts.filter(x => x.me).length;
+      const nb = await rpc("set_prediction", { bid, pick: p, method: m });
+      Object.assign(b, nb);
+      const li = $(`.pv-bout[data-bid="${bid}"]`); if (li) li.outerHTML = boutHtml(b, ev.locked);
+      const n = ev.bouts.filter(x => x.me).length;
+      if (before === 0 && n === 1) { ev.predictors++; const sm = $(".pv-sum"); if (sm) sm.innerHTML = sm.innerHTML.replace(/\d+人が参加/, `${ev.predictors}人が参加`); }
+      $("#pvPicked").textContent = n; const sh = $("#pvShare"); if (sh) sh.disabled = !n;
+      track("predict", null, { event: ev.id, bout: bid, method: !!m, change: !!method }, null);
+    } catch (e) { toast(esc(e.code === "LOCKED" ? "この試合の予想は締め切られました。" : e.message)); }
+    finally { busy.delete("p" + bid); }
+  }
+  async function loadRanking() {
+    const wrap = $("#pvRankWrap"), box = $("#pvRank"); if (!wrap || !pv.ev) return;
+    try {
+      const r = await rpc("event_ranking", { eid: pv.ev.id });
+      if (!r.decided) return;
+      wrap.hidden = false;
+      box.innerHTML = (r.me ? `<p class="pv-myrank">あなたは <b>${r.me.rank}位</b>（${r.me.of}人中）・${r.me.pts}点（勝者 ${r.me.hit}／${r.me.decided}試合的中・決着方法 ${r.me.mhit}的中）</p>` : "")
+        + (r.top.length ? `<ol class="fb-opp">${r.top.map(x => `<li class="${x.mine ? "me" : ""}"><span class="rk">${x.rank}</span><span><b>${esc(x.name)}</b><small>勝者 ${x.hit}/${x.decided}・決着 ${x.mhit}</small></span><span class="n">${x.pts}点</span></li>`).join("")}</ol>` : "")
+        + `<p class="note">勝者が的中で1点、決着方法（KO・一本・判定）も的中でさらに1点。結果が入った ${r.decided}試合で計算しています。</p>`;
+    } catch (e) {}
+  }
+  async function loadChat(first) {
+    const box = $("#pvChat"); if (!box || !pv.ev) return;
+    try {
+      const list = await rpc("list_event_comments", { eid: pv.ev.id, after_id: first ? 0 : pv.chatLast });
+      if (first) box.innerHTML = list.length ? "" : `<p class="note pv-empty">まだ書き込みはありません。最初のひとことをどうぞ。</p>`;
+      if (!list.length) return;
+      const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+      const em = box.querySelector(".pv-empty"); if (em) em.remove();
+      box.insertAdjacentHTML("beforeend", list.map(c => `<div class="pv-msg ${c.mine ? "mine" : ""}" id="ec${c.id}"><b>${esc(c.name)}</b><span>${esc(c.body)}</span>
+        <small>${ago(c.created_at)}${c.mine ? ` <button class="fblink" data-ecdel="${c.id}">削除</button>` : ` <button class="fblink" data-report="event_comment" data-target="${c.id}">通報</button>`}${isAdmin() ? ` <button class="fblink danger" data-admin-hide="event_comment" data-target="${c.id}" data-hidden="true">🗑 削除</button>` : ""}</small></div>`).join(""));
+      pv.chatLast = list[list.length - 1].id;
+      if (first || nearBottom) box.scrollTop = box.scrollHeight;
+    } catch (e) { if (first) box.innerHTML = failBox(e); }
+  }
+  async function sendChat(f) {
+    const msg = $("#pvMsg"), body = msg.value.trim(), nick = $("#pvNick").value.trim(), ne = nickErr(nick);
+    if (ne) { toast(ne); $("#pvNick").focus(); return; }
+    if (!body) { msg.focus(); return; }
+    const btn = f.querySelector("button"); if (btn.disabled) return; btn.disabled = true;
+    try {
+      await ensureUser(nick);
+      const r = await rpc("add_event_comment", { eid: pv.ev.id, body });
+      msg.value = ""; if (!r.duplicate) track("event_comment", null, { event: pv.ev.id });
+      await loadChat(false);
+      const box = $("#pvChat"); box.scrollTop = box.scrollHeight;
+    } catch (e) { toast(esc(e.message)); }
+    finally { btn.disabled = false; }
+  }
+
+  /* ---------- 「私の予想」画像（端末内で作る。サーバーには送らない） ---------- */
+  async function shareImage() {
+    const ev = pv.ev; if (!ev) return;
+    const picks = ev.bouts.filter(b => b.me).slice().reverse();
+    if (!picks.length) return;
+    try { await document.fonts.load('900 40px "Noto Sans JP"'); } catch (e) {}
+    const W = 1080, TOP = 290, rowH = picks.length > 8 ? 74 : picks.length > 5 ? 96 : 120, H = Math.max(1080, TOP + picks.length * rowH + 200);
+    const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    const g = cv.getContext("2d");
+    const grd = g.createLinearGradient(0, 0, W, H); grd.addColorStop(0, "#1F2715"); grd.addColorStop(1, "#11140D");
+    g.fillStyle = grd; g.fillRect(0, 0, W, H);
+    g.strokeStyle = "rgba(181,199,131,.08)"; g.lineWidth = 2;
+    for (let x = -H; x < W; x += 56) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x + H, H); g.stroke(); g.beginPath(); g.moveTo(x + H, 0); g.lineTo(x, H); g.stroke(); }
+    g.fillStyle = "#8FA35E"; g.fillRect(0, H - 14, W, 14);
+    const font = (w, s) => `${w} ${s}px "Noto Sans JP","Hiragino Sans",sans-serif`;
+    const fit = (t, w, s, max) => { let size = s; g.font = font(w, size); while (g.measureText(t).width > max && size > 18) { size -= 2; g.font = font(w, size); } return size; };
+    g.fillStyle = "#E3CF8F"; g.font = font(900, 40); g.fillText("私の予想", 64, 110);
+    g.fillStyle = "#F7F6F0"; fit(ev.name, 900, 58, W - 128); g.fillText(ev.name, 64, 190);
+    g.fillStyle = "#C3C8B1"; g.font = font(700, 28); g.fillText(fmtWhen(ev.starts_at), 64, 240);
+    // 選んだ試合を上から並べる（余白が多いときは中央に寄せる）
+    const listH = picks.length * rowH, top = TOP + Math.max(0, (H - 200 - TOP - listH) / 2);
+    g.textBaseline = "middle";
+    picks.forEach((b, i) => {
+      const y0 = top + i * rowH, cy = y0 + (rowH - 14) / 2;
+      const win = fname(b, b.me.pick), lose = fname(b, b.me.pick === "a" ? "b" : "a");
+      g.fillStyle = "rgba(255,255,255,.06)"; g.fillRect(56, y0, W - 112, rowH - 14);
+      g.fillStyle = b.me.pick === "a" ? "#D06A52" : "#6F95C4"; g.fillRect(56, y0, 8, rowH - 14);
+      const meth = b.me.method ? `（${METH[b.me.method]}）` : "";
+      g.fillStyle = "#F7F6F0"; fit(`◎ ${win}${meth}`, 900, rowH > 100 ? 44 : rowH > 80 ? 38 : 30, 640); g.fillText(`◎ ${win}${meth}`, 88, cy);
+      g.fillStyle = "#9DA38F"; g.font = font(700, rowH > 80 ? 26 : 20); const t2 = `vs ${lose}`;
+      g.fillText(t2, W - 84 - Math.min(g.measureText(t2).width, 300), cy, 300);
+    });
+    g.textBaseline = "alphabetic";
+    g.fillStyle = "#B5C783"; g.font = font(900, 34); g.fillText("あなたの予想は？", 64, H - 92);
+    g.fillStyle = "#F7F6F0"; g.font = font(900, 34); const site = "FIGHT BOOK  fightbook-jp.com"; g.fillText(site, W - 64 - g.measureText(site).width, H - 92);
+    const blob = await new Promise(r => cv.toBlob(r, "image/png"));
+    const url = location.origin + evUrl(ev.id) + "?ref=x_share";
+    const text = `${ev.name}、私の予想はこれ！🥊 みんなはどう予想する？\n#RIZIN #FIGHTBOOK`;
+    const file = new File([blob], `fightbook-predict-${ev.id}.png`, { type: "image/png" });
+    track("predict_share", null, { event: ev.id, n: picks.length });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: `${text}\n${url}` }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+    }
+    // PC など：画像を保存して、X の投稿画面を開く（画像は投稿画面で添付）
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove();
+    showSharePanel(text, url, a.href);
+  }
+  function showSharePanel(text, url, img) {
+    let d = $("#pvShareDlg");
+    if (!d) { d = document.createElement("dialog"); d.id = "pvShareDlg"; d.className = "picker small"; document.body.appendChild(d); }
+    d.innerHTML = `<div class="pk-head"><div><small>SHARE</small><h3>私の予想を共有</h3></div><button class="pk-close" onclick="this.closest('dialog').close()" aria-label="閉じる">×</button></div>
+      <div class="pv-dlg"><img src="${img}" alt="私の予想の画像"><p>画像を保存しました。Xの投稿画面で画像を添付して投稿してください。</p>
+      <a class="btn primary big" href="https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=fightbookjp" target="_blank" rel="noopener">Xの投稿画面を開く</a></div>`;
+    d.showModal();
+  }
+
+  /* ---------- 管理：大会と対戦カードの登録・結果入力 ---------- */
+  const adm = { ev: null };
+  async function loadAdminEvents() {
+    const box = $("#admEvents"); if (!box) return;
+    try {
+      const list = await rpc("list_fight_events");
+      box.innerHTML = `<form id="admEvForm" class="adm-form">
+          <b>大会を登録・更新</b>
+          <label>ID（英小文字・数字・ハイフン。URLになります）<input name="eid" required pattern="[a-z0-9][a-z0-9\\-]{2,39}" placeholder="rizin-2026-12-31" value="${esc(adm.ev ? adm.ev.id : "")}"></label>
+          <label>大会名<input name="name" required maxlength="80" value="${esc(adm.ev ? adm.ev.name : "")}" placeholder="RIZIN DECADE"></label>
+          <label>開始日時（この時刻で予想を締め切ります）<input name="at" type="datetime-local" required value="${adm.ev ? localInput(adm.ev.starts_at) : ""}"></label>
+          <label>会場（任意）<input name="venue" maxlength="80" value="${esc(adm.ev ? adm.ev.venue || "" : "")}"></label>
+          <label>公式発表のURL（任意）<input name="src" maxlength="300" value="${esc(adm.ev ? adm.ev.source_url || "" : "")}" placeholder="https://"></label>
+          <label>公開<select name="status"><option value="public">公開</option><option value="hidden" ${adm.ev && adm.ev.status === "hidden" ? "selected" : ""}>非公開（準備中）</option></select></label>
+          <button class="btn primary" type="submit">保存</button></form>
+        <ul class="adm-evs">${list.map(e => `<li><button class="fblink" data-admev="${esc(e.id)}">${esc(e.name)}</button> <small>${fmtWhen(e.starts_at)}・${e.bouts}試合</small> <a href="${evUrl(e.id)}">表示</a></li>`).join("") || "<li class='note'>まだ大会はありません</li>"}</ul>
+        <div id="admBouts"></div>`;
+      if (adm.ev) renderAdminBouts();
+    } catch (e) { box.innerHTML = e.code && /function|schema/.test(e.message) ? `<p class="note">大会予想のデータベース設定がまだです（schema.sql を実行し直してください）。</p>` : failBox(e); }
+  }
+  const localInput = t => { const d = new Date(t); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
+  async function renderAdminBouts() {
+    const box = $("#admBouts"); if (!box || !adm.ev) return;
+    const ev = adm.ev = await rpc("get_fight_event", { eid: adm.ev.id });
+    const opts = Object.values(S.profiles).filter(p => p.riz.total > 0).sort((a, b) => b.rating - a.rating).map(p => `<option value="${esc(p.key)}">${esc(S.nameOf(p.key))}</option>`).join("");
+    box.innerHTML = `<h3 class="fb-h3">${esc(ev.name)} の対戦カード</h3>
+      <datalist id="admFighters">${opts}</datalist>
+      <form id="admBoutForm" class="adm-form">
+        <b>試合を追加（メインイベントを最後に）</b>
+        <label>選手A（一覧から選ぶか、名前を入力）<input name="a" list="admFighters" required maxlength="60" placeholder="選手名またはID"></label>
+        <label>選手B<input name="b" list="admFighters" required maxlength="60"></label>
+        <label>ルール<select name="rule">${Object.entries(RULES).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}<option value="other">その他</option></select></label>
+        <label>階級・契約（任意）<input name="weight" maxlength="40" placeholder="フェザー級"></label>
+        <label class="toggle"><input type="checkbox" name="title"> タイトルマッチ</label>
+        <button class="btn primary" type="submit">追加</button></form>
+      <ol class="adm-bouts">${ev.bouts.map(b => `<li><b>${esc(fname(b, "a"))}</b> vs <b>${esc(fname(b, "b"))}</b> <small>${b.n}人が予想</small>
+        <span class="adm-res">結果：<select data-res="${b.id}"><option value="">未入力</option><option value="a" ${b.winner === "a" ? "selected" : ""}>${esc(fname(b, "a"))}の勝ち</option><option value="b" ${b.winner === "b" ? "selected" : ""}>${esc(fname(b, "b"))}の勝ち</option><option value="draw" ${b.winner === "draw" ? "selected" : ""}>引き分け</option><option value="nc" ${b.winner === "nc" ? "selected" : ""}>無効試合</option></select>
+        <select data-resm="${b.id}"><option value="">決着</option>${Object.entries(METH).map(([k, v]) => `<option value="${k}" ${b.method === k ? "selected" : ""}>${v}</option>`).join("")}</select>
+        <button class="btn small" data-ressave="${b.id}">結果を保存</button> <button class="btn small danger" data-admdelbout="${b.id}">削除</button></span></li>`).join("") || "<li class='note'>まだ試合がありません</li>"}</ol>`;
+  }
+  const keyOfName = v => { v = (v || "").trim(); if (valid(v)) return v; const hit = Object.values(S.profiles).find(p => S.nameOf(p.key) === v || S.enOf(p.key) === v); return hit ? hit.key : null; };
+
+  function predictClick(e) {
+    const t = e.target;
+    const pb = t.closest(".pv-pick"); if (pb && !pb.disabled) { pick(pb); return true; }
+    const mb = t.closest("[data-meth]"); if (mb) { pick(mb, mb.dataset.meth); return true; }
+    if (t.closest("#pvShare")) { shareImage().catch(err => toast("画像を作れませんでした。")); return true; }
+    const dl = t.closest("[data-ecdel]"); if (dl) { rpc("delete_event_comment", { mid: +dl.dataset.ecdel }).then(() => { const el = $(`#ec${dl.dataset.ecdel}`); if (el) el.remove(); }).catch(err => toast(esc(err.message))); return true; }
+    const ae = t.closest("[data-admev]"); if (ae) { rpc("get_fight_event", { eid: ae.dataset.admev }).then(ev => { adm.ev = ev; loadAdminEvents(); }); return true; }
+    const rs = t.closest("[data-ressave]");
+    if (rs) { const id = rs.dataset.ressave; rpc("admin_set_result", { bid: +id, winner: $(`[data-res="${id}"]`).value || null, method: $(`[data-resm="${id}"]`).value || null }).then(() => { toast("結果を保存しました"); renderAdminBouts(); }).catch(err => toast(esc(err.message))); return true; }
+    const db = t.closest("[data-admdelbout]");
+    if (db) { if (confirm("この試合を削除しますか？（集まった予想も消えます）")) rpc("admin_delete_bout", { bid: +db.dataset.admdelbout }).then(renderAdminBouts).catch(err => toast(esc(err.message))); return true; }
+    return false;
+  }
+  function predictSubmit(e) {
+    const f = e.target;   // 注意：フォーム内に name="id" の入力欄を置くと f.id が上書きされる
+    if (f.id === "pvChatForm") { e.preventDefault(); sendChat(f); return true; }
+    if (f.id === "admEvForm") {
+      e.preventDefault();
+      const v = n => f.elements[n].value;
+      rpc("admin_upsert_event", { eid: v("eid"), name: v("name"), starts_at: new Date(v("at")).toISOString(), venue: v("venue") || null, source_url: v("src") || null, status: v("status") })
+        .then(ev => { adm.ev = ev; toast("大会を保存しました"); loadAdminEvents(); }).catch(err => toast(esc(err.message)));
+      return true;
+    }
+    if (f.id === "admBoutForm") {
+      e.preventDefault();
+      const v = n => f.elements[n].value.trim(), ka = keyOfName(v("a")), kb = keyOfName(v("b"));
+      rpc("admin_add_bout", { eid: adm.ev.id, fa_name: ka ? S.nameOf(ka) : v("a"), fb_name: kb ? S.nameOf(kb) : v("b"), fa: ka, fb: kb, rule: v("rule"), weight: v("weight") || null, title: f.elements.title.checked, ord: null })
+        .then(() => { toast("試合を追加しました"); renderAdminBouts(); }).catch(err => toast(esc(err.message)));
+      return true;
+    }
+    return false;
+  }
+
   function click(e) {
+    if (predictClick(e)) return true;
     const t = e.target;
     const a = t.closest("a[data-src]"); if (a) { navSrc = a.dataset.src; ss.set("fb_navsrc", a.dataset.src); if (a.dataset.why) track("related_click", det.id, { why: a.dataset.why, to: (a.closest("[data-card]") || {}).dataset && a.closest("[data-card]").dataset.card }); }
     const xs = t.closest("[data-xshare]"); if (xs) { track("share_click", xs.dataset.xshare, { where: "after_vote" }); return true; }
@@ -1066,6 +1379,7 @@ window.FBC_INIT = function (H) {
     return false;
   }
   function submit(e) {
+    if (predictSubmit(e)) return true;
     const f = e.target;
     if (f.id === "fbAuth") { e.preventDefault(); submitAuth(f); return true; }
     if (f.id === "fbContact") { e.preventDefault(); submitContact(f); return true; }
@@ -1122,6 +1436,8 @@ window.FBC_INIT = function (H) {
     else if (page === "create") { ready().then(() => { paintMe(); refreshCreate(); }); }
     else if (page === "me") loadMe();
     else if (page === "admin") loadAdmin();
+    else if (page === "predict") loadPredictList();
+    else if (page === "pevent") loadPredict();
     else if (page === "login") { ready().then(() => { paintMe(); if (isAdmin() && parts[1] !== "forgot") location.href = "/admin/"; }); }
     else if (page === "reset") { ready().then(() => { paintMe(); if (loggedIn() && !$("#fbReset")) H.rerender(); }); }
     else if (page === "fighter") loadFighter(parts[1]);
@@ -1155,10 +1471,12 @@ window.FBC_INIT = function (H) {
       if (page === "login") return viewLogin(parts[1]);
       if (page === "reset") return viewReset();
       if (page === "about") return viewAbout();
+      if (page === "predict") return viewPredictList();
+      if (page === "pevent") return viewPredict(parts[1]);
       if (page === "privacy") return viewPrivacy();
       if (page === "contact") return viewContact();
       return null;
     },
-    title(page) { return { cards: "ファンの見たい対戦", create: "見たい対戦を作る", me: "マイページ", admin: "管理", login: "管理者ログイン", reset: "パスワードの再設定", about: "FIGHT BOOKについて", privacy: "プライバシーポリシー", contact: "お問い合わせ" }[page]; },
+    title(page) { return { cards: "ファンの見たい対戦", create: "見たい対戦を作る", me: "マイページ", admin: "管理", login: "管理者ログイン", reset: "パスワードの再設定", about: "FIGHT BOOKについて", predict: "大会予想", pevent: "大会予想", privacy: "プライバシーポリシー", contact: "お問い合わせ" }[page]; },
   };
 };
