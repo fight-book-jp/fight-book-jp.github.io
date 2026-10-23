@@ -16,7 +16,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: 取得
@@ -27,10 +27,24 @@ jobs:
           code=$?
           if [ $code -eq 3 ]; then echo "skip=1" >> "$GITHUB_OUTPUT"; exit 0; fi
           exit $code
+      # 日本語フォントは一度入れたらキャッシュして使い回す（apt-get が混雑で止まり、10分で打ち切られることがあったため）
+      - name: 日本語フォント（キャッシュ）
+        if: steps.fetch.outputs.skip != '1'
+        uses: actions/cache@v4
+        with:
+          path: ~/.fonts-fb
+          key: noto-cjk-black-v1
       - name: 日本語フォントと画像ライブラリ
         if: steps.fetch.outputs.skip != '1'
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk >/dev/null
+          mkdir -p ~/.fonts-fb
+          if [ ! -s ~/.fonts-fb/NotoSansCJK-Black.ttc ]; then
+            for i in 1 2 3; do
+              if timeout 240 sudo apt-get update -qq && timeout 300 sudo apt-get install -y -qq --no-install-recommends fonts-noto-cjk >/dev/null; then break; fi
+              echo "フォントの取得をやり直します（${i}回目）"; sleep 10
+            done
+            cp /usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc ~/.fonts-fb/ 2>/dev/null || cp /usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc ~/.fonts-fb/NotoSansCJK-Black.ttc
+          fi
           pip install -q pillow
       - name: ページを作る
         if: steps.fetch.outputs.skip != '1'

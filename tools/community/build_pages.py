@@ -29,6 +29,7 @@ MANIFEST = os.path.join(ROOT, "data-src", "community", "pages.json")
 RULES = {"mma": "MMA", "kickboxing": "キックボクシング", "grappling": "グラップリング", "boxing": "ボクシング"}
 CONDS = {"standard": "", "title": "タイトル戦", "catchweight": "契約体重", "openweight": "無差別級"}
 FONT_CANDIDATES = [
+    os.path.expanduser("~/.fonts-fb/NotoSansCJK-Black.ttc"),     # GitHub Actions でキャッシュしたもの
     "/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc",
     "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
     "/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc",
