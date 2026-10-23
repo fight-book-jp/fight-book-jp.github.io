@@ -874,6 +874,7 @@ language sql stable security definer set search_path = public as $$
   select jsonb_build_object('id', bt.id, 'ord', bt.ord, 'fa', bt.fa, 'fb', bt.fb, 'fa_name', bt.fa_name, 'fb_name', bt.fb_name,
            'rule', bt.rule, 'weight', bt.weight, 'title', bt.title, 'winner', bt.winner, 'method', bt.method,
            'n', (select cn from c),
+           'ncm', (select count(*) from event_comments k where k.bout_id = bt.id and k.status = 'visible'),
            'counts', case when locked or exists(select 1 from m) or public._is_admin()
                           then (select jsonb_build_object('a', ca, 'b', cb, 'ko', cko, 'sub', csub, 'dec', cdec) from c) end,
            'me', (select jsonb_build_object('pick', m.pick, 'method', m.method) from m))

@@ -1263,3 +1263,116 @@ body{overflow-x:clip}
 .my-pv-p{font-weight:900}
 .my-pv li.hit .my-pv-p{color:var(--win)}
 #fbMeTabs{flex-wrap:wrap}
+
+/* =====================================================================
+   ホーム（v32）：①勝敗予想（主役） ②見たい一戦 ③データの入口
+   ===================================================================== */
+.hero.hero-s{padding:30px 16px 34px;text-align:left}
+.hero-s .hero-in{max-width:1208px;margin:0 auto}
+.hero-s .kicker{letter-spacing:.18em;font-size:13px}
+.hero-s h1.hero-h{margin:8px 0 0;font-family:"Noto Sans JP",sans-serif;font-weight:900;font-size:clamp(26px,4.6vw,44px);line-height:1.25;text-transform:none;letter-spacing:.01em}
+.hero-s .hero-sub{margin:10px 0 0;max-width:640px;font-size:14px;opacity:.85}
+@media (max-width:560px){.hero.hero-s{padding:20px 16px 24px}.hero-s .hero-sub{font-size:13px;margin-top:6px}}
+.nav-sep{width:1px;height:18px;background:var(--hero-line);margin:0 6px;align-self:center}
+.nav a.nav-main{color:var(--hero-ink)}
+@media (max-width:900px){.nav-sep{display:none}}
+
+/* 主役：勝敗予想 */
+.hp{background:var(--bg)}
+.hp .wrap{padding-top:22px;padding-bottom:8px}
+.hp-head h2,.hf-head h2{margin:0;font-size:clamp(21px,3vw,28px);font-weight:900;line-height:1.3}
+.hp-head p,.hf-head p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.hp-ev{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:16px 0 12px}
+.hp-ev-name{font-weight:900;font-size:16px;color:var(--ink);text-decoration:none}.hp-ev-name:hover{text-decoration:underline}
+.hp-ev small{flex-basis:100%;color:var(--muted);font-size:12px}
+.hp-live{display:flex;align-items:center;gap:10px;margin:14px 0 0;padding:12px 16px;border-radius:12px;background:var(--loss);color:#fff;text-decoration:none;font-size:14px;font-weight:700}
+.hp-live i{width:10px;height:10px;border-radius:50%;background:#fff;flex:none}
+.hp-live b{font-weight:900}.hp-live span{margin-left:auto}
+.hp-note{margin:14px 0 0;font-size:14px;font-weight:700}
+.hp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hpb{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.hpb.big{grid-column:1/-1;padding:18px 20px;border:2px solid var(--accent)}
+.hpb.done{border-color:var(--accent)}
+.hpb-meta{display:flex;flex-wrap:wrap;gap:6px;font-size:11px;font-weight:800;color:var(--muted)}
+.hpb-meta>span{padding:2px 8px;border-radius:999px;background:var(--soft);border:1px solid var(--line)}
+.hpb-meta .hpb-main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hpb-meta .pv-title{background:var(--gold);color:#16190F;border-color:var(--gold)}
+.hpb-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.hpb-side{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;min-width:0}
+.hpb-side b{font-size:15px;font-weight:900;line-height:1.3;word-break:break-word}
+.hpb-side b a{color:inherit;text-decoration:none}.hpb-side b a:hover{text-decoration:underline}
+.hpb.big .hpb-side b{font-size:clamp(18px,2.6vw,24px)}
+.hpb-av .av{border:3px solid var(--corner-red)}.hpb-side.blue .hpb-av .av{border-color:var(--corner-blue)}
+.hpb-x{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:22px;color:var(--muted)}
+.hpb.big .hpb-x{font-size:32px}
+.hpb-picks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hpb-pick{min-height:48px;padding:8px 10px;border-radius:12px;border:2px solid var(--corner-red);background:var(--surface);color:var(--corner-red);font:inherit;font-size:14px;font-weight:900;cursor:pointer;line-height:1.3;word-break:break-word}
+.hpb-pick.blue{border-color:var(--corner-blue);color:var(--corner-blue)}
+.hpb-pick:hover{background:var(--corner-red-tint)}.hpb-pick.blue:hover{background:var(--corner-blue-tint)}
+.hpb-pick[aria-pressed="true"]{background:var(--corner-red);color:#fff}
+.hpb-pick.blue[aria-pressed="true"]{background:var(--corner-blue);color:#fff}
+.hpb-pick:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.hpb-hint{margin:0;font-size:12px;color:var(--muted)}
+.hpb-res .pv-bar{margin-top:8px}
+.hpb-done{margin:0;font-size:14px}.hpb-done b{font-weight:900}
+.hpb-done small{display:block;font-size:11px;color:var(--muted)}
+.hpb-done .pv-hit,.hpb-done .pv-miss{margin-left:8px}
+.hpb-next{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.hpb-cm,.hpb-go{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 14px;border-radius:999px;font:inherit;font-size:13px;font-weight:800;text-decoration:none;cursor:pointer}
+.hpb-cm{flex:1 1 auto;background:var(--accent);color:var(--accent-ink);border:none}
+.hpb-go{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.hpb-go:hover{border-color:var(--ink)}
+.hp-cd{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;padding:10px 14px;border-radius:10px;background:var(--accent-tint);border-left:4px solid var(--accent)}
+.hp-cd[data-level="warm"]{background:rgba(184,155,76,.16);border-left-color:var(--gold)}
+.hp-cd[data-level="hot"]{background:rgba(168,67,47,.12);border-left-color:var(--loss)}
+.hp-cd-l{font-size:13px;font-weight:900}
+.hp-cd-t{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hp-cd-t b{font-family:"Barlow Condensed","Noto Sans JP",sans-serif;font-size:26px;font-weight:800;color:var(--accent-strong)}
+.hp-cd[data-level="hot"] .hp-cd-t b{color:var(--loss)}
+.hp-cd small{flex-basis:100%;font-size:11px;color:var(--muted)}
+.hp-foot,.hf-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.hp-foot{justify-content:center}
+.hp-all{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;border:2px solid var(--ink);color:var(--ink);font-weight:900;font-size:14px;text-decoration:none}
+.hp-all:hover{background:var(--ink);color:var(--bg)}
+.hp-others{margin:10px 0 0;font-size:13px;text-align:center}
+.hp-empty{margin-top:14px;padding:22px;border:2px dashed var(--line);border-radius:14px;background:var(--surface)}
+.hp-empty b{font-size:17px}.hp-empty p{margin:6px 0 12px;color:var(--muted);font-size:14px}
+@media (max-width:900px){.hp-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){
+  .hp-grid{grid-template-columns:1fr}
+  .hpb.big{padding:14px}
+  .hpb:not(.big) .hpb-vs{grid-template-columns:1fr auto 1fr}
+  .hpb:not(.big) .hpb-av{display:none}
+  .hpb-cm,.hpb-go{flex:1 1 100%}
+}
+
+/* 第二：見たい一戦 */
+.hf{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:28px}
+.hf .wrap{padding-top:26px;padding-bottom:28px}
+.hf-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:14px}
+.hf-tag{display:inline-block;font-size:11px;font-weight:900;padding:3px 10px;border-radius:999px;background:var(--black-soft);color:#fff;margin-bottom:6px}
+.hf-post{padding:12px 22px;font-size:15px}
+.hf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hf-grid .fc{min-width:0}
+.hf-foot small{color:var(--muted);font-size:12px}
+.hf .fz-empty{border-color:var(--line);background:var(--surface)}
+.hf .fz-empty p{color:var(--muted)}
+@media (max-width:900px){.hf-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.hf-post{width:100%;justify-content:center}}
+
+/* 補助：データの入口 */
+.hd-lead{margin:0 0 12px;font-size:14px;color:var(--muted)}
+.hd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hd-link{position:relative;display:block;padding:14px 34px 14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;color:var(--ink);text-decoration:none}
+.hd-link b{display:block;font-size:15px;font-weight:900}
+.hd-link small{color:var(--muted);font-size:12px}
+.hd-link span{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--muted)}
+.hd-link:hover{border-color:var(--ink)}
+@media (max-width:620px){.hd-grid{grid-template-columns:1fr 1fr}.hd-link{padding:12px 26px 12px 12px}.hd-link span{right:10px}}
+@media (min-width:900px){
+  .hpb.big{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);column-gap:28px;row-gap:10px;align-items:start}
+  .hpb.big>.hpb-meta{grid-column:1/-1}
+  .hpb.big>.hpb-vs{grid-column:1;grid-row:2/span 4;align-self:center}
+  .hpb.big>:not(.hpb-meta):not(.hpb-vs){grid-column:2}
+}
+.hpb-vs{align-items:start}.hpb-x{align-self:center}

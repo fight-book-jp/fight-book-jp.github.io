@@ -137,3 +137,45 @@ p as (
 )
 select c.w week, count(*) creators, count(*) filter (where exists (select 1 from p where p.u = c.u and p.w = c.w + 7)) active_next_week
 from c group by 1 order by 1 desc;
+
+-- =====================================================================
+-- ホーム（v32〜）の参加の流れ
+--  home_predict_view  ホームで受付中の対戦カードを表示（端末×大会×日で1回） {event, picked}
+--  predict            予想の成功。ホームからは props.src = 'home'          {event, bout, change, src}
+--  home_to_comment    ホームの「理由をコメント」「コメントを読む」を押した   {event, bout, picked}
+--  home_next_bout     ホームの「次の試合を予想」                           {event, from, to}
+--  bout_comment / bout_reply  大会ページでのコメント・返信
+-- =====================================================================
+
+-- 【ホーム→予想】受付中カードを見た端末のうち、同じ日にホームから予想した端末の割合（日ごと）
+with v as (select distinct anon_id, created_at::date d from events where name = 'home_predict_view'),
+     p as (select distinct anon_id, created_at::date d from events where name = 'predict' and props->>'src' = 'home' and coalesce((props->>'change')::boolean, false) = false)
+select v.d, count(*) as viewers, count(p.anon_id) as predicted, round(100.0 * count(p.anon_id) / nullif(count(*), 0), 1) as rate_pct
+from v left join p on p.anon_id = v.anon_id and p.d = v.d group by 1 order by 1 desc limit 30;
+
+-- 【予想→コメント】ホームから予想した端末のうち、同じ日に試合のコメントを書いた端末の割合
+with p as (select distinct anon_id, created_at::date d from events where name = 'predict' and props->>'src' = 'home'),
+     c as (select distinct anon_id, created_at::date d from events where name in ('bout_comment', 'bout_reply'))
+select p.d, count(*) as predicted, count(c.anon_id) as commented, round(100.0 * count(c.anon_id) / nullif(count(*), 0), 1) as rate_pct
+from p left join c on c.anon_id = p.anon_id and c.d = p.d group by 1 order by 1 desc limit 30;
+
+-- 【別の対戦へ】ホームから予想した端末のうち、2試合以上を予想した、または「次の試合」を押した端末の割合
+with p as (select anon_id, created_at::date d, count(distinct props->>'bout') n from events where name = 'predict' group by 1, 2),
+     h as (select distinct anon_id, created_at::date d from events where name = 'predict' and props->>'src' = 'home'),
+     nx as (select distinct anon_id, created_at::date d from events where name = 'home_next_bout')
+select h.d, count(*) as predicted_from_home,
+       count(*) filter (where p.n >= 2 or nx.anon_id is not null) as went_to_another,
+       round(100.0 * count(*) filter (where p.n >= 2 or nx.anon_id is not null) / nullif(count(*), 0), 1) as rate_pct
+from h left join p on p.anon_id = h.anon_id and p.d = h.d left join nx on nx.anon_id = h.anon_id and nx.d = h.d
+group by 1 order by 1 desc limit 30;
+
+-- 【見たい一戦】ホームの見たい一戦からの反応と投稿（週ごと）
+select date_trunc('week', created_at)::date as week,
+       count(*) filter (where name = 'vote' and props->>'where' like 'home%') as votes_from_home,
+       count(*) filter (where name = 'card_publish' and coalesce((props->>'existed')::boolean, false) = false) as new_cards
+from events group by 1 order by 1 desc limit 12;
+
+-- 【再訪率】その週に訪問した端末のうち、翌週も訪問した端末の割合
+with w as (select distinct anon_id, date_trunc('week', created_at)::date wk from events where name = 'daily_visit')
+select a.wk, count(*) as visitors, count(b.anon_id) as returned_next_week, round(100.0 * count(b.anon_id) / nullif(count(*), 0), 1) as rate_pct
+from w a left join w b on b.anon_id = a.anon_id and b.wk = a.wk + 7 group by 1 order by 1 desc limit 12;

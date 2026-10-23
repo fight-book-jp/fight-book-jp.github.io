@@ -62,8 +62,8 @@ const pages = [];
 const fightersN = Object.values(S.profiles).filter(p => p.riz.total > 0).length;
 const riz = S.events.filter(e => e.rizin);
 const HOME = {
-  title: "FIGHT BOOK｜RIZIN選手データベース・ファンが語る見たい対戦",
-  desc: `RIZINに出場した全${fightersN}選手の戦績・レーティング・王座の歴史・統計をまとめた非公式ファンデータベース。ファン同士で「次に見たい一戦」を作って投票・コメントできます。`,
+  title: "FIGHT BOOK｜RIZINの勝敗予想とファンが語る見たい一戦",
+  desc: `RIZINの対戦カードの勝者を予想して、ファン同士でコメントできる非公式ファンサイト。次に見たい一戦の提案や、全${fightersN}選手の戦績・レーティングも見られます。登録不要。`,
 };
 
 /* ---------- 選手ページ ---------- */

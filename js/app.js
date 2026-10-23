@@ -104,46 +104,31 @@
 
   /* ---------- トップ ---------- */
   function viewHome() {
-    const top = activeRanked().slice(0, 10);
-    const streaks = activeRanked().filter(p => p.riz.streak >= 3).sort((a, b) => b.riz.streak - a.riz.streak || b.rating - a.rating).slice(0, 8);
+    // ホームの役割：①決定済み試合の勝敗予想（主役） ②ファンが見たい一戦を語る。選手データは入口だけを置く
     const riz = S.events.filter(e => e.rizin);
     const fighters = Object.values(S.profiles).filter(p => p.riz.total > 0).length;
     const bouts = riz.reduce((n, e) => n + e.bouts.length, 0);
-    const latest = riz[0];
+    const champs = S.champions ? Object.keys(S.champions).length : 0;
+    const DATA = [
+      ["/rankings/", "ランキング", "実力・注目度・大物食いなど"],
+      ["/fighters/", "選手一覧", `${fighters}選手の戦績・レーティング`],
+      ["/champions/", "王者", "現王者と王座の歴史"],
+      ["/events/", "大会一覧", `RIZIN ${riz.length}大会の全試合`],
+      ["/stats/", "統計", "KO率・連勝・最多出場"],
+      ["/gyms/", "ジム一覧", "所属ジムごとの戦績"],
+    ];
     return `
-    <section class="hero"><div class="hero-in">
-      <div class="kicker">RIZIN FIGHTER DATABASE</div>
-      <h1>Fight Book</h1>
-      <p class="hero-lead">格闘技の素晴らしさを、もっと多くの人へ。</p>
-      <p>2015年からのRIZIN全大会のMMA試合をもとに、全選手のレーティング・戦績・王座の歴史・統計を自動で算出。格闘技の魅力と選手たちの軌跡を、データで可視化する選手データベース<span class="nowrap">「FIGHT BOOK」</span>。</p>
-      <div class="cta"><a class="btn primary" href="/rankings/">ランキングを見る</a><a class="btn" href="/fighters/">選手一覧</a></div>
-      <div class="hero-stats">
-        <div><b>${fighters}</b><small>出場選手</small></div>
-        <div><b>${bouts}</b><small>MMA試合</small></div>
-        <div><b>${riz.length}</b><small>大会</small></div>
-      </div>
+    <section class="hero hero-s"><div class="hero-in">
+      <div class="kicker">RIZIN ファンの予想とトーク</div>
+      <h1 class="hero-h">勝敗を予想する。<br>次に見たい一戦を語る。</h1>
+      <p class="hero-sub">RIZINの対戦カードを予想して、ファン同士で語れる非公式ファンサイト。登録不要で参加できます。</p>
     </div></section>
-    ${FBC ? FBC.homeTop() : ""}
+    ${FBC && FBC.enabled ? FBC.homeTop() : ""}
     <div class="wrap">
-      <section class="section">
-        <div class="sec-head"><h2>Top 10<small>現役選手のレーティング順</small></h2><a href="/rankings/">すべて見る ›</a></div>
-        ${rankTable(top, { avRight: true })}
-      </section>
-      <section class="section">
-        <div class="sec-head"><h2>Champions<small>現王者</small></h2><a href="/champions/">王座の歴史 ›</a></div>
-        ${champCards()}
-      </section>
-      <section class="section">
-        <div class="sec-head"><h2>Win Streak<small>RIZINで連勝中</small></h2><a href="/stats/">統計 ›</a></div>
-        <div class="tiles">${streaks.map(p => `<div class="tile with-av">${av(p.key, "m")}<div class="lbl">${esc(p.division)}</div><div class="big">${p.riz.streak}<small>連勝</small></div><div>${linkTxt(p.key)}</div><div class="sub">レート ${r1(p.rating)}・RIZIN ${rec(p.riz)}</div></div>`).join("")}</div>
-      </section>
-      ${latest ? `<section class="section">
-        <div class="sec-head"><h2>Latest<small>最新大会</small></h2><a href="/events/">大会一覧 ›</a></div>
-        ${eventCard(latest, true)}
-      </section>` : ""}
-      <section class="section">
-        <div class="sec-head"><h2>Highlights<small>統計ハイライト</small></h2><a href="/stats/">もっと見る ›</a></div>
-        ${highlightTiles()}
+      <section class="section hd" aria-labelledby="hdT">
+        <div class="sec-head"><h2 id="hdT">Data<small>選手データで深掘り</small></h2></div>
+        <p class="hd-lead">予想の参考に。2015年からのRIZIN全${bouts}試合をもとに、選手の戦績やレーティングを自動で計算しています。</p>
+        <div class="hd-grid">${DATA.map(([h, t, d]) => `<a class="hd-link" href="${h}"><b>${t}</b><small>${d}</small><span aria-hidden="true">›</span></a>`).join("")}</div>
       </section>
     </div>`;
   }

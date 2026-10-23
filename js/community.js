@@ -387,34 +387,177 @@ window.FBC_INIT = function (H) {
     </div>`;
   }
 
-  /* ---------- ホーム ---------- */
-  const home = { tab: null, rule: "" };
+  /* ---------- ホーム ----------
+     役割は2つだけ：①決定済みの試合の勝敗を予想して語る（主役） ②次に見たい一戦をファンが提案して語る
+     ・表示する試合：受付中の大会のうち締め切りが近い大会。先頭はメインイベント（管理者が決めた試合順）、続けて3試合
+     ・予想前は割合を見せない（多数派に引っ張られないように）。予想後に割合と「理由をコメント」「次の試合」を出す
+     ・数字はすべて実際の集計。0件のときは0件と分かる表示にする */
+  const home = { tab: null, rule: "", ev: null, others: [], mode: null, live: null };
+  const HOME_BOUTS = 4;
   function homeTop() {
-    if (!ENABLED) return "";     // 接続前は、これまでのホームのまま（空の参加画面は出さない）
-    return `<section class="fz" aria-labelledby="fzTitle"><div class="fz-in">
-      <a class="fz-predict" id="fzPredict" hidden></a>
-      <div class="fz-top">
-        <div class="fz-copy">
-          <div class="fz-kicker"><span class="dot r"></span><span class="dot b"></span>FAN MATCHMAKING</div>
-          <h2 id="fzTitle">次に見たい一戦を、<br>ファンで語ろう。</h2>
-          <p class="fz-lead">選手を2人選ぶだけ。あなたの「見たい！」と一言が、ファンの声になる。</p>
-          <ol class="fz-steps">
-            <li><b>1</b><span>選手を<br>2人選ぶ</span></li>
-            <li><b>2</b><span>見たい理由を<br>ひと言</span></li>
-            <li><b>3</b><span>ファンが<br>投票・コメント</span></li>
-          </ol>
-          <div class="fz-cta"><a class="fz-btn" href="/create/" data-src="home_cta"><span aria-hidden="true">＋</span>見たい対戦を作る</a><a class="fz-link" href="/cards/">みんなのカードを見る →</a></div>
-          <p class="fz-note">※ファンによる提案です。実際の対戦を決めるものではありません。</p>
+    if (!ENABLED) return "";
+    return `<section class="hp" aria-labelledby="hpT"><div class="wrap">
+        <div class="hp-head"><h2 id="hpT">次の一戦、あなたはどっち？</h2>
+          <p>発表済みの対戦カードの勝者を予想しよう。登録不要・締め切りまで何度でも変更できます。</p></div>
+        <div id="hpBox" aria-live="polite">${loading("対戦カードを読み込み中…")}</div>
+      </div></section>
+      <section class="hf" aria-labelledby="hfT"><div class="wrap">
+        <div class="hf-head">
+          <div><span class="hf-tag">ファン提案・開催未定</span><h2 id="hfT">次に見たい一戦を、ファンで語ろう</h2>
+            <p>実際に決まった試合ではなく、ファンが「この試合が見たい」と提案した対戦です。</p></div>
+          <a class="fz-btn hf-post" href="/create/" data-src="home_fan_post"><span aria-hidden="true">＋</span>見たい一戦を投稿する</a>
         </div>
-        <div class="fz-feature" id="fbFeatured" aria-live="polite">${loading()}</div>
-      </div>
-      <div class="fz-list">
-        <div class="fz-list-head"><h3>ファンの見たい対戦</h3>${tabBar("fbHomeTab", home.tab || "trending")}${ruleSelect("fbHomeRule", home.rule)}</div>
-        <div id="fbHomeList">${loading()}</div>
-      </div>
-      <div id="fbTheme" class="fz-theme" hidden></div>
-    </div></section>`;
+        <div id="hfList">${loading()}</div>
+      </div></section>`;
   }
+  async function loadHome() {
+    if (!ENABLED) return;
+    await ready();
+    paintMe();
+    loadHomePredict();
+    loadHomeFans();
+  }
+  async function loadHomePredict() {
+    const box = $("#hpBox"); if (!box) return;
+    try {
+      const list = (await rpc("list_fight_events")).filter(e => e.bouts > 0);
+      const open = list.filter(e => !e.locked).sort((a, b) => a.starts_at < b.starts_at ? -1 : 1);
+      const past = list.filter(e => e.locked).sort((a, b) => a.starts_at < b.starts_at ? 1 : -1);
+      home.live = past.find(e => e.phase === "live") || null;
+      const pickEv = open[0] || past[0];
+      home.others = open.slice(1);
+      home.mode = open[0] ? "open" : pickEv ? "past" : "none";
+      home.ev = pickEv ? await rpc("get_fight_event", { eid: pickEv.id }) : null;
+      if (home.ev) home.skew = new Date(home.ev.now).getTime() - Date.now();
+      paintHomePredict();
+      if (home.mode === "open") track("home_predict_view", null, { event: home.ev.id, picked: home.ev.bouts.filter(b => b.me).length }, `hpv:${anon}:${home.ev.id}:${new Date().toISOString().slice(0, 10)}`);
+    } catch (e) { box.innerHTML = failBox(e, "home"); }
+  }
+  // 表示する試合：メインイベントから順に（試合順の大きい方がメイン）
+  const homeBouts = ev => ev.bouts.slice().sort((a, b) => b.ord - a.ord || b.id - a.id);
+  function paintHomePredict() {
+    const box = $("#hpBox"); if (!box) return;
+    const ev = home.ev;
+    const liveStrip = home.live && (!ev || home.live.id !== ev.id || home.mode !== "past")
+      ? `<a class="hp-live" href="/predict/${encodeURIComponent(home.live.id)}/" data-src="home_live"><i aria-hidden="true"></i><b>試合中</b>${esc(home.live.name)}｜コメントで盛り上がろう<span aria-hidden="true">→</span></a>` : "";
+    if (!ev) {
+      box.innerHTML = liveStrip + `<div class="hp-empty"><b>いま受付中の試合はありません</b><p>次の大会の対戦カードが発表されたら、ここで勝敗を予想できます。それまでは、ファンが提案する「見たい一戦」で語りましょう。</p><a class="btn small" href="#hfT">見たい一戦を見る ↓</a></div>`;
+      return;
+    }
+    const st = stateOf(ev), bouts = homeBouts(ev), shown = bouts.slice(0, HOME_BOUTS);
+    const BADGE = { open: "勝敗予想 受付中", closed: "勝敗予想の受付は終了", live: "● 試合中", finished: "試合終了" };
+    const picked = ev.bouts.filter(b => b.me).length;
+    box.innerHTML = liveStrip
+      + (home.mode === "past" ? `<p class="hp-note">いま受付中の試合はありません。直近の大会の試合について、コメントで語りましょう。</p>` : "")
+      + `<div class="hp-ev"><span class="pv-badge st-${st}">${BADGE[st]}</span>
+          <a class="hp-ev-name" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_event">${esc(ev.name)}</a>
+          <small>${fmtWhen(ev.starts_at)}${ev.venue ? `・${esc(ev.venue)}` : ""}・${ev.predictors ? `${ev.predictors}人が予想に参加` : "まだ予想した人はいません"}${picked ? `・あなたは${picked}/${ev.bouts.length}試合を予想済み` : ""}</small></div>
+        <div class="hp-grid">${shown.map((b, i) => hpBout(b, i === 0)).join("")}</div>
+        <div class="hp-foot"><a class="hp-all" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_all_bouts">${st === "open" ? `受付中の試合をすべて見る（全${ev.bouts.length}試合）` : `全${ev.bouts.length}試合の${st === "finished" ? "結果と" : ""}コメントを見る`}<span aria-hidden="true">→</span></a></div>
+        ${home.others.length ? `<p class="hp-others">ほかに受付中の大会：${home.others.map(o => `<a href="/predict/${encodeURIComponent(o.id)}/" data-src="home_other_event">${esc(o.name)}</a>`).join("、")}</p>` : ""}`;
+    startHomeCountdown();
+  }
+  function hpBout(b, featured) {
+    const ev = home.ev, open = !ev.locked && !b.winner, me = b.me || {}, c = b.counts, tot = c ? c.a + c.b : 0;
+    const pa = tot ? Math.round(c.a / tot * 100) : 0, decided = b.winner === "a" || b.winner === "b";
+    const corner = s => {
+      const x = side(b, s), name = fname(b, s), win = b.winner === s, link = x.key && valid(x.key);
+      return `<div class="hpb-side ${s === "a" ? "red" : "blue"} ${me.pick === s ? "on" : ""} ${win ? "win" : ""}">
+        <span class="hpb-av">${av(link ? x.key : "", featured ? "l" : "m")}</span>
+        <b>${link ? `<a href="/fighters/${encodeURIComponent(x.key)}/" data-src="home_fighter">${esc(name)}</a>` : esc(name)}</b>
+        ${win ? `<span class="pv-win">WIN${b.method ? "・" + esc(METH[b.method] || "") : ""}</span>` : ""}</div>`;
+    };
+    const pickBtn = s => `<button class="hpb-pick ${s === "a" ? "red" : "blue"}" data-hpick="${s}" data-bid="${b.id}" aria-pressed="${me.pick === s}">${me.pick === s ? "✓ " : ""}${esc(fname(b, s))}が勝つ</button>`;
+    const bar = c ? `<div class="pv-bar" aria-label="${esc(fname(b, "a"))} ${pa}%・${esc(fname(b, "b"))} ${100 - pa}%"><i style="width:${pa}%"></i></div>
+        <div class="pv-pct"><span>${pa}%</span><small>${tot}人が予想</small><span>${tot ? 100 - pa : 0}%</span></div>` : "";
+    const cmLink = (t) => `<a class="hpb-cm" href="/predict/${encodeURIComponent(ev.id)}/?bout=${b.id}" data-src="home_to_comment" data-bid="${b.id}">💬 ${t}${b.ncm ? `（${b.ncm}件）` : ""}</a>`;
+    let body;
+    if (open && !me.pick) {
+      body = `<div class="hpb-picks" role="group" aria-label="勝者を予想">${pickBtn("a")}${pickBtn("b")}</div>
+        <p class="hpb-hint">${b.n ? `${b.n}人が予想済み。` : "まだ予想はありません。最初の予想をどうぞ。"}予想すると、みんなの予想の割合が見られます。</p>
+        ${b.ncm ? `<div class="hpb-next">${cmLink("コメントを読む")}</div>` : ""}`;
+    } else if (open) {
+      body = `<div class="hpb-picks" role="group" aria-label="勝者を予想（変更できます）">${pickBtn("a")}${pickBtn("b")}</div>
+        <div class="hpb-res" role="status"><p class="hpb-done">✓ <b>${esc(fname(b, me.pick))}</b>の勝ちと予想しました<small>締め切りまで変更できます</small></p>${bar}</div>
+        <div class="hpb-next">${cmLink(b.ncm ? "みんなの理由を読んで、コメントしよう" : "そう思った理由をコメントしよう")}<button class="hpb-go" data-hpnext="${b.id}">次の試合を予想<span aria-hidden="true"> ↓</span></button></div>`;
+    } else {
+      const hit = decided && me.pick ? me.pick === b.winner : null;
+      body = `${me.pick ? `<p class="hpb-done">あなたの予想：<b>${esc(fname(b, me.pick))}</b>${hit === true ? '<span class="pv-hit">的中！</span>' : hit === false ? '<span class="pv-miss">はずれ</span>' : ""}</p>` : ""}${bar}
+        <div class="hpb-next">${cmLink(stateOf(ev) === "finished" || b.winner ? "感想をコメントしよう" : "この試合について語ろう")}</div>`;
+    }
+    return `<article class="hpb ${featured ? "big" : ""} ${me.pick ? "done" : ""}" data-hpb="${b.id}">
+      <div class="hpb-meta">${featured ? '<span class="hpb-main">メインイベント</span>' : ""}${b.title ? '<span class="pv-title">タイトルマッチ</span>' : ""}${b.weight ? `<span>${esc(b.weight)}</span>` : ""}</div>
+      <div class="hpb-vs">${corner("a")}<span class="hpb-x" aria-hidden="true">VS</span>${corner("b")}</div>
+      ${featured && open ? `<div class="hp-cd" id="hpCd" role="timer" aria-live="off"><span class="hp-cd-l">勝敗予想の締め切りまで</span><span class="hp-cd-t" id="hpCdT"></span><small>締め切り：${fmtWhen(ev.starts_at)}</small></div>` : ""}
+      ${body}
+    </article>`;
+  }
+  // 1秒ごとに、締め切りまでの文字だけを書き換える
+  function startHomeCountdown() {
+    clearInterval(home.timer);
+    const el = $("#hpCdT"); if (!el || !home.ev) return;
+    const at = new Date(home.ev.starts_at).getTime(), pad = n => String(n).padStart(2, "0");
+    const tick = home.tick = () => {
+      const t0 = $("#hpCdT"); if (!t0) { clearInterval(home.timer); return; }
+      const ms = at - (Date.now() + (home.skew || 0));
+      if (ms <= 0) { clearInterval(home.timer); loadHomePredict(); return; }
+      const t = Math.floor(ms / 1000), d = Math.floor(t / 86400);
+      const txt = `${d ? `<b>${d}</b>日 ` : ""}<b>${pad(Math.floor(t % 86400 / 3600))}</b>時間 <b>${pad(Math.floor(t % 3600 / 60))}</b>分 <b>${pad(t % 60)}</b>秒`;
+      if (t0.innerHTML !== txt) t0.innerHTML = txt;
+      const cd = $("#hpCd"); if (cd) cd.dataset.level = ms <= 3600e3 ? "hot" : ms <= 86400e3 ? "warm" : "normal";
+    };
+    tick(); home.timer = setInterval(tick, 1000);
+  }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && home.tick && $("#hpCdT")) home.tick(); });
+  async function homePick(btn) {
+    const bid = +btn.dataset.bid, ev = home.ev; if (!ev) return;
+    const b = ev.bouts.find(x => x.id === bid); if (!b || busy.has("h" + bid)) return;
+    busy.add("h" + bid);
+    const was = b.me && b.me.pick, p = btn.dataset.hpick;
+    try {
+      if (!loggedIn()) await ensureUser();
+      const nb = await rpc("set_prediction", { bid, pick: p, method: was === p ? b.me.method : null });
+      Object.assign(b, nb);
+      if (!was && !ev.bouts.some(x => x !== b && x.me)) ev.predictors++;
+      const card = $(`[data-hpb="${bid}"]`);
+      if (card) {
+        card.outerHTML = hpBout(b, card.classList.contains("big"));
+        if (card.classList.contains("big")) startHomeCountdown();
+        const nb2 = $(`[data-hpb="${bid}"] [data-hpick="${p}"]`); if (nb2) nb2.focus({ preventScroll: true });
+      }
+      track("predict", null, { event: ev.id, bout: bid, change: !!was, src: "home" });
+    } catch (e) {
+      if (e.code === "LOCKED") { toast("勝敗予想の受付は終了しました。コメントは引き続き投稿できます。"); loadHomePredict(); }
+      else toast(esc(e.message));
+    } finally { busy.delete("h" + bid); }
+  }
+  // 「次の試合を予想」：まだ予想していないホームのカードへ。無ければ大会ページへ
+  function homeNext(bid) {
+    const cards = $$("[data-hpb]"), i = cards.findIndex(c => +c.dataset.hpb === bid);
+    const next = cards.slice(i + 1).concat(cards.slice(0, i)).find(c => !c.classList.contains("done"));
+    track("home_next_bout", null, { event: home.ev.id, from: bid, to: next ? "home" : "event" });
+    if (!next) { location.href = `/predict/${encodeURIComponent(home.ev.id)}/`; return; }
+    next.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    const b = next.querySelector(".hpb-pick"); if (b) setTimeout(() => b.focus({ preventScroll: true }), 350);
+  }
+  // 見たい一戦：「見たい！」が多い順に3件（足りなければ新着で埋める）
+  async function loadHomeFans() {
+    const box = $("#hfList"); if (!box) return;
+    try {
+      const [tot, nw] = await Promise.all([rpc("list_cards", { tab: "total", lim: 3 }), rpc("list_cards", { tab: "new", lim: 6 })]);
+      const cards = tot.cards.slice(0, 3);
+      for (const c of nw.cards) { if (cards.length >= 3) break; if (!cards.some(x => x.id === c.id)) cards.push(c); }
+      remember(cards);
+      if (!cards.length) {
+        box.innerHTML = `<div class="fz-empty"><b>最初の「見たい一戦」を、あなたが。</b><p>選手を2人選んで、見たい理由をひと言書くだけです。</p>${exampleCard()}</div>`;
+        return;
+      }
+      const html = cards.map(c => cardHtml(c, { src: "home_fan" })).join("");
+      box.innerHTML = `<div class="hf-grid">${html}</div>
+        <div class="hf-foot"><small>${tot.cards.length ? "「見たい！」が多い順" : "新着順"}${tot.cards.length && tot.cards.length < 3 ? "（足りない分は新着）" : ""}・${hhmm(tot.as_of)} 時点</small><a class="hp-all" href="/cards/" data-src="home_fan_all">見たい一戦をすべて見る<span aria-hidden="true">→</span></a></div>`;
+    } catch (e) { box.innerHTML = failBox(e, "home"); }
+  }
+  async function loadHomeList() {}   // 旧ホームの一覧（今は使わない。古いイベント処理から呼ばれても何もしない）
   const tabBar = (id, cur) => `<div class="tabs" id="${id}" role="tablist">${TABS.map(t => `<button class="tab" role="tab" aria-selected="${t.id === cur}" aria-pressed="${t.id === cur}" data-tab="${t.id}">${t.t}</button>`).join("")}</div>`;
   const ruleSelect = (id, cur) => `<label class="fb-sel"><span class="sr">ルールで絞り込み</span><select id="${id}"><option value="">すべてのルール</option>${Object.entries(RULES).map(([k, v]) => `<option value="${k}" ${k === cur ? "selected" : ""}>${v}</option>`).join("")}</select></label>`;
   const periodText = (tab, c) => tab === "trending" ? `直近48時間で${c.period_n}人が「見たい！」` : tab === "weekly" ? `今週${c.period_n}人が「見たい！」` : "";
@@ -424,54 +567,6 @@ window.FBC_INIT = function (H) {
     total: "「見たい！」が付いたカードは、まだありません。",
     new: "まだカードがありません。最初の1枚を作ってみませんか？",
   };
-  async function loadHome() {
-    if (!ENABLED) return;
-    await ready();
-    paintMe();
-    // 予想受付中の大会があれば、帯の一番上に案内
-    rpc("list_fight_events").then(list => {
-      const e = list.find(x => !x.locked && x.bouts > 0), el = $("#fzPredict"); if (!e || !el) return;
-      el.href = `/predict/${encodeURIComponent(e.id)}/`; el.dataset.src = "home_predict";
-      el.innerHTML = `<span class="pv-badge">勝敗予想 受付中</span><b>${esc(e.name)}</b><small>締切 ${fmtWhen(e.starts_at)}・${e.predictors}人が予想中</small><em>予想する →</em>`;
-      el.hidden = false;
-    }).catch(() => {});
-    // 注目カード：お題 → 急上昇1位 → 週間1位 → 新着（どれも実際のデータ。無ければ作成への案内）
-    try {
-      const [theme, tr, wk, nw] = await Promise.all([rpc("current_theme"), rpc("list_cards", { tab: "trending", lim: 6 }), rpc("list_cards", { tab: "weekly", lim: 1 }), rpc("list_cards", { tab: "new", lim: 6 })]);
-      remember(tr.cards); remember(wk.cards); remember(nw.cards);
-      let feat = null, label = "";
-      if (theme && theme.cards && theme.cards[0]) { feat = theme.cards[0]; label = `今週のお題：${theme.title}`; remember(theme.cards); }
-      else if (tr.cards[0]) { feat = tr.cards[0]; label = "急上昇 1位"; }
-      else if (wk.cards[0]) { feat = wk.cards[0]; label = "今週もっとも「見たい！」が集まったカード"; }
-      else if (nw.cards[0]) { feat = nw.cards[0]; label = "新着カード"; }
-      const box = $("#fbFeatured");
-      if (box) box.innerHTML = feat ? cardHtml(feat, { big: true, label: "PICK UP｜" + label, src: "home_featured" })
-        : `<div class="fz-empty"><b>最初の1枚を、あなたが。</b><p>まだカードがありません。選手を2人選ぶだけで作れます。</p>${exampleCard()}</div>`;
-      if (!home.tab) home.tab = tr.cards.length ? "trending" : "new";
-      $$("#fbHomeTab .tab").forEach(b => { const on = b.dataset.tab === home.tab; b.setAttribute("aria-selected", on); b.setAttribute("aria-pressed", on); });
-      const th = $("#fbTheme");
-      if (th && theme) { th.hidden = false; th.innerHTML = `<div class="fz-list-head"><h3>今週のお題（編集部）</h3></div><div class="fb-theme"><b>${esc(theme.title)}</b>${theme.body ? `<p>${esc(theme.body)}</p>` : ""}<small>${hhmm(theme.starts_at)} 〜 ${hhmm(theme.ends_at)}</small><a class="btn small" href="/create/" data-src="theme">このお題でカードを作る</a></div>${grid(theme.cards.slice(1, 4), { src: "theme" })}`; }
-      await loadHomeList();
-    } catch (e) { const box = $("#fbFeatured"); if (box) box.innerHTML = failBox(e, "home"); }
-  }
-  async function loadHomeList() {
-    const box = $("#fbHomeList"); if (!box) return;
-    box.innerHTML = loading();
-    try {
-      const r = await rpc("list_cards", { tab: home.tab || "new", rule_f: home.rule || null, lim: 6 });
-      remember(r.cards);
-      let html = r.cards.map(c => cardHtml(c, { src: "home_" + r.tab, period: periodText(r.tab, c) })).join("");
-      if (!html) html = `<p class="note">${EMPTY_TAB[r.tab]}</p>`;
-      // 人気だけで埋もれないよう、反応がまだ少ない新着を1枚添える
-      if (r.tab !== "new") {
-        const f = await rpc("list_cards", { tab: "new", rule_f: home.rule || null, lim: 8 });
-        const shown = new Set(r.cards.map(c => c.id)), fresh = f.cards.find(c => !shown.has(c.id) && c.want < 3);
-        if (fresh) { remember([fresh]); html += cardHtml(fresh, { src: "home_fresh", label: "まだ反応が少ない新着" }); }
-      }
-      box.innerHTML = (html.includes("<article") ? `<div class="fz-rail">${html}<a class="fz-more" href="/cards/"><b>＋</b>すべてのカードを見る</a></div>` : html)
-        + `<p class="fb-asof">${TABS.find(t => t.id === r.tab).t}・${hhmm(r.as_of)} 時点の集計</p>`;
-    } catch (e) { box.innerHTML = failBox(e, "homelist"); }
-  }
   // カードが1枚も無いときの作成例（投票できない見本であることを明示）
   function exampleCard() {
     const fw = S.ranked.filter(p => p.active && p.division === "フェザー級");
@@ -985,7 +1080,7 @@ window.FBC_INIT = function (H) {
     try {
       const c = await rpc("set_reaction", { cid: id, kind, on });
       cache[id] = c; paintCounts(c);
-      const where = btn.closest(".fb-board") ? "detail" : "list";
+      const where = btn.closest(".fb-board") ? "detail" : btn.closest(".hf") ? "home_fan" : "list";
       track("vote", id, { kind, on, where }, null);
       if (on && kind === "want") showNext(btn.closest("[data-card]"), c, where);
     } catch (e) {
@@ -1059,7 +1154,7 @@ window.FBC_INIT = function (H) {
   }
 
   function viewPredict(id) {
-    pv.ev = null; pv.id = id; pv.chatLast = 0; pv.cm = {}; pv.open = new Set(); pv.th = new Set(); pv.reply = null; pv.permaDone = false;
+    pv.ev = null; pv.id = id; pv.chatLast = 0; pv.cm = {}; pv.open = new Set(); pv.th = new Set(); pv.reply = null; pv.permaDone = false; pv.boutDone = false;
     return `<div class="wrap pv" id="pvBox">${ENABLED ? loading("大会を読み込み中…") : offBox()}</div>`;
   }
   async function loadPredict() {
@@ -1363,7 +1458,7 @@ window.FBC_INIT = function (H) {
       if (list.length) pv.chatLast = Math.max(pv.chatLast || 0, list[list.length - 1].id);
       if (first) pv.ev.bouts.forEach(b => touched.add(b.id));
       touched.forEach(paintBc);
-      if (first) focusPermalink();
+      if (first) { focusPermalink(); focusBoutParam(); }
       else if (list.length) setTimeout(() => { Object.values(pv.cm).flat().forEach(c => { c._new = false; }); $$(".bc-new").forEach(el => el.classList.remove("bc-new")); }, 2500);
     } catch (e) {}
   }
@@ -1427,6 +1522,17 @@ window.FBC_INIT = function (H) {
     el.classList.add("bc-focus");
     requestAnimationFrame(() => el.scrollIntoView({ block: "center" }));
     setTimeout(() => el.classList.remove("bc-focus"), 4000);
+  }
+  // ?bout=ID で開いたとき（ホームの「理由をコメントしよう」から）：その試合のコメント欄へ移動
+  function focusBoutParam() {
+    const bid = +new URLSearchParams(location.search).get("bout"); if (!bid || pv.boutDone) return;
+    pv.boutDone = true;
+    const li = $(`.pv-bout[data-bid="${bid}"]`); if (!li) return;
+    const bc = li.querySelector(".bc");
+    requestAnimationFrame(() => (bc || li).scrollIntoView({ block: "start" }));
+    li.classList.add("bc-focus"); setTimeout(() => li.classList.remove("bc-focus"), 2500);
+    const inp = li.querySelector(".bc-in");
+    if (inp && !matchMedia("(pointer:coarse)").matches) setTimeout(() => inp.focus({ preventScroll: true }), 400);   // スマホでは急にキーボードを出さない
   }
   async function sendBoutComment(f) {
     const reply = f.classList.contains("bc-rform");
@@ -1555,6 +1661,9 @@ window.FBC_INIT = function (H) {
     const pb = t.closest(".pv-pick"); if (pb && !pb.disabled) { pick(pb); return true; }
     const mb = t.closest("[data-meth]"); if (mb) { pick(mb, mb.dataset.meth); return true; }
     if (t.closest("[data-gocomment]")) { goComment(); return true; }
+    const hk = t.closest("[data-hpick]"); if (hk) { homePick(hk); return true; }
+    const hn = t.closest("[data-hpnext]"); if (hn) { homeNext(+hn.dataset.hpnext); return true; }
+    const hc = t.closest(".hpb-cm"); if (hc && home.ev) track("home_to_comment", null, { event: home.ev.id, bout: +hc.dataset.bid, picked: !!(hc.closest(".done")) });
     if (t.closest("#pvShare")) { shareImage().catch(err => toast("画像を作れませんでした。")); return true; }
     const dl = t.closest("[data-ecdel]");
     if (dl) {
