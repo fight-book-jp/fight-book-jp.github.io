@@ -1242,3 +1242,10 @@ button.fz-btn{border:none;font-family:inherit;cursor:pointer}
 @media (max-width:420px){.bc-c{grid-template-columns:28px 1fr;gap:8px}.bc-av{width:28px;height:28px;font-size:12px}.bc-reps{margin-left:12px;padding-left:12px}.bc-rform{margin-left:0}.bc-act-t{display:none}}
 .bc-tome{margin-left:8px;font-size:10px;font-weight:900;padding:1px 7px;border-radius:999px;background:var(--gold);color:#16190F}
 .bc-c:has(.bc-tome){box-shadow:inset 3px 0 0 var(--gold)}
+
+/* スマホで横にはみ出さないように */
+.bc-nickbar label{flex:1 1 220px;min-width:0}
+.bc-nickbar input{flex:1 1 auto;min-width:0;width:auto;max-width:280px}
+@media (max-width:560px){.bc-nickbar{padding:12px}.bc-nickbar input{max-width:none}}
+@media (max-width:360px){.cd-digits{gap:2px 6px}.cd-g b{font-size:30px}.cd-g small{font-size:10px}}
+body{overflow-x:clip}
