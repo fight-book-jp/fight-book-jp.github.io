@@ -542,7 +542,7 @@ window.FBC_INIT = function (H) {
   }
   // 「次の試合を予想」：まだ予想していないホームのカードへ。無ければ大会ページへ
   function homeNext(bid) {
-    const cards = $$("[data-hpb]"), i = cards.findIndex(c => +c.dataset.hpb === bid);
+    const cards = $$("[data-hpb]").filter(c => c.offsetParent !== null), i = cards.findIndex(c => +c.dataset.hpb === bid);
     const next = cards.slice(i + 1).concat(cards.slice(0, i)).find(c => !c.classList.contains("done"));
     track("home_next_bout", null, { event: home.ev.id, from: bid, to: next ? "home" : "event" });
     if (!next) { location.href = `/predict/${encodeURIComponent(home.ev.id)}/`; return; }

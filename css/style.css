@@ -1492,3 +1492,4 @@ body{overflow-x:clip}
 .bc-nickbar{padding:10px 14px}
 @media (max-width:620px){ .fp-vote{min-height:44px;font-size:14px} }
 .fp.big .fp-ph{aspect-ratio:1/1}
+@media (max-width:620px){ .hp-grid>.hpb:nth-child(n+5){display:none} }   /* スマホはメイン＋3試合だけ（残りは「全○試合に投票する」から） */
