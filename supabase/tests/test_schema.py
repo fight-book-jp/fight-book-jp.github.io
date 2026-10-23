@@ -424,6 +424,14 @@ class Predict(Base):
         self.assertEqual([i["type"] for i in self.call(v, "my_notifications", 30)["items"]], ["ec_reply"])   # W→V の返信
         self.assertTrue(lst[r2]["to_me"] is False)   # 未ログインで見たときは誰宛てでもない
         self.assertTrue({c["id"]: c for c in self.call(v, "list_event_comments", "rizin-test", 0)}[r2]["to_me"])
+        # マイページ：自分のコメントと予想（ニックネームもDBに保存されている）
+        self.call(v, "set_prediction", b1, "b", "dec")
+        mp = self.call(v, "my_page")
+        self.assertEqual(mp["profile"]["name"], "V")
+        self.assertEqual([(c["kind"], c["id"], c["reply_name"], c["replies"]) for c in mp["comments"]], [("event", r1, "U", 1)])
+        self.assertEqual(mp["predictions"][0]["event_id"], "rizin-test")
+        self.assertEqual((mp["predictions"][0]["picks"][0]["pick"], mp["predictions"][0]["picks"][0]["method"]), ("鈴木 千裕", "dec"))
+        self.assertEqual(self.call(u, "my_page")["comments"][0]["likes"], 1)
         self.call(u, "mark_notifications_seen")
         self.assertEqual(self.call(u, "unread_count"), 0)
         # 先頭のコメントを消しても、返信があれば「削除されました」として残る

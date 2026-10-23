@@ -788,14 +788,14 @@ window.FBC_INIT = function (H) {
   function viewMe(tab) {
     if (tab) mp.tab = tab;
     if (!ENABLED) return H.pageHero("My Page", "") + `<div class="wrap"><section class="section">${offBox()}</section></div>`;
-    return H.pageHero("My Page", "あなたが作ったカード・参加したカード・届いた反応") + `<div class="wrap" id="fbMe">${loading()}</div>`;
+    return H.pageHero("My Page", "あなたのコメント・予想・カードと、届いた反応") + `<div class="wrap" id="fbMe">${loading()}</div>`;
   }
   async function loadMe() {
     const box = $("#fbMe"); if (!box) return;
     await ready(); paintMe();
     if (!loggedIn()) {
       box.innerHTML = `<div class="fb-login"><b>まだ参加していません</b>
-        <p>ログインは不要です。カードに「見たい！」を押したり、コメントやカードを作ったりすると、このブラウザでの参加の記録がここに表示されます。</p>
+        <p>ログインは不要です。大会の勝敗を予想したり、コメントしたり、カードに「見たい！」を押したりすると、あなたのニックネーム・コメント・予想がここに表示されます。</p>
         <a class="btn primary big" href="/cards/">カードを見る</a></div>`;
       return;
     }
@@ -803,17 +803,40 @@ window.FBC_INIT = function (H) {
       const [d, n] = await Promise.all([rpc("my_page"), rpc("my_notifications", { lim: 30 })]);
       remember(d.created); remember(d.joined); remember(d.saved);
       const unread = n.items.filter(i => i.unread).length;
-      const T = [["notice", `お知らせ${unread ? `（${unread}）` : ""}`], ["created", `作った（${d.created.length}）`], ["joined", `参加した（${d.joined.length}）`], ["saved", `保存（${d.saved.length}）`]];
-      const body = mp.tab === "notice" ? noticeHtml(n.items) : grid(d[mp.tab].map(c => c.status === "public" ? c : { ...c, _hidden: true }), c => ({ src: "me_" + mp.tab, label: c._hidden ? "非公開になりました" : "" })) || `<p class="note">${{ created: "まだカードを作っていません。", joined: "まだ参加したカードはありません。", saved: "保存したカードはありません。" }[mp.tab]}</p>`;
+      d.comments = d.comments || []; d.predictions = d.predictions || [];
+      const T = [["notice", `お知らせ${unread ? `（${unread}）` : ""}`], ["comments", `コメント（${d.comments.length}）`], ["predictions", `予想（${d.predictions.length}）`], ["created", `作った（${d.created.length}）`], ["joined", `参加した（${d.joined.length}）`], ["saved", `保存（${d.saved.length}）`]];
+      const body = mp.tab === "notice" ? noticeHtml(n.items) : mp.tab === "comments" ? myCommentsHtml(d.comments) : mp.tab === "predictions" ? myPredHtml(d.predictions) : grid(d[mp.tab].map(c => c.status === "public" ? c : { ...c, _hidden: true }), c => ({ src: "me_" + mp.tab, label: c._hidden ? "非公開になりました" : "" })) || `<p class="note">${{ created: "まだカードを作っていません。", joined: "まだ参加したカードはありません。", saved: "保存したカードはありません。" }[mp.tab]}</p>`;
       box.innerHTML = `<div class="fb-me-head">${d.profile.avatar ? `<img src="${esc(d.profile.avatar)}" alt="" width="48" height="48" referrerpolicy="no-referrer">` : ""}<div><b>${esc(d.profile.name)}</b>${d.profile.username ? `<small>@${esc(d.profile.username)}</small>` : ""}</div>
           <div class="fb-me-acts">${d.profile.admin ? '<a class="btn small" href="/admin/">通報の確認</a><button class="btn small ghost" data-logout>ログアウト</button>' : ""}</div></div>
         <details class="fb-def fb-acct"><summary>アカウント設定</summary>
           <form id="fbNameForm" class="fb-name-form"><label>ニックネーム（公開）<input id="fbNameIn" maxlength="30" value="${esc(d.profile.name)}" required></label><button class="btn small primary" type="submit">変更</button></form>
-          <p class="note">${d.profile.admin ? '<a href="/reset/">パスワードを変更する</a>' : "参加の記録はこのブラウザに保存されています。ブラウザのデータを消したり、別の端末から開いたりすると、これまでの投稿を編集・削除できなくなります。"}</p></details>
+          <p class="note">${d.profile.admin ? '<a href="/reset/">パスワードを変更する</a>' : "ニックネーム・コメント・予想はサーバー（データベース）に保存されています。ログインの代わりに、このブラウザに参加用の合い言葉を保存して本人を見分けています。ブラウザのデータを消したり、別の端末・別のブラウザで開いたりすると、このマイページには入れなくなります（投稿は消えずにサイトに残ります）。"}</p></details>
         <div class="tabs" id="fbMeTabs">${T.map(([k, t]) => `<a class="tab" href="/me/?tab=${k}" aria-pressed="${k === mp.tab}">${t}</a>`).join("")}</div>
         <div class="fb-me-body">${body}</div>`;
       if (mp.tab === "notice" && unread) { rpc("mark_notifications_seen").then(paintMe).catch(() => {}); track("notif_open", null, { unread }); }
     } catch (e) { box.innerHTML = failBox(e, "me"); }
+  }
+  // 自分のコメント（大会予想・見たいカード）
+  function myCommentsHtml(list) {
+    if (!list.length) return `<p class="note">まだコメントはありません。<a href="/predict/">大会予想</a>の各試合の下や、<a href="/cards/">見たいカード</a>からコメントできます。</p>`;
+    return `<ul class="fb-notice my-cm">${list.map(c => {
+      const href = c.kind === "event" ? `/predict/${encodeURIComponent(c.event_id)}/?c=${c.id}` : `/matchups/${encodeURIComponent(c.card_id)}/?focus=comments`;
+      const where = c.kind === "event" ? `${esc(c.event_name)}${c.bout ? `・${esc(c.bout)}` : ""}` : (valid(c.fa) && valid(c.fb) ? `見たいカード：${nm(c.fa)} vs ${nm(c.fb)}` : "見たいカード");
+      const meta = c.kind === "event" ? `<span class="my-cm-n">💬 ${c.replies || 0}　♥ ${c.likes || 0}</span>` : "";
+      return `<li><a href="${href}" data-src="me_comments">${c.reply_name ? `<span class="my-cm-to">返信先：@${esc(c.reply_name)}</span>` : ""}<span class="my-cm-b">${esc(c.body)}</span><small>${where}・${ago(c.at)}${meta}</small></a></li>`;
+    }).join("")}</ul>`;
+  }
+  // 自分の勝敗予想（大会ごと）
+  function myPredHtml(list) {
+    if (!list.length) return `<p class="note">まだ予想していません。<a href="/predict/">大会予想</a>から参加できます。</p>`;
+    const M = { ko: "KO", sub: "一本", dec: "判定" };
+    return list.map(ev => {
+      const done = ev.picks.filter(p => p.hit !== null && p.hit !== undefined), hit = done.filter(p => p.hit).length;
+      return `<section class="my-pv"><div class="my-pv-h"><a href="/predict/${encodeURIComponent(ev.event_id)}/"><b>${esc(ev.event_name)}</b></a>
+          <small>${fmtWhen(ev.starts_at)}・${ev.locked ? "受付終了" : "受付中（締め切りまで変更できます）"}${done.length ? `・的中 ${hit}/${done.length}` : ""}</small></div>
+        <ul>${ev.picks.map(p => `<li class="${p.hit === true ? "hit" : p.hit === false ? "miss" : ""}"><span class="my-pv-b">${p.title ? '<span class="fbtag">タイトル戦</span> ' : ""}${esc(p.bout)}</span>
+          <span class="my-pv-p">${esc(p.pick)}${p.method ? `（${M[p.method] || p.method}）` : ""}${p.hit === true ? " ✓ 的中" : p.hit === false ? " ✕" : ""}</span></li>`).join("")}</ul></section>`;
+    }).join("");
   }
   function noticeHtml(items) {
     if (!items.length) return `<p class="note">まだお知らせはありません。あなたのコメントへの返信・いいねや、作ったカードへの反応がここに届きます。</p>`;
@@ -1674,7 +1697,7 @@ window.FBC_INIT = function (H) {
     if (f.id === "fbReset") { e.preventDefault(); submitReset(f); return true; }
     if (f.id === "fbNameForm") {
       e.preventDefault();
-      rpc("set_display_name", { name: $("#fbNameIn").value }).then(async () => { who = await rpc("whoami"); toast("表示名を変更しました"); H.rerender(); }).catch(err => toast(esc(err.message)));
+      rpc("set_display_name", { name: $("#fbNameIn").value }).then(async () => { ls.set(NICK, $("#fbNameIn").value.trim()); who = await rpc("whoami"); toast("表示名を変更しました"); H.rerender(); }).catch(err => toast(esc(err.message)));
       return true;
     }
     if (f.id === "fbCreate") { e.preventDefault(); publish(); return true; }

@@ -569,7 +569,34 @@ begin
                    exists(select 1 from reactions r where r.card_id = c.id and r.user_id = u)
                    or exists(select 1 from comments m where m.card_id = c.id and m.user_id = u and m.status = 'visible'))),
     'saved',   (select coalesce(jsonb_agg(public._card_json(c) order by s.created_at desc), '[]') from saves s join cards c on c.id = s.card_id
-                 where s.user_id = u and c.status = 'public'));
+                 where s.user_id = u and c.status = 'public'),
+    -- 自分のコメント（大会予想の試合ごとのコメント＋見たいカードへのコメント）。新しい順に200件まで
+    'comments', (select coalesce(jsonb_agg(x.j order by x.at desc), '[]') from (
+                  (select m.created_at at, jsonb_build_object('kind', 'event', 'id', m.id, 'body', m.body, 'at', m.created_at,
+                          'event_id', m.event_id, 'event_name', e.name, 'bout', b.fa_name || ' vs ' || b.fb_name,
+                          'reply_name', (select coalesce(rp.display_name, '退会したユーザー') from event_comments r left join profiles rp on rp.id = r.user_id where r.id = m.reply_to),
+                          'likes', (select count(*) from event_comment_likes l where l.comment_id = m.id),
+                          'replies', (select count(*) from event_comments k where k.reply_to = m.id and k.status = 'visible')) j
+                     from event_comments m join fight_events e on e.id = m.event_id left join fight_bouts b on b.id = m.bout_id
+                    where m.user_id = u and m.status = 'visible' and e.status = 'public')
+                  union all
+                  (select m.created_at, jsonb_build_object('kind', 'card', 'id', m.id, 'body', m.body, 'at', m.created_at,
+                          'card_id', m.card_id, 'fa', c.fa, 'fb', c.fb)
+                     from comments m join cards c on c.id = m.card_id
+                    where m.user_id = u and m.status = 'visible' and c.status = 'public')
+                  order by 1 desc limit 200) x),
+    -- 自分の勝敗予想（大会ごと）
+    'predictions', (select coalesce(jsonb_agg(ev.j order by ev.at desc), '[]') from (
+                  select e.starts_at at, jsonb_build_object('event_id', e.id, 'event_name', e.name, 'starts_at', e.starts_at,
+                          'locked', now() >= e.starts_at,
+                          'picks', jsonb_agg(jsonb_build_object('bout', b.fa_name || ' vs ' || b.fb_name, 'title', b.title,
+                                     'pick', case when p.pick = 'a' then b.fa_name else b.fb_name end, 'method', p.method,
+                                     'winner', b.winner, 'hit', case when b.winner in ('a','b') then b.winner = p.pick end,
+                                     'mhit', case when b.winner in ('a','b') and b.winner = p.pick and p.method is not null then p.method = b.method end)
+                                   order by b.ord desc)) j
+                    from predictions p join fight_bouts b on b.id = p.bout_id join fight_events e on e.id = b.event_id
+                   where p.user_id = u and e.status = 'public'
+                   group by e.id) ev));
 end $$;
 
 -- 自分に関係のある事実だけ：自分のコメントへの返信／自分のカードへのコメント／自分のカードへの「見たい」
