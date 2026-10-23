@@ -147,8 +147,7 @@ def ev_when(t):
 
 
 def bout_names(b, names):
-    nm = lambda k, n: names[k]["name"] if k and k in names else n
-    return nm(b.get("fa"), b["fa_name"]), nm(b.get("fb"), b["fb_name"])
+    return b["fa_name"], b["fb_name"]   # 公式発表の表記
 
 
 def event_html(template, e, names, hidden):

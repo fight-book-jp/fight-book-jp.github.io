@@ -1003,7 +1003,7 @@ window.FBC_INIT = function (H) {
   const pv = { ev: null, timer: null, chatLast: 0, chatTimer: null };
   const fmtWhen = t => { const d = new Date(t); return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日（${"日月火水木金土"[d.getDay()]}）${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
   const side = (bt, s) => ({ key: bt["f" + s], name: bt["f" + s + "_name"] });
-  const fname = (bt, s) => { const x = side(bt, s); return x.key && valid(x.key) ? S.nameOf(x.key) : x.name; };
+  const fname = (bt, s) => side(bt, s).name;   // 表記は登録した名前（公式発表の表記）を使う
   const evUrl = id => `/predict/${encodeURIComponent(id)}/`;
 
   function viewPredictList() {
