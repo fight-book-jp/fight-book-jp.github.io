@@ -789,6 +789,9 @@ create table if not exists public.event_comments (
   constraint event_comments_body check (status <> 'visible' or char_length(body) between 1 and 200)
 );
 create index if not exists event_comments_event on public.event_comments(event_id, id);
+-- 試合ごとのコメント（bout_id が空なら大会全体の雑談）
+alter table public.event_comments add column if not exists bout_id bigint references public.fight_bouts(id) on delete cascade;
+create index if not exists event_comments_bout on public.event_comments(bout_id, id);
 alter table public.fight_events   enable row level security;
 alter table public.fight_bouts    enable row level security;
 alter table public.predictions    enable row level security;
@@ -906,17 +909,39 @@ begin
   return jsonb_build_object('id', nid, 'duplicate', false);
 end $$;
 
--- after_id より新しいものを古い順に（自動更新用）。after_id = 0 なら最新100件
+-- after_id より新しいものを古い順に（自動更新用）。after_id = 0 なら全件（最新500件まで）
+-- 書いた人がその試合でどちらを予想しているか（pick）も返す
 create or replace function public.list_event_comments(eid text, after_id bigint default 0) returns jsonb
 language sql stable security definer set search_path = public as $$
-  select coalesce(jsonb_agg(jsonb_build_object('id', c.id, 'body', c.body, 'created_at', c.created_at,
-           'name', coalesce(p.display_name, '退会したユーザー'), 'mine', c.user_id = auth.uid()) order by c.id), '[]')
+  select coalesce(jsonb_agg(jsonb_build_object('id', c.id, 'bout', c.bout_id, 'body', c.body, 'created_at', c.created_at,
+           'name', coalesce(p.display_name, '退会したユーザー'), 'mine', c.user_id = auth.uid(),
+           'pick', (select pr.pick from predictions pr where pr.bout_id = c.bout_id and pr.user_id = c.user_id)) order by c.id), '[]')
     from (select * from event_comments c
            where c.event_id = eid and c.status = 'visible' and c.id > coalesce(after_id, 0)
              and exists(select 1 from fight_events e where e.id = eid and (e.status = 'public' or public._is_admin()))
-           order by c.id desc limit 100) c
+           order by c.id desc limit 500) c
     left join profiles p on p.id = c.user_id
 $$;
+
+-- 試合ごとのコメント（雑談と同じ制限：10秒に1回・1日100件まで）
+create or replace function public.add_bout_comment(bid bigint, body text) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare u uuid := public._me(); eid text; last_at timestamptz; n int; nid bigint;
+begin
+  body := btrim(coalesce(body, ''));
+  if char_length(body) < 1 then raise exception 'EMPTY' using errcode = 'P0001'; end if;
+  if char_length(body) > 200 then raise exception 'TOO_LONG' using errcode = 'P0001'; end if;
+  select b.event_id into eid from fight_bouts b join fight_events e on e.id = b.event_id where b.id = bid and e.status = 'public';
+  if eid is null then raise exception 'NOT_FOUND' using errcode = 'P0001'; end if;
+  select id into nid from event_comments c where c.user_id = u and c.bout_id = bid and c.body = add_bout_comment.body
+     and c.created_at > now() - interval '2 minutes' and c.status = 'visible' limit 1;
+  if nid is not null then return jsonb_build_object('id', nid, 'duplicate', true); end if;
+  select max(created_at), count(*) filter (where created_at > now() - interval '1 day') into last_at, n from event_comments where user_id = u;
+  if last_at > now() - interval '10 seconds' then raise exception 'TOO_FAST' using errcode = 'P0001'; end if;
+  if n >= 100 then raise exception 'RATE_LIMIT' using errcode = 'P0001'; end if;
+  insert into event_comments (event_id, bout_id, user_id, body) values (eid, bid, u, body) returning id into nid;
+  return jsonb_build_object('id', nid, 'duplicate', false);
+end $$;
 
 create or replace function public.delete_event_comment(mid bigint) returns boolean
 language plpgsql security definer set search_path = public as $$
@@ -992,7 +1017,7 @@ grant execute on function public.create_card(text, text, text, text, text, text,
   public.delete_comment(bigint), public.report(text, text, text, text), public.my_page(), public.my_notifications(int),
   public.mark_notifications_seen(), public.request_fighter(text, text), public.set_display_name(text), public.admin_reports(), public.admin_set_hidden(text, text, boolean), public.admin_dismiss(text, text),
   public.admin_contacts(), public.admin_contact_done(bigint),
-  public.set_prediction(bigint, text, text), public.clear_prediction(bigint), public.add_event_comment(text, text), public.delete_event_comment(bigint),
+  public.set_prediction(bigint, text, text), public.clear_prediction(bigint), public.add_event_comment(text, text), public.add_bout_comment(bigint, text), public.delete_event_comment(bigint),
   public.admin_upsert_event(text, text, timestamptz, text, text, text), public.admin_add_bout(text, text, text, text, text, text, text, boolean, int),
   public.admin_delete_bout(bigint), public.admin_set_result(bigint, text, text)
   to authenticated;

@@ -370,6 +370,15 @@ class Predict(Base):
         self.call(adm, "admin_set_hidden", "event_comment", str(m1), True)
         self.assertEqual([c["id"] for c in self.call(None, "list_event_comments", "rizin-test", 0)], [m2])
         self.assertIn("TOO_LONG", self.err(v, "add_event_comment", "rizin-test", "あ" * 201))
+        # 試合ごとのコメント：書いた人の予想も一緒に返す
+        self.su.cursor().execute("update public.event_comments set created_at = created_at - interval '1 minute'")
+        self.call(u, "set_prediction", b1, "a", None)
+        c1 = self.call(u, "add_bout_comment", b1, "朝倉の打撃が上")["id"]
+        lst = self.call(None, "list_event_comments", "rizin-test", 0)
+        bc = [c for c in lst if c["id"] == c1][0]
+        self.assertEqual((bc["bout"], bc["pick"]), (b1, "a"))
+        self.assertIsNone([c for c in lst if c["id"] == m2][0]["bout"])
+        self.assertIn("NOT_FOUND", self.err(v, "add_bout_comment", 999999, "x"))
         exp = self.call(None, "export_fight_events")
         self.assertEqual(exp[0]["bouts"][0]["fa_name"], "朝倉 未来")
 
