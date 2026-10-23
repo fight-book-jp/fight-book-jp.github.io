@@ -20,7 +20,7 @@
   const rec = t => `${t.w}-${t.l}-${t.d}`;
   const P = k => S.profiles[k];
   /* ---------- 選手画像（data/photos.js を全画面で共通に参照） ---------- */
-  const localOrHttps = u => /^(img\/[\w./-]+|https:\/\/\S+)$/.test(u || "") ? u : "";
+  const localOrHttps = u => /^(img\/[\w./-]+(\?v=[\w.-]+)?|https:\/\/\S+)$/.test(u || "") ? u : "";   // ?v= は画像を差し替えたときのキャッシュ対策
   const photoOf = k => {
     const x = (window.PHOTOS || {})[k];
     if (x && localOrHttps(x.src)) return { src: x.src, face: localOrHttps(x.face) || x.src, pos: x.pos || "50% 20%" };
