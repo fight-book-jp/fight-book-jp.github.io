@@ -350,6 +350,17 @@ class Predict(Base):
         self.assertIn("LOCKED", self.err(u, "set_prediction", b1, "a", None))
         ev = self.call(None, "get_fight_event", "rizin-test")
         self.assertTrue(ev["locked"]); self.assertIsNotNone(ev["bouts"][0]["counts"])   # 締め切り後は公開
+        self.assertIsNone(ev["phase"])                                  # 締め切っただけでは「試合中」にしない
+        # 締め切り後・試合中・終了後もコメントはできる
+        self.call(u, "add_bout_comment", b1, "締め切り後のコメント")
+        self.call(adm, "admin_set_phase", "rizin-test", "live")
+        self.assertEqual(self.call(None, "get_fight_event", "rizin-test")["phase"], "live")
+        self.su.cursor().execute("update public.event_comments set created_at = created_at - interval '1 minute'")
+        self.call(u, "add_bout_comment", b1, "試合中のコメント")
+        self.call(adm, "admin_set_phase", "rizin-test", None)
+        self.call(adm, "admin_set_result", b1, "a", "ko"); self.call(adm, "admin_set_result", b2, "b", "dec")
+        self.assertEqual(self.call(None, "get_fight_event", "rizin-test")["phase"], "finished")   # 全試合の結果で自動的に終了
+        self.assertIn("FORBIDDEN", self.err(u, "admin_set_phase", "rizin-test", "live"))
         self.call(adm, "admin_upsert_event", "rizin-test", "RIZIN テスト大会", "2000-01-01T18:00:00+09:00", None, None, "hidden")
         self.assertIsNone(self.call(None, "get_fight_event", "rizin-test"))
         self.assertEqual(self.call(None, "list_fight_events"), [])

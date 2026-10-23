@@ -1057,7 +1057,9 @@ a.pl:hover span{text-decoration:underline}
 
 /* 大会予想 */
 .pv-badge{display:inline-block;font-size:12px;font-weight:900;padding:4px 10px;border-radius:999px;background:var(--loss);color:#fff;letter-spacing:.03em}
-.pv-badge.locked{background:var(--black-soft)}
+.pv-badge.locked,.pv-badge.st-closed{background:var(--black-soft)}
+.pv-badge.st-open{background:var(--accent)}.pv-badge.st-live{background:var(--loss)}.pv-badge.st-finished{background:var(--gold);color:#16190F}
+.pv-share-link{background:none;border:none;font:inherit;cursor:pointer;padding:0}
 .pv-events{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .pv-ev{display:grid;gap:6px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;transition:transform .15s,box-shadow .15s}
 .pv-ev:hover{transform:translateY(-2px);box-shadow:0 12px 28px var(--shadow)}
@@ -1067,7 +1069,6 @@ a.pl:hover span{text-decoration:underline}
 .pv-head{background:linear-gradient(135deg,#1F2715,#151A0F);color:#F7F6F0;border-radius:16px;padding:26px 24px;border-bottom:4px solid var(--accent)}
 .pv-head h1{margin:10px 0 0;font-size:clamp(24px,4vw,38px);font-weight:900;line-height:1.25}
 .pv-when{margin:8px 0 0;color:#C3C8B1;font-size:14px}
-.pv-count{margin:12px 0 0;font-family:"Barlow Condensed","Noto Sans JP",sans-serif;font-size:22px;font-weight:800;color:#E3CF8F}
 .pv-sum{margin:10px 0 0;font-size:14px;color:#E4E6DA}.pv-sum b{font-size:20px;color:#B5C783}
 .pv-acts{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:16px}
 .pv-head .note{color:#9DA38F;margin:14px 0 0}
@@ -1171,3 +1172,32 @@ button.fz-btn{border:none;font-family:inherit;cursor:pointer}
 }
 @media (prefers-reduced-motion:reduce){.bc-c.bc-new{animation:none}}
 .bc-nickbar label{white-space:nowrap}
+
+/* 勝敗予想の締め切りカウントダウン */
+.cd{--cd-c:var(--accent);--cd-tint:var(--accent-tint);margin:0 0 16px;padding:16px 18px 14px;border:2px solid var(--cd-c);border-left-width:6px;border-radius:14px;background:linear-gradient(135deg,var(--cd-tint),transparent 70%),var(--surface);color:var(--ink)}
+.cd[data-level="warm"]{--cd-c:var(--gold);--cd-tint:rgba(184,155,76,.16)}
+.cd[data-level="hot"]{--cd-c:var(--loss);--cd-tint:rgba(168,67,47,.14)}
+.cd-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.cd-label{font-size:14px;font-weight:900;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px}
+.cd-flag{font-size:12px;font-weight:900;padding:3px 9px;border-radius:999px;background:var(--cd-c);color:#fff}
+.cd[data-level="warm"] .cd-flag{color:#16190F}
+.cd-digits{display:flex;flex-wrap:nowrap;align-items:baseline;gap:4px 14px;margin-top:6px;font-family:"Barlow Condensed","Noto Sans JP",sans-serif;font-variant-numeric:tabular-nums;color:var(--cd-c)}
+.cd-g{display:inline-flex;align-items:baseline;gap:3px;white-space:nowrap}
+.cd-g b{display:inline-block;font-size:clamp(36px,8vw,56px);font-weight:800;line-height:1;min-width:1.05ch;text-align:right}
+.cd-g small{font-family:"Noto Sans JP",sans-serif;font-size:13px;font-weight:800;color:var(--muted)}
+.cd-g[hidden]{display:none}
+.cd-sub{margin:8px 0 0;font-size:13px;color:var(--muted);font-weight:700}
+.cd-msg{margin:6px 0 0;font-size:14px;font-weight:700}
+.cd-end{--cd-c:var(--black-soft)}
+.cd-end[data-phase="live"]{--cd-c:var(--loss);--cd-tint:rgba(168,67,47,.12)}
+.cd-end[data-phase="finished"]{--cd-c:var(--gold);--cd-tint:rgba(184,155,76,.14)}
+.cd-end .cd-label{font-size:clamp(17px,3.4vw,22px)}
+.cd-live{width:10px;height:10px;border-radius:50%;background:var(--loss);box-shadow:0 0 0 4px rgba(168,67,47,.2)}
+.cd-cta{margin-top:12px;border:none;border-radius:999px;padding:11px 22px;font:inherit;font-size:15px;font-weight:900;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.cd-cta:hover{filter:brightness(1.08)}
+.cd-tick{animation:cdTick .35s ease-out}
+@keyframes cdTick{from{opacity:.35;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cd-tick{animation:none}}
+.adm-phase{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0 14px;font-size:13px;font-weight:700}
+.adm-phase small{width:100%;color:var(--muted);font-weight:400}
+@media (max-width:420px){.cd{padding:14px 12px 12px}.cd-digits{gap:2px 8px}.cd-g b{font-size:34px}.cd-g small{font-size:11px}.cd-sub span{display:block}}

@@ -1033,31 +1033,30 @@ window.FBC_INIT = function (H) {
       const ev = await rpc("get_fight_event", { eid: pv.id });
       if (!ev) { box.innerHTML = `<div class="fb-empty"><b>大会が見つかりません</b><p><a href="/predict/">大会予想の一覧へ</a></p></div>`; return; }
       pv.ev = ev;
+      pv.skew = new Date(ev.now).getTime() - Date.now();   // 端末の時計のずれを補正（サーバーの時刻を基準にする）
       document.title = `${ev.name} 勝敗予想｜FIGHT BOOK`;
       box.innerHTML = predictHtml(ev);
-      tick();
+      startCountdown();
       track("predict_view", null, { event: ev.id, src: navSrc || ss.get("fb_navsrc") || "direct" }, `pv:${anon}:${ev.id}:${today()}`);
       ss.set("fb_navsrc", "");
       loadBoutComments(true); loadRanking();
       clearInterval(pv.chatTimer);
       // 開いているあいだ20秒ごとに新しいコメントを取りに行く（タブが裏にあるときは止める）
-      pv.chatTimer = setInterval(() => { if (!$("#pvBox")) return clearInterval(pv.chatTimer); if (document.visibilityState === "visible") loadBoutComments(false); }, 20000);
+      pv.chatN = 0;
+      pv.chatTimer = setInterval(() => {
+        if (!$("#pvBox")) return clearInterval(pv.chatTimer);
+        if (document.visibilityState !== "visible") return;
+        loadBoutComments(false);
+        if (pv.ev && pv.ev.locked && ++pv.chatN % 3 === 0) refreshEvent(false);   // 締め切り後は1分ごとに試合の状態・結果を確認
+      }, 20000);
     } catch (e) { box.innerHTML = failBox(e, "predict"); }
   }
   function predictHtml(ev) {
     const picked = ev.bouts.filter(b => b.me).length;
     return `<nav class="crumb"><a href="/predict/">大会予想</a> › <span>${esc(ev.name)}</span></nav>
-      <section class="pv-head">
-        <div class="pv-badge ${ev.locked ? "locked" : ""}">${ev.locked ? "予想は締め切りました" : "勝敗予想 受付中"}</div>
-        <h1>${esc(ev.name)}</h1>
-        <p class="pv-when">${fmtWhen(ev.starts_at)}${ev.venue ? `・${esc(ev.venue)}` : ""}</p>
-        ${ev.locked ? "" : `<p class="pv-count" id="pvCount" data-at="${esc(ev.starts_at)}"></p>`}
-        <p class="pv-sum"><b id="pvPicked">${picked}</b> / ${ev.bouts.length}試合を予想済み・${ev.predictors}人が参加</p>
-        <div class="pv-acts"><button class="fz-btn pv-share" id="pvShare" ${picked ? "" : "disabled"}>📣 私の予想を共有</button>
-          ${ev.source_url ? `<a class="fz-link" href="${esc(ev.source_url)}" target="_blank" rel="noopener">公式の発表を見る ↗</a>` : ""}</div>
-        <p class="note">対戦カードは公式発表をもとに掲載しています。予想は開始時刻まで何度でも変えられます。みんなの予想の割合は、自分が予想した試合から見られます。</p>
-      </section>
+      <section class="pv-head" id="pvHead">${headHtml(ev)}</section>
       <section class="section"><div class="sec-head"><h2>Fight Card<small>対戦カード（${ev.bouts.length}試合）</small></h2></div>
+        <div id="pvStatus">${statusHtml(ev)}</div>
         ${ev.bouts.length ? `<div class="bc-nickbar"><span class="bc-nb-t">💬 各試合の下で、ファン同士コメントできます</span>
           <label>ニックネーム<input class="fb-nick" id="pvNick" maxlength="30" value="${esc(nickOf())}" placeholder="例：格闘技好き" autocomplete="nickname"></label>
           <small>ログイン不要・ニックネームは公開されます</small></div>` : ""}
@@ -1066,6 +1065,114 @@ window.FBC_INIT = function (H) {
       <section class="section" id="pvRankWrap" hidden><div class="sec-head"><h2>Ranking<small>的中ランキング</small></h2></div><div id="pvRank"></div></section>
       <p class="fb-rules">コメントは20秒ごとに自動で新しいものを表示します。選手や他のファンへの侮辱・差別は管理者が削除します。</p>`;
   }
+  /* ---------- 状態：予想の受付（締め切り時刻）と、試合の進行（管理者が設定）は別に扱う ---------- */
+  const stateOf = ev => !ev.locked ? "open" : ev.phase === "live" ? "live" : ev.phase === "finished" ? "finished" : "closed";
+  const deadlineText = ev => `締め切り：${fmtWhen(ev.starts_at)}`;
+  function headHtml(ev) {
+    const st = stateOf(ev), picked = ev.bouts.filter(b => b.me).length;
+    const BADGE = { open: "勝敗予想 受付中", closed: "勝敗予想の受付は終了", live: "● LIVE 試合中", finished: "試合終了" };
+    return `<div class="pv-badge st-${st}">${BADGE[st]}</div>
+      <h1>${esc(ev.name)}</h1>
+      <p class="pv-when">${fmtWhen(ev.starts_at)}${ev.venue ? `・${esc(ev.venue)}` : ""}</p>
+      <p class="pv-sum"><b id="pvPicked">${picked}</b> / ${ev.bouts.length}試合を予想${st === "open" ? "済み" : ""}・${ev.predictors}人が参加</p>
+      <div class="pv-acts">${st === "open"
+        ? `<button class="fz-btn pv-share" id="pvShare" ${picked ? "" : "disabled"}>📣 私の予想を共有</button>`
+        : `<button class="fz-btn" data-gocomment>💬 コメントする</button>${picked ? `<button class="fz-link pv-share-link" id="pvShare">私の予想を共有</button>` : ""}`}
+        ${ev.source_url ? `<a class="fz-link" href="${esc(ev.source_url)}" target="_blank" rel="noopener">公式の発表を見る ↗</a>` : ""}</div>
+      <p class="note">対戦カードは公式発表をもとに掲載しています。${st === "open" ? "予想は締め切りまで何度でも変えられます。みんなの予想の割合は、自分が予想した試合から見られます。" : "コメントは試合中・試合後も各試合の下から投稿できます。"}</p>`;
+  }
+  function statusHtml(ev) {
+    const st = stateOf(ev);
+    if (st === "open") return `<div class="cd" id="pvCd" data-level="normal" role="timer" aria-live="off" aria-labelledby="pvCdSr">
+        <div class="cd-top"><span class="cd-label">⏱ 勝敗予想の締め切りまで</span><span class="cd-flag" id="pvCdFlag" hidden></span></div>
+        <div class="cd-digits" aria-hidden="true">
+          <span class="cd-g" data-g="d"><b data-k="d">0</b><small>日</small></span>
+          <span class="cd-g"><b data-k="h">00</b><small>時間</small></span>
+          <span class="cd-g"><b data-k="m">00</b><small>分</small></span>
+          <span class="cd-g"><b data-k="s">00</b><small>秒</small></span>
+        </div>
+        <p class="cd-sub">${esc(deadlineText(ev))}<span>・締め切りまで何度でも予想を変えられます</span></p>
+        <span class="sr" id="pvCdSr">勝敗予想の${esc(deadlineText(ev))}</span>
+      </div>`;
+    const T = {
+      closed: ["勝敗予想の受付は終了しました", "コメントは引き続き投稿できます。みんなの予想の割合も見られます。"],
+      live: ["試合中｜コメントで盛り上がろう", "勝敗予想の受付は終了しました。各試合の下から、いつでもコメントできます。"],
+      finished: ["試合終了｜感想を投稿しよう", "結果と的中ランキングをチェック。感想は各試合の下から投稿できます。"],
+    }[st];
+    return `<div class="cd cd-end" data-phase="${st}" role="status">
+        <div class="cd-top"><span class="cd-label">${st === "live" ? '<i class="cd-live" aria-hidden="true"></i>' : ""}${T[0]}</span></div>
+        <p class="cd-msg">${T[1]}</p>
+        <button class="cd-cta" data-gocomment>💬 コメントする</button>
+        <p class="cd-sub">${esc(deadlineText(ev))}（受付終了）</p>
+      </div>`;
+  }
+  // 1秒ごとに数字だけを書き換える（ページやコメント欄は描き直さない）
+  function startCountdown() {
+    clearInterval(pv.timer); clearTimeout(pv.timer2);
+    const el = $("#pvCd"); if (!el || !pv.ev) return;
+    const at = new Date(pv.ev.starts_at).getTime(), pad = n => String(n).padStart(2, "0");
+    const set = (k, v) => { const b = el.querySelector(`[data-k="${k}"]`); if (b && b.textContent !== v) { b.textContent = v; b.classList.remove("cd-tick"); void b.offsetWidth; b.classList.add("cd-tick"); } };
+    const tickFn = pv.tickFn = () => {
+      if (!$("#pvCd")) { clearInterval(pv.timer); return; }
+      const ms = at - (Date.now() + (pv.skew || 0));
+      if (ms <= 0) { clearInterval(pv.timer); onDeadline(); return; }
+      const t = Math.floor(ms / 1000), d = Math.floor(t / 86400);
+      set("d", String(d)); set("h", pad(Math.floor(t % 86400 / 3600))); set("m", pad(Math.floor(t % 3600 / 60))); set("s", pad(t % 60));
+      el.querySelector('[data-g="d"]').hidden = d === 0;
+      const level = ms <= 3600e3 ? "hot" : ms <= 86400e3 ? "warm" : "normal";
+      if (el.dataset.level !== level) {
+        el.dataset.level = level;
+        const f = $("#pvCdFlag"); f.hidden = level === "normal";
+        f.textContent = level === "hot" ? "締め切り間近！" : "まもなく締め切り";
+      }
+    };
+    tickFn();
+    // 秒の切り替わりに合わせて更新
+    pv.timer2 = setTimeout(() => { tickFn(); pv.timer = setInterval(tickFn, 1000); }, 1000 - ((Date.now() + (pv.skew || 0)) % 1000));
+  }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && pv.tickFn && $("#pvCd")) pv.tickFn(); });
+  // 締め切りを迎えた瞬間：表示と操作を切り替える（入力途中のコメントは残す）
+  async function onDeadline() {
+    if (pv.ev) pv.ev.locked = true;
+    paintState();
+    toast("勝敗予想の受付を締め切りました。コメントは引き続き投稿できます。");
+    await refreshEvent(true);
+  }
+  // サーバーから最新の大会情報（締め切り・試合の状態・結果・割合）を取り直す
+  async function refreshEvent(force) {
+    if (!pv.ev) return;
+    try {
+      const ev = await rpc("get_fight_event", { eid: pv.ev.id }); if (!ev) return;
+      const changed = force || ev.locked !== pv.ev.locked || ev.phase !== pv.ev.phase || JSON.stringify(ev.bouts.map(b => [b.winner, b.method])) !== JSON.stringify(pv.ev.bouts.map(b => [b.winner, b.method]));
+      ev._joined = pv.ev._joined;
+      if (pv.ev.locked && Date.now() + (pv.skew || 0) >= new Date(ev.starts_at).getTime()) ev.locked = true;   // 端末側で締め切りを迎えた後は戻さない
+      pv.ev = ev;
+      if (!changed) return;
+      paintState();
+      ev.bouts.forEach(rerenderBout);
+      if (ev.bouts.some(b => b.winner)) loadRanking();
+    } catch (e) {}
+  }
+  function paintState() {
+    const h = $("#pvHead"), st = $("#pvStatus");
+    if (h) h.innerHTML = headHtml(pv.ev);
+    if (st) { st.innerHTML = statusHtml(pv.ev); startCountdown(); }
+  }
+  function rerenderBout(b) {   // 書きかけのコメントとフォーカスを保ったまま、1試合だけ描き直す
+    const li = $(`.pv-bout[data-bid="${b.id}"]`); if (!li) return;
+    const inp = li.querySelector(".bc-in"), keep = inp ? inp.value : "", focused = inp && document.activeElement === inp;
+    li.outerHTML = boutHtml(b, pv.ev.locked);
+    const ni = $(`.pv-bout[data-bid="${b.id}"] .bc-in`);
+    if (ni) { if (keep) ni.value = keep; if (focused) ni.focus(); }
+  }
+  function goComment() {
+    const draft = $$(".bc-in").find(i => i.value.trim()), target = draft || $(".pv-bout .bc-in");
+    if (!target) return;
+    target.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    setTimeout(() => target.focus({ preventScroll: true }), 300);
+    track("go_comment", null, { event: pv.ev.id, state: stateOf(pv.ev) });
+  }
+
   function boutHtml(b, locked) {
     const me = b.me || {}, c = b.counts, tot = c ? c.a + c.b : 0;
     const pa = tot ? Math.round(c.a / tot * 100) : 0;
@@ -1091,19 +1198,6 @@ window.FBC_INIT = function (H) {
       ${bcHtml(b)}
     </li>`;
   }
-  function tick() {
-    clearInterval(pv.timer);
-    const el = $("#pvCount"); if (!el) return;
-    const at = new Date(el.dataset.at).getTime();
-    const f = () => {
-      const s = Math.max(0, Math.floor((at - Date.now()) / 1000));
-      if (!$("#pvCount")) return clearInterval(pv.timer);
-      if (s === 0) { el.textContent = "まもなく締め切ります"; clearInterval(pv.timer); return; }
-      const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
-      el.textContent = `締め切りまで ${d ? d + "日 " : ""}${h}時間 ${m}分`;
-    };
-    f(); pv.timer = setInterval(f, 30000);
-  }
   async function pick(btn, method) {
     const bid = +btn.dataset.bid, ev = pv.ev; if (!ev) return;
     const b = ev.bouts.find(x => x.id === bid); if (!b) return;
@@ -1115,17 +1209,15 @@ window.FBC_INIT = function (H) {
       const before = ev.bouts.filter(x => x.me).length;
       const nb = await rpc("set_prediction", { bid, pick: p, method: m });
       Object.assign(b, nb);
-      const li = $(`.pv-bout[data-bid="${bid}"]`);
-      if (li) {   // 書きかけのコメントは消さない
-        const inp = li.querySelector(".bc-in"), keep = inp ? inp.value : "";
-        li.outerHTML = boutHtml(b, ev.locked);
-        const ni = $(`.pv-bout[data-bid="${bid}"] .bc-in`); if (ni && keep) ni.value = keep;
-      }
+      rerenderBout(b);
       const n = ev.bouts.filter(x => x.me).length;
       if (before === 0 && n === 1) { ev.predictors++; const sm = $(".pv-sum"); if (sm) sm.innerHTML = sm.innerHTML.replace(/\d+人が参加/, `${ev.predictors}人が参加`); }
       $("#pvPicked").textContent = n; const sh = $("#pvShare"); if (sh) sh.disabled = !n;
       track("predict", null, { event: ev.id, bout: bid, method: !!m, change: !!method }, null);
-    } catch (e) { toast(esc(e.code === "LOCKED" ? "この試合の予想は締め切られました。" : e.message)); }
+    } catch (e) {
+      if (e.code === "LOCKED") { toast("勝敗予想の受付は終了しました。コメントは引き続き投稿できます。"); refreshEvent(true); }
+      else toast(esc(e.message));
+    }
     finally { busy.delete("p" + bid); }
   }
   async function loadRanking() {
@@ -1289,6 +1381,9 @@ window.FBC_INIT = function (H) {
     const ev = adm.ev = await rpc("get_fight_event", { eid: adm.ev.id });
     const opts = Object.values(S.profiles).filter(p => p.riz.total > 0).sort((a, b) => b.rating - a.rating).map(p => `<option value="${esc(p.key)}">${esc(S.nameOf(p.key))}</option>`).join("");
     box.innerHTML = `<h3 class="fb-h3">${esc(ev.name)} の対戦カード</h3>
+      <div class="adm-phase">大会の状態（予想の締め切りとは別。コメントはいつでもできます）：
+        ${[["", "開催前"], ["live", "試合中"], ["finished", "試合終了"]].map(([k, v]) => `<button class="fbchip" data-admphase="${k}" aria-pressed="${(ev.phase || "") === k}">${v}</button>`).join("")}
+        <small>全試合の結果を入れると、自動で「試合終了」になります。</small></div>
       <datalist id="admFighters">${opts}</datalist>
       <form id="admBoutForm" class="adm-form">
         <b>試合を追加（メインイベントを最後に）</b>
@@ -1309,6 +1404,7 @@ window.FBC_INIT = function (H) {
     const t = e.target;
     const pb = t.closest(".pv-pick"); if (pb && !pb.disabled) { pick(pb); return true; }
     const mb = t.closest("[data-meth]"); if (mb) { pick(mb, mb.dataset.meth); return true; }
+    if (t.closest("[data-gocomment]")) { goComment(); return true; }
     if (t.closest("#pvShare")) { shareImage().catch(err => toast("画像を作れませんでした。")); return true; }
     const dl = t.closest("[data-ecdel]");
     if (dl) {
@@ -1327,6 +1423,8 @@ window.FBC_INIT = function (H) {
       return true;
     }
     const ae = t.closest("[data-admev]"); if (ae) { rpc("get_fight_event", { eid: ae.dataset.admev }).then(ev => { adm.ev = ev; loadAdminEvents(); }); return true; }
+    const ph = t.closest("[data-admphase]");
+    if (ph) { rpc("admin_set_phase", { eid: adm.ev.id, phase: ph.dataset.admphase || null }).then(() => { toast("大会の状態を変更しました"); renderAdminBouts(); }).catch(err => toast(esc(err.message))); return true; }
     const rs = t.closest("[data-ressave]");
     if (rs) { const id = rs.dataset.ressave; rpc("admin_set_result", { bid: +id, winner: $(`[data-res="${id}"]`).value || null, method: $(`[data-resm="${id}"]`).value || null }).then(() => { toast("結果を保存しました"); renderAdminBouts(); }).catch(err => toast(esc(err.message))); return true; }
     const db = t.closest("[data-admdelbout]");

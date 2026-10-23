@@ -769,6 +769,8 @@ create table if not exists public.fight_bouts (
   created_at timestamptz not null default now()
 );
 create index if not exists fight_bouts_event on public.fight_bouts(event_id, ord);
+-- 大会の進行状態（管理者が切り替える）。空＝開催前。予想の締め切り（starts_at）とは別に扱う
+alter table public.fight_events add column if not exists phase text check (phase is null or phase in ('live','finished'));
 create table if not exists public.predictions (
   bout_id    bigint not null references public.fight_bouts(id) on delete cascade,
   user_id    uuid not null references public.profiles(id) on delete cascade,
@@ -821,7 +823,7 @@ language sql stable security definer set search_path = public as $$
   select coalesce(jsonb_agg(x order by (x->>'upcoming')::boolean desc,
            case when (x->>'upcoming')::boolean then x->>'starts_at' end asc, x->>'starts_at' desc), '[]')
     from (select jsonb_build_object('id', e.id, 'name', e.name, 'starts_at', e.starts_at, 'venue', e.venue,
-                   'locked', now() >= e.starts_at, 'upcoming', e.starts_at > now() - interval '1 day',
+                   'locked', now() >= e.starts_at, 'upcoming', e.starts_at > now() - interval '1 day', 'phase', e.phase,
                    'bouts', (select count(*) from fight_bouts b where b.event_id = e.id),
                    'predictors', (select count(distinct p.user_id) from predictions p join fight_bouts b on b.id = p.bout_id where b.event_id = e.id),
                    'comments', (select count(*) from event_comments c where c.event_id = e.id and c.status = 'visible')) x
@@ -838,6 +840,10 @@ begin
   locked := now() >= e.starts_at;
   return jsonb_build_object('id', e.id, 'name', e.name, 'starts_at', e.starts_at, 'venue', e.venue, 'source_url', e.source_url,
     'status', e.status, 'locked', locked, 'now', now(),
+    -- 試合の状態：管理者の設定。全試合に結果が入っていれば「終了」とみなす
+    'phase', case when e.phase is not null then e.phase
+                  when exists(select 1 from fight_bouts b where b.event_id = e.id)
+                   and not exists(select 1 from fight_bouts b where b.event_id = e.id and b.winner is null) then 'finished' end,
     'bouts', coalesce((select jsonb_agg(public._bout_json(b, locked) order by b.ord, b.id) from fight_bouts b where b.event_id = e.id), '[]'),
     'predictors', (select count(distinct p.user_id) from predictions p join fight_bouts b on b.id = p.bout_id where b.event_id = e.id));
 end $$;
@@ -978,6 +984,15 @@ begin
   return nid;
 end $$;
 
+create or replace function public.admin_set_phase(eid text, phase text) returns boolean
+language plpgsql security definer set search_path = public as $$
+begin
+  if not public._is_admin() then raise exception 'FORBIDDEN' using errcode = 'P0001'; end if;
+  if phase is not null and phase not in ('live','finished') then raise exception 'BAD_PHASE' using errcode = 'P0001'; end if;
+  update fight_events e set phase = nullif(admin_set_phase.phase, '') where e.id = eid;
+  return true;
+end $$;
+
 create or replace function public.admin_delete_bout(bid bigint) returns boolean
 language plpgsql security definer set search_path = public as $$
 begin
@@ -1019,5 +1034,5 @@ grant execute on function public.create_card(text, text, text, text, text, text,
   public.admin_contacts(), public.admin_contact_done(bigint),
   public.set_prediction(bigint, text, text), public.clear_prediction(bigint), public.add_event_comment(text, text), public.add_bout_comment(bigint, text), public.delete_event_comment(bigint),
   public.admin_upsert_event(text, text, timestamptz, text, text, text), public.admin_add_bout(text, text, text, text, text, text, text, boolean, int),
-  public.admin_delete_bout(bigint), public.admin_set_result(bigint, text, text)
+  public.admin_delete_bout(bigint), public.admin_set_result(bigint, text, text), public.admin_set_phase(text, text)
   to authenticated;
