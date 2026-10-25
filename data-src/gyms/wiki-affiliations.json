@@ -27,6 +27,11 @@
   "name": "Abdulla Saidov"
  },
  "abijah-kaleo-meheula": {
+  "ja": {
+   "team": "[[エクストリーム・クートゥア]]",
+   "title": "アバイジャ・カレオ・メヘウラ",
+   "url": "https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%90%E3%82%A4%E3%82%B8%E3%83%A3%E3%83%BB%E3%82%AB%E3%83%AC%E3%82%AA%E3%83%BB%E3%83%A1%E3%83%98%E3%82%A6%E3%83%A9"
+  },
   "name": "Abijah Kaleo Meheula"
  },
  "ai-shimizu": {
@@ -98,6 +103,11 @@
   "name": "Ali Yousefi"
  },
  "alibek-gadzhammatov": {
+  "ja": {
+   "team": "KHK DAGESTAN",
+   "title": "アリベク・ガジャマトフ",
+   "url": "https://ja.wikipedia.org/wiki/%E3%82%A2%E3%83%AA%E3%83%99%E3%82%AF%E3%83%BB%E3%82%AC%E3%82%B8%E3%83%A3%E3%83%9E%E3%83%88%E3%83%95"
+  },
   "name": "Alibek Gadzhammatov"
  },
  "alison-vicente": {
@@ -116,7 +126,7 @@
  },
  "amir-aliakbari": {
   "en": {
-   "team": "AAA Team (present)<br>AKA Thailand (2014–present)<ref>{{cite web|url=http://amiraliakbarimma.com/about/|archive-url=https://web.archive.org/web/20190305055133/http://amiraliakbarimma.com/about/|url-status=dead|archive-date=March 5, 2019|title=About — Amir Aliakbari — Official Website|access-date=February 3, 2021|website=amiraliakbarimma.com}}</ref>",
+   "team": "AAA Team (present)<br>AKA Thailand (2014–present)<ref>{{cite web|url=http://amiraliakbarimma.com/about/|archive-url=https://web.archive.org/web/20190305055133/http://amiraliakbarimma.com/about/|url-status=dead|archive-date=5 March 2019|title=About — Amir Aliakbari — Official Website|access-date=3 February 2021|website=amiraliakbarimma.com}}</ref>",
    "title": "Amir Aliakbari",
    "url": "https://en.wikipedia.org/wiki/Amir_Aliakbari"
   },
@@ -218,6 +228,11 @@
   "name": "Arashi Suzuki"
  },
  "arata-mizuno": {
+  "ja": {
+   "team": "トイカツ道場<br />→フリー",
+   "title": "水野新太",
+   "url": "https://ja.wikipedia.org/wiki/%E6%B0%B4%E9%87%8E%E6%96%B0%E5%A4%AA"
+  },
   "name": "Arata Mizuno"
  },
  "arman-ashimov": {
@@ -523,6 +538,11 @@
   "name": "Daichi Tomizawa"
  },
  "daigo-kuramoto": {
+  "ja": {
+   "team": "[[JAPAN TOP TEAM]] （トライフォース赤坂）",
+   "title": "倉本大悟",
+   "url": "https://ja.wikipedia.org/wiki/%E5%80%89%E6%9C%AC%E5%A4%A7%E6%82%9F"
+  },
   "name": "Daigo Kuramoto"
  },
  "daiki-gojima": {
@@ -1128,6 +1148,11 @@
   "name": "Islam Babatov"
  },
  "issa-hosokawa": {
+  "ja": {
+   "team": "K-Clann",
+   "title": "細川一颯",
+   "url": "https://ja.wikipedia.org/wiki/%E7%B4%B0%E5%B7%9D%E4%B8%80%E9%A2%AF"
+  },
   "name": "Issa Hosokawa"
  },
  "ivan-rats": {
@@ -1336,6 +1361,11 @@
   "name": "John Dodson"
  },
  "john-sweeney": {
+  "ja": {
+   "team": "アップステート空手",
+   "title": "ジョン・スウィーニー",
+   "url": "https://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A7%E3%83%B3%E3%83%BB%E3%82%B9%E3%82%A6%E3%82%A3%E3%83%BC%E3%83%8B%E3%83%BC"
+  },
   "name": "John Sweeney"
  },
  "john-teixeira": {
@@ -1721,6 +1751,11 @@
   "name": "Kenji Yamanaka"
  },
  "kenshin-kodama": {
+  "ja": {
+   "team": null,
+   "title": "児玉兼慎",
+   "url": "https://ja.wikipedia.org/wiki/%E5%85%90%E7%8E%89%E5%85%BC%E6%85%8E"
+  },
   "name": "Kenshin Kodama"
  },
  "kenshin-saito": {
@@ -1777,6 +1812,11 @@
   "name": "Kiichi Kunimoto"
  },
  "kim-kyung-pyo": {
+  "ja": {
+   "team": "Redhorse MMA",
+   "title": "キム・ギョンピョ",
+   "url": "https://ja.wikipedia.org/wiki/%E3%82%AD%E3%83%A0%E3%83%BB%E3%82%AE%E3%83%A7%E3%83%B3%E3%83%94%E3%83%A7"
+  },
   "name": "Kim Kyung-pyo"
  },
  "kim-si-won": {
@@ -1795,6 +1835,11 @@
   "name": "Kirill Sidelnikov"
  },
  "kisa-miyake": {
+  "ja": {
+   "team": "ZOOMER",
+   "title": "三宅輝砂",
+   "url": "https://ja.wikipedia.org/wiki/%E4%B8%89%E5%AE%85%E8%BC%9D%E7%A0%82"
+  },
   "name": "Kisa Miyake"
  },
  "kiyoshi-kuwabara": {
@@ -2025,6 +2070,11 @@
   "name": "Leszek Krakowski"
  },
  "li-kaiwen": {
+  "ja": {
+   "team": "K-1ジム<br>天津トップチーム",
+   "title": "リー・カイウェン",
+   "url": "https://ja.wikipedia.org/wiki/%E3%83%AA%E3%83%BC%E3%83%BB%E3%82%AB%E3%82%A4%E3%82%A6%E3%82%A7%E3%83%B3"
+  },
   "name": "Li Kaiwen"
  },
  "li-yunfeng": {
@@ -2524,6 +2574,11 @@
   "name": "Nuerla Murati"
  },
  "nurkhan-zhumagazy": {
+  "ja": {
+   "team": "トゥラン・オルダ",
+   "title": "ヌルハン・ズマガジー",
+   "url": "https://ja.wikipedia.org/wiki/%E3%83%8C%E3%83%AB%E3%83%8F%E3%83%B3%E3%83%BB%E3%82%BA%E3%83%9E%E3%82%AC%E3%82%B8%E3%83%BC"
+  },
   "name": "Nurkhan Zhumagazy"
  },
  "oh-doo-seok": {
@@ -3153,6 +3208,11 @@
   "name": "Sho Patrick Usami"
  },
  "sho-sekihara": {
+  "ja": {
+   "team": "K-PLACE<ref name=\"RIZINプロフィール\"/> <br />→RESURGO MMA",
+   "title": "関原翔",
+   "url": "https://ja.wikipedia.org/wiki/%E9%96%A2%E5%8E%9F%E7%BF%94"
+  },
   "name": "Sho Sekihara"
  },
  "shogo-kuriaki": {
@@ -3598,6 +3658,11 @@
   "name": "Tatsumitsu Wada"
  },
  "tatsuya-ando": {
+  "ja": {
+   "team": "TRIBE TOKYO MMA<br/>→フリー",
+   "title": "安藤達也",
+   "url": "https://ja.wikipedia.org/wiki/%E5%AE%89%E8%97%A4%E9%81%94%E4%B9%9F"
+  },
   "name": "Tatsuya Ando"
  },
  "tatsuya-kawajiri": {
@@ -3684,6 +3749,11 @@
   "name": "Thiago Oliveira"
  },
  "thiatou-bambilor": {
+  "ja": {
+   "team": "ROOTS GYM",
+   "title": "チャートゥ・バンビロール",
+   "url": "https://ja.wikipedia.org/wiki/%E3%83%81%E3%83%A3%E3%83%BC%E3%83%88%E3%82%A5%E3%83%BB%E3%83%90%E3%83%B3%E3%83%93%E3%83%AD%E3%83%BC%E3%83%AB"
+  },
   "name": "Thiatou Bambilor"
  },
  "tilek-batyrov": {
@@ -4005,6 +4075,11 @@
   "name": "Yota Hayashi"
  },
  "yrysbek-tilenov": {
+  "ja": {
+   "team": "イーラスMMA",
+   "title": "イリスベク・ティレノフ",
+   "url": "https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%AA%E3%82%B9%E3%83%99%E3%82%AF%E3%83%BB%E3%83%86%E3%82%A3%E3%83%AC%E3%83%8E%E3%83%95"
+  },
   "name": "Yrysbek Tilenov"
  },
  "yu-kuwabara": {
