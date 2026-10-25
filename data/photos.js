@@ -31,6 +31,14 @@ window.PHOTOS = {
   "sho-sekihara": { src:"img/fighters/sho-sekihara.webp", face:"img/fighters/sho-sekihara-face.webp" },
   "daigo-kuramoto": { src:"img/fighters/daigo-kuramoto.webp", face:"img/fighters/daigo-kuramoto-face.webp" },
   "taichi-nakajima": { src:"img/fighters/taichi-nakajima.webp", face:"img/fighters/taichi-nakajima-face.webp" },
+  "dautbek": { src:"img/fighters/dautbek.webp?v=2", face:"img/fighters/dautbek-face.webp?v=2" },
+  "koike": { src:"img/fighters/koike.webp?v=2", face:"img/fighters/koike-face.webp?v=2" },
+  "sabatello": { src:"img/fighters/sabatello.webp?v=2", face:"img/fighters/sabatello-face.webp?v=2" },
+  "gustavo": { src:"img/fighters/gustavo.webp?v=2", face:"img/fighters/gustavo-face.webp?v=2" },
+  "akimoto": { src:"img/fighters/akimoto.webp?v=2", face:"img/fighters/akimoto-face.webp?v=2" },
+  "hiramoto": { src:"img/fighters/hiramoto.webp?v=2", face:"img/fighters/hiramoto-face.webp?v=2" },
+  "kyoji-horiguchi": { src:"img/fighters/kyoji-horiguchi.webp?v=2", face:"img/fighters/kyoji-horiguchi-face.webp?v=2" },
+  "suzuki": { src:"img/fighters/suzuki.webp?v=2", face:"img/fighters/suzuki-face.webp?v=2" },
 };
 
 /* 選手データ（RIZINの試合記録）がまだない選手の画像。大会予想の対戦カードで、登録名が一致したときに使う */
@@ -41,5 +49,9 @@ window.PHOTOS_BY_NAME = {
   "力也": { src:"img/fighters/n-rikiya.webp", face:"img/fighters/n-rikiya-face.webp" },
   "木村琉音": { src:"img/fighters/n-kimura-rune.webp", face:"img/fighters/n-kimura-rune-face.webp" },
   "松本尚大": { src:"img/fighters/n-matsumoto-naohiro.webp", face:"img/fighters/n-matsumoto-naohiro-face.webp" },
+  "濱田巧": { src:"img/fighters/n-hamada-takumi.webp", face:"img/fighters/n-hamada-takumi-face.webp" },
+  "髙橋正親": { src:"img/fighters/n-takahashi-masachika.webp", face:"img/fighters/n-takahashi-masachika-face.webp" },
+  "井上舜矢": { src:"img/fighters/n-inoue-shunya.webp", face:"img/fighters/n-inoue-shunya-face.webp" },
+  "マイティ・saw": { src:"img/fighters/n-mighty-saw.webp", face:"img/fighters/n-mighty-saw-face.webp" },
   "アバイジャ・カレオ・メヘウラ": { src:"img/fighters/abijah-kaleo-meheula.webp", face:"img/fighters/abijah-kaleo-meheula-face.webp" },
 };
