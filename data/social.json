@@ -1,13 +1,13 @@
 {
  "version": 1,
- "generatedAt": "2026-11-01T23:48:00.141Z",
+ "generatedAt": "2026-11-02T01:26:00.608Z",
  "intervalMinutes": 60,
  "fighters": {
   "shinryu": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCmfh-87a6MXbwpht28pyroA",
@@ -48,14 +48,14 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "ougikubo": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC7vKmzcPgsVUJXtHWsGVq-A",
@@ -103,7 +103,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCuLHbp1vovgv2JUdXdot_DA",
@@ -151,7 +151,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCglmYU7sr0Vo-R7Wty1bkZQ",
@@ -197,9 +197,9 @@
   },
   "goto": {
    "youtube": {
-    "status": "unavailable",
+    "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC-n2WuHwVqEi338R-huj9cA",
@@ -240,15 +240,15 @@
       }
      }
     ],
-    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
    }
   },
   "asakura": {
    "youtube": {
-    "status": "not_found",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCJZVj2iBrdvbNc416i0V-UA",
      "title": "朝倉未来 Mikuru Asakura"
@@ -287,15 +287,14 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    ]
    }
   },
   "koike": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC2yf1R3Z48xe7faHhvhaVQA",
@@ -341,9 +340,9 @@
   },
   "akimoto": {
    "youtube": {
-    "status": "unavailable",
+    "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCd7FROEsP6LNEV3XT7TUFzg",
@@ -384,14 +383,14 @@
       }
      }
     ],
-    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
    }
   },
   "suzuki": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCqGGEgRROwOFdagbsKsh5OA",
@@ -432,15 +431,15 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "hiramoto": {
    "youtube": {
-    "status": "unavailable",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCmddHtZJvNrFdKJ9GBO401w",
      "title": "平本蓮  BLACKROSE"
@@ -479,15 +478,14 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+    ]
    }
   },
   "satoshi": {
    "youtube": {
     "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC_y74TtJIX_ugYDBlYXxlxg",
@@ -533,9 +531,9 @@
   },
   "izawa": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCDXe3wEy3AfZOyMbIwXW9rw",
@@ -576,14 +574,14 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "ayaka-hamasaki": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCX4TiOv-KFfWglvlvLw0gtw",
@@ -629,10 +627,10 @@
   },
   "daichi-tomizawa": {
    "youtube": {
-    "status": "not_found",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCbvMeXGcSb-v2m18LHkBigg",
      "title": "冨澤大智 Daichi Tomizawa"
@@ -671,15 +669,14 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    ]
    }
   },
   "erson-yamamoto": {
    "youtube": {
-    "status": "unavailable",
+    "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC8X3NozweVH39FytLWvIBmA",
@@ -720,14 +717,14 @@
       }
      }
     ],
-    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
    }
   },
   "genji-umeno": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCsFf0pNdtdFy7R76F0m3iOg",
@@ -775,7 +772,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCvG_RjzKKEwVzqPjDaWdkNA",
@@ -823,7 +820,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCDEQcn0d5hTOuJz-kJ-jWWg",
@@ -871,7 +868,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCfCeMNcY3OjomqBPcBQhR5g",
@@ -917,9 +914,9 @@
   },
   "hiroyuki-takaya": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCdseQUrKw20EliPDBEzV_LQ",
@@ -960,14 +957,14 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "hyuma-yasui": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCnHuySSxNFZXPfjXFUJlTQw",
@@ -1013,9 +1010,9 @@
   },
   "juntaro-ushiku": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCcZM76gUfS5geagIHNES-eA",
@@ -1056,14 +1053,14 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "kai-asakura": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCbqtn4vldMg5HjKims7MWfw",
@@ -1104,15 +1101,15 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "kanna-asakura": {
    "youtube": {
-    "status": "not_found",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UC1Fgn2YxBxviecK8QP7vsdg",
      "title": "浅倉カンナ"
@@ -1151,16 +1148,15 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    ]
    }
   },
   "kazushi-sakuraba": {
    "youtube": {
-    "status": "unavailable",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCT368AKr2fFG6KT2Xy1KFgQ",
      "title": "SAKU39 - Kazushi Sakuraba Official Channel"
@@ -1199,16 +1195,15 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+    ]
    }
   },
   "kenta-takizawa": {
    "youtube": {
-    "status": "not_found",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCC7ka_zjdQQjgWoD7i0X-xw",
      "title": "瀧澤謙太"
@@ -1247,15 +1242,14 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    ]
    }
   },
   "koji-takeda": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCtSVXHc8d0OnmAs2j8tYCaQ",
@@ -1296,14 +1290,14 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "kyohei-hagiwara": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC9rOWpS7IMMsSxWUwXOT63Q",
@@ -1351,7 +1345,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC-GUnpgY8Er056ZUI_CdDOA",
@@ -1399,7 +1393,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCtX7oQLlXYNoqb2gdJ3s-nw",
@@ -1445,10 +1439,10 @@
   },
   "miyuu-yamamoto": {
    "youtube": {
-    "status": "not_found",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCrIE5fgn6W7X9wPxlEtFD1A",
      "title": "山本美憂 MiyuuYamamoto"
@@ -1487,15 +1481,14 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    ]
    }
   },
   "peter-aerts": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCyshG1Tyc7WrKYvODgJVygA",
@@ -1543,7 +1536,7 @@
    "youtube": {
     "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCW2I4DTIJBp4or4TOyhIIUw",
@@ -1589,9 +1582,9 @@
   },
   "ryusei-ashizawa": {
    "youtube": {
-    "status": "ok",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T23:48:00.141Z",
     "channel": {
      "id": "UCaAYPF-OGgKrKHb1_U4ui5A",
@@ -1631,14 +1624,15 @@
        "height": 360
       }
      }
-    ]
+    ],
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "satoru-kitaoka": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCRw27HCS5dvwM52O5t_cHFg",
@@ -1686,7 +1680,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCgdRu6t75tTmESoDl_tEHag",
@@ -1732,9 +1726,9 @@
   },
   "shinya-aoki": {
    "youtube": {
-    "status": "not_found",
+    "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCq4ivf-il6TuKib3I2WvjxA",
@@ -1775,14 +1769,14 @@
       }
      }
     ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
    }
   },
   "sho-patrick-usami": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCHntD9saJbyPmrDvAAz7OOQ",
@@ -1828,10 +1822,10 @@
   },
   "taisei-nishitani": {
    "youtube": {
-    "status": "not_found",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCMbjPW4TQv01yJw_FxHlJhg",
      "title": "西谷大成のギャンブルちゃんねる"
@@ -1870,16 +1864,15 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    ]
    }
   },
   "takaki-soya": {
    "youtube": {
-    "status": "not_found",
+    "status": "ok",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
-    "lastSuccessAt": "2026-11-01T22:50:23.133Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
+    "lastSuccessAt": "2026-11-02T01:26:00.608Z",
     "channel": {
      "id": "UCcnZDXUNhpMiFmdZrNkgIAg",
      "title": "征矢貴は穏やかに生きたい  Takaki Soya"
@@ -1918,15 +1911,14 @@
        "height": 360
       }
      }
-    ],
-    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
+    ]
    }
   },
   "tatsuya-kawajiri": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCQSQTofrIsryeE-adiAKbiA",
@@ -1974,7 +1966,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC_Y6rtEtWxf-7xn15ik1Z2g",
@@ -2020,9 +2012,9 @@
   },
   "toki-tamaru": {
    "youtube": {
-    "status": "ok",
+    "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T23:48:00.141Z",
     "channel": {
      "id": "UCVWaYVKObRJ6Nzi8xb7j7eQ",
@@ -2062,14 +2054,15 @@
        "height": 360
       }
      }
-    ]
+    ],
+    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
    }
   },
   "ya-man": {
    "youtube": {
-    "status": "ok",
+    "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T23:48:00.141Z",
     "channel": {
      "id": "UCjTTrRFzE6DW1NA0QOFFciQ",
@@ -2109,14 +2102,15 @@
        "height": 360
       }
      }
-    ]
+    ],
+    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
    }
   },
   "yoshinori-horie": {
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCCpxmSVNPjgWSq5DTCby4aQ",
@@ -2164,7 +2158,7 @@
    "youtube": {
     "status": "unavailable",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC1sCMCM2yQqS3dggBcTbNSg",
@@ -2212,7 +2206,7 @@
    "youtube": {
     "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UC4S7FmJAcEJ_JubmjarL8kw",
@@ -2258,9 +2252,9 @@
   },
   "yutaka-saito": {
    "youtube": {
-    "status": "unavailable",
+    "status": "not_found",
     "source": "youtube-rss",
-    "fetchedAt": "2026-11-01T23:48:00.141Z",
+    "fetchedAt": "2026-11-02T01:26:00.608Z",
     "lastSuccessAt": "2026-11-01T22:50:23.133Z",
     "channel": {
      "id": "UCeK1fLPjfHJYZ-Ucr0VK4cw",
@@ -2301,7 +2295,7 @@
       }
      }
     ],
-    "error": "HTTP 500: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 500 (Server Error)!!1</title>\n  <style>\n    *"
+    "error": "HTTP 404: <!DOCTYPE html>\n<html lang=en>\n  <meta charset=utf-8>\n  <meta name=viewport content=\"initial-scale=1, minimum-scale=1, width=device-width\">\n  <title>Error 404 (Not Found)!!1</title>\n  <style>\n    *{ma"
    }
   }
  }
