@@ -447,6 +447,7 @@
         <div><b>${t.d}</b><small>分</small></div><div><b>${t.nc}</b><small>無効</small></div>
       </div>
       <p class="note" style="margin-top:8px">上の数字はRIZINでのMMA戦績です。${f && !f.partial ? `プロ通算は ${rec(p.pro)}${p.pro.nc ? `（無効${p.pro.nc}）` : ""}。` : ""}${f && f.partial ? "この選手はRIZIN外の戦績を集めきれていません。" : ""}</p>
+      ${mitchakuSection(key)}
       ${socialSection(key)}
       <div class="f-cols">
         <div>
@@ -580,6 +581,59 @@
       <p class="note" style="margin:8px 0 0">YouTubeの動画を画面右下のプレーヤーで再生します。<a href="https://www.youtube.com/watch?v=${esc(list[0].yt)}" target="_blank" rel="noopener">YouTubeで開く</a></p></div>`;
   }
 
+  /* ---------- 公式の密着動画（data/mitchaku.js） ----------
+     ・最初はサムネイル画像だけを出し、押されたときに初めて YouTube を読み込む（ページ表示を重くしない）
+     ・自動再生はしない。再生を押したら入場曲は一時停止する
+     ・動画の登録がない選手はセクションごと出さない */
+  const mcOf = k => (window.MITCHAKU && window.MITCHAKU[k]) || [];
+  const ytThumb = (id, q = "maxresdefault") => `https://i.ytimg.com/vi/${encodeURIComponent(id)}/${q}.jpg`;
+  const mcLabel = v => [v.series, v.note].filter(Boolean).join("｜");
+  function mcFacade(v, name) {
+    return `<button class="mc-facade" type="button" data-mc-play="${esc(v.yt)}" aria-label="${esc(name)}の密着動画を再生する（YouTube）">
+        <img src="${ytThumb(v.yt)}" alt="" loading="lazy" decoding="async" width="1280" height="720"
+          onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${ytThumb(v.yt, "hqdefault")}'}else{this.remove()}">
+        <span class="mc-shade" aria-hidden="true"></span>
+        <span class="mc-badge" aria-hidden="true">RIZIN公式</span>
+        <span class="mc-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+        <span class="mc-cap" aria-hidden="true"><small>${esc(v.series || "密着")}</small><b>${esc(name)}に密着</b></span>
+      </button>`;
+  }
+  function mitchakuSection(key) {
+    const list = mcOf(key); if (!list.length) return "";
+    const name = S.nameOf(key), v = list[0];
+    return `<section class="section mc" id="mc" data-key="${esc(key)}" aria-labelledby="mcT">
+      <div class="sec-head"><h2 id="mcT">公式の密着動画<small>Official Documentary</small></h2></div>
+      <div class="mc-card">
+        <div class="mc-player" id="mcPlayer">${mcFacade(v, name)}</div>
+        <div class="mc-side">
+          <div class="mc-kicker">RIZIN公式 ・ 密着ドキュメンタリー</div>
+          <h3 class="mc-title">リングの外の、${esc(name)}。</h3>
+          <p class="mc-desc">試合に向けた日々の練習や、仲間・家族と過ごす時間。戦績だけでは見えない素顔と想いに迫る、RIZIN公式の密着映像です。</p>
+          <div class="mc-now" id="mcNow"${list.length > 1 ? " hidden" : ""}><small>再生する動画</small><b>${esc(mcLabel(v))}</b></div>
+          ${list.length > 1 ? `<div class="mc-sub">${list.length}本の密着動画</div>` : ""}
+          ${list.length > 1 ? `<div class="mc-list" role="list" aria-label="ほかの密着動画">${list.map((x, i) => `<button class="mc-pick" type="button" role="listitem" data-mc-pick="${i}" aria-pressed="${i === 0}">
+              <span class="mc-th"><img src="${ytThumb(x.yt, "mqdefault")}" alt="" loading="lazy" decoding="async" width="320" height="180" onerror="this.remove()"></span><span>${esc(mcLabel(x))}</span></button>`).join("")}</div>` : ""}
+          <a class="mc-yt" id="mcYt" href="https://www.youtube.com/watch?v=${esc(v.yt)}" target="_blank" rel="noopener">YouTubeで開く<span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>`;
+  }
+  function mcPlay(id) {
+    const box = document.getElementById("mcPlayer"); if (!box) return;
+    try { if (walk.player && isPlaying()) walk.player.pauseVideo(); } catch (e) {}   // 入場曲と重ならないように止める
+    box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1" title="公式の密着動画（YouTube）" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  }
+  function mcPick(i) {
+    const sec = document.getElementById("mc"); if (!sec) return;
+    const key = sec.dataset.key, list = mcOf(key), v = list[i]; if (!v) return;
+    const playing = !!sec.querySelector("#mcPlayer iframe");
+    document.getElementById("mcPlayer").innerHTML = mcFacade(v, S.nameOf(key));
+    if (playing) mcPlay(v.yt);
+    sec.querySelector("#mcNow b").textContent = mcLabel(v);
+    sec.querySelector("#mcYt").href = `https://www.youtube.com/watch?v=${encodeURIComponent(v.yt)}`;
+    sec.querySelectorAll(".mc-pick").forEach(b => b.setAttribute("aria-pressed", +b.dataset.mcPick === i));
+  }
+
   // 画面右下のプレーヤー枠（ページ全体で1つ）
   const dock = document.createElement("div");
   dock.id = "ytDock"; dock.className = "yt-dock"; dock.hidden = true;
@@ -694,6 +748,8 @@
     if (e.target.closest("#woPlay")) togglePlay();
     if (e.target.closest("#dockMin")) dock.classList.toggle("min");
     const pk = e.target.closest(".song-pick"); if (pk) pickSong(+pk.dataset.idx);
+    const mp = e.target.closest("[data-mc-play]"); if (mp) mcPlay(mp.dataset.mcPlay);
+    const mk = e.target.closest("[data-mc-pick]"); if (mk) mcPick(+mk.dataset.mcPick);
   });
   document.addEventListener("change", e => {
     if (e.target.id !== "woAuto") return;
