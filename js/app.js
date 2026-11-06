@@ -397,18 +397,6 @@
     const f = S.roster[key];
     const t = p.riz;
     const ig = igPermalink(f);
-    const rows = p.fights.slice().reverse().map(b => {
-      const me = b.winner === key, opp = me ? b.loser : b.winner;
-      const res = b.outcome === "NC" ? "NC" : b.outcome === "D" ? "D" : me ? "W" : "L";
-      const d = b.delta && b.delta[key];
-      return `<tr>
-        <td class="c"><span class="res ${res}">${res}</span></td>
-        <td class="opp">${link(opp)}</td>
-        <td>${esc(METHOD_JA[b.cat] || "")}<div class="ev">${esc(b.method)}</div></td>
-        <td>${b.rizin ? '<span class="tag-rizin">RIZIN</span> ' : ""}${esc(b.event)}${b.rizinTitle ? ' <span class="mini-badge">TITLE</span>' : ""}<div class="ev">${fmtDate(b.date)}</div></td>
-        <td class="c num">${esc(b.round || "–")}${b.time ? `<div class="ev">${esc(b.time)}</div>` : ""}</td>
-        <td class="r">${d ? deltaHtml(d) : ""}</td></tr>`;
-    }).join("");
     const kv = f ? [["階級", f.division], ["国籍", f.country], ["生年月日", f.born], ["出身地", f.hometown], ["身長", f.height], ["所属", f.team]]
       : [["階級（直近）", p.division], ["国", p.country], ["RIZIN初出場", p.rizinFights[0] ? fmtDate(p.rizinFights[0].date) : ""]];
     const kvHtml = kv.filter(r => r[1]).map(r => `<tr><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("");
@@ -453,10 +441,6 @@
       <div class="f-cols">
         <div>
           <div class="panel chart"><h3>レーティングの推移（RIZIN）</h3>${ratingChart(p.history)}</div>
-          <div class="section">
-            <div class="sec-head"><h2>試合履歴<small>${f ? `全${p.fights.length}試合（うちRIZIN ${p.rizinFights.length}）` : `RIZIN ${p.rizinFights.length}試合`}</small></h2></div>
-            <div class="tbl-wrap"><table class="tbl"><thead><tr><th class="c">結果</th><th>対戦相手</th><th>決着</th><th>大会</th><th class="c">R</th><th class="r">レート</th></tr></thead><tbody>${rows}</tbody></table></div>
-          </div>
         </div>
         <div>
           <div class="panel"><h3>勝ち方（RIZIN）</h3>
@@ -475,6 +459,7 @@
           ${ig ? `<div class="panel card-ig" style="margin-top:16px;padding:12px">${igEmbed(ig)}</div>` : ""}
         </div>
       </div>
+      ${fightHistory(key, p)}
     </div>`;
   }
 
@@ -580,6 +565,102 @@
     return `<div class="panel" style="margin-top:16px"><h3>入場曲</h3>
       <div class="song-list">${list.map((s, i) => `<button class="song-pick ${i === 0 ? "on" : ""}" data-idx="${i}">♪ ${esc(s.title)} <small>${esc(s.artist)}</small></button>`).join("")}</div>
       <p class="note" style="margin:8px 0 0">YouTubeの動画を画面右下のプレーヤーで再生します。<a href="https://www.youtube.com/watch?v=${esc(list[0].yt)}" target="_blank" rel="noopener">YouTubeで開く</a></p></div>`;
+  }
+
+  /* ---------- 試合履歴（カード形式・ページの一番下） ----------
+     試合ごとの動画は data/fightvideos.js：キーは「日付|勝者キー|敗者キー」 */
+  const evName = e => String(e || "").replace(/^Super Rizin (\d+)/i, "超RIZIN.$1").replace(/^Rizin Landmark (\d+)/i, "RIZIN LANDMARK $1")
+    .replace(/^Rizin (\d+)$/i, "RIZIN.$1").replace(/\bRizin\b/g, "RIZIN");
+  const MJ = [[/rear[- ]naked choke/i, "リアネイキッドチョーク"], [/arm[- ]triangle choke/i, "肩固め"], [/guillotine choke/i, "ギロチンチョーク"], [/triangle choke/i, "三角絞め"],
+    [/anaconda choke/i, "アナコンダチョーク"], [/d'?arce choke/i, "ダースチョーク"], [/north[- ]south choke/i, "ノースサウスチョーク"], [/armbar/i, "腕ひしぎ十字固め"],
+    [/kimura/i, "キムラ"], [/heel hook/i, "ヒールフック"], [/kneebar/i, "ヒザ十字固め"], [/ankle lock/i, "アンクルホールド"], [/soccer kicks?/i, "サッカーボールキック"],
+    [/head kick/i, "ハイキック"], [/body kick/i, "ボディキック"], [/leg kicks?/i, "ローキック"], [/knees?/i, "ヒザ"], [/elbows?/i, "ヒジ"], [/punch(es)?/i, "パンチ"],
+    [/kicks?/i, "キック"], [/slam/i, "スラム"], [/doctor stoppage/i, "ドクターストップ"], [/corner stoppage/i, "セコンドのタオル"], [/retirement/i, "棄権"], [/injury/i, "負傷"]];
+  function methodParts(b, me) {
+    const m = String(b.method || ""), inner = (m.match(/\(([^)]*)\)/) || [])[1] || "";
+    let label = METHOD_JA[b.cat] || "", detail = "";
+    if (b.cat === "KO") label = /^tko/i.test(m) ? "TKO" : "KO";
+    if (b.cat === "DEC") {
+      label = "判定";
+      detail = /unanimous/i.test(m) ? "ユナニマス（3-0）" : /split/i.test(m) ? (me ? "スプリット（2-1）" : "スプリット（1-2）") : /majority/i.test(m) ? "マジョリティ" : "";
+    } else if (inner) {
+      const parts = inner.split(/\s+and\s+|,\s*/i).map(x => { const hit = MJ.find(([re]) => re.test(x)); return hit ? hit[1] : x; });
+      detail = [...new Set(parts)].join("・");
+    }
+    return { label, detail, cls: b.cat === "KO" ? "ko" : b.cat === "SUB" ? "sub" : "dec" };
+  }
+  const fvKey = b => `${b.date}|${b.winner}|${b.loser}`;
+  const fvOf = b => ((window.FIGHT_VIDEOS || {})[fvKey(b)] || [])[0] || null;
+  const FV_KIND = { full: "試合映像", highlight: "ハイライト", interview: "試合後インタビュー" };
+  function fightCard(b, key) {
+    const me = b.winner === key, opp = me ? b.loser : b.winner;
+    const res = b.outcome === "NC" ? "NC" : b.outcome === "D" ? "D" : me ? "W" : "L";
+    const RES = { W: "WIN", L: "LOSS", D: "DRAW", NC: "NC" };
+    const mp = methodParts(b, me), d = b.delta && b.delta[key], v = fvOf(b);
+    const finish = res === "W" && (b.cat === "KO" || b.cat === "SUB");
+    return `<article class="fx ${res}" data-res="${res}" data-fin="${finish ? 1 : 0}" data-vid="${v ? 1 : 0}" data-rizin="${b.rizin ? 1 : 0}">
+      <div class="fx-res"><b>${RES[res]}</b><small>${esc(b.round ? `${b.round}R` : "")}${b.time ? ` ${esc(b.time)}` : ""}</small></div>
+      <div class="fx-bd">
+        <a class="fx-op" href="/fighters/${encodeURIComponent(opp)}/">${av(opp, "m")}<span><small>vs</small><b>${esc(S.nameOf(opp))}</b></span></a>
+        <div class="fx-how"><em class="${mp.cls}">${esc(mp.label)}</em>${mp.detail ? `<span>${esc(mp.detail)}</span>` : ""}${b.rizinTitle ? '<span class="mini-badge">TITLE</span>' : ""}</div>
+        <div class="fx-ev">${b.rizin ? "" : '<span class="fx-out">RIZIN以外</span>'}${esc(evName(b.event))}・${fmtDate(b.date)}${d ? deltaHtml(d) : ""}</div>
+      </div>
+      ${v ? `<button class="fx-vd" type="button" data-fx-play="${esc(v.yt)}" aria-label="${esc(S.nameOf(opp))}戦の動画を再生する（YouTube）">
+          <img src="${ytThumb(v.yt, "mqdefault")}" alt="" loading="lazy" decoding="async" width="320" height="180" onerror="this.remove()">
+          <span class="fx-pl" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+          <span class="fx-vk">${esc(FV_KIND[v.kind] || "動画")}・RIZIN公式</span></button>` : ""}
+    </article>`;
+  }
+  function fightHistory(key, p) {
+    const all = p.fights.slice().reverse(), riz = all.filter(b => b.rizin), out = all.filter(b => !b.rizin), t = p.riz;
+    if (!all.length) return "";
+    const nVid = all.filter(fvOf).length, nWin = riz.filter(b => b.winner === key && b.outcome !== "NC" && b.outcome !== "D").length;
+    const nFin = riz.filter(b => b.winner === key && (b.cat === "KO" || b.cat === "SUB")).length;
+    // ベストフィニッシュ：動画がある勝ち試合のうち、KO・一本で決着が早いもの
+    const secs = b => (+b.round || 9) * 300 + (String(b.time || "5:00").split(":").reduce((a, x) => a * 60 + +x, 0));
+    const best = all.filter(b => b.winner === key && (b.cat === "KO" || b.cat === "SUB") && fvOf(b)).sort((a, b) => secs(a) - secs(b))[0];
+    const LIMIT = 6;
+    return `<section class="section fh" id="fh" aria-labelledby="fhT">
+      <div class="fh-top"><h2 id="fhT"><small>Fight History</small>試合履歴</h2>
+        <div class="fh-sum">RIZIN <b>${riz.length}戦 ${rec(t)}</b>・KO/TKO <b>${t.ko}</b>・一本 <b>${t.sub}</b>・判定 <b>${t.dec}</b>${nVid ? `・<b>${nVid}試合</b>に動画あり` : ""}</div></div>
+      <div class="fh-chips" role="group" aria-label="試合の絞り込み">
+        <button type="button" class="on" data-fh="all" aria-pressed="true">すべて ${riz.length}</button>
+        <button type="button" data-fh="win" aria-pressed="false">勝ち ${nWin}</button>
+        <button type="button" data-fh="fin" aria-pressed="false">KO・一本 ${nFin}</button>
+        ${nVid ? `<button type="button" data-fh="vid" aria-pressed="false">▶ 動画あり ${nVid}</button>` : ""}
+      </div>
+      ${best ? (() => { const mp = methodParts(best, true), v = fvOf(best); return `<div class="fh-best">
+        <button class="fh-best-th" type="button" data-fx-play="${esc(v.yt)}" aria-label="決着シーンを再生する（YouTube）"><img src="${ytThumb(v.yt)}" alt="" loading="lazy" decoding="async" width="1280" height="720" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${ytThumb(v.yt, "hqdefault")}'}else{this.remove()}"><span class="fx-pl big" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></button>
+        <div class="fh-best-tx"><div class="k">BEST FINISH ・ ${esc(FV_KIND[v.kind] || "動画")}（RIZIN公式）</div>
+          <h3>${esc(S.nameOf(best.loser))}を${esc(best.round)}R ${esc(best.time)}で${esc(mp.label === "一本" ? "一本勝ち" : mp.label)}</h3>
+          <div class="m">${esc(evName(best.event))}（${fmtDate(best.date)}）${mp.detail ? `・${esc(mp.detail)}` : ""}</div>
+          <button class="fh-go" type="button" data-fx-play="${esc(v.yt)}" data-fx-target="best">▶ 決着シーンを見る</button></div></div>`; })() : ""}
+      <div class="fh-list" id="fhList">${riz.map((b, i) => fightCard(b, key).replace("<article ", `<article ${i >= LIMIT ? "hidden data-more " : ""}`)).join("")}</div>
+      <p class="fh-empty note" id="fhEmpty" hidden>該当する試合はありません。</p>
+      ${riz.length > LIMIT ? `<button class="fh-more" type="button" id="fhMore">さらに表示（RIZIN ${riz.length - LIMIT}試合）</button>` : ""}
+      ${out.length ? `<details class="fh-out"><summary>RIZIN以外の試合（${out.length}）</summary><div class="fh-list">${out.map(b => fightCard(b, key)).join("")}</div></details>` : ""}
+    </section>`;
+  }
+  function fhFilter(mode) {
+    const sec = document.getElementById("fh"); if (!sec) return;
+    sec.querySelectorAll("[data-fh]").forEach(b => { const on = b.dataset.fh === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+    const more = document.getElementById("fhMore"); let n = 0;
+    sec.querySelectorAll("#fhList .fx").forEach(c => {
+      const ok = mode === "all" || (mode === "win" && c.dataset.res === "W") || (mode === "fin" && c.dataset.fin === "1") || (mode === "vid" && c.dataset.vid === "1");
+      const show = ok && (mode !== "all" || !c.hasAttribute("data-more") || (more && more.hidden));
+      c.hidden = !show; if (show) n++;
+    });
+    if (more) more.style.display = mode === "all" && !more.hidden ? "" : "none";
+    document.getElementById("fhEmpty").hidden = n > 0;
+  }
+  function fxPlay(btn) {
+    try { if (walk.player && isPlaying()) walk.player.pauseVideo(); } catch (e) {}
+    const id = btn.dataset.fxPlay;
+    const box = btn.dataset.fxTarget === "best" ? btn.closest(".fh-best").querySelector(".fh-best-th") : btn;
+    const fr = document.createElement("div"); fr.className = box.classList.contains("fh-best-th") ? "fh-best-th playing" : "fx-vd playing";
+    fr.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1" title="試合の動画（YouTube）" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+    box.replaceWith(fr);
+    const card = fr.closest(".fx"); if (card) card.classList.add("fx-playing");
   }
 
   /* ---------- RIZINの試合記録がまだない選手（data/newcomers.js） ----------
@@ -800,6 +881,9 @@
     const pk = e.target.closest(".song-pick"); if (pk) pickSong(+pk.dataset.idx);
     const mp = e.target.closest("[data-mc-play]"); if (mp) mcPlay(mp.dataset.mcPlay);
     const mk = e.target.closest("[data-mc-pick]"); if (mk) mcPick(+mk.dataset.mcPick);
+    const fhb = e.target.closest("[data-fh]"); if (fhb) fhFilter(fhb.dataset.fh);
+    if (e.target.id === "fhMore") { e.target.hidden = true; fhFilter("all"); }
+    const fxb = e.target.closest("[data-fx-play]"); if (fxb) fxPlay(fxb);
     if (e.target.closest("[data-mc-down]")) { const t = document.getElementById("fProfile"); if (t) t.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
   });
   document.addEventListener("change", e => {
