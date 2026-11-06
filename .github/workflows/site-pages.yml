@@ -24,7 +24,7 @@ jobs:
       - run: node tools/pages/build.js
       - name: コミット
         run: |
-          git add -A index.html 404.html sitemap-pages.xml sitemap.xml robots.txt fighters gyms rankings champions events stats cards about privacy contact compare create me admin login reset predict/index.html
+          git add -A index.html 404.html sitemap-pages.xml sitemap.xml robots.txt fighters rankings events stats about privacy contact compare me admin login reset predict/index.html
           if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
           # 別の自動処理と push がぶつかったら、最新の main に合わせて作り直して最大3回やり直す
           for i in 1 2 3; do
@@ -34,7 +34,7 @@ jobs:
             git rebase --abort 2>/dev/null || true
             git fetch -q origin main && git reset -q --hard origin/main
             node tools/pages/build.js
-            git add -A index.html 404.html sitemap-pages.xml sitemap.xml robots.txt fighters gyms rankings champions events stats cards about privacy contact compare create me admin login reset predict/index.html
+            git add -A index.html 404.html sitemap-pages.xml sitemap.xml robots.txt fighters rankings events stats about privacy contact compare me admin login reset predict/index.html
             if git diff --cached --quiet; then echo "変化なし"; exit 0; fi
             sleep $((i * 5))
           done
