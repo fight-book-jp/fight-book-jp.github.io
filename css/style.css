@@ -1548,21 +1548,62 @@ body{overflow-x:clip}
 .nc-vs span{font-family:"Barlow Condensed",sans-serif;color:var(--muted);margin:0 6px;font-size:16px}
 .nc-vs a{color:var(--accent)}
 
-/* 密着動画がある選手：ページ最上部の帯（B案） */
-.mc-top{background:#141810;color:#ECEDE4;padding:22px 0 18px}
-.mc-top .mc-in{max-width:1240px;margin:0 auto;padding:0 16px}
-.mc-top .sec-head{border-bottom-color:#3a4430}
-.mc-top .sec-head h2{color:#ECEDE4}
-.mc-top .sec-head h2 small{color:#B5C783}
-.mc-top .mc-card{border-color:#2E3524;color:var(--ink)}
-.mc-down{display:inline-flex;gap:6px;margin-top:12px;font-size:13px;font-weight:700;color:#C3C8B1;text-decoration:none}
-.mc-down span{transition:transform .2s}
-.mc-down:hover{color:#fff}.mc-down:hover span{transform:translateY(2px)}
-@media (max-width:620px){
-  .mc-top{padding:14px 0 12px}
-  .mc-top .mc-in{padding:0 12px}
-  .mc-top .mc-desc{display:none}
-  .mc-top .sec-head{margin-bottom:10px}
-}
-.mc-down{background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
+/* ---------- 密着動画：シネマ型（ページ最上部・全幅） ---------- */
+.mc-cine{background:#0b0d08;color:#fff;margin:0}
+.mc-cine .mc-in{max-width:1240px;margin:0 auto;padding:0 16px}
+.mc-stage{position:relative;overflow:hidden}
+.mc-cine .mc-player{position:relative;aspect-ratio:21/8;max-height:min(560px,72vh);width:100%;background:#0b0d08}
+.mc-cine .mc-facade{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;cursor:pointer;background:linear-gradient(135deg,#2a3320,#0b0d08);display:block}
+.mc-cine .mc-facade img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 30%;transition:transform .6s ease}
+.mc-cine .mc-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,10,6,.94) 0%,rgba(8,10,6,.78) 30%,rgba(8,10,6,.25) 58%,rgba(8,10,6,0) 72%),linear-gradient(0deg,rgba(8,10,6,.55),transparent 35%)}
+.mc-cine .mc-badge{position:absolute;right:16px;top:16px;left:auto;background:rgba(0,0,0,.6);color:#fff;font-size:11px;font-weight:800;letter-spacing:.06em;padding:4px 9px}
+.mc-cine .mc-play{position:absolute;left:auto;right:20%;top:50%;width:84px;height:84px;margin:-42px 0 0;border-radius:50%;background:#B5C783;color:#11140D;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 8px rgba(181,199,131,.22);transition:transform .2s ease}
+.mc-cine .mc-play svg{margin-left:4px}
+.mc-cine .mc-facade:hover img{transform:scale(1.03)}
+.mc-cine .mc-facade:hover .mc-play,.mc-cine .mc-facade:focus-visible .mc-play{transform:scale(1.08)}
+.mc-cine .mc-facade:focus-visible{outline:3px solid #B5C783;outline-offset:-3px}
+.mc-over{position:absolute;inset:0;display:flex;align-items:center;pointer-events:none}
+.mc-over .mc-in{width:100%}
+.mc-over .mc-in>*{max-width:520px}
+.mc-cine .mc-kicker{font-size:12px;font-weight:800;letter-spacing:.08em;color:#B5C783;margin-bottom:10px}
+.mc-cine .mc-title{margin:0;font-weight:900;line-height:1.25;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.mc-cine .mc-title span{display:block;font-size:clamp(26px,3.2vw,44px)}
+.mc-cine .mc-title small{display:block;font-size:clamp(18px,1.9vw,26px);font-weight:800;color:#E3E6D8;margin-top:4px}
+.mc-cine .mc-desc{margin:12px 0 0;font-size:14px;line-height:1.8;color:#D3D7C8}
+.mc-acts{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px}
+.mc-go{pointer-events:auto;display:inline-flex;align-items:center;gap:8px;background:#B5C783;color:#11140D;border:0;border-radius:999px;padding:13px 24px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .15s,background .15s}
+.mc-go:hover{background:#c6d797;transform:translateY(-1px)}
+.mc-go:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.mc-cine .mc-yt{pointer-events:auto;font-size:13px;font-weight:700;color:#C9D3A8;text-decoration:none;margin:0}
+.mc-cine .mc-yt:hover{color:#fff;text-decoration:underline}
+.mc-cine .mc-list{pointer-events:auto;display:flex;gap:8px;margin-top:16px;max-width:none;overflow-x:auto;scrollbar-width:thin}
+.mc-cine .mc-pick{display:flex;align-items:center;gap:8px;flex:0 0 auto;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.18);color:#fff;padding:4px 10px 4px 4px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;max-width:240px;text-align:left;line-height:1.35}
+.mc-cine .mc-pick[aria-pressed="true"]{border-color:#B5C783;background:rgba(181,199,131,.18)}
+.mc-cine .mc-th{width:64px;flex:0 0 64px;aspect-ratio:16/9;background:#232a1b;overflow:hidden;display:block}
+.mc-cine .mc-th img{width:100%;height:100%;object-fit:cover;display:block}
+.mc-bar{background:#11140D;border-top:1px solid #232a1b}
+.mc-bar .mc-in{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
+.mc-cine .mc-now{font-size:12px;color:#A4A995;display:flex;gap:10px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;background:none;border:0;padding:0}
+.mc-cine .mc-now b{color:#ECEDE4;font-weight:800}
+.mc-cine .mc-down{display:inline-flex;gap:6px;background:none;border:0;padding:8px 0;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;color:#C3C8B1;white-space:nowrap}
+.mc-cine .mc-down:hover{color:#fff}
+/* 再生中：文字を消して、16:9のプレーヤーを中央に */
+.mc-cine.playing .mc-over{display:none}
+.mc-cine.playing .mc-player{aspect-ratio:16/9;max-height:none;max-width:min(1100px,100%,calc(78vh * 16 / 9));margin:0 auto}
+.mc-cine .mc-player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 #fProfile{scroll-margin-top:60px}
+@media (max-width:760px){
+  .mc-cine .mc-player{aspect-ratio:4/5;max-height:78vh}
+  .mc-cine .mc-facade img{object-position:50% 20%}
+  .mc-cine .mc-shade{background:linear-gradient(0deg,rgba(8,10,6,.96) 0%,rgba(8,10,6,.82) 34%,rgba(8,10,6,.2) 60%,rgba(8,10,6,0) 72%)}
+  .mc-cine .mc-play{right:auto;left:50%;top:32%;margin:-36px 0 0 -36px;width:72px;height:72px}
+  .mc-over{align-items:flex-end;padding-bottom:18px}
+  .mc-over .mc-in{padding:0 16px}
+  .mc-cine .mc-desc{display:none}
+  .mc-cine .mc-title span{font-size:26px}.mc-cine .mc-title small{font-size:17px}
+  .mc-acts{margin-top:14px;gap:14px}
+  .mc-go{padding:12px 20px;font-size:15px}
+  .mc-cine .mc-list{margin-top:12px}
+  .mc-cine.playing .mc-player{aspect-ratio:16/9;max-height:none}
+}
+@media (prefers-reduced-motion:reduce){.mc-cine .mc-facade img,.mc-cine .mc-play,.mc-go{transition:none}}

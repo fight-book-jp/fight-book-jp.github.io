@@ -628,54 +628,61 @@
     teletama: { badge: "テレ玉", kicker: "SPOTLIGHT ・ テレ玉", desc: "選手に密着した特集番組『SPOTLIGHT』。リングに上がるまでの日々や、戦い続ける理由に迫ります。" },
   };
   const mcSrc = v => MC_SRC[v.src] || MC_SRC.rizin;
+  // 映像のサムネイル（押すまでYouTubeは読み込まない）。文字は重ねず、バッジと再生ボタンだけ
   function mcFacade(v, name) {
     return `<button class="mc-facade" type="button" data-mc-play="${esc(v.yt)}" aria-label="${esc(name)}の密着動画を再生する（YouTube）">
-        <img src="${ytThumb(v.yt)}" alt="" loading="lazy" decoding="async" width="1280" height="720"
+        <img src="${ytThumb(v.yt)}" alt="" decoding="async" fetchpriority="high" width="1280" height="720"
           onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${ytThumb(v.yt, "hqdefault")}'}else{this.remove()}">
         <span class="mc-shade" aria-hidden="true"></span>
         <span class="mc-badge" aria-hidden="true">${esc(mcSrc(v).badge)}</span>
-        <span class="mc-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
-        <span class="mc-cap" aria-hidden="true"><small>${esc(v.series || "密着")}</small><b>${esc(name)}に密着</b></span>
+        <span class="mc-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="34" height="34"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
       </button>`;
   }
+  /* シネマ型：横長の映像を画面幅いっぱいに出し、左（スマホは下）に名前・紹介文・再生ボタンを重ねる。
+     再生を押すと文字を消して、16:9のプレーヤーに切り替える */
   function mitchakuSection(key) {
     const list = mcOf(key); if (!list.length) return "";
     const name = nameAny(key), v = list[0];
-    // 密着動画がある選手は、ページの一番上（メニューの直下）に全幅の帯で出す
-    return `<section class="mc mc-top" id="mc" data-key="${esc(key)}" aria-labelledby="mcT"><div class="mc-in">
-      <div class="sec-head"><h2 id="mcT">公式の密着動画<small>Official Documentary</small></h2></div>
-      <div class="mc-card">
+    return `<section class="mc mc-cine" id="mc" data-key="${esc(key)}" aria-labelledby="mcT">
+      <div class="mc-stage">
         <div class="mc-player" id="mcPlayer">${mcFacade(v, name)}</div>
-        <div class="mc-side">
+        <div class="mc-over"><div class="mc-in">
           <div class="mc-kicker" id="mcKick">${esc(mcSrc(v).kicker)}</div>
-          <h3 class="mc-title">リングの外の、${esc(name)}。</h3>
+          <h2 class="mc-title" id="mcT"><span>${esc(name)}</span><small>リングの外の素顔。</small></h2>
           <p class="mc-desc" id="mcDesc">${esc(mcSrc(v).desc)}</p>
-          <div class="mc-now" id="mcNow"${list.length > 1 ? " hidden" : ""}><small>再生する動画</small><b>${esc(mcLabel(v))}</b></div>
-          ${list.length > 1 ? `<div class="mc-sub">${list.length}本の密着動画</div>` : ""}
-          ${list.length > 1 ? `<div class="mc-list" role="list" aria-label="ほかの密着動画">${list.map((x, i) => `<button class="mc-pick" type="button" role="listitem" data-mc-pick="${i}" aria-pressed="${i === 0}">
+          <div class="mc-acts">
+            <button class="mc-go" type="button" data-mc-play="${esc(v.yt)}" id="mcGo"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>密着動画を見る</button>
+            <a class="mc-yt" id="mcYt" href="https://www.youtube.com/watch?v=${esc(v.yt)}" target="_blank" rel="noopener">YouTubeで開く<span aria-hidden="true">↗</span></a>
+          </div>
+          ${list.length > 1 ? `<div class="mc-list" role="list" aria-label="密着動画（${list.length}本）">${list.map((x, i) => `<button class="mc-pick" type="button" role="listitem" data-mc-pick="${i}" aria-pressed="${i === 0}">
               <span class="mc-th"><img src="${ytThumb(x.yt, "mqdefault")}" alt="" loading="lazy" decoding="async" width="320" height="180" onerror="this.remove()"></span><span>${esc(mcLabel(x))}</span></button>`).join("")}</div>` : ""}
-          <a class="mc-yt" id="mcYt" href="https://www.youtube.com/watch?v=${esc(v.yt)}" target="_blank" rel="noopener">YouTubeで開く<span aria-hidden="true">↗</span></a>
-        </div>
+        </div></div>
       </div>
-      <button class="mc-down" type="button" data-mc-down>${esc(name)}のプロフィール・戦績を見る<span aria-hidden="true">↓</span></button>
-    </div></section>`;
+      <div class="mc-bar"><div class="mc-in">
+        <span class="mc-now" id="mcNow"><b>${esc(v.series || "密着")}</b>${v.note ? `<span>${esc(v.note)}</span>` : ""}</span>
+        <button class="mc-down" type="button" data-mc-down>プロフィール・戦績を見る<span aria-hidden="true">↓</span></button>
+      </div></div>
+    </section>`;
   }
   function mcPlay(id) {
     const box = document.getElementById("mcPlayer"); if (!box) return;
     try { if (walk.player && isPlaying()) walk.player.pauseVideo(); } catch (e) {}   // 入場曲と重ならないように止める
-    box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1" title="公式の密着動画（YouTube）" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+    const sec = document.getElementById("mc"); if (sec) sec.classList.add("playing");
+    box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1" title="密着動画（YouTube）" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   }
   function mcPick(i) {
     const sec = document.getElementById("mc"); if (!sec) return;
     const key = sec.dataset.key, list = mcOf(key), v = list[i]; if (!v) return;
-    const playing = !!sec.querySelector("#mcPlayer iframe");
+    const playing = sec.classList.contains("playing");
     document.getElementById("mcPlayer").innerHTML = mcFacade(v, nameAny(key));
     if (playing) mcPlay(v.yt);
-    sec.querySelector("#mcNow b").textContent = mcLabel(v);
+    sec.querySelector("#mcNow").innerHTML = `<b>${esc(v.series || "密着")}</b>${v.note ? `<span>${esc(v.note)}</span>` : ""}`;
     sec.querySelector("#mcKick").textContent = mcSrc(v).kicker; sec.querySelector("#mcDesc").textContent = mcSrc(v).desc;
+    sec.querySelector("#mcGo").dataset.mcPlay = v.yt;
     sec.querySelector("#mcYt").href = `https://www.youtube.com/watch?v=${encodeURIComponent(v.yt)}`;
     sec.querySelectorAll(".mc-pick").forEach(b => b.setAttribute("aria-pressed", +b.dataset.mcPick === i));
   }
+
 
   // 画面右下のプレーヤー枠（ページ全体で1つ）
   const dock = document.createElement("div");
