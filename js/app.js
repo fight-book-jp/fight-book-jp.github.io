@@ -595,15 +595,15 @@
   function fightCard(b, key) {
     const me = b.winner === key, opp = me ? b.loser : b.winner;
     const res = b.outcome === "NC" ? "NC" : b.outcome === "D" ? "D" : me ? "W" : "L";
-    const RES = { W: "WIN", L: "LOSS", D: "DRAW", NC: "NC" };
-    const mp = methodParts(b, me), d = b.delta && b.delta[key], v = fvOf(b);
+    const RES = { W: "勝ち", L: "負け", D: "引き分け", NC: "無効" };
+    const mp = methodParts(b, me), v = fvOf(b);
     const finish = res === "W" && (b.cat === "KO" || b.cat === "SUB");
     return `<article class="fx ${res}" data-res="${res}" data-fin="${finish ? 1 : 0}" data-vid="${v ? 1 : 0}" data-rizin="${b.rizin ? 1 : 0}">
       <div class="fx-res"><b>${RES[res]}</b><small>${esc(b.round ? `${b.round}R` : "")}${b.time ? ` ${esc(b.time)}` : ""}</small></div>
       <div class="fx-bd">
         <a class="fx-op" href="/fighters/${encodeURIComponent(opp)}/">${av(opp, "m")}<span><small>vs</small><b>${esc(S.nameOf(opp))}</b></span></a>
         <div class="fx-how"><em class="${mp.cls}">${esc(mp.label)}</em>${mp.detail ? `<span>${esc(mp.detail)}</span>` : ""}${b.rizinTitle ? '<span class="mini-badge">TITLE</span>' : ""}</div>
-        <div class="fx-ev">${b.rizin ? "" : '<span class="fx-out">RIZIN以外</span>'}${esc(evName(b.event))}・${fmtDate(b.date)}${d ? deltaHtml(d) : ""}</div>
+        <div class="fx-ev">${b.rizin ? "" : '<span class="fx-out">RIZIN以外</span>'}${esc(evName(b.event))}・${fmtDate(b.date)}</div>
       </div>
       ${v ? `<button class="fx-vd" type="button" data-fx-play="${esc(v.yt)}" aria-label="${esc(S.nameOf(opp))}戦の動画を再生する（YouTube）">
           <img src="${ytThumb(v.yt, "mqdefault")}" alt="" loading="lazy" decoding="async" width="320" height="180" onerror="this.remove()">
