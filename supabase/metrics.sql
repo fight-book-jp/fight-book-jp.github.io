@@ -179,3 +179,8 @@ from events group by 1 order by 1 desc limit 12;
 with w as (select distinct anon_id, date_trunc('week', created_at)::date wk from events where name = 'daily_visit')
 select a.wk, count(*) as visitors, count(b.anon_id) as returned_next_week, round(100.0 * count(b.anon_id) / nullif(count(*), 0), 1) as rate_pct
 from w a left join w b on b.anon_id = a.anon_id and b.wk = a.wk + 7 group by 1 order by 1 desc limit 12;
+
+-- 【流入元】?from=x / ?from=ig などから来た端末数（日ごと）。2026-11-06 以降に記録開始
+select created_at::date as day, coalesce(nullif(props->>'from',''), props->>'rf') as source,
+       count(distinct anon_id) as devices
+from events where name = 'landing' group by 1, 2 order by 1 desc, 3 desc;

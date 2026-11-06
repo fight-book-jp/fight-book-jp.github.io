@@ -1884,7 +1884,13 @@ window.FBC_INIT = function (H) {
   if (ENABLED) {
     ready().then(async () => {
       paintMe();
-      track("daily_visit", null, { logged_in: loggedIn(), ref: new URLSearchParams(location.search).get("ref") || "" }, `dv:${anon}:${today()}`);
+      const qs = new URLSearchParams(location.search);
+      const from = (qs.get("from") || "").slice(0, 20);
+      let rf = ""; try { rf = document.referrer ? new URL(document.referrer).hostname.slice(0, 60) : ""; } catch (_) {}
+      if (rf === location.hostname) rf = "";
+      track("daily_visit", null, { logged_in: loggedIn(), ref: qs.get("ref") || "", from, rf, path: location.pathname.slice(0, 80) }, `dv:${anon}:${today()}`);
+      // 流入元（?from=x / ?from=ig など）は、同じ日の2回目以降の訪問でも記録する（端末×流入元×日で1回）
+      if (from || rf) track("landing", null, { from, rf, path: location.pathname.slice(0, 80) }, `ld:${anon}:${from || rf}:${today()}`);
       await afterAuthReturn();
     }).catch(() => {});
   }
