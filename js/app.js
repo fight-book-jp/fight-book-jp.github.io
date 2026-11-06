@@ -120,7 +120,6 @@
     const DATA = [
       ["/rankings/", "ランキング", "実力・注目度・大物食いなど"],
       ["/fighters/", "選手一覧", `${fighters}選手の戦績・レーティング`],
-      ["/champions/", "王者", "現王者と王座の歴史"],
       ["/events/", "大会一覧", `RIZIN ${riz.length}大会の全試合`],
       ["/stats/", "統計", "KO率・連勝・最多出場"],
     ];
@@ -1366,7 +1365,7 @@
       case "rankings": html = viewRankings(); break;
       case "fighters": html = viewFighters(); break;
       case "fighter": html = viewFighter(key); break;
-      case "champions": html = viewChampions(); break;
+      case "champions": location.replace("/rankings/"); return;  // 王者ページは廃止
       case "events": html = viewEvents(); break;
       case "stats": html = viewStats(); break;
       case "matchups": html = viewMatchups(arg); break;

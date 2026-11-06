@@ -101,8 +101,6 @@ pages.push(page("/rankings/", { title: "RIZIN選手ランキング（レーテ�
 const allF = Object.values(S.profiles).filter(p => p.riz.total > 0).sort((a, b) => b.rating - a.rating);
 pages.push(page("/fighters/", { title: `RIZIN出場選手一覧（全${allF.length}人）｜FIGHT BOOK`, desc: `RIZINに出場した全${allF.length}選手の一覧。階級・戦績・レーティングから選手を探せます。` },
   `<h1>RIZIN出場選手一覧</h1><ul>${allF.map(p => `<li>${link(p.key)}${p.division ? `（${esc(p.division)}）` : ""}</li>`).join("")}</ul>`));
-pages.push(page("/champions/", { title: "RIZIN歴代王者・タイトルマッチの歴史｜FIGHT BOOK", desc: "RIZINの各階級の現王者と、歴代のタイトルマッチの結果。" },
-  `<h1>RIZIN王者とタイトルマッチの歴史</h1><ul>${S.titleFights.slice().reverse().map(f => `<li>${fmt(f.date)} ${esc(f.titleDiv || "")}：${link(f.winner)} vs ${link(f.loser)}（${esc(f.event)}）</li>`).join("")}</ul>`));
 pages.push(page("/events/", { title: `RIZIN大会一覧・全試合結果（${riz.length}大会）｜FIGHT BOOK`, desc: "2015年からのRIZIN全大会のMMA試合結果を大会ごとに一覧できます。" },
   `<h1>RIZIN大会一覧</h1><ul>${riz.map(e => `<li>${fmt(e.date)} ${esc(e.name)}（MMA ${e.bouts.length}試合）</li>`).join("")}</ul>`));
 pages.push(page("/stats/", { title: "RIZIN統計・記録（KO率・一本勝ち・連勝など）｜FIGHT BOOK", desc: "RIZINのMMA試合から集計した統計。KO率、一本勝ち数、最多出場、最長連勝、秒殺、番狂わせなど。" },
