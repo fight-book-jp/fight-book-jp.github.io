@@ -401,13 +401,6 @@ window.FBC_INIT = function (H) {
         <div class="hp-head"><h2 id="hpT">次の一戦、あなたはどっち？</h2>
           <p>勝つと思う選手に投票。登録不要・締切まで変更OK</p></div>
         <div id="hpBox" aria-live="polite">${loading("対戦カードを読み込み中…")}</div>
-      </div></section>
-      <section class="hf" aria-labelledby="hfT"><div class="wrap">
-        <div class="hf-head">
-          <div><span class="hf-tag">ファン提案・開催未定</span><h2 id="hfT">次に見たい一戦を、ファンで語ろう</h2></div>
-          <a class="fz-btn hf-post" href="/create/" data-src="home_fan_post"><span aria-hidden="true">＋</span>投稿する</a>
-        </div>
-        <div id="hfList">${loading()}</div>
       </div></section>`;
   }
   async function loadHome() {
@@ -415,7 +408,6 @@ window.FBC_INIT = function (H) {
     await ready();
     paintMe();
     loadHomePredict();
-    loadHomeFans();
   }
   async function loadHomePredict() {
     const box = $("#hpBox"); if (!box) return;
@@ -908,7 +900,7 @@ window.FBC_INIT = function (H) {
       remember(d.created); remember(d.joined); remember(d.saved);
       const unread = n.items.filter(i => i.unread).length;
       d.comments = d.comments || []; d.predictions = d.predictions || [];
-      const T = [["notice", `お知らせ${unread ? `（${unread}）` : ""}`], ["comments", `コメント（${d.comments.length}）`], ["predictions", `予想（${d.predictions.length}）`], ["created", `作った（${d.created.length}）`], ["joined", `参加した（${d.joined.length}）`], ["saved", `保存（${d.saved.length}）`]];
+      const T = [["notice", `お知らせ${unread ? `（${unread}）` : ""}`], ["comments", `コメント（${d.comments.length}）`], ["predictions", `予想（${d.predictions.length}）`]]; if (!T.some(([k]) => k === mp.tab)) mp.tab = "notice"; 
       const body = mp.tab === "notice" ? noticeHtml(n.items) : mp.tab === "comments" ? myCommentsHtml(d.comments) : mp.tab === "predictions" ? myPredHtml(d.predictions) : grid(d[mp.tab].map(c => c.status === "public" ? c : { ...c, _hidden: true }), c => ({ src: "me_" + mp.tab, label: c._hidden ? "非公開になりました" : "" })) || `<p class="note">${{ created: "まだカードを作っていません。", joined: "まだ参加したカードはありません。", saved: "保存したカードはありません。" }[mp.tab]}</p>`;
       box.innerHTML = `<div class="fb-me-head">${d.profile.avatar ? `<img src="${esc(d.profile.avatar)}" alt="" width="48" height="48" referrerpolicy="no-referrer">` : ""}<div><b>${esc(d.profile.name)}</b>${d.profile.username ? `<small>@${esc(d.profile.username)}</small>` : ""}</div>
           <div class="fb-me-acts">${d.profile.admin ? '<a class="btn small" href="/admin/">通報の確認</a><button class="btn small ghost" data-logout>ログアウト</button>' : ""}</div></div>
@@ -922,7 +914,7 @@ window.FBC_INIT = function (H) {
   }
   // 自分のコメント（大会予想・見たいカード）
   function myCommentsHtml(list) {
-    if (!list.length) return `<p class="note">まだコメントはありません。<a href="/predict/">大会予想</a>の各試合の下や、<a href="/cards/">見たいカード</a>からコメントできます。</p>`;
+    if (!list.length) return `<p class="note">まだコメントはありません。<a href="/predict/">大会予想</a>の各試合の下からコメントできます。</p>`;
     return `<ul class="fb-notice my-cm">${list.map(c => {
       const href = c.kind === "event" ? `/predict/${encodeURIComponent(c.event_id)}/?c=${c.id}` : `/matchups/${encodeURIComponent(c.card_id)}/?focus=comments`;
       const where = c.kind === "event" ? `${esc(c.event_name)}${c.bout ? `・${esc(c.bout)}` : ""}` : (valid(c.fa) && valid(c.fb) ? `見たいカード：${nm(c.fa)} vs ${nm(c.fb)}` : "見たいカード");
@@ -986,13 +978,12 @@ window.FBC_INIT = function (H) {
     return doc("FIGHT BOOKについて", "About", `
       <h2>このサイトについて</h2>
       <p>FIGHT BOOK（ファイトブック）は、格闘技ファンが運営する<b>非公式のファンサイト</b>です。RIZINをはじめとする団体・選手・関係者とは関係ありません。</p>
-      <p>「格闘技の素晴らしさを、もっと多くの人へ。」を目標に、2015年からのRIZIN全大会のMMA試合をもとにした選手データベースと、ファン同士が「次に見たい一戦」を語り合う場所を提供しています。</p>
+      <p>「格闘技の素晴らしさを、もっと多くの人へ。」を目標に、2015年からのRIZIN全大会のMMA試合をもとにした選手データベースと、大会の勝敗をファン同士で予想して語り合う場所を提供しています。</p>
       <h2>データについて</h2>
       <p>選手の戦績・レーティング・統計は、公開されている試合結果をもとに自動で計算しています。主な出典は Wikipedia などで、出典の一覧はページ下部に記載しています。誤りに気づいた場合は<a href="/contact/">お問い合わせ</a>からお知らせください。確認のうえ訂正します。</p>
       <p>レーティングや勝率の予想は、計算にもとづく目安であり、実際の結果を保証するものではありません。</p>
-      <h2>ファンの見たい対戦カードについて</h2>
-      <ul><li>カードはファンによる提案で、実際の対戦を決めるものではありません。</li>
-        <li>運営が作ったカードには「編集部提案」と表示します。架空のユーザーや票・コメントは作りません。</li>
+      <h2>勝敗予想とコメントについて</h2>
+      <ul><li>予想の割合やコメントは、実際に訪問した方の投稿だけを集計・表示しています。架空のユーザーや票・コメントは作りません。</li>
         <li>選手や他のファンへの侮辱・差別・個人情報の書き込みは、管理者が削除します。</li></ul>
       <h2>運営</h2>
       <p>FIGHT BOOK 運営（個人運営）。ご連絡は<a href="/contact/">お問い合わせ</a>からお願いします。</p>`);

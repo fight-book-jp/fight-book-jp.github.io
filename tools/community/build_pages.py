@@ -16,7 +16,7 @@ GitHub Pages は静的配信なので、X などが JavaScript を動かさず�
 import argparse
 import hashlib
 import html
-import json
+import json, shutil
 import os
 import re
 import sys
@@ -206,7 +206,8 @@ def main():
     ap.add_argument("--events", help="export_fight_events() の結果（任意）")
     ap.add_argument("--no-images", action="store_true", help="画像を作らない（テスト用）")
     args = ap.parse_args()
-    cards = json.load(open(args.cards, encoding="utf-8"))
+    cards = []   # 「見たい一戦」は廃止。カードの共有ページ（/matchups/）は作らず、残っていれば消す
+    shutil.rmtree(OUT_DIR, ignore_errors=True)
     names = json.load(open(args.names, encoding="utf-8"))
     template = open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()
     tpl_hash = hashlib.sha1((template + VERSION).encode()).hexdigest()

@@ -89,7 +89,7 @@ for (const p of Object.values(S.profiles)) {
       ["所属ジム", gyms.map(g => esc(g.name)).join("、")]]
       .filter(r => r[1]).map(r => `<li><b>${r[0]}</b>：${r[0] === "所属ジム" ? r[1] : esc(r[1])}</li>`).join("")}</ul>` +
     `<h2>試合結果（新しい順）</h2><ul>${rows}</ul>` +
-    `<p><a href="/create/?a=${enc(k)}">${esc(nm(k))}の次の相手を提案する</a> ・ <a href="/rankings/">ランキング</a></p>`;
+    `<p><a href="/predict/">勝敗予想</a> ・ <a href="/rankings/">ランキング</a></p>`;
   pages.push(page(`/fighters/${enc(k)}/`, { title, desc, type: "profile" }, body));
 }
 
@@ -107,15 +107,13 @@ pages.push(page("/events/", { title: `RIZIN大会一覧・全試合結果（${ri
   `<h1>RIZIN大会一覧</h1><ul>${riz.map(e => `<li>${fmt(e.date)} ${esc(e.name)}（MMA ${e.bouts.length}試合）</li>`).join("")}</ul>`));
 pages.push(page("/stats/", { title: "RIZIN統計・記録（KO率・一本勝ち・連勝など）｜FIGHT BOOK", desc: "RIZINのMMA試合から集計した統計。KO率、一本勝ち数、最多出場、最長連勝、秒殺、番狂わせなど。" },
   `<h1>RIZIN統計・記録</h1><p>KO率・一本勝ち・最多出場・最長連勝・秒殺・番狂わせなどの記録をまとめています。</p>`));
-pages.push(page("/cards/", { title: "ファンが見たい対戦カード（急上昇・週間・新着）｜FIGHT BOOK", desc: "格闘技ファンが「次に見たい一戦」を提案し、投票・コメントで語り合うページ。ファンの提案であり、実際の対戦を決めるものではありません。" },
-  `<h1>ファンが見たい対戦カード</h1><p>格闘技ファンが「次に見たい一戦」を提案し、「見たい！」とコメントで語り合います。</p>`));
 pages.push(page("/predict/", { title: "大会の勝敗予想（RIZIN）｜FIGHT BOOK", desc: "RIZINの大会の対戦カードの勝敗を予想して、ファン同士で語り合うページ。みんなの予想の割合や、的中ランキングも見られます。" },
   `<h1>大会の勝敗予想</h1><p>大会の対戦カードの勝敗を予想して、ファン同士で語り合えます。</p>`));
 pages.push(page("/about/", { title: "FIGHT BOOKについて｜FIGHT BOOK", desc: "FIGHT BOOKは、RIZINの全選手データと、ファン同士で見たい対戦を語り合う場を提供する非公式ファンサイトです。" }, `<h1>FIGHT BOOKについて</h1>`));
 pages.push(page("/privacy/", { title: "プライバシーポリシー｜FIGHT BOOK", desc: "FIGHT BOOKのプライバシーポリシー（取得する情報・利用目的・広告・Cookie・お問い合わせ）。" }, `<h1>プライバシーポリシー</h1>`));
 pages.push(page("/contact/", { title: "お問い合わせ｜FIGHT BOOK", desc: "FIGHT BOOKへのお問い合わせ・投稿の削除依頼・掲載内容の訂正依頼はこちら。" }, `<h1>お問い合わせ</h1>`));
 // 検索対象にしないページ（ログイン・作成・マイページなど）
-for (const [rel, title] of [["/compare/", "対戦データ比較"], ["/create/", "見たい対戦を作る"], ["/me/", "マイページ"],
+for (const [rel, title] of [["/compare/", "対戦データ比較"], ["/me/", "マイページ"],
   ["/admin/", "管理"], ["/login/", "管理者ログイン"], ["/reset/", "パスワードの再設定"]]) {
   pages.push(page(rel, { title: `${title}｜FIGHT BOOK`, desc: HOME.desc, noindex: true }, ""));
 }

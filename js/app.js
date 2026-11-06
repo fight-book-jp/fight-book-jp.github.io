@@ -127,7 +127,7 @@
     return `
     <section class="hero hero-s"><div class="hero-in">
       <div class="kicker">RIZIN ファンの予想とトーク</div>
-      <h1 class="hero-h">勝敗を予想する。<br>次に見たい一戦を語る。</h1>
+      <h1 class="hero-h">勝敗を予想する。<br>ファンと語る。</h1>
       <p class="hero-sub">RIZINの非公式ファンサイト・登録不要</p>
     </div></section>
     ${FBC && FBC.enabled ? FBC.homeTop() : ""}
@@ -448,7 +448,6 @@
         <div><b>${t.d}</b><small>分</small></div><div><b>${t.nc}</b><small>無効</small></div>
       </div>
       <p class="note" style="margin-top:8px">上の数字はRIZINでのMMA戦績です。${f && !f.partial ? `プロ通算は ${rec(p.pro)}${p.pro.nc ? `（無効${p.pro.nc}）` : ""}。` : ""}${f && f.partial ? "この選手はRIZIN外の戦績を集めきれていません。" : ""}</p>
-      ${FBC ? FBC.fighterPanel(key) : ""}
       ${socialSection(key)}
       <div class="f-cols">
         <div>
@@ -792,8 +791,6 @@
             <div class="pcts"><b class="r">${Math.round(pa * 100)}%</b><small>勝率予想</small><b class="b">${Math.round((1 - pa) * 100)}%</b></div></div>
           <div class="mu-note">${sameDiv ? `${esc(P(a).division)}の一戦` : "階級が異なるカードです"}${met.length ? `・過去${met.length}戦` : "・初対戦"}</div>
           <div class="mu-actions">
-            ${FBC && FBC.enabled ? `<a class="btn-want" href="/create/?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}">＋ この対戦をみんなに聞く</a>`
-              : `<button class="btn-want ${isSaved ? "on" : ""}" id="muWant" aria-pressed="${isSaved}">${isSaved ? "♥ 見たいリストに追加済み" : "♡ この対戦を見たい！"}</button>`}
             <div class="mu-sub"><button class="ghost" id="muSwap" aria-label="コーナーを入れ替える">⇄ 入れ替え</button><button class="ghost" id="muShare">🔗 リンクをコピー</button></div>
           </div>
         </div>
@@ -1379,6 +1376,7 @@
       case "stats": html = viewStats(); break;
       case "matchups": html = viewMatchups(arg); break;
       case "gyms": case "gym": location.replace("/fighters/"); return;  // ジムページは廃止
+      case "cards": case "c": case "create": location.replace("/predict/"); return;  // 見たい一戦は廃止
       case "cards": case "c": case "create": case "me": case "admin": case "login": case "reset": case "about": case "privacy": case "contact": case "predict": case "pevent":
         html = FBC ? FBC.view(page, parts.map(x => decodeURIComponent(x || ""))) : viewHome(); break;
       default: html = viewHome();
