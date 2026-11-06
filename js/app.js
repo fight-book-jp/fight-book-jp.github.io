@@ -112,7 +112,7 @@
 
   /* ---------- トップ ---------- */
   function viewHome() {
-    // ホームの役割：①決定済み試合の勝敗予想（主役） ②ファンが見たい一戦を語る。選手データは入口だけを置く
+    // ホームの役割：①決定済み試合の勝敗予想（主役） ②選手データへの入口
     const riz = S.events.filter(e => e.rizin);
     const fighters = Object.values(S.profiles).filter(p => p.riz.total > 0).length;
     const bouts = riz.reduce((n, e) => n + e.bouts.length, 0);
@@ -126,8 +126,8 @@
     ];
     return `
     <section class="hero hero-s"><div class="hero-in">
-      <div class="kicker">RIZIN ファンの予想とトーク</div>
-      <h1 class="hero-h">勝敗を予想する。<br>ファンと語る。</h1>
+      <div class="kicker">RIZIN ファンの勝敗予想</div>
+      <h1 class="hero-h">勝敗を予想する。<br>みんなの予想を見る。</h1>
       <p class="hero-sub">RIZINの非公式ファンサイト・登録不要</p>
     </div></section>
     ${FBC && FBC.enabled ? FBC.homeTop() : ""}
@@ -808,11 +808,6 @@
           : `<p class="note">まだ対戦したことのない、まさに「夢のカード」です。</p>`}
       </section>
 
-      ${FBC && FBC.enabled ? "" : `<section class="section">
-        <div class="sec-head"><h2>あなたの見たいカード（${saved.length}）<small>My List</small></h2></div>
-        ${saved.length ? `<div class="mu-grid">${saved.slice().reverse().filter(m => P(m.a) && P(m.b)).map(m => miniCard(m.a, m.b)).join("")}</div>`
-          : `<p class="note">「この対戦を見たい！」を押したカードがここに並びます（このブラウザに保存されます）。</p>`}
-      </section>`}
 
       <section class="section">
         <div class="sec-head"><h2>実現したら熱いカード<small>Dream Cards</small></h2></div>
@@ -1386,7 +1381,7 @@
     document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.r === page || (page === "fighter" && a.dataset.r === "fighters") || (page === "gym" && a.dataset.r === "gyms") || (["c", "create"].includes(page) && a.dataset.r === "cards") || (page === "pevent" && a.dataset.r === "predict")));
     document.getElementById("nav").classList.remove("open");
     document.getElementById("menuBtn").setAttribute("aria-expanded", "false");
-    const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計", matchups: "見たい対戦カード", gyms: arg === "compare" ? "ジム比較" : "ジム一覧" };
+    const titles = { rankings: "ランキング", fighters: "選手一覧", champions: "王者", events: "大会一覧", stats: "統計", matchups: "対戦データ比較", gyms: arg === "compare" ? "ジム比較" : "ジム一覧" };
     document.title = (page === "fighter" && P(key) ? S.nameOf(key) : page === "gym" && GYMS[key] ? GYMS[key].name : titles[page] || (FBC && FBC.title(page)) || "RIZIN選手データベース") + "｜FIGHT BOOK";
     window.scrollTo(0, keepScroll === true ? y : 0);
     if (FBC) FBC.after(page || "", parts.map(x => decodeURIComponent(x || "")));

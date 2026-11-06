@@ -325,7 +325,7 @@ window.FBC_INIT = function (H) {
   const div = k => (P(k) && P(k).division) || "";
   const loading = (msg = "読み込み中…") => `<div class="fb-loading" role="status"><span class="spin" aria-hidden="true"></span>${msg}</div>`;
   const failBox = (e, retry) => `<div class="fb-fail" role="alert"><p>${esc(e && e.message || "読み込めませんでした。")}</p>${retry ? `<button class="btn small" data-retry="${retry}">もう一度読み込む</button>` : ""}</div>`;
-  const offBox = () => `<div class="fb-off"><b>ファン投票は準備中です</b><p>カードの作成・「見たい！」・コメントは公開準備中です。架空の票やコメントは表示していません。</p></div>`;
+  const offBox = () => `<div class="fb-off"><b>勝敗予想は準備中です</b><p>予想・コメントは公開準備中です。架空の票やコメントは表示していません。</p></div>`;
 
   // カード（一覧・ホーム・選手ページで共通）
   function cardHtml(c, o = {}) {
@@ -884,7 +884,7 @@ window.FBC_INIT = function (H) {
   function viewMe(tab) {
     if (tab) mp.tab = tab;
     if (!ENABLED) return H.pageHero("My Page", "") + `<div class="wrap"><section class="section">${offBox()}</section></div>`;
-    return H.pageHero("My Page", "あなたのコメント・予想・カードと、届いた反応") + `<div class="wrap" id="fbMe">${loading()}</div>`;
+    return H.pageHero("My Page", "あなたの予想・コメントと、届いた反応") + `<div class="wrap" id="fbMe">${loading()}</div>`;
   }
   async function loadMe() {
     const box = $("#fbMe"); if (!box) return;
@@ -992,7 +992,7 @@ window.FBC_INIT = function (H) {
     return doc("プライバシーポリシー", "Privacy", `
       <p>FIGHT BOOK（以下「当サイト」）は、利用者の情報を次のとおり取り扱います。</p>
       <h2>1. 取得する情報</h2>
-      <ul><li><b>投稿・反応</b>：ニックネーム、作成したカード、コメント、「見たい！」「面白い」、保存、通報の内容</li>
+      <ul><li><b>投稿・反応</b>：ニックネーム、勝敗予想、コメント、いいね、通報の内容（過去に作成された対戦カードと、その反応を含みます）</li>
         <li><b>ブラウザの識別情報</b>：参加のためにブラウザごとに自動で発行する識別ID（氏名・メールアドレスは取得しません）</li>
         <li><b>利用状況</b>：閲覧したページ、ボタンの操作、訪問日などの記録（サービス改善のための集計に使います）</li>
         <li><b>お問い合わせ</b>：お問い合わせの内容と、任意で入力されたお名前・メールアドレス</li></ul>
@@ -1140,7 +1140,7 @@ window.FBC_INIT = function (H) {
   const evUrl = id => `/predict/${encodeURIComponent(id)}/`;
 
   function viewPredictList() {
-    return H.pageHero("Predict", "大会の対戦カードの勝敗を予想して、ファン同士で語り合おう。") + `<div class="wrap" id="pvList">${ENABLED ? loading() : offBox()}</div>`;
+    return H.pageHero("Predict", "勝つと思う選手に投票して、みんなの予想を見よう。") + `<div class="wrap" id="pvList">${ENABLED ? loading() : offBox()}</div>`;
   }
   async function loadPredictList() {
     const box = $("#pvList"); if (!box || !ENABLED) return;

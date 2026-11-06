@@ -62,8 +62,8 @@ const pages = [];
 const fightersN = Object.values(S.profiles).filter(p => p.riz.total > 0).length;
 const riz = S.events.filter(e => e.rizin);
 const HOME = {
-  title: "FIGHT BOOK｜RIZINの勝敗予想とファンが語る見たい一戦",
-  desc: `RIZINの対戦カードの勝者を予想して、ファン同士でコメントできる非公式ファンサイト。次に見たい一戦の提案や、全${fightersN}選手の戦績・レーティングも見られます。登録不要。`,
+  title: "FIGHT BOOK｜RIZIN勝敗予想・みんなの予想と選手データ",
+  desc: `RIZINの対戦カードの勝者を予想して、みんなの予想の割合が見られる非公式ファンサイト。登録不要で、締め切りまで何度でも変更OK。ファン同士のコメントや、全${fightersN}選手の戦績・レーティングも見られます。`,
 };
 
 /* ---------- 選手ページ ---------- */
@@ -107,9 +107,9 @@ pages.push(page("/events/", { title: `RIZIN大会一覧・全試合結果（${ri
   `<h1>RIZIN大会一覧</h1><ul>${riz.map(e => `<li>${fmt(e.date)} ${esc(e.name)}（MMA ${e.bouts.length}試合）</li>`).join("")}</ul>`));
 pages.push(page("/stats/", { title: "RIZIN統計・記録（KO率・一本勝ち・連勝など）｜FIGHT BOOK", desc: "RIZINのMMA試合から集計した統計。KO率、一本勝ち数、最多出場、最長連勝、秒殺、番狂わせなど。" },
   `<h1>RIZIN統計・記録</h1><p>KO率・一本勝ち・最多出場・最長連勝・秒殺・番狂わせなどの記録をまとめています。</p>`));
-pages.push(page("/predict/", { title: "大会の勝敗予想（RIZIN）｜FIGHT BOOK", desc: "RIZINの大会の対戦カードの勝敗を予想して、ファン同士で語り合うページ。みんなの予想の割合や、的中ランキングも見られます。" },
-  `<h1>大会の勝敗予想</h1><p>大会の対戦カードの勝敗を予想して、ファン同士で語り合えます。</p>`));
-pages.push(page("/about/", { title: "FIGHT BOOKについて｜FIGHT BOOK", desc: "FIGHT BOOKは、RIZINの全選手データと、ファン同士で見たい対戦を語り合う場を提供する非公式ファンサイトです。" }, `<h1>FIGHT BOOKについて</h1>`));
+pages.push(page("/predict/", { title: "大会の勝敗予想（RIZIN）｜FIGHT BOOK", desc: "RIZINの大会の対戦カードの勝敗を予想して、みんなの予想の割合を見られるページ。みんなの予想の割合や、的中ランキングも見られます。" },
+  `<h1>大会の勝敗予想</h1><p>大会の対戦カードの勝敗を予想して、みんなの予想の割合を見られます。登録不要・締め切りまで変更OK。</p>`));
+pages.push(page("/about/", { title: "FIGHT BOOKについて｜FIGHT BOOK", desc: "FIGHT BOOKは、RIZINの勝敗予想と、全選手の戦績データを提供する非公式ファンサイトです。" }, `<h1>FIGHT BOOKについて</h1>`));
 pages.push(page("/privacy/", { title: "プライバシーポリシー｜FIGHT BOOK", desc: "FIGHT BOOKのプライバシーポリシー（取得する情報・利用目的・広告・Cookie・お問い合わせ）。" }, `<h1>プライバシーポリシー</h1>`));
 pages.push(page("/contact/", { title: "お問い合わせ｜FIGHT BOOK", desc: "FIGHT BOOKへのお問い合わせ・投稿の削除依頼・掲載内容の訂正依頼はこちら。" }, `<h1>お問い合わせ</h1>`));
 // 検索対象にしないページ（ログイン・作成・マイページなど）
