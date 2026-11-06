@@ -16,7 +16,7 @@ const SITE = JSON.parse(fs.readFileSync(path.join(ROOT, "data-src", "site.json")
 const ctx = { window: {}, console };
 ctx.window.window = ctx.window;
 vm.createContext(ctx);
-for (const f of ["data/fighters.js", "data/fights.js", "data/names-ja.js", "data/gyms.js", "data/profiles.js", "js/stats.js"]) {
+for (const f of ["data/fighters.js", "data/fights.js", "data/names-ja.js", "data/gyms.js", "data/profiles.js", "data/newcomers.js", "js/stats.js"]) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, f), "utf8"), ctx, { filename: f });
 }
 const W = ctx.window, S = W.STATS, GYMS = W.GYMS || {}, AFFIL = W.AFFIL || {}, CATCH = W.CATCHPHRASE || {};
@@ -91,6 +91,15 @@ for (const p of Object.values(S.profiles)) {
     `<h2>試合結果（新しい順）</h2><ul>${rows}</ul>` +
     `<p><a href="/predict/">勝敗予想</a> ・ <a href="/rankings/">ランキング</a></p>`;
   pages.push(page(`/fighters/${enc(k)}/`, { title, desc, type: "profile" }, body));
+}
+
+/* ---------- RIZINの試合記録がまだない選手（data/newcomers.js）：中身が薄いので検索対象にはしない ---------- */
+for (const [k, n] of Object.entries(W.NEWCOMERS || {})) {
+  const nx = n.next || {};
+  const title = `${n.name}（RIZIN初参戦）｜FIGHT BOOK`;
+  const desc = nx.event ? `${n.name}は${nx.event}（${nx.date}）で${nx.opp}と対戦します。勝敗予想はFIGHT BOOKで。` : `${n.name}の選手ページ。`;
+  const body = crumbs([["/", "FIGHT BOOK"], ["/fighters/", "選手一覧"], [null, n.name]]) + `<h1>${esc(n.name)}</h1><p>${esc(desc)}</p>`;
+  pages.push(page(`/fighters/${enc(k)}/`, { title, desc, noindex: true }, body));
 }
 
 /* ---------- 一覧・固定ページ ---------- */

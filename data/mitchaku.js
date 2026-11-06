@@ -3,9 +3,10 @@
    "選手キー": [{ yt:"YouTube動画ID", series:"シリーズ名", note:"大会など補足" }, …]  先頭が最新
    ・RIZIN公式チャンネル（@RIZIN_FF）で公開されている動画だけを登録する
    ・登録がない選手は、選手ページに「公式の密着動画」セクションを出さない
-   出典：https://www.youtube.com/@RIZIN_FF （2026/11/6 時点）
+   出典：https://www.youtube.com/@RIZIN_FF （2026/11/6 時点・チャンネルの全動画から【密着】で始まるものを確認）
    ===================================================================== */
 window.MITCHAKU = {
+  "n-chiharu": [{"yt": "lJ8THHD9CUE", "series": "Preparation", "note": "abc presents RIZIN.55"}],
   "tatsuki-shinotsuka": [{"yt": "TReZTuuaAq8", "series": "Preparation", "note": "from BLACK ROSE"}],
   "hiramoto": [{"yt": "ImLQdnNPV2s", "series": "Preparation", "note": "超RIZIN.5 浪速の超復活祭り"}, {"yt": "AvoHP646ouE", "series": "Preparation", "note": "RIZIN.26"}],
   "akimoto": [{"yt": "ZzDetZ0176k", "series": "Preparation", "note": ""}],
@@ -19,7 +20,7 @@ window.MITCHAKU = {
   "issa-hosokawa": [{"yt": "0AXbJeRZmus", "series": "Preparation", "note": ""}],
   "ryusei-ashizawa": [{"yt": "PVEf27hsUPQ", "series": "Preparation", "note": ""}],
   "ryuya-fukuda": [{"yt": "_UpC8feYpBw", "series": "Preparation", "note": ""}],
-  "suzuki": [{"yt": "EZ05AVht_iQ", "series": "Preparation", "note": "RIZIN LANDMARK 7 in Azerbaijan"}],
+  "suzuki": [{"yt": "Tf-PyVX7Atg", "series": "Preparation in Kagawa", "note": "井上直樹・鈴木千裕"}, {"yt": "EZ05AVht_iQ", "series": "Preparation", "note": "RIZIN LANDMARK 7 in Azerbaijan"}],
   "ryo-takagi": [{"yt": "_hFmkIW2Lok", "series": "Preparation", "note": ""}],
   "masanori-kanehara": [{"yt": "QTjagEpL2w4", "series": "Preparation", "note": "RIZIN.44"}],
   "kyoji-horiguchi": [{"yt": "amaKGyL84JE", "series": "Preparation", "note": ""}],
@@ -44,9 +45,19 @@ window.MITCHAKU = {
   "kanna-asakura": [{"yt": "FGaZPUyY6YY", "series": "Preparation", "note": "RIZIN.35"}],
   "karamov": [{"yt": "yIBFjtpmuFE", "series": "Fighters daily", "note": "超RIZIN.2"}],
   "yusaku-inoue": [{"yt": "n-HyIlZ5l5c", "series": "ぷれぱれーしょん", "note": ""}],
-  "inoue": [{"yt": "U0em6sB8mZ4", "series": "Preparation", "note": "RIZIN.28"}],
-  "kazumasa-majima": [{"yt": "5-MKJ3jWx24", "series": "Preparation", "note": ""}],
+  "inoue": [{"yt": "eY0tKAWYbg8", "series": "Preparation", "note": ""}, {"yt": "Tf-PyVX7Atg", "series": "Preparation in Kagawa", "note": "井上直樹・鈴木千裕"}, {"yt": "U0em6sB8mZ4", "series": "Preparation", "note": "RIZIN.28"}],
+  "kazumasa-majima": [{"yt": "ePJts-o-tmk", "series": "Preparation 東京編", "note": ""}, {"yt": "5-MKJ3jWx24", "series": "Preparation", "note": ""}],
   "a-j-mckee": [{"yt": "HI86YWzbg4A", "series": "Preparation", "note": "超RIZIN.5 浪速の超復活祭り"}],
   "soo-chul-kim": [{"yt": "XoJEuSrels4", "series": "Preparation", "note": "RIZIN.40"}],
-  "miyuu-yamamoto": [{"yt": "otu1xBagH8c", "series": "Preparation the LASTMATCH", "note": ""}]
+  "miyuu-yamamoto": [{"yt": "otu1xBagH8c", "series": "Preparation the LASTMATCH", "note": ""}],
+  "tony-laramie": [{"yt": "QwOs4wjFCbo", "series": "RIZIN世界滞在記 in カナダ vol.3", "note": "壮絶な半生と戦い続ける理由"}],
+  "hideo-tokoro": [{"yt": "5NIrnU3x5ZI", "series": "Preparation 夏休み編", "note": "所英男・鹿志村仁之介"}],
+  "jinnosuke-kashimura": [{"yt": "5NIrnU3x5ZI", "series": "Preparation 夏休み編", "note": "所英男・鹿志村仁之介"}],
+  "koki-akada": [{"yt": "aoeNfuFXLV8", "series": "Preparation", "note": ""}],
+  "izawa": [{"yt": "0LDEXBucy6c", "series": "Preparation", "note": ""}],
+  "joe-hiramoto": [{"yt": "AV3v-EIy4vY", "series": "Preparation", "note": ""}],
+  "yoshinori-horie": [{"yt": "h0hn7g-0eaM", "series": "Preparation", "note": ""}],
+  "yushi": [{"yt": "3J4Z7A2N7Xs", "series": "Preparation", "note": "RIZIN.37"}],
+  "kouzi": [{"yt": "FeQE3GTgL3s", "series": "Preparation", "note": "RIZIN.32"}],
+  "tsuyoshi-sudario": [{"yt": "FtKMhak4vzE", "series": "Preparation", "note": "RIZIN.27"}]
 };

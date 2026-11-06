@@ -392,6 +392,7 @@
 
   function viewFighter(key) {
     const p = P(key);
+    if (!p && NEW()[key]) return viewNewcomer(key);
     if (!p) return pageHero("Not Found", "選手が見つかりません。") + `<div class="wrap"><a href="/fighters/">選手一覧へ戻る</a></div>`;
     const f = S.roster[key];
     const t = p.riz;
@@ -581,6 +582,38 @@
       <p class="note" style="margin:8px 0 0">YouTubeの動画を画面右下のプレーヤーで再生します。<a href="https://www.youtube.com/watch?v=${esc(list[0].yt)}" target="_blank" rel="noopener">YouTubeで開く</a></p></div>`;
   }
 
+  /* ---------- RIZINの試合記録がまだない選手（data/newcomers.js） ----------
+     初参戦などで戦績データがない選手。名前・写真・次の試合・密着動画だけを出し、国籍などは推測で埋めない */
+  const NEW = () => window.NEWCOMERS || {};
+  const nameAny = k => (NEW()[k] && NEW()[k].name) || S.nameOf(k);
+  function viewNewcomer(key) {
+    const n = NEW()[key], name = n.name, nx = n.next || {};
+    const byName = (window.PHOTOS_BY_NAME || {})[name.replace(/\s/g, "")];
+    const ph = byName && localOrHttps(byName.src) ? byName.src : "";
+    const past = nx.date && new Date(nx.date + "T23:59:59+09:00") < new Date();
+    const opp = nx.oppKey && (P(nx.oppKey) || NEW()[nx.oppKey]) ? `<a href="/fighters/${encodeURIComponent(nx.oppKey)}/">${esc(nx.opp)}</a>` : esc(nx.opp || "");
+    return `
+    <section class="f-hero"><div class="in has-photo">
+      <div class="f-photo${ph ? "" : " none"}">${SIL}${ph ? `<img src="${esc(ph)}" alt="${esc(name)}" width="800" height="800" decoding="async" fetchpriority="high" style="object-position:50% 20%" onerror="this.remove()">` : ""}</div>
+      <div class="f-main">
+        <div class="nick">RIZIN初参戦</div>
+        <h1>${esc(name)}</h1>
+        <div class="tags">${nx.weight ? `<span>${esc(nx.weight)}</span>` : ""}<span>RIZIN戦績なし</span></div>
+      </div>
+    </div></section>
+    ${walkoutBar(key)}
+    <div class="wrap">
+      ${nx.event ? `<div class="panel nc-next">
+        <h3>${past ? "RIZINでの試合" : "次の試合"}</h3>
+        <div class="nc-ev"><b>${esc(nx.event)}</b><small>${esc(fmtDate(nx.date))}・${esc(nx.bout || "")}${nx.weight ? `・${esc(nx.weight)}` : ""}</small></div>
+        <div class="nc-vs">${esc(name)} <span>vs</span> ${opp}</div>
+        <a class="btn primary" href="/predict/${encodeURIComponent(nx.eventId)}/">${past ? "大会の結果と予想を見る" : "この試合の勝敗を予想する"}</a>
+      </div>` : ""}
+      <p class="note" style="margin-top:10px">RIZINでの試合記録はまだありません。試合結果が反映されると、戦績やレーティングがこのページに表示されます。</p>
+      ${mitchakuSection(key)}
+    </div>`;
+  }
+
   /* ---------- 公式の密着動画（data/mitchaku.js） ----------
      ・最初はサムネイル画像だけを出し、押されたときに初めて YouTube を読み込む（ページ表示を重くしない）
      ・自動再生はしない。再生を押したら入場曲は一時停止する
@@ -600,7 +633,7 @@
   }
   function mitchakuSection(key) {
     const list = mcOf(key); if (!list.length) return "";
-    const name = S.nameOf(key), v = list[0];
+    const name = nameAny(key), v = list[0];
     return `<section class="section mc" id="mc" data-key="${esc(key)}" aria-labelledby="mcT">
       <div class="sec-head"><h2 id="mcT">公式の密着動画<small>Official Documentary</small></h2></div>
       <div class="mc-card">
@@ -627,7 +660,7 @@
     const sec = document.getElementById("mc"); if (!sec) return;
     const key = sec.dataset.key, list = mcOf(key), v = list[i]; if (!v) return;
     const playing = !!sec.querySelector("#mcPlayer iframe");
-    document.getElementById("mcPlayer").innerHTML = mcFacade(v, S.nameOf(key));
+    document.getElementById("mcPlayer").innerHTML = mcFacade(v, nameAny(key));
     if (playing) mcPlay(v.yt);
     sec.querySelector("#mcNow b").textContent = mcLabel(v);
     sec.querySelector("#mcYt").href = `https://www.youtube.com/watch?v=${encodeURIComponent(v.yt)}`;

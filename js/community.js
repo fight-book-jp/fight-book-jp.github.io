@@ -478,8 +478,10 @@ window.FBC_INIT = function (H) {
   }
   /* 選手パネル：ポスターのように写真を大きく見せ、名前を写真の下部に重ねる（赤コーナー／青コーナーの色帯つき）
      写真が無い選手は同じ枠にシルエット。自分が予想した側には「あなたの予想」、勝者には WIN を重ねる */
+  // 試合記録がまだない選手（data/newcomers.js）は、登録名から選手ページのキーを探す
+  const newKeyOf = name => { const N = window.NEWCOMERS || {}, n = (name || "").replace(/\s/g, ""); return Object.keys(N).find(k => N[k].name.replace(/\s/g, "") === n) || ""; };
   function vsPanel(b, s, o = {}) {
-    const x = side(b, s), name = fname(b, s), link = x.key && valid(x.key), byName = (window.PHOTOS_BY_NAME || {})[(name || "").replace(/\s/g, "")];
+    const x0 = side(b, s), name = fname(b, s), nk = !x0.key && newKeyOf(name), x = nk ? { ...x0, key: nk } : x0, link = x.key && (valid(x.key) || !!nk), byName = (window.PHOTOS_BY_NAME || {})[(name || "").replace(/\s/g, "")];
     const ph = (link ? photoOf(x.key) : null) || (byName && /^img\//.test(byName.src) ? { src: byName.src, pos: "50% 20%" } : null);   // 試合記録がまだない選手は登録名で探す
     const me = b.me || {}, win = b.winner === s, lose = (b.winner === "a" || b.winner === "b") && !win;
     const inner = `${ph ? `<img src="${esc(ph.src)}" alt="" loading="${o.featured ? "eager" : "lazy"}" decoding="async" style="object-position:${esc(ph.pos)}" onerror="this.remove()">` : ""}<span class="fp-sil" aria-hidden="true">${SIL}</span>

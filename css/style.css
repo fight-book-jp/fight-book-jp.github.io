@@ -1538,3 +1538,12 @@ body{overflow-x:clip}
   .mc-title{font-size:17px}
 }
 @media (prefers-reduced-motion:reduce){.mc-facade img,.mc-play{transition:none}}
+
+/* ---------- 試合記録がまだない選手のページ ---------- */
+.nc-next{margin-top:24px;display:grid;gap:10px;justify-items:start}
+.nc-next h3{margin:0}
+.nc-ev b{display:block;font-size:16px;font-weight:900}
+.nc-ev small{font-size:13px;color:var(--muted)}
+.nc-vs{font-size:20px;font-weight:900}
+.nc-vs span{font-family:"Barlow Condensed",sans-serif;color:var(--muted);margin:0 6px;font-size:16px}
+.nc-vs a{color:var(--accent)}
