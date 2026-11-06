@@ -394,7 +394,7 @@ window.FBC_INIT = function (H) {
      ・予想前は割合を見せない（多数派に引っ張られないように）。予想後に割合と「理由をコメント」「次の試合」を出す
      ・数字はすべて実際の集計。0件のときは0件と分かる表示にする */
   const home = { tab: null, rule: "", ev: null, others: [], mode: null, live: null };
-  const HOME_BOUTS = 10;   // メイン1＋3列×3段
+  const HOME_BOUTS = 99;   // 大会の全試合を表示（メインは大きく、残りは3列）
   function homeTop() {
     if (!ENABLED) return "";
     return `<section class="hp" aria-labelledby="hpT"><div class="wrap">
@@ -433,7 +433,7 @@ window.FBC_INIT = function (H) {
     const liveStrip = home.live && (!ev || home.live.id !== ev.id || home.mode !== "past")
       ? `<a class="hp-live" href="/predict/${encodeURIComponent(home.live.id)}/" data-src="home_live"><i aria-hidden="true"></i><b>LIVE</b>${esc(home.live.name)}<span aria-hidden="true">コメント →</span></a>` : "";
     if (!ev) {
-      box.innerHTML = liveStrip + `<div class="hp-empty"><b>いま受付中の試合はありません</b><p>次の対戦カードが発表されたら、ここで投票できます。</p><a class="btn small" href="#hfT">見たい一戦を見る ↓</a></div>`;
+      box.innerHTML = liveStrip + `<div class="hp-empty"><b>いま受付中の試合はありません</b><p>次の対戦カードが発表されたら、ここで投票できます。</p><a class="btn small" href="/predict/">大会予想の一覧へ</a></div>`;
       return;
     }
     const st = stateOf(ev), bouts = homeBouts(ev), shown = bouts.slice(0, HOME_BOUTS);
@@ -445,7 +445,7 @@ window.FBC_INIT = function (H) {
           <a class="hp-ev-name" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_event">${esc(ev.name)}</a>
           <small>${fmtShort(ev.starts_at)}${ev.venue ? `・${esc(ev.venue.replace(/（.*?）/g, ""))}` : ""}${ev.predictors ? `・${ev.predictors}人参加` : ""}${picked ? `・<b>投票 ${picked}/${ev.bouts.length}</b>` : ""}</small></div>
         <div class="hp-grid">${shown.map((b, i) => hpBout(b, i === 0)).join("")}</div>
-        <div class="hp-foot"><a class="hp-all" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_all_bouts">${st === "open" ? `全${ev.bouts.length}試合に投票する` : `全${ev.bouts.length}試合を見る`}<span aria-hidden="true">→</span></a></div>
+        <div class="hp-foot"><a class="hp-all" href="/predict/${encodeURIComponent(ev.id)}/" data-src="home_all_bouts">${st === "open" ? "大会ページでコメント・的中ランキングを見る" : "大会ページで結果・コメントを見る"}<span aria-hidden="true">→</span></a></div>
         ${home.others.length ? `<p class="hp-others">ほかの大会：${home.others.map(o => `<a href="/predict/${encodeURIComponent(o.id)}/" data-src="home_other_event">${esc(o.name)}</a>`).join("、")}</p>` : ""}`;
     startHomeCountdown();
   }
