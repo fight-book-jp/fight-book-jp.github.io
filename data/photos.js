@@ -8,6 +8,16 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "alan-yamaniha": { src:"img/fighters/alan-yamaniha.webp", face:"img/fighters/alan-yamaniha-face.webp" },
+  "rena-kubota": { src:"img/fighters/rena-kubota.webp", face:"img/fighters/rena-kubota-face.webp" },
+  "nozimov": { src:"img/fighters/nozimov.webp", face:"img/fighters/nozimov-face.webp" },
+  "karamov": { src:"img/fighters/karamov.webp", face:"img/fighters/karamov-face.webp" },
+  "king-edokpolo": { src:"img/fighters/king-edokpolo.webp", face:"img/fighters/king-edokpolo-face.webp" },
+  "tsuyoshi-sudario": { src:"img/fighters/tsuyoshi-sudario.webp", face:"img/fighters/tsuyoshi-sudario-face.webp" },
+  "satoshi": { src:"img/fighters/satoshi.webp", face:"img/fighters/satoshi-face.webp" },
+  "izawa": { src:"img/fighters/izawa.webp", face:"img/fighters/izawa-face.webp" },
+  "yuki-ito": { src:"img/fighters/yuki-ito.webp", face:"img/fighters/yuki-ito-face.webp" },
+  "haruo-ochi": { src:"img/fighters/haruo-ochi.webp", face:"img/fighters/haruo-ochi-face.webp" },
   "shinryu": { src:"img/fighters/shinryu.webp?v=2", face:"img/fighters/shinryu-face.webp?v=2" },
   "inoue": { src:"img/fighters/inoue.webp?v=2", face:"img/fighters/inoue-face.webp?v=2" },
   "yrysbek-tilenov": { src:"img/fighters/yrysbek-tilenov.webp", face:"img/fighters/yrysbek-tilenov-face.webp" },

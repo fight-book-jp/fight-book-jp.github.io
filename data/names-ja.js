@@ -9,7 +9,7 @@ window.NAMES_JA = {
   "Shintaro Ishiwatari":"石渡 伸太郎", "Yutaka Saito":"斎藤 裕", "Juntaro Ushiku":"牛久 絢太郎",
   "Kyohei Hagiwara":"萩原 京平", "Masanori Kanehara":"金原 正徳", "Shinobu Ota":"太田 忍",
   "Shoko Sato":"佐藤 将光", "Ryuya Fukuda":"福田 龍彌", "Yuki Ito":"伊藤 裕樹",
-  "Ayaka Hamasaki":"浜崎 朱加", "Kanna Asakura":"浅倉 カンナ", "Rena Kubota":"RENA",
+  "Ayaka Hamasaki":"浜崎 朱加", "Kanna Asakura":"浅倉 カンナ", "Rena Kubota":"RENA", "Alan Yamaniha":"アラン“ヒロ”ヤマニハ",
   "Miyuu Yamamoto":"山本 美憂", "Saori Oshima":"大島 沙緒里", "Yusuke Yachi":"矢地 祐介",
   "Koji Takeda":"武田 光司", "Yoshinori Horie":"堀江 圭功", "Sho Patrick Usami":"宇佐美 正パトリック",
   "Shunta Nomura":"野村 駿太", "Yuta Kubo":"久保 優太", "Daisuke Nakamura":"中村 大介",
