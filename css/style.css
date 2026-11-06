@@ -1547,3 +1547,22 @@ body{overflow-x:clip}
 .nc-vs{font-size:20px;font-weight:900}
 .nc-vs span{font-family:"Barlow Condensed",sans-serif;color:var(--muted);margin:0 6px;font-size:16px}
 .nc-vs a{color:var(--accent)}
+
+/* 密着動画がある選手：ページ最上部の帯（B案） */
+.mc-top{background:#141810;color:#ECEDE4;padding:22px 0 18px}
+.mc-top .mc-in{max-width:1240px;margin:0 auto;padding:0 16px}
+.mc-top .sec-head{border-bottom-color:#3a4430}
+.mc-top .sec-head h2{color:#ECEDE4}
+.mc-top .sec-head h2 small{color:#B5C783}
+.mc-top .mc-card{border-color:#2E3524;color:var(--ink)}
+.mc-down{display:inline-flex;gap:6px;margin-top:12px;font-size:13px;font-weight:700;color:#C3C8B1;text-decoration:none}
+.mc-down span{transition:transform .2s}
+.mc-down:hover{color:#fff}.mc-down:hover span{transform:translateY(2px)}
+@media (max-width:620px){
+  .mc-top{padding:14px 0 12px}
+  .mc-top .mc-in{padding:0 12px}
+  .mc-top .mc-desc{display:none}
+  .mc-top .sec-head{margin-bottom:10px}
+}
+.mc-down{background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
+#fProfile{scroll-margin-top:60px}

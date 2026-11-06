@@ -423,7 +423,8 @@
     const og = originOf(key);
     const flagImg = og.iso ? `img/flags/${og.iso}.svg` : "";
     return `
-    <section class="f-hero${flagImg ? " has-flag" : ""}">
+    ${mitchakuSection(key)}
+    <section class="f-hero${flagImg ? " has-flag" : ""}" id="fProfile">
       ${flagImg ? `<div class="f-flagbg" aria-hidden="true"><img src="${flagImg}" alt="" decoding="async"></div>` : ""}
       <div class="f-bgname" style="--w:${ringW}" aria-hidden="true">${esc(ring)}</div><div class="in has-photo">
       <div class="f-photo${ph ? "" : " none"}">${SIL}${ph ? `<img src="${esc(ph.src)}" alt="${esc(name)}" width="800" height="800" decoding="async" fetchpriority="high" style="object-position:${esc(ph.pos)}" onerror="this.remove()">` : ""}</div>
@@ -448,7 +449,6 @@
         <div><b>${t.d}</b><small>分</small></div><div><b>${t.nc}</b><small>無効</small></div>
       </div>
       <p class="note" style="margin-top:8px">上の数字はRIZINでのMMA戦績です。${f && !f.partial ? `プロ通算は ${rec(p.pro)}${p.pro.nc ? `（無効${p.pro.nc}）` : ""}。` : ""}${f && f.partial ? "この選手はRIZIN外の戦績を集めきれていません。" : ""}</p>
-      ${mitchakuSection(key)}
       ${socialSection(key)}
       <div class="f-cols">
         <div>
@@ -593,7 +593,8 @@
     const past = nx.date && new Date(nx.date + "T23:59:59+09:00") < new Date();
     const opp = nx.oppKey && (P(nx.oppKey) || NEW()[nx.oppKey]) ? `<a href="/fighters/${encodeURIComponent(nx.oppKey)}/">${esc(nx.opp)}</a>` : esc(nx.opp || "");
     return `
-    <section class="f-hero"><div class="in has-photo">
+    ${mitchakuSection(key)}
+    <section class="f-hero" id="fProfile"><div class="in has-photo">
       <div class="f-photo${ph ? "" : " none"}">${SIL}${ph ? `<img src="${esc(ph)}" alt="${esc(name)}" width="800" height="800" decoding="async" fetchpriority="high" style="object-position:50% 20%" onerror="this.remove()">` : ""}</div>
       <div class="f-main">
         <div class="nick">RIZIN初参戦</div>
@@ -610,7 +611,6 @@
         <a class="btn primary" href="/predict/${encodeURIComponent(nx.eventId)}/">${past ? "大会の結果と予想を見る" : "この試合の勝敗を予想する"}</a>
       </div>` : ""}
       <p class="note" style="margin-top:10px">RIZINでの試合記録はまだありません。試合結果が反映されると、戦績やレーティングがこのページに表示されます。</p>
-      ${mitchakuSection(key)}
     </div>`;
   }
 
@@ -621,12 +621,19 @@
   const mcOf = k => (window.MITCHAKU && window.MITCHAKU[k]) || [];
   const ytThumb = (id, q = "maxresdefault") => `https://i.ytimg.com/vi/${encodeURIComponent(id)}/${q}.jpg`;
   const mcLabel = v => [v.series, v.note].filter(Boolean).join("｜");
+  // 動画の出どころ（RIZIN公式の【密着】／選手特集番組『SPOTLIGHT』）ごとの表示
+  const MC_SRC = {
+    rizin: { badge: "RIZIN公式", kicker: "RIZIN公式 ・ 密着ドキュメンタリー", desc: "試合に向けた日々の練習や、仲間・家族と過ごす時間。戦績だけでは見えない素顔と想いに迫る、RIZIN公式の密着映像です。" },
+    unext: { badge: "U-NEXT格闘技公式", kicker: "SPOTLIGHT ・ U-NEXT格闘技公式", desc: "選手に密着した特集番組『SPOTLIGHT』。リングに上がるまでの日々や、戦い続ける理由に迫ります。" },
+    teletama: { badge: "テレ玉", kicker: "SPOTLIGHT ・ テレ玉", desc: "選手に密着した特集番組『SPOTLIGHT』。リングに上がるまでの日々や、戦い続ける理由に迫ります。" },
+  };
+  const mcSrc = v => MC_SRC[v.src] || MC_SRC.rizin;
   function mcFacade(v, name) {
     return `<button class="mc-facade" type="button" data-mc-play="${esc(v.yt)}" aria-label="${esc(name)}の密着動画を再生する（YouTube）">
         <img src="${ytThumb(v.yt)}" alt="" loading="lazy" decoding="async" width="1280" height="720"
           onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${ytThumb(v.yt, "hqdefault")}'}else{this.remove()}">
         <span class="mc-shade" aria-hidden="true"></span>
-        <span class="mc-badge" aria-hidden="true">RIZIN公式</span>
+        <span class="mc-badge" aria-hidden="true">${esc(mcSrc(v).badge)}</span>
         <span class="mc-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
         <span class="mc-cap" aria-hidden="true"><small>${esc(v.series || "密着")}</small><b>${esc(name)}に密着</b></span>
       </button>`;
@@ -634,14 +641,15 @@
   function mitchakuSection(key) {
     const list = mcOf(key); if (!list.length) return "";
     const name = nameAny(key), v = list[0];
-    return `<section class="section mc" id="mc" data-key="${esc(key)}" aria-labelledby="mcT">
+    // 密着動画がある選手は、ページの一番上（メニューの直下）に全幅の帯で出す
+    return `<section class="mc mc-top" id="mc" data-key="${esc(key)}" aria-labelledby="mcT"><div class="mc-in">
       <div class="sec-head"><h2 id="mcT">公式の密着動画<small>Official Documentary</small></h2></div>
       <div class="mc-card">
         <div class="mc-player" id="mcPlayer">${mcFacade(v, name)}</div>
         <div class="mc-side">
-          <div class="mc-kicker">RIZIN公式 ・ 密着ドキュメンタリー</div>
+          <div class="mc-kicker" id="mcKick">${esc(mcSrc(v).kicker)}</div>
           <h3 class="mc-title">リングの外の、${esc(name)}。</h3>
-          <p class="mc-desc">試合に向けた日々の練習や、仲間・家族と過ごす時間。戦績だけでは見えない素顔と想いに迫る、RIZIN公式の密着映像です。</p>
+          <p class="mc-desc" id="mcDesc">${esc(mcSrc(v).desc)}</p>
           <div class="mc-now" id="mcNow"${list.length > 1 ? " hidden" : ""}><small>再生する動画</small><b>${esc(mcLabel(v))}</b></div>
           ${list.length > 1 ? `<div class="mc-sub">${list.length}本の密着動画</div>` : ""}
           ${list.length > 1 ? `<div class="mc-list" role="list" aria-label="ほかの密着動画">${list.map((x, i) => `<button class="mc-pick" type="button" role="listitem" data-mc-pick="${i}" aria-pressed="${i === 0}">
@@ -649,7 +657,8 @@
           <a class="mc-yt" id="mcYt" href="https://www.youtube.com/watch?v=${esc(v.yt)}" target="_blank" rel="noopener">YouTubeで開く<span aria-hidden="true">↗</span></a>
         </div>
       </div>
-    </section>`;
+      <button class="mc-down" type="button" data-mc-down>${esc(name)}のプロフィール・戦績を見る<span aria-hidden="true">↓</span></button>
+    </div></section>`;
   }
   function mcPlay(id) {
     const box = document.getElementById("mcPlayer"); if (!box) return;
@@ -663,6 +672,7 @@
     document.getElementById("mcPlayer").innerHTML = mcFacade(v, nameAny(key));
     if (playing) mcPlay(v.yt);
     sec.querySelector("#mcNow b").textContent = mcLabel(v);
+    sec.querySelector("#mcKick").textContent = mcSrc(v).kicker; sec.querySelector("#mcDesc").textContent = mcSrc(v).desc;
     sec.querySelector("#mcYt").href = `https://www.youtube.com/watch?v=${encodeURIComponent(v.yt)}`;
     sec.querySelectorAll(".mc-pick").forEach(b => b.setAttribute("aria-pressed", +b.dataset.mcPick === i));
   }
@@ -783,6 +793,7 @@
     const pk = e.target.closest(".song-pick"); if (pk) pickSong(+pk.dataset.idx);
     const mp = e.target.closest("[data-mc-play]"); if (mp) mcPlay(mp.dataset.mcPlay);
     const mk = e.target.closest("[data-mc-pick]"); if (mk) mcPick(+mk.dataset.mcPick);
+    if (e.target.closest("[data-mc-down]")) { const t = document.getElementById("fProfile"); if (t) t.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
   });
   document.addEventListener("change", e => {
     if (e.target.id !== "woAuto") return;

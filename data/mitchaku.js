@@ -1,6 +1,8 @@
 /* =====================================================================
    公式の密着動画（RIZIN公式YouTubeの【密着】シリーズ）
-   "選手キー": [{ yt:"YouTube動画ID", series:"シリーズ名", note:"大会など補足" }, …]  先頭が最新
+   "選手キー": [{ yt:"YouTube動画ID", series:"シリーズ名", note:"大会など補足", src:"rizin|unext|teletama" }, …]  先頭が最新
+   ・RIZIN公式の【密着】動画を優先。密着がない選手だけ、選手特集番組『SPOTLIGHT』（U-NEXT格闘技公式・テレ玉・RIZIN公式）から
+     再生回数が最も多い1本を入れる（前編・後編があるものは前編）。src 省略時は rizin
    ・RIZIN公式チャンネル（@RIZIN_FF）で公開されている動画だけを登録する
    ・登録がない選手は、選手ページに「公式の密着動画」セクションを出さない
    出典：https://www.youtube.com/@RIZIN_FF （2026/11/6 時点・チャンネルの全動画から【密着】で始まるものを確認）
@@ -59,5 +61,14 @@ window.MITCHAKU = {
   "yoshinori-horie": [{"yt": "h0hn7g-0eaM", "series": "Preparation", "note": ""}],
   "yushi": [{"yt": "3J4Z7A2N7Xs", "series": "Preparation", "note": "RIZIN.37"}],
   "kouzi": [{"yt": "FeQE3GTgL3s", "series": "Preparation", "note": "RIZIN.32"}],
-  "tsuyoshi-sudario": [{"yt": "FtKMhak4vzE", "series": "Preparation", "note": "RIZIN.27"}]
+  "tsuyoshi-sudario": [{"yt": "FtKMhak4vzE", "series": "Preparation", "note": "RIZIN.27"}],
+  "asakura": [{"yt": "x58JskpVOrA", "series": "SPOTLIGHT 前編", "note": "", "src": "unext"}],
+  "shinobu-ota": [{"yt": "tI6UTSNXDtI", "series": "SPOTLIGHT", "note": "RIZIN.48", "src": "rizin"}],
+  "shinryu": [{"yt": "z9VYnnh_zJ0", "series": "SPOTLIGHT EPISODE9", "note": "次世代ファイター神龍誠", "src": "teletama"}],
+  "juan-archuleta": [{"yt": "pNAqCMnKqdI", "series": "SPOTLIGHT 前編", "note": "", "src": "unext"}],
+  "patricky-pitbull": [{"yt": "yDM2kIcjljo", "series": "SPOTLIGHT", "note": "", "src": "unext"}],
+  "sergio-pettis": [{"yt": "n8OKPCVzOdU", "series": "SPOTLIGHT 前編", "note": "", "src": "unext"}],
+  "rikuto-shirakawa": [{"yt": "t3VVB_QydWE", "series": "SPOTLIGHT JAPAN TOP TEAM", "note": "RIZIN LANDMARK 10", "src": "unext"}],
+  "daigo-kuramoto": [{"yt": "t3VVB_QydWE", "series": "SPOTLIGHT JAPAN TOP TEAM", "note": "RIZIN LANDMARK 10", "src": "unext"}],
+  "shintaro-ishiwatari": [{"yt": "-StdZPA0ppk", "series": "SPOTLIGHT offshot", "note": "堀口恭司×石渡伸太郎", "src": "unext"}]
 };
