@@ -123,7 +123,6 @@
       ["/champions/", "王者", "現王者と王座の歴史"],
       ["/events/", "大会一覧", `RIZIN ${riz.length}大会の全試合`],
       ["/stats/", "統計", "KO率・連勝・最多出場"],
-      ["/gyms/", "ジム一覧", "所属ジムごとの戦績"],
     ];
     return `
     <section class="hero hero-s"><div class="hero-in">
@@ -1294,16 +1293,16 @@
     const rows = affilOf(k);
     const cur = rows.filter(r => r.cur === true), past = rows.filter(r => r.cur === false), unk = rows.filter(r => r.cur == null);
     const period = r => r.from ? `${r.from}年〜${r.to ? r.to + "年" : "現在"}` : "";
-    const card = r => { const g = GYMS[r.g]; return `<a class="fg-card" href="/gyms/${encodeURIComponent(r.g)}/">${gymBadge(r.g, "m")}<span><b>${esc(g.name)}</b><small>${gymPlace(g) ? esc(gymPlace(g)) : "所在地 未確認"}${period(r) ? "・" + period(r) : ""}</small><em>ジム詳細を見る →</em></span></a>`; };
+    const card = r => { const g = GYMS[r.g]; return `<div class="fg-card">${gymBadge(r.g, "m")}<span><b>${esc(g.name)}</b><small>${gymPlace(g) ? esc(gymPlace(g)) : "所在地 未確認"}${period(r) ? "・" + period(r) : ""}</small></span></div>`; };
     const src = rows.find(r => r.src);
     return `<div class="panel" style="margin-top:16px"><h3>所属ジム</h3>
       ${cur.length ? cur.map(card).join("") : unk.length ? "" : '<p class="note" style="margin:0">所属ジム未確認</p>'}
       ${unk.length ? `<div class="fg-sub">時期不明の所属</div>${unk.map(card).join("")}` : ""}
-      ${past.length ? `<div class="fg-sub">過去の所属</div><div class="fg-past">${past.map(r => `<a href="/gyms/${encodeURIComponent(r.g)}/">${esc(gymName(r.g))}</a>${period(r) ? `<small>${period(r)}</small>` : ""}`).join("")}</div>` : ""}
+      ${past.length ? `<div class="fg-sub">過去の所属</div><div class="fg-past">${past.map(r => `<span>${esc(gymName(r.g))}</span>${period(r) ? `<small>${period(r)}</small>` : ""}`).join("")}</div>` : ""}
       ${src ? `<p class="note" style="margin:10px 0 0">出典：<a href="${esc(src.src)}" target="_blank" rel="noopener">${esc(GYM_SRC[src.via] || "Wikipedia")}</a></p>` : rows.length ? `<p class="note" style="margin:10px 0 0">出典：${esc(GYM_SRC[rows[0].via] || "")}</p>` : ""}
     </div>`;
   }
-  const gymChip = k => { const c = curGyms(k); return c.length ? `<a class="gym-chip" href="/gyms/${encodeURIComponent(c[0])}/">${gymBadge(c[0], "s")}${esc(gymName(c[0]))}${c.length > 1 ? ` ほか${c.length - 1}` : ""}</a>` : ""; };
+  const gymChip = k => { const c = curGyms(k); return c.length ? `<span class="gym-chip">${gymBadge(c[0], "s")}${esc(gymName(c[0]))}${c.length > 1 ? ` ほか${c.length - 1}` : ""}</span>` : ""; };
 
   function gymEvents(e) {
     const cb = e.target.closest("[data-cmp]");
@@ -1379,8 +1378,7 @@
       case "events": html = viewEvents(); break;
       case "stats": html = viewStats(); break;
       case "matchups": html = viewMatchups(arg); break;
-      case "gyms": html = arg === "compare" ? viewGymCompare() : viewGyms(); break;
-      case "gym": html = viewGym(key); break;
+      case "gyms": case "gym": location.replace("/fighters/"); return;  // ジムページは廃止
       case "cards": case "c": case "create": case "me": case "admin": case "login": case "reset": case "about": case "privacy": case "contact": case "predict": case "pevent":
         html = FBC ? FBC.view(page, parts.map(x => decodeURIComponent(x || ""))) : viewHome(); break;
       default: html = viewHome();
