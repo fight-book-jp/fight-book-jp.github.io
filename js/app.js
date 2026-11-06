@@ -438,11 +438,7 @@
       </div>
       <p class="note" style="margin-top:8px">上の数字はRIZINでのMMA戦績です。${f && !f.partial ? `プロ通算は ${rec(p.pro)}${p.pro.nc ? `（無効${p.pro.nc}）` : ""}。` : ""}${f && f.partial ? "この選手はRIZIN外の戦績を集めきれていません。" : ""}</p>
       ${socialSection(key)}
-      <div class="f-cols">
-        <div>
-          <div class="panel chart"><h3>レーティングの推移（RIZIN）</h3>${ratingChart(p.history)}</div>
-        </div>
-        <div>
+      <div class="f-info">
           <div class="panel"><h3>勝ち方（RIZIN）</h3>
             <div class="bar"><span style="width:${t.ko / tot * 100}%;background:var(--accent)"></span><span style="width:${t.sub / tot * 100}%;background:var(--gold)"></span><span style="width:${(t.dec + t.other) / tot * 100}%;background:var(--draw)"></span></div>
             <div class="legend"><span><i style="background:var(--accent)"></i>KO/TKO ${t.ko}</span><span><i style="background:var(--gold)"></i>一本 ${t.sub}</span><span><i style="background:var(--draw)"></i>判定ほか ${t.dec + t.other}</span></div>
@@ -457,7 +453,6 @@
           ${fighterGymPanel(key)}
           ${walkoutPanel(key)}
           ${ig ? `<div class="panel card-ig" style="margin-top:16px;padding:12px">${igEmbed(ig)}</div>` : ""}
-        </div>
       </div>
       ${fightHistory(key, p)}
     </div>`;
