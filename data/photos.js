@@ -8,6 +8,12 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "mirko-cro-cop": { src:"img/fighters/mirko-cro-cop.webp", face:"img/fighters/mirko-cro-cop-face.webp" },
+  "tatsuya-ando": { src:"img/fighters/tatsuya-ando.webp", face:"img/fighters/tatsuya-ando-face.webp" },
+  "kai-asakura": { src:"img/fighters/kai-asakura.webp", face:"img/fighters/kai-asakura-face.webp" },
+  "koji-takeda": { src:"img/fighters/koji-takeda.webp", face:"img/fighters/koji-takeda-face.webp" },
+  "kana-watanabe": { src:"img/fighters/kana-watanabe.webp", face:"img/fighters/kana-watanabe-face.webp" },
+  "kyohei-hagiwara": { src:"img/fighters/kyohei-hagiwara.webp", face:"img/fighters/kyohei-hagiwara-face.webp" },
   "amir-aliakbari": { src:"img/fighters/amir-aliakbari.webp", face:"img/fighters/amir-aliakbari-face.webp" },
   "jiri-prochazka": { src:"img/fighters/jiri-prochazka.webp", face:"img/fighters/jiri-prochazka-face.webp" },
   "gabi-garcia": { src:"img/fighters/gabi-garcia.webp", face:"img/fighters/gabi-garcia-face.webp" },
