@@ -8,6 +8,7 @@
    出典：https://www.youtube.com/@RIZIN_FF （2026/11/6 時点・チャンネルの全動画から【密着】で始まるものを確認）
    ===================================================================== */
 window.MITCHAKU = {
+  "yuto-hokamura": [{"yt": "TfU2hxxM7Ps", "series": "Preparation", "note": "RIZIN.29"}],
   "n-chiharu": [{"yt": "lJ8THHD9CUE", "series": "Preparation", "note": "abc presents RIZIN.55"}],
   "tatsuki-shinotsuka": [{"yt": "TReZTuuaAq8", "series": "Preparation", "note": "from BLACK ROSE"}],
   "hiramoto": [{"yt": "ImLQdnNPV2s", "series": "Preparation", "note": "超RIZIN.5 浪速の超復活祭り"}, {"yt": "AvoHP646ouE", "series": "Preparation", "note": "RIZIN.26"}],
