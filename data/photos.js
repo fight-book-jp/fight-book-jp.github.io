@@ -8,6 +8,7 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "yusuke-yachi": { src:"img/fighters/yusuke-yachi.webp", face:"img/fighters/yusuke-yachi-face.webp" },
   "mirko-cro-cop": { src:"img/fighters/mirko-cro-cop.webp", face:"img/fighters/mirko-cro-cop-face.webp" },
   "tatsuya-ando": { src:"img/fighters/tatsuya-ando.webp", face:"img/fighters/tatsuya-ando-face.webp" },
   "kai-asakura": { src:"img/fighters/kai-asakura.webp", face:"img/fighters/kai-asakura-face.webp" },
