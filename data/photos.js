@@ -8,6 +8,11 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "shoko-sato": { src:"img/fighters/shoko-sato.webp", face:"img/fighters/shoko-sato-face.webp" },
+  "yoshinori-horie": { src:"img/fighters/yoshinori-horie.webp", face:"img/fighters/yoshinori-horie-face.webp" },
+  "saori-oshima": { src:"img/fighters/saori-oshima.webp", face:"img/fighters/saori-oshima-face.webp" },
+  "joe-hiramoto": { src:"img/fighters/joe-hiramoto.webp", face:"img/fighters/joe-hiramoto-face.webp" },
+  "ayaka-hamasaki": { src:"img/fighters/ayaka-hamasaki.webp", face:"img/fighters/ayaka-hamasaki-face.webp" },
   "alan-yamaniha": { src:"img/fighters/alan-yamaniha.webp", face:"img/fighters/alan-yamaniha-face.webp" },
   "rena-kubota": { src:"img/fighters/rena-kubota.webp", face:"img/fighters/rena-kubota-face.webp" },
   "nozimov": { src:"img/fighters/nozimov.webp", face:"img/fighters/nozimov-face.webp" },
