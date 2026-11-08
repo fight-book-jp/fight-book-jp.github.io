@@ -196,13 +196,6 @@
   "type": "SNS 新規候補"
  },
  {
-  "detail": "公式サイト：既存「（なし）」→ 候補「https://kyoji-horiguchi.com」　本人確認が必要（Wikidataは非公式情報）",
-  "id": "e2ff610813bc",
-  "key": "kyoji-horiguchi",
-  "source": "https://www.wikidata.org/wiki/Q6451952",
-  "type": "SNS 新規候補"
- },
- {
   "detail": "Instagram：既存「（なし）」→ 候補「https://www.instagram.com/kinchan_alpha/」　本人確認が必要（Wikidataは非公式情報）",
   "id": "500170ac0750",
   "key": "masanori-kanehara",
