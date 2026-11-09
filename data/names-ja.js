@@ -31,7 +31,7 @@ window.NAMES_JA = {
   "Takeya Mizugaki":"水垣 偉弥", "Tatsuki Saomoto":"竿本 樹生", "Daichi Kitakata":"北方 大地",
   "Yutaro Muramoto":"村元 友太郎", "Haruo Ochi":"越智 晴雄", "Yoshiro Maeda":"前田 吉朗",
   "Mitsuhisa Sunabe":"砂辺 光久", "Rikuto Shirakawa":"白川 陸斗", "Kazuma Sone":"祖根 寿麻",
-  "Takeshi Kasugai":"春日井 たけし", "Kintaro":"金太郎", "Chiharu":"千春", "Jake Wilkins":"ジェイク・ウィルキンス", "Tsukasa Mizoguchi":"溝口 司", "Takumi Hamada":"濱田 巧", "Rikiya":"力也", "Rune Kimura":"木村 琉音", "Mac Papalii":"マック・パパリイ", "Yukinori Akazawa":"赤沢 幸典", "Masachika Takahashi":"髙橋 正親", "Naohiro Matsumoto":"松本 尚大", "Mighty Saw":"マイティ・saw", "Shunya Inoue":"井上 舜矢", "Yajuro Yamazaki":"山﨑 弥十朗", "Muneki Aimoto":"相本 宗輝", "Yuto Hokamura":"金太郎", "Yamato Fujita":"藤田 大和",
+  "Takeshi Kasugai":"春日井 たけし", "Kintaro":"金太郎", "Hiroya Kondo":"ヒロヤ", "Chiharu":"千春", "Jake Wilkins":"ジェイク・ウィルキンス", "Tsukasa Mizoguchi":"溝口 司", "Takumi Hamada":"濱田 巧", "Rikiya":"力也", "Rune Kimura":"木村 琉音", "Mac Papalii":"マック・パパリイ", "Yukinori Akazawa":"赤沢 幸典", "Masachika Takahashi":"髙橋 正親", "Naohiro Matsumoto":"松本 尚大", "Mighty Saw":"マイティ・saw", "Shunya Inoue":"井上 舜矢", "Yajuro Yamazaki":"山﨑 弥十朗", "Muneki Aimoto":"相本 宗輝", "Yuto Hokamura":"金太郎", "Yamato Fujita":"藤田 大和",
   "Mamoru Uoi":"魚井 フルスイング", "Seiichiro Ito":"伊藤 盛一郎", "Tsuyoshi Kosaka":"高阪 剛",
   "Hisaki Kato":"加藤 久輝", "Yuki Kawana":"川名 雄生", "Shinji Sasaki":"佐々木 信治",
   "Tatsuya Saika":"雑賀 ヤン坊 達也", "Genji Umeno":"梅野 源治", "Ren Sugiyama":"杉山 廉",
