@@ -8,6 +8,7 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "erson-yamamoto": { src:"img/fighters/erson-yamamoto.webp", face:"img/fighters/erson-yamamoto-face.webp" },
   "ya-man": { src:"img/fighters/ya-man.webp", face:"img/fighters/ya-man-face.webp" },
   "n-donmai-kawabata": { src:"img/fighters/n-donmai-kawabata.webp", face:"img/fighters/n-donmai-kawabata-face.webp" },
   "natalia-kuziutina": { src:"img/fighters/natalia-kuziutina.webp", face:"img/fighters/natalia-kuziutina-face.webp" },
