@@ -8,6 +8,16 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "chiharu": { src:"img/fighters/n-chiharu.webp", face:"img/fighters/n-chiharu-face.webp" },
+  "muneki-aimoto": { src:"img/fighters/n-aimoto.webp", face:"img/fighters/n-aimoto-face.webp" },
+  "tsukasa-mizoguchi": { src:"img/fighters/n-mizoguchi.webp", face:"img/fighters/n-mizoguchi-face.webp" },
+  "rikiya": { src:"img/fighters/n-rikiya.webp", face:"img/fighters/n-rikiya-face.webp" },
+  "rune-kimura": { src:"img/fighters/n-kimura-rune.webp", face:"img/fighters/n-kimura-rune-face.webp" },
+  "naohiro-matsumoto": { src:"img/fighters/n-matsumoto-naohiro.webp", face:"img/fighters/n-matsumoto-naohiro-face.webp" },
+  "takumi-hamada": { src:"img/fighters/n-hamada-takumi.webp", face:"img/fighters/n-hamada-takumi-face.webp" },
+  "masachika-takahashi": { src:"img/fighters/n-takahashi-masachika.webp", face:"img/fighters/n-takahashi-masachika-face.webp" },
+  "shunya-inoue": { src:"img/fighters/n-inoue-shunya.webp", face:"img/fighters/n-inoue-shunya-face.webp" },
+  "mighty-saw": { src:"img/fighters/n-mighty-saw.webp", face:"img/fighters/n-mighty-saw-face.webp" },
   "yusuke-yachi": { src:"img/fighters/yusuke-yachi.webp", face:"img/fighters/yusuke-yachi-face.webp" },
   "mirko-cro-cop": { src:"img/fighters/mirko-cro-cop.webp", face:"img/fighters/mirko-cro-cop-face.webp" },
   "tatsuya-ando": { src:"img/fighters/tatsuya-ando.webp", face:"img/fighters/tatsuya-ando-face.webp" },

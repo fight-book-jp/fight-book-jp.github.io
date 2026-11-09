@@ -479,7 +479,14 @@ window.FBC_INIT = function (H) {
   /* 選手パネル：ポスターのように写真を大きく見せ、名前を写真の下部に重ねる（赤コーナー／青コーナーの色帯つき）
      写真が無い選手は同じ枠にシルエット。自分が予想した側には「あなたの予想」、勝者には WIN を重ねる */
   // 試合記録がまだない選手（data/newcomers.js）は、登録名から選手ページのキーを探す
-  const newKeyOf = name => { const N = window.NEWCOMERS || {}, n = (name || "").replace(/\s/g, ""); return Object.keys(N).find(k => N[k].name.replace(/\s/g, "") === n) || ""; };
+  let jaIndex = null;   // 日本語名 → 選手キー（データベースにキーがない試合でも、選手ページに飛べるように）
+  const newKeyOf = name => {
+    const N = window.NEWCOMERS || {}, n = (name || "").replace(/[\s“”"]/g, "");
+    const hit = Object.keys(N).find(k => N[k].name.replace(/\s/g, "") === n); if (hit) return hit;
+    if (!jaIndex) { jaIndex = {}; const P = window.PEOPLE || {}, J = window.NAMES_JA || {};
+      for (const k in P) { const ja = J[P[k][0]]; if (ja) { const s = ja.replace(/[\s“”"]/g, ""); if (!(s in jaIndex)) jaIndex[s] = k; else jaIndex[s] = null; } } }
+    return jaIndex[n] || "";
+  };
   function vsPanel(b, s, o = {}) {
     const x0 = side(b, s), name = fname(b, s), nk = !x0.key && newKeyOf(name), x = nk ? { ...x0, key: nk } : x0, link = x.key && (valid(x.key) || !!nk), byName = (window.PHOTOS_BY_NAME || {})[(name || "").replace(/\s/g, "")];
     const ph = (link ? photoOf(x.key) : null) || (byName && /^img\//.test(byName.src) ? { src: byName.src, pos: "50% 20%" } : null);   // 試合記録がまだない選手は登録名で探す

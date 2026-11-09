@@ -392,6 +392,7 @@
 
   function viewFighter(key) {
     const p = P(key);
+    const moved = (window.NEWCOMERS_MOVED || {})[key]; if (!p && moved) { location.replace(`/fighters/${moved}/`); return ""; }
     if (!p && NEW()[key]) return viewNewcomer(key);
     if (!p) return pageHero("Not Found", "選手が見つかりません。") + `<div class="wrap"><a href="/fighters/">選手一覧へ戻る</a></div>`;
     const f = S.roster[key];

@@ -86,3 +86,19 @@ Rizin Landmark 15|2026-07-18|Bantamweight|Shota Nagano|Shuichi Kanda|W|Decision 
 Rizin Landmark 15|2026-07-18|Female Super Atomweight|Namiko Kawabata|Ayane Hirata|W|Decision (unanimous)|2|5:00|
 Rizin Landmark 15|2026-07-18|Lightweight|Takuya Shibamura|Taisei Mizusugi|W|Decision (split)|2|5:00|
 Rizin Landmark 16|2026-10-03|Lightweight|Ryota Oki|Daisuke Okumiya|W|TKO (punches and soccer kicks)|1|4:47|
+Rizin 55|2026-11-08|Flyweight|CAN Tony Laramie|JPN Makoto Takahashi|W|Decision (split)|3|5:00|Won the Rizin Flyweight Championship.
+Rizin 55|2026-11-08|Bantamweight|KGZ Yrysbek Tilenov|JPN Naoki Inoue|W|Decision (unanimous)|3|5:00|
+Rizin 55|2026-11-08|Bantamweight|JPN Ryuya Fukuda|KOR Soo Chul Kim|W|Decision (unanimous)|3|5:00|
+Rizin 55|2026-11-08|Bantamweight|JPN Jinnosuke Kashimura|JPN Shinobu Ota|W|Submission (Ezekiel choke)|3|1:51|
+Rizin 55|2026-11-08|Featherweight|USA Abijah Kaleo Meheula|Muneki Aimoto|NC|No Contest (Meheula missed weight)|2|4:58|
+Rizin 55|2026-11-08|Featherweight|JPN Juntaro Ushiku|CHN Li Kaiwen|W|Decision (unanimous)|3|5:00|
+Rizin 55|2026-11-08|Lightweight|KAZ Nurkhan Zhumagazy|KOR Kim Kyung-pyo|W|TKO (punches)|1|3:34|
+Rizin 55|2026-11-08|Heavyweight|Mac Papalii|Yukinori Akazawa|W|KO (punches)|2|2:15|
+Rizin 55|2026-11-08|Featherweight|Chiharu|JPN Hiroaki Suzuki|W|TKO (elbows)|2|4:41|
+Rizin 55|2026-11-08|Bantamweight|Tsukasa Mizoguchi|JPN Taichi Nakajima|W|Technical Submission (rear-naked choke)|1|0:22|
+Rizin 55|2026-11-08|Lightweight|JPN Tatsuya Saika|JPN Daigo Kuramoto|W|TKO (punches)|1|1:38|
+Rizin 55|2026-11-08|Flyweight|Takumi Hamada|JPN Sho Sekihara|W|TKO (punches)|3|4:56|
+Rizin 55|2026-11-08|Flyweight|Rikiya|Rune Kimura|W|Decision (unanimous)|3|5:00|
+Rizin 55|2026-11-08|Lightweight|Yajuro Yamazaki|Jake Wilkins|W|TKO (punches)|1|4:58|
+Rizin 55|2026-11-08|Bantamweight|Mighty Saw|Shunya Inoue|W|Decision (unanimous)|2|5:00|
+Rizin 55|2026-11-08|Featherweight|Masachika Takahashi|Naohiro Matsumoto|W|TKO (punches)|1|0:25|
