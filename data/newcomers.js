@@ -6,6 +6,7 @@
    画像は data/photos.js の PHOTOS_BY_NAME（登録名で一致）を使う
    ===================================================================== */
 window.NEWCOMERS = {
+  "n-donmai-kawabata": {"name": "ドンマイ川端", "next": {"event": "超RIZIN.6 師走の尾張名古屋下剋上祭り", "eventId": "rizin-2026-12-31", "date": "2026-12-31", "bout": "59.0kg契約", "weight": "59.0kg契約", "opp": "冨澤大智", "oppKey": "daichi-tomizawa"}}
 };
 // RIZIN.55（2026/11/8）で試合記録が入った選手
 window.NEWCOMERS_MOVED = {
