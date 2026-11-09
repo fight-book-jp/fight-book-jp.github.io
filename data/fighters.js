@@ -10,10 +10,10 @@
    ===================================================================== */
 window.FIGHTERS = [
   // ---------------- フライ級 ----------------
-  { key:"shinryu", name:"神龍 誠", en:"Makoto Shinryu", nick:"", division:"フライ級", status:"champion",
+  { key:"shinryu", name:"神龍 誠", en:"Makoto Shinryu", nick:"", division:"フライ級", status:"former",
     country:"日本", born:"2000年7月5日", hometown:"宮城県仙台市", height:"165cm", team:"パラエストラ松戸",
-    record:[23,5,1], nc:1, recordType:"プロ通算",
-    note:"2026年6月、扇久保博正に判定勝ちしRIZINフライ級王座を獲得。",
+    record:[23,6,1], nc:1, recordType:"プロ通算",
+    note:"元RIZINフライ級王者。2026年6月に扇久保博正に判定勝ちして王座を獲得したが、11月のRIZIN.55でトニー・ララミーに判定1-2で敗れ王座を失う。",
     sns:{ x:"https://twitter.com/makoto0705mma", instagram:"https://www.instagram.com/makoto2000mma/", youtube:"https://www.youtube.com/channel/UCmfh-87a6MXbwpht28pyroA" }, photo:"",
     igPost:"https://www.instagram.com/p/DZPpRi1OSFy/" },
   { key:"ougikubo", name:"扇久保 博正", en:"Hiromasa Ougikubo", nick:"", division:"フライ級", status:"former",
@@ -21,6 +21,11 @@ window.FIGHTERS = [
     record:[30,9,2], nc:0, recordType:"プロ通算",
     note:"元RIZINフライ級王者。2026年6月の防衛戦で神龍誠に敗れ王座を失う。",
     sns:{ x:"https://twitter.com/hiromasa0401", instagram:"https://www.instagram.com/hiromonster0401/", youtube:"https://www.youtube.com/channel/UC7vKmzcPgsVUJXtHWsGVq-A" }, photo:"" },
+  { key:"tony-laramie", partial:true, name:"トニー・ララミー", en:"Tony Laramie", nick:"", division:"フライ級", status:"champion",
+    country:"カナダ", born:"", hometown:"", height:"", team:"",
+    record:[5,1,0], nc:0, recordType:"RIZIN",
+    note:"RIZINフライ級王者。2026年11月のRIZIN.55で神龍誠に判定2-1で勝ち、王座を獲得。",
+    sns:{}, photo:"" },
 
   // ---------------- バンタム級 ----------------
   { key:"sabatello", name:"ダニー・サバテロ", en:"Danny Sabatello", nick:"The Italian Gangster", division:"バンタム級", status:"champion",
@@ -30,8 +35,8 @@ window.FIGHTERS = [
     sns:{ x:"https://twitter.com/ShockThisWorld", instagram:"https://www.instagram.com/shockthisworld/" }, photo:"" },
   { key:"inoue", name:"井上 直樹", en:"Naoki Inoue", nick:"", division:"バンタム級", status:"former",
     country:"日本", born:"1997年6月14日", hometown:"愛知県豊橋市", height:"173cm", team:"",
-    record:[21,5,0], nc:0, recordType:"プロ通算",
-    note:"元RIZINバンタム級王者。2026年5月にはPFLの大会でも勝利。",
+    record:[21,6,0], nc:0, recordType:"プロ通算",
+    note:"元RIZINバンタム級王者。2026年5月にはPFLの大会でも勝利。11月のRIZIN.55でイリスベク・ティレノフに判定負け。",
     sns:{ x:"https://twitter.com/NaokiInoueMMA", instagram:"https://www.instagram.com/naokiinouemma/", youtube:"https://www.youtube.com/channel/UCuLHbp1vovgv2JUdXdot_DA" }, photo:"" },
   { key:"motoya", partial:true, name:"元谷 友貴", en:"Yuki Motoya", nick:"", division:"バンタム級", status:"",
     country:"日本", born:"", hometown:"石川県加賀市", height:"", team:"",
