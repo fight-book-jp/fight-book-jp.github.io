@@ -8,6 +8,14 @@
    ・登録がない選手はシルエットを表示します（data/fighters.js の photo も使えます）
    ===================================================================== */
 window.PHOTOS = {
+  "ya-man": { src:"img/fighters/ya-man.webp", face:"img/fighters/ya-man-face.webp" },
+  "n-donmai-kawabata": { src:"img/fighters/n-donmai-kawabata.webp", face:"img/fighters/n-donmai-kawabata-face.webp" },
+  "natalia-kuziutina": { src:"img/fighters/natalia-kuziutina.webp", face:"img/fighters/natalia-kuziutina-face.webp" },
+  "hiroya-kondo": { src:"img/fighters/hiroya-kondo.webp", face:"img/fighters/hiroya-kondo-face.webp" },
+  "daichi-tomizawa": { src:"img/fighters/daichi-tomizawa.webp", face:"img/fighters/daichi-tomizawa-face.webp" },
+  "yutaro-muramoto": { src:"img/fighters/yutaro-muramoto.webp", face:"img/fighters/yutaro-muramoto-face.webp" },
+  "hinotori": { src:"img/fighters/hinotori.webp", face:"img/fighters/hinotori-face.webp" },
+  "tatsuki-shinotsuka": { src:"img/fighters/tatsuki-shinotsuka.webp", face:"img/fighters/tatsuki-shinotsuka-face.webp" },
   "chiharu": { src:"img/fighters/n-chiharu.webp", face:"img/fighters/n-chiharu-face.webp" },
   "muneki-aimoto": { src:"img/fighters/n-aimoto.webp", face:"img/fighters/n-aimoto-face.webp" },
   "tsukasa-mizoguchi": { src:"img/fighters/n-mizoguchi.webp", face:"img/fighters/n-mizoguchi-face.webp" },
@@ -80,6 +88,9 @@ window.PHOTOS = {
 
 /* 選手データ（RIZINの試合記録）がまだない選手の画像。大会予想の対戦カードで、登録名が一致したときに使う */
 window.PHOTOS_BY_NAME = {
+  "ドンマイ川端": { src:"img/fighters/n-donmai-kawabata.webp", face:"img/fighters/n-donmai-kawabata-face.webp" },
+  "松尾クリスチャンアキラ": { src:"img/fighters/n-matsuo-christian-akira.webp", face:"img/fighters/n-matsuo-christian-akira-face.webp" },
+  "金子蒼空": { src:"img/fighters/n-kaneko-sora.webp", face:"img/fighters/n-kaneko-sora-face.webp" },
   "千春": { src:"img/fighters/n-chiharu.webp", face:"img/fighters/n-chiharu-face.webp" },
   "相本宗輝": { src:"img/fighters/n-aimoto.webp", face:"img/fighters/n-aimoto-face.webp" },
   "溝口司": { src:"img/fighters/n-mizoguchi.webp", face:"img/fighters/n-mizoguchi-face.webp" },
