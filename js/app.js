@@ -664,7 +664,8 @@
   const NEW = () => window.NEWCOMERS || {};
   const nameAny = k => (NEW()[k] && NEW()[k].name) || S.nameOf(k);
   function viewNewcomer(key) {
-    const n = NEW()[key], name = n.name, nx = n.next || {};
+    const n = NEW()[key], name = n.name, nx = n.next || {}, pf = n.profile || {};
+    const sns = snsItems(profileOf(key)).map(([k, u]) => `<a class="sns-${k}" href="${esc(u)}" target="_blank" rel="noopener" aria-label="${esc(name)}の${SNS_LABEL[k]}（新しいタブで開く）" title="${SNS_LABEL[k]}">${ICONS[k]}<span>${SNS_LABEL[k]}</span></a>`).join("");
     const byName = (window.PHOTOS_BY_NAME || {})[name.replace(/\s/g, "")];
     const ph = byName && localOrHttps(byName.src) ? byName.src : "";
     const past = nx.date && new Date(nx.date + "T23:59:59+09:00") < new Date();
@@ -674,9 +675,12 @@
     <section class="f-hero" id="fProfile"><div class="in has-photo">
       <div class="f-photo${ph ? "" : " none"}">${SIL}${ph ? `<img src="${esc(ph)}" alt="${esc(name)}" width="800" height="800" decoding="async" fetchpriority="high" style="object-position:50% 20%" onerror="this.remove()">` : ""}</div>
       <div class="f-main">
-        <div class="nick">RIZIN初参戦</div>
+        <div class="nick">RIZIN初参戦${n.nick ? `　${esc(n.nick)}` : ""}</div>
         <h1>${esc(name)}</h1>
+        ${pf["出身"] ? `<div class="f-origin"><span class="f-og"><span><small>出身</small>${esc(pf["出身"])}</span></span></div>` : ""}
         <div class="tags">${nx.weight ? `<span>${esc(nx.weight)}</span>` : ""}<span>RIZIN戦績なし</span></div>
+        ${pf["所属"] ? `<div class="f-gym">所属 <span class="gym-chip">${esc(pf["所属"])}</span></div>` : ""}
+        ${sns ? `<div class="f-sns" role="list" aria-label="SNS">${sns}</div>` : ""}
       </div>
     </div></section>
     ${walkoutBar(key)}
@@ -685,9 +689,16 @@
         <h3>${past ? "RIZINでの試合" : "次の試合"}</h3>
         <div class="nc-ev"><b>${esc(nx.event)}</b><small>${esc(fmtDate(nx.date))}・${esc(nx.bout || "")}${nx.weight ? `・${esc(nx.weight)}` : ""}</small></div>
         <div class="nc-vs">${esc(name)} <span>vs</span> ${opp}</div>
+        ${nx.note ? `<p class="note" style="margin:0">${esc(nx.note)}</p>` : ""}
         <a class="btn primary" href="/predict/${encodeURIComponent(nx.eventId)}/">${past ? "大会の結果と予想を見る" : "この試合の勝敗を予想する"}</a>
       </div>` : ""}
-      <p class="note" style="margin-top:10px">RIZINでの試合記録はまだありません。試合結果が反映されると、戦績やレーティングがこのページに表示されます。</p>
+      <p class="note" style="margin-top:10px">RIZINでの試合記録はまだありません。試合結果が反映されると、戦績がこのページに表示されます。</p>
+      ${Object.keys(pf).length || (n.career || []).length ? `<div class="f-info">
+        ${Object.keys(pf).length ? `<div class="panel"><h3>プロフィール</h3><table class="kv">${Object.entries(pf).map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}</table></div>` : ""}
+        ${(n.career || []).length ? `<div class="panel nc-career"><h3>経歴</h3><ol>${n.career.map(c => `<li>${esc(c)}</li>`).join("")}</ol></div>` : ""}
+      </div>` : ""}
+      ${(n.sources || []).length ? `<p class="note nc-src">出典：${n.sources.map(([t, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join("・")}</p>` : ""}
+      ${socialSection(key)}
     </div>`;
   }
 

@@ -1671,3 +1671,6 @@ body{overflow-x:clip}
 /* 選手ページ：勝ち方・プロフィール・所属・入場曲などのパネル（レーティング推移の枠は廃止） */
 .f-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:28px;align-items:start}
 .f-info>*{margin-top:0!important;min-width:0}
+
+.nc-career ol{margin:0;padding:0 0 0 1.2em;display:grid;gap:6px;font-size:14px;line-height:1.6}
+.nc-src{margin-top:10px;font-size:12px}

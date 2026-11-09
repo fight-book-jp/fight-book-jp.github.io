@@ -7,6 +7,7 @@
                  ここに登録すると SOCIAL UPDATES の自動取得対象になります。
    ===================================================================== */
 window.CATCHPHRASE = {
+  "n-donmai-kawabata":"柔道日本一からMMAへ",
   "a-j-mckee":"マーセナリー",
   "akimoto":"超強真星",
   "alan-yamaniha":"ボンサイ柔術第4の男",
@@ -209,6 +210,7 @@ window.CATCHPHRASE = {
 };
 
 window.SNS_EXTRA = {
+  "n-donmai-kawabata": { youtube:"https://www.youtube.com/@donmai_kawabata", instagram:"https://www.instagram.com/kawabata1129/" },
   "ayaka-hamasaki":{ youtube:"https://www.youtube.com/channel/UCX4TiOv-KFfWglvlvLw0gtw" },
   "daichi-tomizawa":{ youtube:"https://www.youtube.com/channel/UCbvMeXGcSb-v2m18LHkBigg" },
   "erson-yamamoto":{ youtube:"https://www.youtube.com/channel/UC8X3NozweVH39FytLWvIBmA" },
